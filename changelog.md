@@ -6,6 +6,8 @@ Meeting Logs:
 - Parse commands on stub
 - Fix naming and refactor
 - Decide stub protocol
+
+
 12/13/19
 - Target Test Date: 1/15/19
 - Need to create wifi protocol 
