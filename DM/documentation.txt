@@ -1,0 +1,13 @@
+## Website ##
+To add new panels to the website
+* Create a new panel in Grafana
+* Click the down arrow next to that panels name
+* Click the embed section at the top of the pop up
+* Deselect the 'Current time range' option so the range will change dynamically when changed in Grafana
+* Copy/Paste the iframe source code into the html file. 
+
+## Grafana ##
+
+To update the embeded panels in the website to a different time range
+
+## InfluxDB ##
