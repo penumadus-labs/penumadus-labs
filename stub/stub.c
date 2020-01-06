@@ -48,8 +48,8 @@ main (int argc,  char *argv[] )
 	//iterate through args and parse
 	//CARO decide on protocol and update
 	for(i = 0; i < numargs; i++){
-		arg = queryargs[0].tag;
-		value = queryargs[0].value;
+		arg = queryargs[0].tag; //key
+		value = queryargs[0].value; //value
 		if(value == NULL){
 			value = "none";
 		}
@@ -57,12 +57,16 @@ main (int argc,  char *argv[] )
 		sprintf(buf,"%ld: cmnd:%s value:%s\n",(long)getpid(),arg,value); //spit out recieved vals
 		g_err(buf,false,false);
 
-		if(strcmp(arg,"LOG") == 0){
+		if(strcmp(arg,"LOG") == 0){ 
 			sprintf(buf,"L %s",value);
 			sendUDPmsg(buf);
 		}
 		else if(strcmp(arg,"NONE") == 0){
 			sprintf(buf,"L %s",value);
+			sendUDPmsg(buf);
+		}
+		else if(strcmp(arg,"POWER") == 0){ //value = true so power off
+			sprintf(buf,"P %s", value);
 			sendUDPmsg(buf);
 		}
 		else{
