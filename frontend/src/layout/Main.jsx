@@ -1,10 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Root = styled.main`
   ${({ theme }) => theme.mediaQueries.layout} {
-    height:
-      ${({ theme }) =>
+    height: ${({ theme }) =>
       `calc(100vh - ${theme.layout.header.height} - ${theme.layout.navbar.size}) `};
     margin-left: 0;
   }
@@ -15,8 +14,8 @@ const Root = styled.main`
   padding: ${({ theme }) => theme.spacing.md};
   overflow-y: scroll;
   background: ${({ theme }) => theme.color.background};
-`;
+`
 
-const Main = ({ children }) => <Root>{children}</Root>;
+const Main = ({ children }) => <Root>{children}</Root>
 
-export default Main;
+export default Main

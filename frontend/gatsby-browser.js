@@ -1,4 +1,4 @@
-import './src/style/global.css';
+import './src/style/global.css'
 
 // import React from 'react';
 // import Layout from './src/layout/Layout.jsx';

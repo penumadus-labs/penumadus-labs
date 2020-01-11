@@ -1,5 +1,5 @@
-import mixins from './mixins';
-import mediaQueries from './mediaqueries';
+import mixins from './mixins'
+import mediaQueries from './mediaqueries'
 
 const theme = {
   mediaQueries,
@@ -38,7 +38,7 @@ const theme = {
   zIndex: [10, 20, 30],
   // transitions: {},
   // shadows: {},
-};
+}
 
 theme.mixins.style = `
   font-family: ${theme.font.family};
@@ -49,6 +49,6 @@ theme.mixins.style = `
   margin-top: ${theme.spacing.sm};
   margin-bottom: ${theme.spacing.sm};
   border-radius: ${theme.shape.borderRadius};
-`;
+`
 
-export default theme;
+export default theme

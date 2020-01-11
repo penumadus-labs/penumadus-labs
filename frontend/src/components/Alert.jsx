@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Card from './Card.jsx';
-import Button from './Button.jsx';
+import React from 'react'
+import styled from 'styled-components'
+import Card from './Card.jsx'
+import Button from './Button.jsx'
 
 const Root = styled.div`
   ${({ theme }) => theme.mixins.centerChild}
@@ -28,11 +28,11 @@ const Root = styled.div`
       text-align: center;
     }
   }
-`;
+`
 
-const green = '#388e3c';
-const blue = '#3f51b5';
-const red = '#c62828';
+const green = '#388e3c'
+const blue = '#3f51b5'
+const red = '#c62828'
 
 const Alert = () => (
   <Root>
@@ -52,6 +52,6 @@ const Alert = () => (
       </div>
     </main>
   </Root>
-);
+)
 
-export default Alert;
+export default Alert

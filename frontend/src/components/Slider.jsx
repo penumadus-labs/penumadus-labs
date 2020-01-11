@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
 const Root = styled.div`
   input {
@@ -21,24 +21,24 @@ const Root = styled.div`
       -webkit-appearance: none;
     }
   }
-`;
+`
 
 const Slider = () => {
-  const [value, setValue] = useState(50);
+  const [value, setValue] = useState(50)
   return (
     <Root>
-      <label htmlFor="slider">slider: {value}</label>
+      <label htmlFor='slider'>slider: {value}</label>
       <br />
       <input
-        type="range"
-        min="0"
-        max="100"
+        type='range'
+        min='0'
+        max='100'
         value={value}
-        name="slider"
+        name='slider'
         onChange={({ target }) => setValue(target.value)}
       ></input>
     </Root>
-  );
-};
+  )
+}
 
-export default Slider;
+export default Slider

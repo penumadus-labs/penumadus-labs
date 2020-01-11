@@ -1,3 +1,3 @@
-import React from 'react';
+import React from 'react'
 
-export default () => <p>control panel</p>;
+export default () => <p>control panel</p>

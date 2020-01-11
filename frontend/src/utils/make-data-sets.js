@@ -1,32 +1,32 @@
 function transpose(a) {
-  let w = a.length || 0;
-  let h = a[0] instanceof Array ? a[0].length : 0;
+  let w = a.length || 0
+  let h = a[0] instanceof Array ? a[0].length : 0
   if (h === 0 || w === 0) {
-    return [];
+    return []
   }
   let i,
     j,
-    t = [];
+    t = []
   for (i = 0; i < h; i++) {
-    t[i] = [];
+    t[i] = []
     for (j = 0; j < w; j++) {
-      t[i][j] = a[j][i];
+      t[i][j] = a[j][i]
     }
   }
-  return t;
+  return t
 }
 
 function makeDataSets(data) {
-  data = transpose(data);
+  data = transpose(data)
 
-  const dataSets = {};
+  const dataSets = {}
 
   for (const row of data) {
-    const key = row[0];
-    const data = row.slice(1).map(x => ({ [key]: x === '' ? 0 : x }));
-    dataSets[key] = { key, data };
+    const key = row[0]
+    const data = row.slice(1).map(x => ({ [key]: x === '' ? 0 : x }))
+    dataSets[key] = { key, data }
   }
-  return dataSets;
+  return dataSets
 }
 
-export default makeDataSets;
+export default makeDataSets

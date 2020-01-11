@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Root = styled.header`
 display: flex;
@@ -22,12 +22,12 @@ svg {
 > * {
   margin-left: ${({ theme }) => theme.spacing.lg};
 }
-`;
+`
 
 const Header = () => (
   <Root>
     <p>TankMon Dashboard</p>
   </Root>
-);
+)
 
-export default Header;
+export default Header

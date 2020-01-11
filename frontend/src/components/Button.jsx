@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const Root = styled.button`
   ${({
@@ -9,8 +9,8 @@ const Root = styled.button`
   }) => clickable + style}
   width: 75px;
   height: 40px;
-`;
+`
 
-const Button = ({ color, children }) => <Root color={color}>{children}</Root>;
+const Button = ({ color, children }) => <Root color={color}>{children}</Root>
 
-export default Button;
+export default Button

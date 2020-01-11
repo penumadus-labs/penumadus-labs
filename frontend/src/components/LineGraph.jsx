@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   LineChart,
   CartesianGrid,
@@ -7,11 +7,11 @@ import {
   Tooltip,
   Legend,
   Line,
-} from 'recharts';
-import replaceMethods from '../utils/replace-methods';
+} from 'recharts'
+import replaceMethods from '../utils/replace-methods'
 
 // deprecated shit :(
-replaceMethods([LineChart, Line]);
+replaceMethods([LineChart, Line])
 
 const LineGraph = ({ data, dataKey }) => {
   return (
@@ -21,14 +21,14 @@ const LineGraph = ({ data, dataKey }) => {
       data={data}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
+      <CartesianGrid strokeDasharray='3 3' />
       <XAxis />
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line dot={false} type="monotone" dataKey={dataKey} stroke="#8884d8" />
+      <Line dot={false} type='monotone' dataKey={dataKey} stroke='#8884d8' />
     </LineChart>
-  );
-};
+  )
+}
 
-export default LineGraph;
+export default LineGraph

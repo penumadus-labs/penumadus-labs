@@ -1,4 +1,4 @@
-import React from 'react';
-import Login from '../routes/Login.jsx';
+import React from 'react'
+import Login from '../routes/Login.jsx'
 
-export default () => <Login />;
+export default () => <Login />

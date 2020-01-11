@@ -3,4 +3,4 @@ module.exports = {
     title: `HankMon-UI`,
   },
   plugins: [`gatsby-plugin-styled-components`],
-};
+}

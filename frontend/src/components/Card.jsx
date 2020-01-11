@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const Root = styled.div`
   display: inline-block;
@@ -24,7 +24,7 @@ const Root = styled.div`
       margin-left: ${({ theme }) => theme.spacing};
     }
   }
-`;
+`
 
 const Card = () => (
   <Root>
@@ -38,6 +38,6 @@ const Card = () => (
       </p>
     </div>
   </Root>
-);
+)
 
-export default Card;
+export default Card

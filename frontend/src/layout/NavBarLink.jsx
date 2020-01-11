@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'gatsby';
-import styled from 'styled-components';
-import responsive from '../utils/responsive';
+import React from 'react'
+import { Link } from 'gatsby'
+import styled from 'styled-components'
+import responsive from '../utils/responsive'
 
 const Root = styled(Link)`
   ${({
@@ -25,7 +25,7 @@ const Root = styled(Link)`
       text-align: center;
     }
   }
-`;
+`
 
 const NavBarLink = ({ Icon, label, theme }) => (
   <Root
@@ -42,6 +42,6 @@ const NavBarLink = ({ Icon, label, theme }) => (
       <p>{label}</p>
     </div>
   </Root>
-);
+)
 
-export default NavBarLink;
+export default NavBarLink

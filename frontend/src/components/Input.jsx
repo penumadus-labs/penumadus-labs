@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const Root = styled.div`
   input {
@@ -18,13 +18,13 @@ const Root = styled.div`
       filter: brightness(80%);
     }
   }
-`;
+`
 
 const Input = () => (
   <Root>
-    <label htmlFor="input">input:</label>
-    <input type="text" name="input" />
+    <label htmlFor='input'>input:</label>
+    <input type='text' name='input' />
   </Root>
-);
+)
 
-export default Input;
+export default Input
