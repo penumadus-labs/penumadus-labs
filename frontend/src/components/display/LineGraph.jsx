@@ -8,7 +8,7 @@ import {
   Legend,
   Line,
 } from 'recharts'
-import replaceMethods from '../utils/replace-methods'
+import replaceMethods from '../../utils/replace-methods'
 
 // deprecated shit :(
 replaceMethods([LineChart, Line])

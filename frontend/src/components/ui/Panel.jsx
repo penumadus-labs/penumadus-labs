@@ -1,5 +1,5 @@
 import React from 'react'
-import Btn from './Button.jsx'
+import Button from './Button.jsx'
 
 class Panel extends React.Component {
   render() {
@@ -14,7 +14,7 @@ class Panel extends React.Component {
           </label>
           <br />
           <br />
-          <Btn>update</Btn>
+          <Button>update</Button>
         </div>
       </div>
     )

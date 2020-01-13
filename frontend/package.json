@@ -6,6 +6,7 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "axios": "^0.19.1",
+    "csv-parse": "^4.8.3",
     "gatsby": "^2.18.12",
     "papaparse": "^5.1.1",
     "randomstring": "^1.1.5",

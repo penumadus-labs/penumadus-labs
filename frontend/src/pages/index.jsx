@@ -1,4 +1,9 @@
 import React from 'react'
-import Login from '../routes/Login.jsx'
+// import Login from '../routes/Login.jsx'
+import GraphsWrapper from '../components/display/GraphsWrapper.jsx'
 
-export default () => <Login />
+export default () => (
+  <>
+    <GraphsWrapper />
+  </>
+)
