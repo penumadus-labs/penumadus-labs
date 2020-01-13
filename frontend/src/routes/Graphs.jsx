@@ -1,3 +1,4 @@
 import React from 'react'
+import Graphs from '../components/display/Graphs.jsx'
 
-export default () => <p>graphs</p>
+export default () => <Graphs />

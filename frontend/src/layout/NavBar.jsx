@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import NavBarLink from './NavBarLink.jsx'
 import { FaChartLine as Chart } from 'react-icons/fa'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
+import { FiLogOut as Logout } from 'react-icons/fi'
 
 const Root = styled.nav`
   ${({ theme }) => theme.mediaQueries.layout} {
@@ -23,6 +24,7 @@ const NavBar = ({ width }) => (
     <NavBarLink Icon={Chart} label='Graphs' />
     <NavBarLink Icon={Dash} label='Control panel' />
     <NavBarLink Icon={Devices} label='Devices' />
+    <NavBarLink Icon={Logout} label='Logout' />
   </Root>
 )
 

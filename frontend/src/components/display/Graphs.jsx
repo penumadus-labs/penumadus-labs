@@ -1,6 +1,6 @@
 import React from 'react'
 import LineGraph from './LineGraph.jsx'
-import useCsv, { filter } from '../../utils/use-csv'
+import useCsv, { filter } from '../../hooks/use-csv'
 
 export default () => {
   const data = useCsv('/data.csv')
@@ -11,8 +11,8 @@ export default () => {
 
     return (
       <>
-        <LineGraph data={hum} dataKey='hum' />
-        <LineGraph data={temp} dataKey='temp' />
+        <LineGraph data={hum} dataKey='humidity' />
+        <LineGraph data={temp} dataKey='temperature' />
       </>
     )
   }

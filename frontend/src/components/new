@@ -5,6 +5,4 @@ const Root = styled.div`
     /* */
 `;
 
-const = () => <Root></Root>;
-
-export default ;
+export default () => <Root></Root>;
