@@ -1,4 +1,4 @@
-import { logout } from '../auth/auth'
+import { logout } from '../utils/auth'
 
 export default () => {
   logout()

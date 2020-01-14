@@ -11,6 +11,10 @@ const Root = styled.button`
   height: 40px;
 `
 
-const Button = ({ color, children }) => <Root color={color}>{children}</Root>
+const Button = ({ color, children, onClick }) => (
+  <Root color={color} onClick={onClick}>
+    {children}
+  </Root>
+)
 
 export default Button

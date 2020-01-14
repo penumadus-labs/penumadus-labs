@@ -1,4 +1,14 @@
 import React from 'react'
-import Login from '../routes/Login.jsx'
+import styled from 'styled-components'
+import Button from '../components/ui/Button.jsx'
+import { login } from '../utils/auth'
 
-export default () => <Login />
+const Root = styled.div`
+  padding: ${({ theme }) => theme.spacing.md};
+`
+
+export default () => (
+  <Root>
+    <Button onClick={login}>login</Button>
+  </Root>
+)

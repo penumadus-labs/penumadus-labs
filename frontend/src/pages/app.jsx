@@ -5,7 +5,7 @@ import Graphs from '../routes/Graphs.jsx'
 import ControlPanel from '../routes/ControlPanel.jsx'
 import Devices from '../routes/Devices.jsx'
 import Logout from '../routes/Logout.jsx'
-import { checkAuth } from '../auth/auth.js'
+import { checkAuth } from '../utils/auth.js'
 
 export default () => {
   if (!checkAuth()) return null

@@ -12,8 +12,7 @@ const Root = styled.main`
 
   margin-left: ${({ theme }) => theme.layout.navbar.size};
   padding: ${({ theme }) => theme.spacing.md};
-  overflow-y: scroll;
-  background: ${({ theme }) => theme.color.background};
+  overflow-y: auto;
 `
 
 const Main = ({ children }) => <Root>{children}</Root>

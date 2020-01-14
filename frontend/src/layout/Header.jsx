@@ -24,9 +24,9 @@ svg {
 }
 `
 
-const Header = () => (
+const Header = ({ children }) => (
   <Root>
-    <p>TankMon Dashboard</p>
+    <p>HankMon Dashboard</p>
   </Root>
 )
 
