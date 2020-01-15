@@ -7,3 +7,4 @@ Folders are laid out as follows:
 - DM: Data Monitoring code 
 - Stub: code that bridges Hank and DM
 - Hank: arduino code for tank module
+- bin: misc. tools that live on the ASW server
