@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Card from './Card.jsx'
 import Button from './Button.jsx'
 
 const Root = styled.div`
@@ -34,21 +33,15 @@ const green = '#388e3c'
 const blue = '#3f51b5'
 const red = '#c62828'
 
-const Alert = () => (
+const Alert = ({ settings, children, onAccept, onCancel }) => (
   <Root>
     <main>
-      <p>are these changes okay?</p>
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis
-        culpa, excepturi officia voluptates voluptatibus repellat beatae enim
-        tempora molestias. Inventore impedit tenetur quam voluptas delectus
-        quisquam alias molestiae nostrum perferendis. Cumque ipsam odit ex iure
-        magni laborum quo culpa nulla obcaecati ratione facere, earum rem ab
-        deserunt labore esse eum?
-      </p>
+      {children}
       <div>
-        <Button color={green}>okay</Button>
-        <Button>cancel</Button>
+        <Button color={green} onClick={onAccept}>
+          accept
+        </Button>
+        <Button onClick={onCancel}>cancel</Button>
       </div>
     </main>
   </Root>

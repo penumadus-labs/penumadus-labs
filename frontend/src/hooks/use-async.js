@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default url => {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState({})
 
   useEffect(() => {
-    void (async function() {
+    void (async () => {
       const { data } = await axios.get(url)
       setData(data)
     })().catch(console.error)

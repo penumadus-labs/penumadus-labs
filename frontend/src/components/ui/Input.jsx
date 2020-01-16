@@ -1,14 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import Card from '../Card.jsx'
 
-const Root = styled.div`
-  margin: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme }) => theme.color.navBackground};
-
-  label {
-    display: block;
-  }
+const Root = styled.label`
+  display: block;
 
   input {
     ${({
@@ -29,13 +24,15 @@ const Root = styled.div`
 `
 
 const Input = props => {
-  const { name, value } = props
+  const { name, value, current, unit } = props
   return (
-    <Root>
-      <label>
-        {name}: <input type='text' name={name} value={value} {...props} />
-      </label>
-    </Root>
+    <Card>
+      <Root>
+        <p>{name}</p>
+        <p>curruent: {current + unit}</p>
+        <input type='text' name={name} value={value} {...props} />
+      </Root>
+    </Card>
   )
 }
 
