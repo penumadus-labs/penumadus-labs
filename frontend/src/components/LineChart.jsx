@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import {
   LineChart,
   CartesianGrid,
@@ -8,14 +9,19 @@ import {
   Legend,
   Line,
 } from 'recharts'
-import replaceMethods from '../../utils/replace-methods'
+import replaceMethods from '../utils/replace-methods'
 
 // deprecated shit :(
 replaceMethods([LineChart, Line])
 
-const LineGraph = ({ data, dataKey }) => {
+const Root = styled(LineChart)`
+  margin: ${({ theme }) => theme.spacing.sm};
+  background: ${({ theme }) => theme.color.navBackground};
+`
+
+export default ({ data, dataKey }) => {
   return (
-    <LineChart
+    <Root
       width={1200}
       height={250}
       data={data}
@@ -27,8 +33,6 @@ const LineGraph = ({ data, dataKey }) => {
       <Tooltip />
       <Legend />
       <Line dot={false} type='monotone' dataKey={dataKey} stroke='#8884d8' />
-    </LineChart>
+    </Root>
   )
 }
-
-export default LineGraph

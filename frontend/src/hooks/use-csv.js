@@ -1,4 +1,4 @@
-import useApi from './use-api'
+import useApi from './use-async'
 import parse from 'csv-parse/lib/sync'
 
 function parseCsv(data) {

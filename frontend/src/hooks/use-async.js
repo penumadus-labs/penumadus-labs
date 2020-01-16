@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const useApi = url => {
+export default url => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -13,5 +13,3 @@ const useApi = url => {
 
   return data
 }
-
-export default useApi
