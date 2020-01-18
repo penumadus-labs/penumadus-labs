@@ -134,11 +134,11 @@ export default () => {
 
     console.log(valueProps.some(({ isvalid }) => !isvalid))
 
-    if (valueProps.some(({ isvalid }) => !isvalid)) {
+    if (valueProps.every(({ value }) => value === '')) {
+      setHelper(true)
+    } else if (valueProps.some(({ isvalid }) => !isvalid)) {
       setWarn(true)
-    } else if (valueProps.some(({ value }) => value !== '')) {
-      setAlert(true)
-    } else setHelper(true)
+    } else setAlert(true)
   }
 
   const handleCancel = () => {
