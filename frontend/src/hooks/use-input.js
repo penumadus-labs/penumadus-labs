@@ -3,6 +3,8 @@ import { useState } from 'react'
 const useInput = (initial = '') => {
   const [value, setValue] = useState(initial)
 
+  const reset = () => setValue('')
+
   return [
     value,
     {
@@ -11,6 +13,7 @@ const useInput = (initial = '') => {
         setValue(e.target.value)
       },
     },
+    reset,
   ]
 }
 

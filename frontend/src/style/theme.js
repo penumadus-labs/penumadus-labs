@@ -13,6 +13,9 @@ const theme = {
     hover: '#3e3e3e',
     active: '#4e4e4e',
     selected: '#373737',
+    green: '#388e3c',
+    blue: '#3f51b5',
+    red: '#c62828',
   },
   font: {
     size: {
@@ -46,9 +49,12 @@ theme.mixins.style = `
   letter-spacing: ${theme.font.letterSpacing}
   color: ${theme.color.font};
   background: ${theme.color.icon};
-  margin-top: ${theme.spacing.sm};
-  margin-bottom: ${theme.spacing.sm};
   border-radius: ${theme.shape.borderRadius};
 `
+// `
+//   margin-top: ${theme.spacing.sm};
+//   margin-bottom: ${theme.spacing.sm};
+//
+// `
 
 export default theme

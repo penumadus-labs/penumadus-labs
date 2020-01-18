@@ -9,8 +9,9 @@ const Root = styled.button`
   }) => clickable + style}
   width: 75px;
   height: 40px;
-  margin: ${({ theme }) => theme.spacing.sm};
-  background: ${({ color }) => color};
+
+  margin-right: ${({ theme }) => theme.spacing.sm};
+  background: ${({ color, theme }) => theme.color[color]};
 `
 
 const Button = ({ color, children, onClick }) => (

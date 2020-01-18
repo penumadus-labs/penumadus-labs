@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Dropdown from '../components/ui/Dropdown.jsx'
 
 const Root = styled.main`
   ${({ theme }) => theme.mediaQueries.layout} {
@@ -17,6 +18,11 @@ const Root = styled.main`
   overflow-y: auto;
 `
 
-const Main = ({ children }) => <Root>{children}</Root>
+const Main = ({ children }) => (
+  <Root>
+    <Dropdown />
+    {children}
+  </Root>
+)
 
 export default Main

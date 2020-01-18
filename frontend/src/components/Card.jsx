@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 const Root = styled.div`
   margin: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: 0;
+
   padding: ${({ theme }) => theme.spacing.sm};
   background: ${({ theme }) => theme.color.navBackground};
 `

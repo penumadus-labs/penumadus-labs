@@ -3,6 +3,9 @@ import { navigate } from 'gatsby'
 
 const isBrowser = typeof window !== 'undefined'
 
+const loginRoot = '/'
+const appRoot = '/app/charts'
+
 const auth = isBrowser
   ? new auth0.WebAuth({
       domain: process.env.AUTH0_DOMAIN,
@@ -21,7 +24,7 @@ export const logout = () => {
   if (!isBrowser) return
 
   endSession()
-  navigate('/')
+  navigate(loginRoot)
 }
 
 export const checkAuth = () => {
@@ -32,7 +35,7 @@ export const checkAuth = () => {
 
   if (now < expiresAt) return true
 
-  navigate('/')
+  navigate(loginRoot)
 }
 
 const setSession = authResult => {
@@ -57,10 +60,10 @@ export const handleAuthentication = () => {
   auth.parseHash((err, authResult) => {
     if (err) {
       console.error(err)
-      navigate('/')
+      navigate(loginRoot)
     } else if (authResult && authResult.accessToken && authResult.idToken) {
       setSession(authResult)
-      navigate('/app/graphs')
+      navigate(appRoot)
     }
   })
 }

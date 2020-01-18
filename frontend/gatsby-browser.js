@@ -1,3 +1,4 @@
+import 'semantic-ui-css/semantic.min.css'
 import './src/style/global.css'
 import React from 'react'
 import Header from './src/layout/Header.jsx'

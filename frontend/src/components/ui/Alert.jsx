@@ -10,14 +10,27 @@ const Root = styled.div`
   bottom: 0;
   left: 0;
   z-index: ${({ theme }) => theme.zIndex[0]};
-  background: ${({ theme }) => theme.color.background};
-  opacity: 0.85;
+
+  > div {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: ${({ theme }) => theme.color.background};
+    opacity: 0.5;
+  }
 
   main {
+    z-index: ${({ theme }) => theme.zIndex[1]};
     width: 60vw;
     max-width: 650px;
     padding: ${({ theme }) => theme.spacing.sm};
     background: ${({ theme }) => theme.color.navBackground};
+
+    .content {
+      min-height: 400px;
+    }
 
     p {
       padding: ${({ theme }) => theme.spacing.sm};
@@ -29,16 +42,13 @@ const Root = styled.div`
   }
 `
 
-const green = '#388e3c'
-const blue = '#3f51b5'
-const red = '#c62828'
-
 const Alert = ({ settings, children, onAccept, onCancel }) => (
   <Root>
+    <div />
     <main>
-      {children}
+      <div className='content'>{children}</div>
       <div>
-        <Button color={green} onClick={onAccept}>
+        <Button color={'green'} onClick={onAccept}>
           accept
         </Button>
         <Button onClick={onCancel}>cancel</Button>

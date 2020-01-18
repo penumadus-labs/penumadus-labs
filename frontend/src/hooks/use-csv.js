@@ -17,7 +17,6 @@ const useCsv = url => {
 export default useCsv
 
 export function filter(data, ...keys) {
-  console.log(keys)
   return data.map(obj => {
     const filtered = {}
     for (const key of keys) {
