@@ -12,6 +12,6 @@ const options = devices.map(device => ({
 
 export default () => (
   <Card>
-    <Select placeholder='select device' options={options} />
+    select device: <Select placeholder='default device' options={options} />
   </Card>
 )

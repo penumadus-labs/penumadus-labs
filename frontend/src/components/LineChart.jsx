@@ -1,38 +1,36 @@
 import React from 'react'
-import styled from 'styled-components'
 import {
+  ResponsiveContainer,
   LineChart,
-  CartesianGrid,
+  CartesianAxis,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
   Line,
 } from 'recharts'
+import Card from './Card.jsx'
+import useResize from '../hooks/use-resize'
 import replaceMethods from '../utils/replace-methods'
 
 // deprecated shit :(
 replaceMethods([LineChart, Line])
 
-const Root = styled(LineChart)`
-  margin: ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme }) => theme.color.navBackground};
-`
-
 export default ({ data, dataKey }) => {
+  useResize()
+
   return (
-    <Root
-      width={1200}
-      height={250}
-      data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-    >
-      <CartesianGrid strokeDasharray='3 3' />
-      <XAxis />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line dot={false} type='monotone' dataKey={dataKey} stroke='#8884d8' />
-    </Root>
+    <Card>
+      <ResponsiveContainer width='100%' height={300}>
+        <LineChart data={data} margin={{ left: -30, right: 10 }}>
+          <CartesianAxis />
+          <XAxis />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line dot={false} type='monotone' dataKey={dataKey} stroke='yellow' />
+        </LineChart>
+      </ResponsiveContainer>
+    </Card>
   )
 }

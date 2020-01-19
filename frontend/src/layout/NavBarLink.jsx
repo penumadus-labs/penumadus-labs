@@ -38,7 +38,7 @@ const NavBarLink = ({ Icon, label, theme }) => (
     }
   >
     <div>
-      <Icon size={responsive({ sm: 36, df: 48 })} />
+      <Icon size={responsive({ layout: 36, default: 48 })} />
       <p>{label}</p>
     </div>
   </Root>

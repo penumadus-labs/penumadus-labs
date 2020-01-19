@@ -7,8 +7,13 @@ function responsive(settings) {
     return settings.md
   } else if (window.innerWidth < breakpoints.lg && settings.lg !== undefined) {
     return settings.lg
+  } else if (
+    window.innerWidth < breakpoints.layout &&
+    settings.layout !== undefined
+  ) {
+    return settings.layout
   } else {
-    return settings.df
+    return settings.default
   }
 }
 

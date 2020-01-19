@@ -9,20 +9,18 @@ import useInput from '../hooks/use-input'
 import * as validate from '../utils/validate-values.js'
 
 const Root = styled.div`
-  form {
+  .flexbox {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-right: ${({ theme }) => theme.spacing.sm};
     margin-left: ${({ theme }) => theme.spacing.sm};
 
     > * {
       ${({ theme }) => theme.mediaQueries.layout} {
-        width: 49.5%;
+        flex-basis: 33%;
       }
-      width: 24.5%;
-      margin-right: 0;
-      margin-left: 0;
+      flex: 1 1 20%;
+      margin-right: ${({ theme }) => theme.spacing.sm};
     }
   }
 
@@ -164,11 +162,11 @@ export default () => {
   return (
     <>
       <Root>
-        <form>
+        <div className='flexbox'>
           {valueProps.map(props => (
             <InputValue {...props} key={props.name} />
           ))}
-        </form>
+        </div>
         <Card>
           <Button onClick={handleSubmit}>Apply</Button>
           {helper && <p className='helper'>no values entered</p>}
@@ -177,6 +175,7 @@ export default () => {
       </Root>
       {alert && (
         <Alert onAccept={handleAccept} onCancel={handleCancel}>
+          <p>Summary</p>
           {valueProps.map(props => (
             <Summary {...props} key={props.name} />
           ))}
