@@ -1,3 +1,3 @@
 import React from 'react'
 
-export default () => <p></p>
+export default () => <>{[<p>hi</p>, <p>hi</p>]}</>
