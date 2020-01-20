@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Dropdown from '../components/ui/Dropdown.jsx'
+import MenuBar from './MenuBar.jsx'
 
 const Root = styled.main`
   ${({ theme }) => theme.mediaQueries.layout} {
@@ -16,7 +16,7 @@ const Root = styled.main`
 const Main = ({ children }) => {
   return (
     <Root>
-      <Dropdown />
+      <MenuBar />
       {children}
     </Root>
   )

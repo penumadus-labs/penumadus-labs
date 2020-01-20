@@ -11,7 +11,7 @@ const Root = styled.div`
   left: 0;
   z-index: ${({ theme }) => theme.zIndex[0]};
 
-  > div {
+  .opaque-cover {
     position: fixed;
     top: 0;
     right: 0;
@@ -25,7 +25,9 @@ const Root = styled.div`
     z-index: ${({ theme }) => theme.zIndex[1]};
     width: 60vw;
     max-width: 650px;
+
     padding: ${({ theme }) => theme.spacing.sm};
+    text-align: center;
     background: ${({ theme }) => theme.color.navBackground};
 
     .content {
@@ -36,19 +38,19 @@ const Root = styled.div`
       padding: ${({ theme }) => theme.spacing.sm};
     }
 
-    > div {
-      text-align: center;
+    button {
+      margin-left: ${({ theme }) => theme.spacing.sm};
     }
   }
 `
 
 const Alert = ({ settings, children, onAccept, onCancel }) => (
   <Root>
-    <div />
+    <div className='opaque-cover' />
     <main>
       <div className='content'>{children}</div>
       <div>
-        <Button color={'green'} onClick={onAccept}>
+        <Button color='green' onClick={onAccept}>
           accept
         </Button>
         <Button onClick={onCancel}>cancel</Button>

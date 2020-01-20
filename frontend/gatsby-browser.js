@@ -15,6 +15,7 @@ const Root = styled.div`
 `
 
 const wrapPageElement = ({ element, props }) => {
+  console.clear()
   return (
     <ThemeProvider theme={theme}>
       <Root>

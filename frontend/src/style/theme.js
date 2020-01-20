@@ -51,10 +51,12 @@ theme.mixins.style = `
   background: ${theme.color.icon};
   border-radius: ${theme.shape.borderRadius};
 `
-// `
-//   margin-top: ${theme.spacing.sm};
-//   margin-bottom: ${theme.spacing.sm};
-//
-// `
+theme.mixins.card = `
+  margin: ${theme.spacing.sm};
+  margin-bottom: 0;
+
+  padding: ${theme.spacing.sm};
+  background: ${theme.color.navBackground};
+`
 
 export default theme

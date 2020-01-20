@@ -7,10 +7,11 @@ const Root = styled.button`
       mixins: { clickable, style },
     },
   }) => clickable + style}
-  width: 75px;
+  min-width: 75px;
   height: 40px;
 
-  margin-right: ${({ theme }) => theme.spacing.sm};
+  /* margin-left: ${({ theme }) => theme.spacing.sm}; */
+  padding: ${({ theme }) => theme.spacing.sm};
   background: ${({ color, theme }) => theme.color[color]};
 `
 

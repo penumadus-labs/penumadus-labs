@@ -1,3 +1,8 @@
 import React from 'react'
+import Card from '../components/Card.jsx'
 
-export default () => <>{[<p>hi</p>, <p>hi</p>]}</>
+export default () => (
+  <Card>
+    <p>Register</p>
+  </Card>
+)

@@ -8,7 +8,7 @@ import Alert from '../components/ui/Alert.jsx'
 import useSetting from '../hooks/use-setting'
 
 const Root = styled.div`
-  .flexbox {
+  form {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -48,9 +48,9 @@ export default () => {
   // methods
 
   const handleSubmit = e => {
-    if (valueProps.every(({ value }) => value === '')) {
+    if (valueProps.every(({ props }) => props.value === '')) {
       setWarning('no valus entered')
-    } else if (valueProps.some(({ warning }) => warning)) {
+    } else if (valueProps.some(({ props }) => props.warning)) {
       setWarning('invalid input')
     } else {
       setWarning('')
@@ -73,14 +73,6 @@ export default () => {
 
   // components
 
-  const Inputs = () => (
-    <div className='flexbox'>
-      {valueProps.map(({ props }) => (
-        <Setting {...props} key={props.name} />
-      ))}
-    </div>
-  )
-
   const Summary = () => (
     <>
       <p>summary</p>
@@ -97,7 +89,11 @@ export default () => {
   return (
     <>
       <Root>
-        <Inputs />
+        <form>
+          {valueProps.map(({ props }) => (
+            <Setting {...props} key={props.name} />
+          ))}
+        </form>
         <Card>
           <Button onClick={handleSubmit}>Apply</Button>
           {warning && <p className='warning'>{warning}</p>}
