@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Dropdown from '../components/ui/Dropdown.jsx'
+import DeviceSelect from '../components/ui/DeviceSelect.jsx'
 import Download from '../components/ui/Download.jsx'
 
 const Root = styled.div`
@@ -11,7 +11,7 @@ const Root = styled.div`
 
 export default () => (
   <Root>
-    <Dropdown />
+    <DeviceSelect />
     <Download />
   </Root>
 )

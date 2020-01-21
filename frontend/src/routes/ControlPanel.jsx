@@ -35,15 +35,15 @@ export default () => {
   const [warning, setWarning] = useState('')
 
   const valueProps = [
-    useSetting('value1'),
-    useSetting('value2'),
-    useSetting('value3'),
-    useSetting('value4'),
-    useSetting('value5'),
-    useSetting('value6'),
-    useSetting('value7'),
-    useSetting('value8'),
-  ]
+    'value1',
+    'value2',
+    'value3',
+    'value4',
+    'value5',
+    'value6',
+    'value7',
+    'value8',
+  ].map(useSetting)
 
   // methods
 

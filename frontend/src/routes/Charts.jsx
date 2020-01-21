@@ -1,10 +1,10 @@
 import React from 'react'
 import LineChart from '../components/LineChart.jsx'
 import useCSV, { filter } from '../hooks/use-csv'
-import { csv } from '../utils/api'
+import { device1 } from '../utils/api'
 
 export default () => {
-  const data = useCSV(csv)
+  const data = useCSV(device1)
 
   const key1 = 'hum'
   const key2 = 'temp'

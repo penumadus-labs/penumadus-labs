@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Card from '../components/Card.jsx'
 import Button from '../components/ui/Button.jsx'
 import { login } from '../utils/auth'
 
