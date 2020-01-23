@@ -3,7 +3,8 @@ Repository for all code related to tank monitoring
 
 Meeting Logs:
 
-
+1/15/20
+- tables created in database and viewable in mysql
 1/13/20
 - On the control panel, there will be options to change parameters, shutdown the unit, repair the SD, and log messages
 - For the parameters, these will be inserted directly into the database via SQL statements.
