@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Select from './Select.jsx'
-import DeviceContext from '../../context/Devices.jsx'
+import useDevicesContext from '../../hooks/use-devices-context'
 
 const Root = styled.div`
   display: flex;
@@ -12,14 +12,18 @@ const Root = styled.div`
 `
 
 export default () => {
-  // useContext(DeviceContext)
+  const [{ selected, devices }, dispatch] = useDevicesContext()
 
-  const list = ['device1', 'device2', 'device3']
+  const name = selected ? selected.name : ''
+
+  const handleSelect = ({ target }) => {
+    dispatch({ type: 'select', name: target.value })
+  }
 
   return (
     <Root>
       <p>select device:</p>
-      <Select list={list} />
+      <Select selected={name} options={devices} handleSelect={handleSelect} />
     </Root>
   )
 }

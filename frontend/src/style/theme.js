@@ -37,6 +37,7 @@ const theme = {
   },
   shape: {
     borderRadius: '5px',
+    buttonHeight: '38px',
   },
   zIndex: [10, 20, 30],
   // transitions: {},

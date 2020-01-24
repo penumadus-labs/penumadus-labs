@@ -10,10 +10,9 @@ import {
   Line,
 } from 'recharts'
 import Card from './Card.jsx'
-import replaceMethods from '../utils/replace-methods'
+import replace from '../utils/replace-deprecated-methods'
 
-// deprecated shit :(
-replaceMethods([LineChart, Line])
+replace(LineChart, Line)
 
 export default ({ data, dataKey }) => {
   return (

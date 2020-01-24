@@ -8,7 +8,8 @@ const Root = styled.button`
     },
   }) => clickable + style}
   min-width: 75px;
-  height: 40px;
+
+  height: ${({ theme }) => theme.shape.buttonHeight};
 
   /* margin-left: ${({ theme }) => theme.spacing.sm}; */
   padding: ${({ theme }) => theme.spacing.sm};

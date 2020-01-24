@@ -4,8 +4,7 @@ import Card from '../components/Card.jsx'
 import Setting from '../components/ui/Setting.jsx'
 import Button from '../components/ui/Button.jsx'
 import Alert from '../components/ui/Alert.jsx'
-// import useAsync from '../hooks/use-async'
-import useSetting from '../hooks/use-setting'
+import useSettings from '../hooks/use-settings'
 
 const Root = styled.div`
   form {
@@ -31,26 +30,17 @@ const Root = styled.div`
 
 export default () => {
   // hooks
+
   const [alert, setAlert] = useState(false)
   const [warning, setWarning] = useState('')
-
-  const valueProps = [
-    'value1',
-    'value2',
-    'value3',
-    'value4',
-    'value5',
-    'value6',
-    'value7',
-    'value8',
-  ].map(useSetting)
+  const [settings, update] = useSettings()
 
   // methods
 
   const handleSubmit = e => {
-    if (valueProps.every(({ props }) => props.value === '')) {
+    if (settings.every(({ props }) => props.value === '')) {
       setWarning('no valus entered')
-    } else if (valueProps.some(({ props }) => props.warning)) {
+    } else if (settings.some(({ props }) => props.warning)) {
       setWarning('invalid input')
     } else {
       setWarning('')
@@ -63,12 +53,19 @@ export default () => {
   }
   const handleAccept = () => {
     setAlert(false)
-    const result = valueProps.reduce((acc, { name, value, current }) => {
-      acc[name] = value === '' ? current : +value
-      return acc
-    }, {})
-    console.log(result)
-    valueProps.forEach(({ reset }) => reset())
+    const result = settings.reduce(
+      (acc, { props: { name, current, value, unit } }) => {
+        acc[name] = {
+          name,
+          unit,
+          value: value === '' ? current : +value,
+        }
+        return acc
+      },
+      {}
+    )
+    settings.forEach(({ reset }) => reset())
+    update(result)
   }
 
   // components
@@ -76,7 +73,7 @@ export default () => {
   const Summary = () => (
     <>
       <p>summary</p>
-      {valueProps.map(({ props: { name, value, current, unit } }) => {
+      {settings.map(({ props: { name, value, current, unit } }) => {
         return value === '' ? null : (
           <p key={name}>
             {name}: {current + unit} => {value + unit}
@@ -87,23 +84,25 @@ export default () => {
   )
 
   return (
-    <>
-      <Root>
-        <form>
-          {valueProps.map(({ props }) => (
-            <Setting {...props} key={props.name} />
-          ))}
-        </form>
-        <Card>
-          <Button onClick={handleSubmit}>Apply</Button>
-          {warning && <p className='warning'>{warning}</p>}
-        </Card>
-      </Root>
-      {alert && (
-        <Alert onAccept={handleAccept} onCancel={handleCancel}>
-          <Summary />
-        </Alert>
-      )}
-    </>
+    settings && (
+      <>
+        <Root>
+          <form>
+            {settings.map(({ props }) => (
+              <Setting {...props} key={props.name} />
+            ))}
+          </form>
+          <Card>
+            <Button onClick={handleSubmit}>Apply</Button>
+            {warning && <p className='warning'>{warning}</p>}
+          </Card>
+        </Root>
+        {alert && (
+          <Alert onAccept={handleAccept} onCancel={handleCancel}>
+            <Summary />
+          </Alert>
+        )}
+      </>
+    )
   )
 }

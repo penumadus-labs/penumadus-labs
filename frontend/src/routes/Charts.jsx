@@ -1,22 +1,22 @@
 import React from 'react'
 import LineChart from '../components/LineChart.jsx'
-import useCSV, { filter } from '../hooks/use-csv'
-import { device1 } from '../utils/api'
+import { useDevicesState } from '../hooks/use-devices-context'
+import { parseCSVData, filterParsed } from '../utils/csv'
 
 export default () => {
-  const data = useCSV(device1)
+  const keys = ['hum', 'temp']
 
-  const key1 = 'hum'
-  const key2 = 'temp'
+  const { selected } = useDevicesState()
 
-  if (data) {
-    const hum = filter(data, key1)
-    const temp = filter(data, key2)
+  if (selected) {
+    const data = parseCSVData(selected.csv)
+    const hum = filterParsed(data, keys[0])
+    const temp = filterParsed(data, keys[1])
 
     return (
       <>
-        <LineChart data={hum} dataKey={key1} />
-        <LineChart data={temp} dataKey={key2} />
+        <LineChart data={hum} dataKey={keys[0]} />
+        <LineChart data={temp} dataKey={keys[1]} />
       </>
     )
   }

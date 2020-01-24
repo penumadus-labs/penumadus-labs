@@ -1,39 +1,37 @@
-// global state not in use
-
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useReducer, useEffect } from 'react'
+import reducer, { initialState } from './reducer'
 import axios from 'axios'
+import * as api from '../utils/api'
 
-const DeviceContext = createContext()
+const DevicesContext = createContext()
 
 export const Provider = ({ children }) => {
-  const [device, setDevice] = useState('')
-  const [deviceSettings, setDeviceSettings] = useState({})
+  console.log('context')
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
     void (async () => {
-      const deviceList = ['device1', 'device2', 'device3']
-      const resps = await Promise.all(
-        deviceList.map(device => axios.get(`/${device}.csv`))
-      )
-      const result = deviceList.reduce((acc, device, index) => {
-        acc[device] = resps[index]
-        return acc
-      }, {})
-      setDeviceSettings(result)
-      setDevice(deviceList[0])
-    })().catch(console.error)
-  })
+      const csv1 = await axios.get(api.device1)
+      const csv2 = await axios.get(api.device2)
+      const csv3 = await axios.get(api.device3)
+      const data = [csv1, csv2, csv3].map(({ data }) => data)
 
-  const value = {
-    device,
-    setDevice,
-    deviceList: Object.keys(deviceSettings),
-    settings: deviceSettings[device],
-  }
+      dispatch({ type: 'get', data })
+    })().catch(console.error)
+  }, [dispatch, state.fetches])
+
+  useEffect(() => {
+    if (state.posts === 0) return
+    void (async () => {
+      dispatch({ type: 'post' })
+    })().catch(console.error)
+  }, [dispatch, state.posts])
 
   return (
-    <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>
+    <DevicesContext.Provider value={[state, dispatch]}>
+      {children}
+    </DevicesContext.Provider>
   )
 }
 
-export default DeviceContext
+export default DevicesContext
