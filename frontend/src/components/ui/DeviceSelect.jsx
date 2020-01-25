@@ -12,12 +12,12 @@ const Root = styled.div`
 `
 
 export default () => {
-  const [{ selected, devices }, dispatch] = useDevicesContext()
+  const [{ selected, devices }, { selectDevice }] = useDevicesContext()
 
   const name = selected ? selected.name : ''
 
   const handleSelect = ({ target }) => {
-    dispatch({ type: 'select', name: target.value })
+    selectDevice(target.value)
   }
 
   return (

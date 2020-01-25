@@ -1,3 +1,5 @@
+import actions from './actions'
+
 const devices = ['device1', 'device2', 'device3']
 
 const settings = {
@@ -29,9 +31,11 @@ export const initialState = {
   ],
 }
 
+export const createActions = actions
+
 export default (state, action) => {
   switch (action.type) {
-    case 'get':
+    case 'get-devices':
       const data = devices.reduce((acc, name, index) => {
         acc[name] = {
           name,
@@ -47,17 +51,13 @@ export default (state, action) => {
         devices,
         data,
       }
-    case 'select':
+    case 'select-device':
       return {
         ...state,
         selected: state.data[action.name],
       }
     case 'update-settings':
       state.selected.settings = action.settings
-      state.posts++
-      return { ...state }
-    case 'post':
-      console.log('post')
       return { ...state }
     default:
       throw new Error()

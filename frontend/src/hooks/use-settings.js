@@ -19,11 +19,10 @@ const useSetting = ({ name, value: current, unit }) => {
 }
 
 export default () => {
-  const [{ selected, settingsList }, dispatch] = useDevicesContext()
-
-  const update = settings => {
-    dispatch({ type: 'update-settings', settings })
-  }
+  const [
+    { selected, settingsList },
+    { updateSettings: update },
+  ] = useDevicesContext()
 
   if (!selected) settingsList.map(useSetting)
 
