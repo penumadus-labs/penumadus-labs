@@ -22,8 +22,10 @@ const Root = styled.label`
   }
 `
 
-export default props => (
-  <Root>
-    <input type='text' {...props} />
-  </Root>
-)
+export default ({ value, onChange }) => {
+  return (
+    <Root>
+      <input type='text' value={value} onChange={onChange} />
+    </Root>
+  )
+}

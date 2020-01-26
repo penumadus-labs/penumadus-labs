@@ -17,13 +17,12 @@ const Root = styled.div`
   }
 `
 
-export default props => {
-  const { current, unit, name, bind, warning } = props
+export default ({ value, current, unit, name, handleChange, warning }) => {
   return (
     <Root>
       <p>{name}</p>
       <p>curruent: {current + unit}</p>
-      <Input {...props} {...bind} />
+      <Input value={value} onChange={handleChange} />
       {warning && <p className='warning'>{warning}</p>}
     </Root>
   )

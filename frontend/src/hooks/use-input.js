@@ -7,10 +7,8 @@ const useInput = (initial = '') => {
 
   return [
     value,
-    {
-      onChange(e) {
-        setValue(e.target.value)
-      },
+    ({ target }) => {
+      setValue(target.value)
     },
     reset,
   ]
