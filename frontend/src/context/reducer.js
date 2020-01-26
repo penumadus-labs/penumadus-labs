@@ -2,17 +2,6 @@ import actions from './actions'
 
 const devices = ['device1', 'device2', 'device3']
 
-const settings = {
-  value1: { name: 'value1', value: 10, unit: 'a' },
-  value2: { name: 'value2', value: 20, unit: 'b' },
-  value3: { name: 'value3', value: 30, unit: 'c' },
-  value4: { name: 'value4', value: 40, unit: 'd' },
-  value5: { name: 'value5', value: 50, unit: 'e' },
-  value6: { name: 'value6', value: 60, unit: 'f' },
-  value7: { name: 'value7', value: 70, unit: 'g' },
-  value8: { name: 'value8', value: 80, unit: 'h' },
-}
-
 export const initialState = {
   fetches: 0,
   posts: 0,
@@ -32,6 +21,17 @@ export const initialState = {
 }
 
 export const createActions = actions
+
+const settings = {
+  value1: { name: 'value1', value: 10, unit: 'a' },
+  value2: { name: 'value2', value: 20, unit: 'b' },
+  value3: { name: 'value3', value: 30, unit: 'c' },
+  value4: { name: 'value4', value: 40, unit: 'd' },
+  value5: { name: 'value5', value: 50, unit: 'e' },
+  value6: { name: 'value6', value: 60, unit: 'f' },
+  value7: { name: 'value7', value: 70, unit: 'g' },
+  value8: { name: 'value8', value: 80, unit: 'h' },
+}
 
 export default (state, action) => {
   switch (action.type) {

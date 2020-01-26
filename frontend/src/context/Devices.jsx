@@ -1,15 +1,13 @@
-import React, { createContext, useReducer, useEffect, useMemo } from 'react'
+import React, { createContext, useEffect } from 'react'
+import useAsyncReducer from '../hooks/use-async-reducer'
 import reducer, { initialState, createActions } from './reducer'
 
 const DevicesContext = createContext()
 
 export const Provider = ({ children }) => {
   console.log('context')
-  const [state, disptach] = useReducer(reducer, initialState)
 
-  const actions = useMemo(() => {
-    return createActions(disptach)
-  }, [disptach])
+  const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   useEffect(() => {
     actions.getDevices()
