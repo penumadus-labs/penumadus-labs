@@ -42,8 +42,8 @@ export default () => {
       value: value === '' ? current : +value,
       unit,
     }))
-    reset()
     update(result)
+    reset()
   }
 
   return settings.length ? (

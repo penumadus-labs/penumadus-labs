@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import useDevicesContext from './use-devices-context'
 import validate from '../utils/validate-settings'
 // import useInput from './use-input'
@@ -74,9 +74,10 @@ export default () => {
         value: '',
         warning: '',
         handleChange({ target }) {
-          const self = list[index]
-          self.value = target.value
-          self.warning = validate[self.name](self.value, self.current)
+          const ref = list[index]
+          const { name, value, current } = ref
+          ref.value = target.value
+          ref.warning = validate[name](value, current)
           setList([...list])
         },
       }

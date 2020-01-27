@@ -2,22 +2,21 @@ import actions from './actions'
 
 const devices = ['device1', 'device2', 'device3']
 
-const settingsList = [
-  'value1',
-  'value2',
-  'value3',
-  'value4',
-  'value5',
-  'value6',
-  'value7',
-  'value8',
-]
+// const settingsList = [
+//   'value1',
+//   'value2',
+//   'value3',
+//   'value4',
+//   'value5',
+//   'value6',
+//   'value7',
+//   'value8',
+// ]
 
 export const initialState = {
   selected: {},
   devices: [],
   data: {},
-  settingsList,
 }
 
 export const createActions = actions

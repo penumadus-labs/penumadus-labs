@@ -6,10 +6,12 @@ import { parseCSVData, filterParsed } from '../utils/csv'
 export default () => {
   const keys = ['hum', 'temp']
 
-  const { selected } = useDevicesState()
+  const {
+    selected: { csv },
+  } = useDevicesState()
 
-  if (selected) {
-    const data = parseCSVData(selected.csv)
+  if (csv) {
+    const data = parseCSVData(csv)
     const hum = filterParsed(data, keys[0])
     const temp = filterParsed(data, keys[1])
 

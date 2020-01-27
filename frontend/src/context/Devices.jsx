@@ -5,8 +5,6 @@ import reducer, { initialState, createActions } from './reducer'
 const DevicesContext = createContext()
 
 export const Provider = ({ children }) => {
-  console.log('context')
-
   const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   useEffect(() => {
