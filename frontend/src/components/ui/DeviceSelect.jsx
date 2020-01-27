@@ -16,6 +16,8 @@ export default () => {
 
   const name = selected ? selected.name : ''
 
+  const deviceNames = devices.map(({ name }) => name)
+
   const handleSelect = ({ target }) => {
     selectDevice(target.value)
   }
@@ -23,7 +25,11 @@ export default () => {
   return (
     <Root>
       <p>select device:</p>
-      <Select selected={name} options={devices} handleSelect={handleSelect} />
+      <Select
+        selected={name}
+        options={deviceNames}
+        handleSelect={handleSelect}
+      />
     </Root>
   )
 }

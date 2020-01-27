@@ -1,41 +1,52 @@
 import React from 'react'
 import styled from 'styled-components'
 import Card from '../Card.jsx'
+import Input from './Input.jsx'
 import Button from './Button.jsx'
-import Setting from './Setting.jsx'
 
-const Root = styled.div`
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-left: ${({ theme }) => theme.spacing.sm};
+const Root = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: ${({ theme }) => theme.spacing.sm};
+`
 
-    > * {
-      ${({ theme }) => theme.mediaQueries.layout} {
-        flex-basis: 33%;
-      }
-      flex: 1 1 20%;
-      margin-right: ${({ theme }) => theme.spacing.sm};
-    }
+const Setting = styled.div`
+  ${({ theme }) => theme.mediaQueries.layout} {
+    flex-basis: 33%;
   }
+  flex: 1 1 20%;
 
-  .warning {
-    margin-top: ${({ theme }) => theme.spacing.sm};
-    color: ${({ theme }) => theme.color.red};
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  margin-right: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.color.navBackground};
+
+  > * {
+    margin-top: ${({ theme }) => theme.spacing.lg};
   }
 `
 
+const Warning = styled.p`
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme }) => theme.color.red};
+`
+
 export default ({ list, onSubmit, warning }) => (
-  <Root>
-    <form>
-      {list.map(props => (
-        <Setting {...props} key={props.name} />
+  <>
+    <Root>
+      {list.map(({ value, current, unit, name, handleChange, warning }) => (
+        <Setting key={name}>
+          <p>{name}</p>
+          <p>curruent: {current + unit}</p>
+          <Input value={value} onChange={handleChange} />
+          {warning && <Warning>{warning}</Warning>}
+        </Setting>
       ))}
-    </form>
+    </Root>
     <Card>
       <Button onClick={onSubmit}>Apply</Button>
-      {warning && <p className='warning'>{warning}</p>}
+      {warning && <Warning>{warning}</Warning>}
     </Card>
-  </Root>
+  </>
 )

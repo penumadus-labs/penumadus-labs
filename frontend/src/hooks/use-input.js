@@ -1,3 +1,5 @@
+// unused
+
 import { useState } from 'react'
 
 const useInput = (initial = '') => {
@@ -5,13 +7,14 @@ const useInput = (initial = '') => {
 
   const reset = () => setValue('')
 
-  return [
+  const bind = {
     value,
-    ({ target }) => {
+    onchange: ({ target }) => {
       setValue(target.value)
     },
-    reset,
-  ]
+  }
+
+  return [bind, reset]
 }
 
 export default useInput

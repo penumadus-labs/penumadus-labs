@@ -4,13 +4,9 @@ import Summary from '../components/ui/Summary.jsx'
 import useSettings from '../hooks/use-settings'
 
 export default () => {
-  // hooks
-
   const [alert, setAlert] = useState(false)
   const [warning, setWarning] = useState('')
   const [settings, update, reset] = useSettings()
-
-  // methods
 
   const handleSubmit = e => {
     if (settings.every(props => props.value === '')) {
@@ -29,20 +25,14 @@ export default () => {
 
   const handleAccept = () => {
     setAlert(false)
-    // const result = settings.reduce((acc, { name, current, value, unit }) => {
-    //   acc[name] = {
-    //     name,
-    //     unit,
-    //     value: value === '' ? current : +value,
-    //   }
-    //   return acc
-    // }, {})
+
     const result = settings.map(({ name, current, value, unit }) => ({
       name,
       value: value === '' ? current : +value,
       unit,
     }))
     update(result)
+
     reset()
   }
 

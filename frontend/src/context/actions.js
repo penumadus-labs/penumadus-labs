@@ -1,10 +1,14 @@
-import { getAll } from '../utils/api'
+import { getDevices, getSettings, getData } from '../utils/api'
 
 export default disptach => ({
   async getDevices() {
-    const data = await getAll()
+    const [devices, settings, data] = await Promise.all([
+      getDevices(),
+      getSettings(),
+      getData(),
+    ])
 
-    disptach({ type: 'get-devices', data })
+    disptach({ type: 'get-devices', devices, settings, data })
   },
   selectDevice(name) {
     disptach({ type: 'select-device', name })
