@@ -1,46 +1,39 @@
 {
   "name": "hankmon-ui",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "",
   "dependencies": {
     "auth0-js": "^9.12.1",
     "axios": "^0.19.1",
     "csv-parse": "^4.8.3",
     "gatsby": "^2.18.12",
+    "gatsby-source-filesystem": "^2.1.46",
     "gatsby-source-mysql": "^2.2.2",
-    "papaparse": "^5.1.1",
     "randomstring": "^1.1.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-icons": "^3.8.0",
     "recharts": "1.8.5",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "typescript": "^3.7.5"
   },
   "devDependencies": {
     "gatsby-plugin-styled-components": "^3.1.17",
     "prettier": "^1.19.1"
   },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
+  "license": "",
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "npm run dev",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "git": "git add . && git commit -m 'tweaks' && git push"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/carosaur/tankmon"
   }
 }

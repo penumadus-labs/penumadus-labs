@@ -1,4 +1,4 @@
-const { options, queries } = require('./db-config')
+const options = require('./db-config')
 
 module.exports = {
   siteMetadata: {
@@ -9,7 +9,6 @@ module.exports = {
     {
       resolve: `gatsby-source-mysql`,
       options,
-      queries,
     },
   ],
 }
