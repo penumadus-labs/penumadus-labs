@@ -1,0 +1,29 @@
+	struct Ddata_t {
+		float pressure;
+		int fills,
+		int temp;
+		int hum;
+	};
+		
+		
+	struct Adata_t {
+		float arrx;
+		float arry;
+		float arrz;
+	};
+	
+	struct Cdata_t {
+		char buf[16];
+	}
+
+	struct memelement_t{
+		byte fwd;
+		byte type;
+		byte Qpath;
+		short msgnum;
+		union {
+			struct Ddata_t Ddata;
+			struct Adata_t Adata;
+			struct Cdata_t Cdata;
+		}
+	} meme;
