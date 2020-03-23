@@ -1,0 +1,20 @@
+const { connect } = require('mongodb')
+const tunnel = require('./ssh-tunnel')
+
+const development = process.env.NODE_ENV === 'development'
+
+const url = development
+  ? `mongodb://localhost/admin`
+  : `mongodb://caro:Matthew85!!@18.222.29.175/test`
+
+module.exports = async () => {
+  if (development) await tunnel()
+
+  const client = await connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  console.log('database connected')
+
+  return client
+}
