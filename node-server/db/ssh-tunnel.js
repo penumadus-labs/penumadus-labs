@@ -1,5 +1,8 @@
+// this code maps a port from the dev server to the local machine for development
+
 const { readFileSync } = require('fs')
 const { promisify } = require('util')
+// promisify allow usage of async/await with ssh tunnel
 const tunnel = promisify(require('tunnel-ssh'))
 
 const dstPort = '27017'

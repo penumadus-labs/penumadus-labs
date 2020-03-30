@@ -3,7 +3,11 @@ const { Router } = require('express')
 const createApi = db => {
   const api = Router()
 
-  api.get('*', (req, res) => {
+  api.get('/test'(req, res) => {
+    res.send('api is working!')
+  })
+
+  api.get('/tank', (req, res) => {
     void (async () => {
       const data = await db
         .collection('environ_data')
