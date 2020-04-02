@@ -1,5 +1,10 @@
 import { getDevices, getSettings, getData } from '../utils/api'
 
+/* 
+  wrapper around React's default dispatch function returned from useReducer
+  to allow async data fetching before updating context
+ */
+
 export default disptach => ({
   async getDevices() {
     const [devices, settings, data] = await Promise.all([
@@ -7,6 +12,8 @@ export default disptach => ({
       getSettings(),
       getData(),
     ])
+
+    console.log(data[0])
 
     disptach({ type: 'get-devices', devices, settings, data })
   },

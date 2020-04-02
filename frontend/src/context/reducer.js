@@ -13,7 +13,7 @@ export default (state, action) => {
       const result = action.devices.map((name, index) => ({
         name,
         settings: action.settings[index],
-        csv: action.data[index],
+        data: action.data[index],
       }))
 
       return {

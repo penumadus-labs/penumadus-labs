@@ -6,7 +6,7 @@ export const parseCSVData = data =>
     skip_empty_lines: true,
   })
 
-export const filterParsed = (data, ...keys) =>
+export const filterData = (data, ...keys) =>
   data.map(obj => {
     const filtered = {}
     for (const key of keys) {

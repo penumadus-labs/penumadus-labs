@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const api = axios.create({baseURL: 'http://localhost/api'})
+
 const settings = [
   { name: 'value1', value: 10, unit: 'a' },
   { name: 'value2', value: 20, unit: 'b' },
@@ -11,24 +13,13 @@ const settings = [
   { name: 'value8', value: 80, unit: 'h' },
 ]
 
-export const getDevices = async () => ['device1', 'device2', 'device3']
+export const getDevices = async () => ['device1']
 
-export const getSettings = async () => [settings, settings, settings]
+export const getSettings = async () => [settings]
 
-export const device1 = async () => {
-  const { data } = await axios.get('/device1.csv')
-  return data
+// used as array because context api expects multiple devices
+export const getData = async () => {
+  const responses = await Promise.all([api.get('/tank')])
+
+  return responses.map(({ data }) => data)
 }
-
-export const device2 = async () => {
-  const { data } = await axios.get('/device2.csv')
-  return data
-}
-
-export const device3 = async () => {
-  const { data } = await axios.get('/device3.csv')
-  return data
-}
-
-export const getData = async () =>
-  Promise.all([device1(), device2(), device2()])

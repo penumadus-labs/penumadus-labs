@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button.jsx'
 import { useDevicesState } from '../../hooks/use-devices-context'
-import { makeCSVFile } from '../../utils/csv'
+import { makeCSVFile } from '../../utils/data'
 
 export default () => {
   const { selected } = useDevicesState()
