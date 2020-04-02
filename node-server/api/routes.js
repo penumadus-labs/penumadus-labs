@@ -3,7 +3,7 @@ const { Router } = require('express')
 const createApi = db => {
   const api = Router()
 
-  api.get('/test'(req, res) => {
+  api.get('/test', (req, res) => {
     res.send('api is working!')
   })
 

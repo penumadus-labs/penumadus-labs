@@ -6,7 +6,7 @@ const { promisify } = require('util')
 const tunnel = promisify(require('tunnel-ssh'))
 
 const dstPort = '27017'
-const privateKey = readFileSync('/Users/abram/.ssh/server2.pem')
+const privateKey = readFileSync(__dirname + '/../.ssh/server2.pem')
 
 const config = {
   username: 'ubuntu',
