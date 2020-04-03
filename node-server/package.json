@@ -7,7 +7,7 @@
     "start": "node server",
     "dev": "NODE_ENV=development nodemon server",
     "commit": "git pull && git add . && git commit -m 'server update' && git push",
-    "pull": "cd .. git pull cd node-server"
+    "pull": "cd .. && git pull && cd node-server"
   },
   "keywords": [],
   "author": "",
