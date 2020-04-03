@@ -5,7 +5,7 @@ const development = process.env.NODE_ENV === 'development'
 
 const url = development
   ? `mongodb://localhost/admin`
-  : `mongodb://caro:Matthew85!!@18.222.29.175/test`
+  : `mongodb://caro:Matthew85!!@localhost/test`
 
 module.exports = async () => {
   if (development) await tunnel()
