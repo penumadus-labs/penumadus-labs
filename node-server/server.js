@@ -21,7 +21,8 @@ void (async () => {
   const client = await connectToMongo()
   app.use('/api', createApi(client.db('test')))
 
-  server.listen(port, () => {
+  server.listen(port, err => {
+    console.log(err)
     console.log(`server listenning on port ${port}`)
   })
 })().catch(console.error)
