@@ -1,12 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
+
+  
+
 const Root = styled.button`
   ${({
-    theme: {
-      mixins: { clickable, style },
-    },
-  }) => clickable + style}
+      theme: {
+        mixins: { clickable, style }
+      }
+    }) => clickable + style}
+
   min-width: 75px;
 
   height: ${({ theme }) => theme.shape.buttonHeight};

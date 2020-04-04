@@ -1,5 +1,3 @@
-const options = require('./db-config')
-
 module.exports = {
   siteMetadata: {
     title: `HankMon-UI`,
