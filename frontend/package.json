@@ -9,9 +9,6 @@
     "axios": "^0.19.1",
     "csv-parse": "^4.8.3",
     "gatsby": "^2.18.12",
-    "gatsby-source-filesystem": "^2.1.46",
-    "gatsby-source-mysql": "^2.2.2",
-    "randomstring": "^1.1.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-icons": "^3.8.0",
@@ -20,8 +17,8 @@
     "typescript": "^3.7.5"
   },
   "devDependencies": {
-    "gatsby-plugin-styled-components": "^3.1.17",
-    "prettier": "^1.19.1"
+    "gatsby-cli": "^2.11.5",
+    "gatsby-plugin-styled-components": "^3.1.17"
   },
   "license": "",
   "scripts": {
