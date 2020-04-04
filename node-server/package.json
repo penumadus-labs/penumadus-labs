@@ -21,5 +21,9 @@
   "devDependencies": {
     "cors": "^2.8.5",
     "tunnel-ssh": "^4.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carosaur/tankmon"
   }
 }
