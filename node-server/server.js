@@ -5,7 +5,7 @@ const connectToMongo = require('./db/connect')
 const createWebsocketServer = require('./sockets/sockets')
 
 const development = process.env.NODE_ENV === 'development'
-const port = 3000
+const port = 80
 
 const app = express()
 
