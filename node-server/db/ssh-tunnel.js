@@ -2,8 +2,7 @@
 
 const { readFileSync } = require('fs')
 const { promisify } = require('util')
-// promisify allow usage of async/await with ssh tunnel
-const tunnel = promisify(require('tunnel-ssh'))
+const tunnel = require('tunnel-ssh')
 
 const dstPort = '27017'
 const privateKey = readFileSync(__dirname + '/../.ssh/server2.pem')
@@ -16,7 +15,15 @@ const config = {
   dstPort,
 }
 
-module.exports = async () => {
-  const server = await tunnel(config)
-  server.on('error', e => console.error(e))
+function tunnelPromise() {
+  return new Promise((resolve, reject) => {
+    const client = tunnel(config, err => {
+      if (err) reject(err)
+      resolve()
+    })
+
+    client.on('error', reject)
+  })
 }
+
+module.exports = tunnelPromise
