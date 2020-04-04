@@ -7,7 +7,7 @@ export default () => {
   const keys = ['hum', 'temp']
 
   const {
-    selected: {data},
+    selected: { data },
   } = useDevicesState()
 
   // don't render while wating for data

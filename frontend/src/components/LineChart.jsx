@@ -12,7 +12,6 @@ import {
 import Card from './Card.jsx'
 import replace from '../utils/replace-deprecated-methods'
 
-
 // replaces deprecated method to suppress error warning
 replace(LineChart, Line)
 

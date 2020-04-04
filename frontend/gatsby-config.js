@@ -2,7 +2,5 @@ module.exports = {
   siteMetadata: {
     title: `HankMon-UI`,
   },
-  plugins: [
-    `gatsby-plugin-styled-components`,
-  ],
+  plugins: [`gatsby-plugin-styled-components`],
 }

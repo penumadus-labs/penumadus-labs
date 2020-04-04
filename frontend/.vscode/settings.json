@@ -1,9 +1,9 @@
 {
-  "eslint.enable": false,
+  "eslint.enable": true,
   "[javascript]": {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[javascriptreact]": {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   }
 }

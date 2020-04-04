@@ -2,7 +2,7 @@ const useTheme = cb => {
   return ({ theme }) => {
     try {
       return cb(theme)
-    } catch(e) {
+    } catch (e) {
       return ''
     }
   }
