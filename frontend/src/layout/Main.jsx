@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import MenuBar from './MenuBar.jsx'
+import MenuBar from './menu-bar'
 
 const Root = styled.main`
   ${({ theme }) => theme.mediaQueries.layout} {

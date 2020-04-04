@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import NavBarLink from './NavBarLink.jsx'
+import NavBarLink from './nav-bar-link'
 import { FaChartLine as Chart } from 'react-icons/fa'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import { FiLogOut as Logout } from 'react-icons/fi'
@@ -21,10 +21,10 @@ const Root = styled.nav`
 
 const NavBar = ({ width }) => (
   <Root width={width}>
-    <NavBarLink Icon={Chart} label='Charts' />
-    <NavBarLink Icon={Dash} label='Control panel' />
-    <NavBarLink Icon={Devices} label='Register' />
-    <NavBarLink Icon={Logout} label='Logout' />
+    <NavBarLink Icon={Chart} label="Charts" />
+    <NavBarLink Icon={Dash} label="Control panel" />
+    <NavBarLink Icon={Devices} label="Register" />
+    <NavBarLink Icon={Logout} label="Logout" />
   </Root>
 )
 

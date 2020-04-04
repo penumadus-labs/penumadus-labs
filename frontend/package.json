@@ -28,7 +28,8 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "commit": "git pull && git add . && git commit -m 'frontend updates' && git push && git status"
+    "commit": "git pull && git add . && git commit -m 'frontend updates' && git push && git status",
+    "pull": "cd .. && git pull && cd frontend"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: 'http://localhost/api' })
+const api = axios.create({ baseURL: 'http://localhost/api-dev' })
 
 const settings = [
   { name: 'value1', value: 10, unit: 'a' },

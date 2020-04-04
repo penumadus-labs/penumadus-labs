@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import DeviceSelect from '../components/ui/DeviceSelect.jsx'
-import Download from '../components/ui/Download.jsx'
+import DeviceSelect from '../components/ui/device-select'
+import Download from '../components/ui/download'
 
 const Root = styled.div`
   ${({ theme }) => theme.mixins.card}

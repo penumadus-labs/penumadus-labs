@@ -1,13 +1,13 @@
 import React from 'react'
-import { Provider } from '../context/Devices.jsx'
-import NavBar from './NavBar.jsx'
-import Main from './Main.jsx'
+import { DatabaseContextProvider } from '../context/database/database'
+import NavBar from './nav-bar'
+import Main from './main'
 
 const Layout = ({ children }) => (
   <>
-    <Provider>
+    <DatabaseContextProvider>
       <Main>{children}</Main>
-    </Provider>
+    </DatabaseContextProvider>
     <NavBar />
   </>
 )

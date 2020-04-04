@@ -1,6 +1,6 @@
 import React from 'react'
-import LineChart from '../components/LineChart.jsx'
-import { useDevicesState } from '../hooks/use-devices-context'
+import LineChart from '../components/line-chart'
+import { useDatabaseContextState } from '../hooks/use-database-context'
 import { filterData } from '../utils/data'
 
 export default () => {
@@ -8,7 +8,7 @@ export default () => {
 
   const {
     selected: { data },
-  } = useDevicesState()
+  } = useDatabaseContextState()
 
   // don't render while wating for data
   if (data) {

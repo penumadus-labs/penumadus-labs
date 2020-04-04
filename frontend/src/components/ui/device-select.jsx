@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Select from './Select.jsx'
-import useDevicesContext from '../../hooks/use-devices-context'
+import Select from './select'
+import useDatabaseContext from '../../hooks/use-database-context'
 
 const Root = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const Root = styled.div`
 `
 
 export default () => {
-  const [{ selected, devices }, { selectDevice }] = useDevicesContext()
+  const [{ selected, devices }, { selectDevice }] = useDatabaseContext()
 
   const name = selected ? selected.name : ''
 

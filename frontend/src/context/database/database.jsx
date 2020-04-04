@@ -1,10 +1,10 @@
 import React, { createContext, useEffect } from 'react'
-import useAsyncReducer from '../hooks/use-async-reducer'
+import useAsyncReducer from '../../hooks/use-async-reducer'
 import reducer, { initialState, createActions } from './reducer'
 
-const DevicesContext = createContext()
+const DatabaseContext = createContext()
 
-export const Provider = ({ children }) => {
+export const DatabaseContextProvider = ({ children }) => {
   const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   useEffect(() => {
@@ -12,10 +12,10 @@ export const Provider = ({ children }) => {
   }, [actions])
 
   return (
-    <DevicesContext.Provider value={[state, actions]}>
+    <DatabaseContext.Provider value={[state, actions]}>
       {children}
-    </DevicesContext.Provider>
+    </DatabaseContext.Provider>
   )
 }
 
-export default DevicesContext
+export default DatabaseContext

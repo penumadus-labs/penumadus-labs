@@ -14,7 +14,7 @@ const Root = styled.div`
 `
 
 const wrapPageElement = ({ element, props }) => {
-  if (process.env.NODE_ENV === 'development') console.clear()
+  // if (process.env.NODE_ENV === 'development') console.clear()
   return (
     <ThemeProvider theme={theme}>
       <Root>

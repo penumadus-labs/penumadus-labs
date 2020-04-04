@@ -1,4 +1,4 @@
-import { getDevices, getSettings, getData } from '../utils/api'
+import { getDevices, getSettings, getData } from '../../utils/api-dev'
 
 /* 
   wrapper around React's default dispatch function returned from useReducer
@@ -12,8 +12,6 @@ export default disptach => ({
       getSettings(),
       getData(),
     ])
-
-    console.log(data[0])
 
     disptach({ type: 'get-devices', devices, settings, data })
   },

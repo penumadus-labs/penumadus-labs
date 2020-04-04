@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import Card from '../Card.jsx'
-import Input from './Input.jsx'
-import Button from './Button.jsx'
+import Card from '../card'
+import Input from './input'
+import Button from './button'
 
 const Root = styled.form`
   display: flex;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Settings from '../components/ui/Settings.jsx'
-import Summary from '../components/ui/Summary.jsx'
+import Settings from '../components/ui/settings'
+import Summary from '../components/ui/summary'
 import useSettings from '../hooks/use-settings'
 
 export default () => {
