@@ -12,17 +12,17 @@ const app = express()
 
 // allow requests from development server in development mode
 // serve static app in production
-app.use(cors())
-{
-  const appPath = '../../react/frontend/build/'
-  app.use(express.static(resolve(appPath)))
-  app.get('/callback/*', (req, res) => {
-    res.sendFile(resolve(appPath + 'index.html'))
-  })
-  app.get('/app/*', (req, res) => {
-    res.sendFile(resolve(appPath + 'index.html'))
-  })
-}
+if (development) app.use(cors())
+else app.use(express.static(resolve('../frontend/public')))
+// {
+//   const appPath = '../../react/frontend/build/'
+//   app.get('/callback/*', (req, res) => {
+//     res.sendFile(resolve(appPath + 'index.html'))
+//   })
+//   app.get('/app/*', (req, res) => {
+//     res.sendFile(resolve(appPath + 'index.html'))
+//   })
+// }
 
 const server = createWebsocketServer(app)
 
