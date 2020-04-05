@@ -18,6 +18,10 @@ const createApi = db => {
     })().catch(console.error)
   })
 
+  // api.get('*', (req, res) => {
+  //   res.status(404).send('api not resolved')
+  // })
+
   return api
 }
 
