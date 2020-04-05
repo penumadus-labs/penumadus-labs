@@ -28,8 +28,8 @@ const server = createWebsocketServer(app)
 
 void (async () => {
   // await connection to database then pass client context object into api routes
-  // const client = await connectToMongo()
-  // app.use('/api', createApi(client.db('test')))
+  const client = await connectToMongo()
+  app.use('/api', createApi(client.db('test')))
 
   server
     .listen(port, () => {
