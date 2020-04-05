@@ -19,6 +19,7 @@ function tunnelPromise() {
   return new Promise((resolve, reject) => {
     const client = tunnel(config, err => {
       if (err) reject(err)
+      console.log('ssh tunnel opened')
       resolve()
     })
 

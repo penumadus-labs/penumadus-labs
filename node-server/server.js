@@ -6,7 +6,7 @@ const createWebsocketServer = require('./sockets/sockets')
 const { join, resolve } = require('path')
 
 const development = process.env.NODE_ENV === 'development'
-const port = 3000
+const port = development? 3000: 80
 
 const app = express()
 
