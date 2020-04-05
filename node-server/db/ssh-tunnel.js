@@ -15,8 +15,8 @@ const config = {
   dstPort,
 }
 
-function tunnelPromise() {
-  return new Promise((resolve, reject) => {
+const tunnelPromise = () =>
+  new Promise((resolve, reject) => {
     const client = tunnel(config, err => {
       if (err) reject(err)
       console.log('ssh tunnel opened')
@@ -25,6 +25,5 @@ function tunnelPromise() {
 
     client.on('error', reject)
   })
-}
 
 module.exports = tunnelPromise

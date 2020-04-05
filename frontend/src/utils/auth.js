@@ -6,11 +6,17 @@ const isBrowser = typeof window !== 'undefined'
 const loginRoot = '/'
 const appRoot = '/app/charts'
 
+const {
+  AUTH0_DOMAIN: domain,
+  AUTH0_CLIENTID: clientID,
+  AUTH0_CALLBACK: redirectUri,
+} = process.env
+
 const auth = isBrowser
   ? new auth0.WebAuth({
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENTID,
-      redirectUri: process.env.AUTH0_CALLBACK,
+      domain,
+      clientID,
+      redirectUri,
       responseType: 'token id_token',
       scope: 'openid profile email',
     })
