@@ -16,7 +16,7 @@ const Root = styled.label`
     padding: ${({ theme }) => theme.spacing.xs};
     outline: none;
 
-    :focus {
+    &:focus {
       filter: brightness(80%);
     }
   }
@@ -25,7 +25,7 @@ const Root = styled.label`
 export default ({ value, onChange }) => {
   return (
     <Root>
-      <input type='text' value={value} onChange={onChange} />
+      <input type="text" value={value} onChange={onChange} />
     </Root>
   )
 }

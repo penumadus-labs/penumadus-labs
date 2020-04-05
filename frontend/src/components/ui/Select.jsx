@@ -47,13 +47,13 @@ export default ({ selected, options, handleSelect }) => {
   return (
     <Root>
       <div
-        className='dropdown'
+        className="dropdown"
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
-        role='listbox'
+        role="listbox"
         tabIndex={0}
       >
-        <div className='selected'>
+        <div className="selected">
           <p>{selected}</p>
           <DownArrow size={18} />
         </div>

@@ -1,6 +1,6 @@
 import './src/style/global.css'
 import React from 'react'
-import Header from './src/layout/Header.jsx'
+import Header from './src/layout/header'
 import styled, { ThemeProvider } from 'styled-components'
 import theme from './src/style/theme'
 
