@@ -11,6 +11,7 @@ export default () => {
   } = useDatabaseContextState()
 
   // don't render while wating for data
+  console.log(data)
   if (data) {
     // const data = parseCSVData(csv)
     const hum = filterData(data, keys[0])

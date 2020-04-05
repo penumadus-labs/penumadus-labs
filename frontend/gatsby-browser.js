@@ -1,8 +1,8 @@
 import './src/style/global.css'
 import React from 'react'
 import Header from './src/layout/header'
-import styled, { ThemeProvider } from 'styled-components'
-import theme from './src/style/theme'
+import styled from 'styled-components'
+import ThemeProvider from './src/context/theme/theme-provider'
 
 const Root = styled.div`
   height: 100vh;
@@ -16,7 +16,7 @@ const Root = styled.div`
 const wrapPageElement = ({ element, props }) => {
   // if (process.env.NODE_ENV === 'development') console.clear()
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Root>
         <Header />
         {element}
