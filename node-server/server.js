@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const createApi = require('./api/routes')
 const connectToMongo = require('./db/connect')
-const createWebsocketServer = require('./sockets/sockets')
+const createWebsocketServer = require('./sockets/web')
 const { join, resolve } = require('path')
 
 const development = process.env.NODE_ENV === 'development'
