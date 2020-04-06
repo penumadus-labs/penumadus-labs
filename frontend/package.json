@@ -24,7 +24,7 @@
   "license": "",
   "scripts": {
     "build": "gatsby build",
-    "dev": "gatsby develop",
+    "dev": "gatsby develop -p 8080",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
