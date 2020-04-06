@@ -2,26 +2,26 @@ const tunnel = require('../utils/ssh-tunnel')
 const { Socket } = require('net')
 const { promisify } = require('util')
 
+const port = 32100
 const client = new Socket()
 
 client.on('data', data => {
-  console.log(data.toString())
-
-  const json = JSON.parse(data.toString().split('\0')[0])
-
-  console.log(json)
+  const json = JSON.parse(data)
 })
 
 client.on('close', () => {})
 
 client.on('error', err => {})
 
-const connect = promisify(client.connect.bind(client))
+client.setEncoding('ascii')
 
-const port = 32100
+client.asyncConnect = promisify(client.connect)
 
-void (async () => {
+const createTCPClient = async () => {
   await tunnel(port)
+  await client.asyncConnect(port)
+  console.log('tcp client connected')
+  return client
+}
 
-  client.connect(port, () => console.log('tcp connected'))
-})().catch(console.error)
+module.exports = createTCPClient

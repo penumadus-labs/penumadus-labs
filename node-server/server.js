@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const createApi = require('./api/routes')
 const connectToMongo = require('./db/connect')
-const createWebsocketServer = require('./sockets/web')
+const { createWebSocketServer, createTCPClient } = require('./sockets')
 const { join, resolve } = require('path')
 
 const development = process.env.NODE_ENV === 'development'
@@ -24,12 +24,13 @@ else app.use(express.static(resolve('../frontend/public')))
 //   })
 // }
 
-const server = createWebsocketServer(app)
+const server = createWebSocketServer(app)
 
 void (async () => {
   // await connection to database then pass client context object into api routes
   // const client = await connectToMongo()
-  // app.use('/api', createApi(client.db('test')))
+  app.use('/api', createApi((await connectToMongo()).db('test')))
+  await createTCPClient()
 
   server
     .listen(port, () => {

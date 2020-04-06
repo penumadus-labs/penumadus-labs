@@ -5,7 +5,7 @@ const { createServer } = require('http')
 const socketIO = require('socket.io')
 const udpPort = 32180
 
-const createWebsocketServer = expressApp => {
+const createWebSocketServer = expressApp => {
   const server = createServer(expressApp)
   const io = socketIO(server)
 
@@ -38,4 +38,4 @@ const createWebsocketServer = expressApp => {
   return server
 }
 
-module.exports = createWebsocketServer
+module.exports = createWebSocketServer
