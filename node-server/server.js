@@ -14,6 +14,8 @@ const app = express()
 // serve static app in production
 if (development) app.use(cors())
 else app.use(express.static(resolve('../frontend/public')))
+
+// spa support
 // {
 //   const appPath = '../../react/frontend/build/'
 //   app.get('/callback/*', (req, res) => {
@@ -29,6 +31,7 @@ const server = createWebSocketServer(app)
 void (async () => {
   // await connection to database then pass client context object into api routes
   // const client = await connectToMongo()
+
   app.use('/api', createApi((await connectToMongo()).db('test')))
   await createTCPClient()
 
