@@ -8,8 +8,8 @@ const appRoot = '/app/charts'
 
 const auth = isBrowser
   ? new auth0.WebAuth({
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENTID,
+      domain: 'dev-3ruw6jpf.auth0.com',
+      clientID: 'QRUEMSZs4JZzHZP57W9KsPO8qI6VoOi7',
       redirectUri: process.env.URL + 'callback',
       responseType: 'token id_token',
       scope: 'openid profile email',
