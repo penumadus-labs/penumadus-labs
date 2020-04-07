@@ -33,7 +33,7 @@ void (async () => {
   // const client = await connectToMongo()
 
   app.use('/api', createApi((await connectToMongo()).db('test')))
-  await createTCPClient()
+  // await createTCPClient()
 
   server
     .listen(port, () => {

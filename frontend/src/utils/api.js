@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: 'http://localhost/api-dev' })
+const api = axios.create({ baseURL: process.env.URL + 'api/' })
 
 const settings = [
   { name: 'value1', value: 10, unit: 'a' },
@@ -19,7 +19,7 @@ export const getSettings = async () => [settings]
 
 // used as array because context api expects multiple devices
 export const getData = async () => {
-  const responses = await Promise.all([api.get('/tank')])
+  const responses = await Promise.all([api.get('tank')])
 
   return responses.map(({ data }) => data)
 }
