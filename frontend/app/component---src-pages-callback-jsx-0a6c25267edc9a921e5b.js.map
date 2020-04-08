@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/pages/callback.jsx"],"names":["handleAuthentication"],"mappings":"6FAAA,uBAEe,qBAEb,OADAA,cACO","file":"component---src-pages-callback-jsx-0a6c25267edc9a921e5b.js","sourcesContent":["import { handleAuthentication } from '../utils/auth'\n\nexport default () => {\n  handleAuthentication()\n  return null\n}\n"],"sourceRoot":""}
