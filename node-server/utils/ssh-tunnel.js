@@ -11,8 +11,6 @@ const config = {
 
 const development = process.env.NODE_ENV === 'development'
 
-console.log(development)
-
 const tunnelPromise = port => {
   if (!development) return
   return new Promise((resolve, reject) => {
