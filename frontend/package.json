@@ -23,7 +23,7 @@
   },
   "license": "",
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build && cp -r public app",
     "dev": "gatsby develop -p 8080",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
