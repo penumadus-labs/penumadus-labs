@@ -7,7 +7,6 @@
     "auth0-js": "^9.12.1",
     "axios": "^0.19.1",
     "csv-parse": "^4.8.3",
-    "gatsby": "^2.20.14",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-icons": "^3.8.0",
@@ -36,8 +35,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gatsby-plugin-styled-components": "^3.2.1"
   }
 }
