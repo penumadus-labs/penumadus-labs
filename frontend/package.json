@@ -19,7 +19,8 @@
   "scripts": {
     "build": "react-scripts build",
     "dev": "PORT=8080 react-scripts start",
-    "serve": "serve build -s -p 8080"
+    "serve": "serve build -s -p 8080",
+    "commit": "git pull && git add . && git commit -m 'frontend updates' && git push"
   },
   "eslintConfig": {
     "extends": "react-app"
