@@ -1,8 +1,8 @@
-import './src/style/global.css'
 import React from 'react'
-import Header from './src/layout/header'
-import styled from 'styled-components'
-import ThemeProvider from './src/context/theme/theme-provider'
+import Header from './layout/header'
+import styled, { ThemeProvider } from 'styled-components'
+import Router from './routes/router'
+import theme from './style/theme'
 
 const Root = styled.div`
   height: 100vh;
@@ -13,13 +13,12 @@ const Root = styled.div`
   background: ${({ theme }) => theme.color.background};
 `
 
-export const wrapPageElement = ({ element, props }) => {
-  if (process.env.NODE_ENV === 'development') console.clear()
+export default () => {
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <Root>
         <Header />
-        {element}
+        <Router />
       </Root>
     </ThemeProvider>
   )

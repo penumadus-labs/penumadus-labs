@@ -1,5 +1,5 @@
 import auth0 from 'auth0-js'
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -7,10 +7,11 @@ const loginRoot = '/'
 const appRoot = '/app/charts'
 
 const auth = isBrowser
-  ? new auth0.WebAuth({
+  ? console.log(process.env.URL) ||
+    new auth0.WebAuth({
       domain: 'dev-3ruw6jpf.auth0.com',
       clientID: 'QRUEMSZs4JZzHZP57W9KsPO8qI6VoOi7',
-      redirectUri: process.env.URL + 'callback',
+      redirectUri: 'http://localhost:8000/' + 'callback',
       responseType: 'token id_token',
       scope: 'openid profile email',
     })

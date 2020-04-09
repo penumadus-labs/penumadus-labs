@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Settings from '../components/ui/settings'
-import Summary from '../components/ui/summary'
-import useSettings from '../hooks/use-settings'
+import Settings from '../../components/ui/settings'
+import Summary from '../../components/ui/summary'
+import useSettings from '../../hooks/use-settings'
 
 export default () => {
   const [alert, setAlert] = useState(false)
