@@ -13,18 +13,16 @@ const app = express()
 // allow requests from development server in development mode
 // serve static app in production
 if (development) app.use(cors())
-else app.use(express.static(resolve('../frontend/public')))
-
-// spa support
-// {
-//   const appPath = '../../react/frontend/build/'
-//   app.get('/callback/*', (req, res) => {
-//     res.sendFile(resolve(appPath + 'index.html'))
-//   })
-//   app.get('/app/*', (req, res) => {
-//     res.sendFile(resolve(appPath + 'index.html'))
-//   })
-// }
+else {
+  const appPath = '../frontend/build/'
+  app.use(express.static(appPath))
+  app.get('/callback', (req, res) => {
+    res.sendFile(resolve(appPath + 'index.html'))
+  })
+  app.get('/admin/*', (req, res) => {
+    res.sendFile(resolve(appPath + 'index.html'))
+  })
+}
 
 const server = createWebSocketServer(app)
 
