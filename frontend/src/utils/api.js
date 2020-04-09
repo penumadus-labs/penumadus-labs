@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: process.env.URL + 'api/' })
+const api = axios.create({ baseURL: window.location.hostname + '/api/' })
 
 const settings = [
   { name: 'value1', value: 10, unit: 'a' },

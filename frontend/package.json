@@ -17,9 +17,9 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "serve": "serve build -s -p 8080",
+    "build": "react-scripts build",
     "dev": "PORT=8080 react-scripts start",
-    "build": "react-scripts build"
+    "serve": "serve build -s -p 8080"
   },
   "eslintConfig": {
     "extends": "react-app"
