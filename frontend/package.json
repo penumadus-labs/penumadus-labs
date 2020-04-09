@@ -18,9 +18,8 @@
   },
   "scripts": {
     "serve": "serve build -s -p 8080",
-    "dev": "PORT=8000 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "dev": "PORT=8080 react-scripts start",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,17 +1,12 @@
-// unused
-
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 
-export default url => {
-  const [data, setData] = useState(null)
+export default (initial, af, clean = null) => {
+  const [state, setState] = useState(initial)
 
   useEffect(() => {
-    void (async () => {
-      const { data } = await axios.get(url)
-      setData(data)
-    })().catch(console.error)
-  }, [url])
+    af(setState).catch(console.error)
+    if (clean) return clean
+  }, [af, setState, clean])
 
-  return data
+  return state
 }

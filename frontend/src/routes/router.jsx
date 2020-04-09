@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from '@reach/router'
 import Login from './login'
 import Callback from './callback'
-import App from './app'
+import Admin from './admin'
 import InvalidRoute from './404'
 // import Layout from '../layout/layout'
 // import Charts from './app/charts'
@@ -16,7 +16,7 @@ export default () => {
     <Router>
       <Login path="/" />
       <Callback path="callback" />
-      <App path="app/*" />
+      <Admin path="admin/*" />
       <InvalidRoute default />
     </Router>
   )

@@ -30,7 +30,7 @@ const Root = styled(Link)`
 const NavBarLink = ({ Icon, label, theme }) => (
   <Root
     to={
-      '/app/' +
+      '/admin/' +
       label
         .toLowerCase()
         .split(' ')

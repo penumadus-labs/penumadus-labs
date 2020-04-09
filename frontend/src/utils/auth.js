@@ -4,14 +4,13 @@ import { navigate } from '@reach/router'
 const isBrowser = typeof window !== 'undefined'
 
 const loginRoot = '/'
-const appRoot = '/app/charts'
+const appRoot = '/admin/charts'
 
 const auth = isBrowser
-  ? console.log(process.env.URL) ||
-    new auth0.WebAuth({
+  ? new auth0.WebAuth({
       domain: 'dev-3ruw6jpf.auth0.com',
       clientID: 'QRUEMSZs4JZzHZP57W9KsPO8qI6VoOi7',
-      redirectUri: 'http://localhost:8000/' + 'callback',
+      redirectUri: 'http://localhost:8080/' + 'callback',
       responseType: 'token id_token',
       scope: 'openid profile email',
     })
