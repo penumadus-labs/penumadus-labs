@@ -3,6 +3,7 @@ import actions from './actions'
 export const initialState = {
   selected: {},
   devices: [],
+  error: null,
 }
 
 export const createActions = actions
@@ -20,6 +21,7 @@ export default (state, action) => {
         ...state,
         selected: result[0],
         devices: result,
+        getError: 'get error',
       }
     case 'select-device':
       return {
@@ -29,6 +31,11 @@ export default (state, action) => {
     case 'update-settings':
       state.selected.settings = action.settings
       return { ...state }
+    case 'error':
+      return {
+        ...state,
+        error: action.error,
+      }
     default:
       throw new Error()
   }

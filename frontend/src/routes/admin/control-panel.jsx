@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import Settings from '../../components/ui/settings'
 import Summary from '../../components/ui/summary'
 import useSettings from '../../hooks/use-settings'
+import Error from '../../components/error'
 
 export default () => {
   const [alert, setAlert] = useState(false)
   const [warning, setWarning] = useState('')
-  const [settings, update, reset] = useSettings()
+  const [error, settings, update, reset] = useSettings()
 
   const handleSubmit = e => {
     if (settings.every(props => props.value === '')) {
@@ -35,6 +36,8 @@ export default () => {
 
     reset()
   }
+
+  if (error) return <Error />
 
   return settings.length ? (
     <>

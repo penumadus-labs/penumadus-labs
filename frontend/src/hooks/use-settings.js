@@ -6,6 +6,7 @@ export default () => {
   const [
     {
       selected: { settings },
+      error,
     },
     { updateSettings: update },
   ] = useDatabaseContext()
@@ -42,5 +43,5 @@ export default () => {
     setList([...list])
   }
 
-  return [list, update, reset]
+  return [error, list, update, reset]
 }

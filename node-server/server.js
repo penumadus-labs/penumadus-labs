@@ -16,10 +16,7 @@ if (development) app.use(cors())
 else {
   const appPath = '../frontend/build/'
   app.use(express.static(appPath))
-  app.get('/callback', (req, res) => {
-    res.sendFile(resolve(appPath + 'index.html'))
-  })
-  app.get('/admin/*', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(resolve(appPath + 'index.html'))
   })
 }

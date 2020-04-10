@@ -7,19 +7,25 @@ import { getDevices, getSettings, getData } from '../../utils/api'
 
 export default disptach => ({
   async getDevices() {
-    const [devices, settings, data] = await Promise.all([
-      getDevices(),
-      getSettings(),
-      getData(),
-    ])
+    try {
+      const [devices, settings, data] = await Promise.all([
+        getDevices(),
+        getSettings(),
+        getData(),
+      ])
 
-    disptach({ type: 'get-devices', devices, settings, data })
+      disptach({ type: 'get-devices', devices, settings, data })
+    } catch (error) {
+      console.error(error)
+      disptach({ type: 'error', error: error.toString() })
+    }
   },
-  selectDevice(name) {
-    disptach({ type: 'select-device', name })
-  },
+
   async updateSettings(settings) {
     // await axios.post()
     disptach({ type: 'update-settings', settings })
+  },
+  selectDevice(name) {
+    disptach({ type: 'select-device', name })
   },
 })

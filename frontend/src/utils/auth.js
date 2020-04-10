@@ -3,7 +3,6 @@ import { navigate } from '@reach/router'
 
 const isBrowser = typeof window !== 'undefined'
 
-const loginRoot = '/'
 const appRoot = '/admin/charts'
 
 const auth = isBrowser
@@ -18,14 +17,14 @@ const auth = isBrowser
   : null
 
 export const login = () => {
-  if (isBrowser) auth.authorize()
+  if (!isBrowser) return
+  auth.authorize()
 }
 
 export const logout = () => {
   if (!isBrowser) return
 
   endSession()
-  navigate(loginRoot)
 }
 
 export const checkAuth = () => {
@@ -35,8 +34,6 @@ export const checkAuth = () => {
   const now = new Date().getTime()
 
   if (now < expiresAt) return true
-
-  navigate(loginRoot)
 }
 
 const setSession = authResult => {
@@ -59,10 +56,8 @@ export const handleAuthentication = () => {
   if (!isBrowser) return
 
   auth.parseHash((err, authResult) => {
-    if (err) {
-      console.error(err)
-      navigate(loginRoot)
-    } else if (authResult && authResult.accessToken && authResult.idToken) {
+    if (err) console.error(err)
+    else if (authResult && authResult.accessToken && authResult.idToken) {
       setSession(authResult)
       navigate(appRoot)
     }

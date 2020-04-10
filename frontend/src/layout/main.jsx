@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import MenuBar from './menu-bar'
+import StatusBar from './status-bar'
 
 const Root = styled.main`
   ${({ theme }) => theme.mediaQueries.layout} {
@@ -16,7 +16,7 @@ const Root = styled.main`
 const Main = ({ children }) => {
   return (
     <Root>
-      <MenuBar />
+      <StatusBar />
       {children}
     </Root>
   )
