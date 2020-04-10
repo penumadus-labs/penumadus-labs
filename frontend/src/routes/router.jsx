@@ -14,13 +14,12 @@ import useAuth from '../hooks/use-auth'
 
 export default () => {
   const authorized = useAuth()
-  console.log(authorized)
 
   return (
     <Router>
       <Login path="/" />
       <Callback path="callback" />
-      {true ? (
+      {authorized ? (
         <Layout path="admin">
           <Charts path="charts" />
           <ControlPanel path="control-panel" />
