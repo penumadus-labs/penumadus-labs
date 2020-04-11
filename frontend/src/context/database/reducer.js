@@ -1,14 +1,4 @@
-import actions from './actions'
-
-export const initialState = {
-  selected: {},
-  devices: [],
-  error: null,
-}
-
-export const createActions = actions
-
-export default (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case 'get-devices':
       const result = action.devices.map((name, index) => ({
@@ -40,3 +30,11 @@ export default (state, action) => {
       throw new Error()
   }
 }
+
+export const initialState = {
+  selected: {},
+  devices: [],
+  error: null,
+}
+
+export { createActions } from './actions'

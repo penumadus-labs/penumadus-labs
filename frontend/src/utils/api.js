@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-const baseURL = `http://${window.location.hostname}:${process.env.REACT_APP_PORT}/api/`
+import url from './url'
 
 const api = axios.create({
   headers: {
@@ -8,7 +7,7 @@ const api = axios.create({
     'X-Requested-With': 'XMLHttpRequest',
     Accept: 'application/json; text/plain',
   },
-  baseURL,
+  baseURL: url + 'api/',
 })
 
 const settings = [

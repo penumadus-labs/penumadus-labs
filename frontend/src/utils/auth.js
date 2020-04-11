@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 import { navigate } from '@reach/router'
+import url from './url'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -9,8 +10,7 @@ const auth = isBrowser
   ? new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-      redirectUri:
-        window.location.origin + process.env.REACT_APP_AUTH0_CALLBACK,
+      redirectUri: url + process.env.REACT_APP_AUTH0_CALLBACK,
       responseType: 'token id_token',
       scope: 'openid profile email',
     })

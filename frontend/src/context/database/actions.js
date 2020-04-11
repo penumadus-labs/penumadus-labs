@@ -5,7 +5,7 @@ import { getDevices, getSettings, getData } from '../../utils/api'
   to allow async data fetching before updating context
  */
 
-export default disptach => ({
+export const createActions = disptach => ({
   async getDevices() {
     try {
       const [devices, settings, data] = await Promise.all([

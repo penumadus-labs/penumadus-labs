@@ -1,17 +1,17 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext } from 'react'
 import useAsyncReducer from '../../hooks/use-async-reducer'
-import reducer, { initialState, createActions } from './reducer'
+import { reducer, initialState, createActions } from './reducer'
 
-const DatabaseContext = createContext()
+const SocketContext = createContext()
 
-export const DatabaseContextProvider = ({ children }) => {
+export const SocketContextProvider = ({ children }) => {
   const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   return (
-    <DatabaseContext.Provider value={[state, actions]}>
+    <SocketContext.Provider value={[state, actions]}>
       {children}
-    </DatabaseContext.Provider>
+    </SocketContext.Provider>
   )
 }
 
-export default DatabaseContext
+export default SocketContext
