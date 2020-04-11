@@ -25,11 +25,12 @@ export const logout = () => {
   if (!isBrowser) return
 
   endSession()
+  navigate('/')
 }
 
 export const checkAuth = () => {
   if (!isBrowser) return
-  if (process.env.NODE_ENV === 'development') return true
+  if (window.location.hostname === 'localhost') return true
 
   const expiresAt = JSON.parse(localStorage.getItem('expires_at'))
   const now = new Date().getTime()

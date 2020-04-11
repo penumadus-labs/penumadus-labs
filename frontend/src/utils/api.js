@@ -1,6 +1,15 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: window.location.hostname + '/api/' })
+const baseURL = `http://${window.location.hostname}:${process.env.REACT_APP_PORT}/api/`
+
+const api = axios.create({
+  headers: {
+    // 'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    Accept: 'application/json; text/plain',
+  },
+  baseURL,
+})
 
 const settings = [
   { name: 'value1', value: 10, unit: 'a' },
@@ -21,9 +30,8 @@ export const getSettings = async () => [settings]
 export const getData = async () => {
   try {
     const responses = await Promise.all([api.get('tank')])
-    console.log('error')
     return responses.map(({ data }) => data)
   } catch (e) {
-    throw new Error('get data failed')
+    throw new Error('could not get tank data')
   }
 }

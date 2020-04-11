@@ -1,6 +1,12 @@
+import { useEffect } from 'react'
+
 import { logout } from '../../utils/auth'
 
 export default () => {
-  logout()
+  useEffect(() => {
+    logout()
+    return () => {}
+  })
+
   return null
 }

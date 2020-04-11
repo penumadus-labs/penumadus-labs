@@ -10,10 +10,12 @@ import Charts from './admin/charts'
 import ControlPanel from './admin/control-panel'
 import Register from './admin/register'
 import Logout from './admin/logout'
-import useAuth from '../hooks/use-auth'
+import { checkAuth } from '../utils/auth'
 
 export default () => {
-  const authorized = useAuth()
+  const authorized = checkAuth()
+
+  if (authorized) console.log('authorized')
 
   return (
     <Router>

@@ -16,6 +16,7 @@ const Root = styled(Link)`
   div {
     svg {
       color: ${({ theme }) => theme.color.icon};
+      font-size: 5rem;
     }
 
     p {
