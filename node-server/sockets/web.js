@@ -7,7 +7,7 @@ const createWebSocket = server => {
 
   io.on('connection', webSocket => {
     console.log('ws connection')
-    webSocket.emit('message', 'hello client!')
+    webSocket.emit('data', 'hello client!')
 
     webSocket.on('message', message => {
       console.log(`recived message "${message}" from browser`)
