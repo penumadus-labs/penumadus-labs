@@ -18,7 +18,7 @@ const dbClient = {
     await tunnel(27017)
 
     await client.connect()
-    console.log('database connected')
+    console.log('database client connected')
     dbClient.db = client.db(db)
   },
   read(col) {

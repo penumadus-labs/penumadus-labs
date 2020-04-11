@@ -15,16 +15,15 @@ tcpClient.on('data', data => {
     switch (type) {
       case 'D':
         // await insertOne('data', doc)
-        console.log('D!')
+        // console.log('D!')
         break
       case 'A':
         // await insertOne('acceleration', doc)
-        console.log('A!')
+        // console.log('A!')
         break
       default:
         throw new Error('recived invalid packet type from tcp server')
     }
-    console.log(doc)
   })().catch(e => {
     console.error(e)
     console.log(data)
@@ -39,10 +38,10 @@ tcpClient.setEncoding('ascii')
 
 tcpClient.connectAsync = promisify(tcpClient.connect)
 
-const createTCPtcpClient = async dbtcpClient => {
+const tcpClientConnect = async dbtcpClient => {
   await tunnel(port)
   await tcpClient.connectAsync(port)
-  console.log('tcp tcpClient connected')
+  console.log('tcp client connected')
 }
 
-module.exports = createTCPtcpClient
+module.exports = tcpClientConnect

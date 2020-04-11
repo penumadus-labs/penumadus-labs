@@ -1,41 +1,20 @@
-const udp = require('dgram')
-const buffer = require('buffer')
-const express = require('express')
-const { createServer } = require('http')
 const socketIO = require('socket.io')
-const udpPort = 32180
 
-const createWebSocketServer = expressApp => {
-  const server = createServer(expressApp)
+const createWebSocket = server => {
   const io = socketIO(server)
 
+  console.log('web socket created')
+
   io.on('connection', webSocket => {
-    console.log('browser connected')
-
-    const udpSocket = udp.createSocket('udp4', () =>
-      console.log('upd socket created')
-    )
-
-    udpSocket.on('message', message => {
-      console.log(`message recieved "${message}" from udp`)
-      webSocket.emit('message', message.toString())
-      console.log('udp message sent to browser')
-    })
+    console.log('ws connection')
+    webSocket.emit('message', 'hello client!')
 
     webSocket.on('message', message => {
       console.log(`recived message "${message}" from browser`)
-      udpSocket.send(Buffer.from(message), udpPort, () =>
-        console.log('browser message sent to udp')
-      )
     })
 
-    webSocket.on('disconnect', () => {
-      console.log('browser disconnected')
-      udpSocket.close(() => console.log('udp socket closed'))
-    })
+    webSocket.on('disconnect', () => {})
   })
-
-  return server
 }
 
-module.exports = createWebSocketServer
+module.exports = createWebSocket

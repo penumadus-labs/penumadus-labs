@@ -1,7 +1,4 @@
-const createWebSocketServer = require('./web')
-const createTCPClient = require('./tcp')
-
 module.exports = {
-  createWebSocketServer,
-  createTCPClient,
+  createWebSocket: require('./web'),
+  tcpClientConnect: require('./tcp'),
 }
