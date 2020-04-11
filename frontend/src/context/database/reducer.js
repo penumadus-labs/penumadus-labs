@@ -27,7 +27,7 @@ export const reducer = (state, action) => {
         error: action.error,
       }
     default:
-      throw new Error()
+      throw new Error('database reducer recieved invalid action type')
   }
 }
 

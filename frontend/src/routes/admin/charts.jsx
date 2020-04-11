@@ -10,7 +10,7 @@ export default () => {
     error,
   } = useDatabaseContextState()
 
-  if (error) return <Error />
+  if (error) return <Error>error: charts not loaded</Error>
 
   // don't render while wating for data
   if (data) {

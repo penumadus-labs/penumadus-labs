@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import DeviceSelect from '../components/ui/device-select'
 import Download from '../components/ui/download'
-import Error from '../components/error'
 
 import useDatabaseContext from '../hooks/use-database-context'
+import { useSocketContextState } from '../hooks/use-socket-context'
 
 const Root = styled.div`
   ${({ theme }) => theme.mixins.card}
@@ -21,17 +21,25 @@ const Status = styled.p`
 `
 
 export default () => {
-  const [{ selected, devices, error }, { selectDevice }] = useDatabaseContext()
-
-  if (error) return <Error>{error}</Error>
+  const [
+    { selected, devices, error: dbError },
+    { selectDevice },
+  ] = useDatabaseContext()
+  const { data, error: socketError } = useSocketContextState()
 
   return (
     <Root>
       <Menu>
-        <DeviceSelect {...{ selected, devices, selectDevice }} />
-        <Download />
+        {dbError ? (
+          <p>{dbError}</p>
+        ) : (
+          <>
+            <DeviceSelect {...{ selected, devices, selectDevice }} />
+            <Download />
+          </>
+        )}
       </Menu>
-      <Status>status: message</Status>
+      <Status>device status: {socketError || data}</Status>
     </Root>
   )
 }

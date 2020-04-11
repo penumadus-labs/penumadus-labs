@@ -6,6 +6,11 @@ const isBrowser = typeof window !== 'undefined'
 
 const appRoot = '/admin/charts'
 
+const disabled =
+  process.env.NODE_ENV === 'development' || process.env.REACT_APP_DISABLE_AUTH
+
+if (disabled) console.log('auth disabled')
+
 const auth = isBrowser
   ? new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
@@ -30,7 +35,7 @@ export const logout = () => {
 
 export const checkAuth = () => {
   if (!isBrowser) return
-  if (window.location.hostname === 'localhost') return true
+  if (disabled) return true
 
   const expiresAt = JSON.parse(localStorage.getItem('expires_at'))
   const now = new Date().getTime()

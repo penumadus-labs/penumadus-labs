@@ -37,7 +37,7 @@ export default () => {
     reset()
   }
 
-  if (error) return <Error />
+  if (error) return <Error>error: control panel not loaded</Error>
 
   return settings.length ? (
     <>
