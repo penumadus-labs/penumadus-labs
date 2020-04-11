@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const createApi = require('./api/routes')
-const connectToMongo = require('./db/connect')
+const apiRouter = require('./api/routes')
+const { dbClientConnect } = require('./db/client')
 const { createWebSocketServer, createTCPClient } = require('./sockets')
 const { join, resolve } = require('path')
 
@@ -9,30 +9,32 @@ const development = process.env.NODE_ENV === 'development'
 const port = 8080
 
 const app = express()
-
-// allow requests from development server in development mode
-// serve static app in production
-if (development) app.use(cors())
-else {
-  const appPath = '../frontend/build/'
-  app.use(express.static(appPath))
-  app.get('*', (req, res) => {
-    res.sendFile(resolve(appPath + 'index.html'))
-  })
-}
-
 const server = createWebSocketServer(app)
+
+app.use(cors())
+
+const appPath = '../frontend/build/'
+const indexPath = resolve(appPath + 'index.html')
+app.use(express.static(appPath))
 
 void (async () => {
   // await connection to database then pass client context object into api routes
   // const client = await connectToMongo()
 
-  app.use('/api', createApi((await connectToMongo()).db('test')))
-  // await createTCPClient()
+  await dbClientConnect()
+  await createTCPClient()
+  app.use('/api', apiRouter)
+
+  app.get('*', (req, res) => {
+    if (!req.xhr) res.sendFile(indexPath)
+    else res.sendStatus(404)
+  })
 
   server
     .listen(port, () => {
-      console.log(`server listenning on port ${port}`)
+      console.log(`server listening on port ${port}`)
     })
     .on('error', console.error)
-})().catch(console.error)
+})().catch(e => {
+  console.error(e)
+})
