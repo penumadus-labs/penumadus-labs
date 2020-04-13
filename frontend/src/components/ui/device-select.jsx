@@ -12,7 +12,7 @@ const Root = styled.div`
 
 export default ({ selected, devices, selectDevice }) => {
   const SelectProps = {
-    select: selected.name,
+    selected: selected.name,
     options: devices.map(({ name }) => name),
     handleSelect({ target }) {
       selectDevice(target.value)

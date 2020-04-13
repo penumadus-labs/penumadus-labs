@@ -1,7 +1,7 @@
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'recieved':
-      return { data: action.data }
+      return { data: action.data, error: null }
     case 'error':
       return {
         data: null,

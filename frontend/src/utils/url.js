@@ -1,5 +1,7 @@
-const url = `http://${window.location.hostname}${process.env.REACT_APP_PORT}/`
+const base = `://${window.location.hostname}${process.env.REACT_APP_PORT}/`
 
-console.log(url)
+const httpURL = 'http' + base
 
-export default url
+export default httpURL
+
+export const wsURL = 'ws' + base

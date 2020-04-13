@@ -23,6 +23,7 @@ const auth = isBrowser
 
 export const login = () => {
   if (!isBrowser) return
+  if (checkAuth()) return navigate(appRoot)
   auth.authorize()
 }
 
