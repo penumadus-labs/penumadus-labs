@@ -1,4 +1,4 @@
 module.exports = {
-  createWebSocket: require('./web'),
-  tcpClientConnect: require('./tcp'),
+  WSServer: require('./web'),
+  TCPServer: require('./tcp'),
 }

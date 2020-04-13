@@ -1,47 +1,36 @@
+const net = require('net')
+const controller = require('./controller')
 const tunnel = require('../utils/ssh-tunnel')
-const { insertOne } = require('../db/client')
-const { Socket } = require('net')
-const { promisify } = require('util')
 
-const port = 32100
-const tcpClient = new Socket()
+class TCPServer extends net.Server {
+  constructor(port, ...args) {
+    super(...args)
+    this.clients = new Set()
+    this.port = port
+    controller.add(this)
 
-tcpClient.on('data', data => {
-  void (async () => {
-    const doc = JSON.parse(data)
-    const { type } = doc
-    delete doc.type
-    delete doc.pad
-    switch (type) {
-      case 'D':
-        // await insertOne('data', doc)
-        // console.log('D!')
-        break
-      case 'A':
-        // await insertOne('acceleration', doc)
-        // console.log('A!')
-        break
-      default:
-        throw new Error('recived invalid packet type from tcp server')
-    }
-  })().catch(e => {
-    console.error(e)
-    console.log(data)
-  })
-})
+    this.on('connection', socket => {
+      this.clients.add(socket)
 
-tcpClient.on('close', () => {})
+      socket.on('data', data => {
+        controller.handleData(data, this)
+      })
 
-tcpClient.on('error', err => {})
-
-tcpClient.setEncoding('ascii')
-
-tcpClient.connectAsync = promisify(tcpClient.connect)
-
-const tcpClientConnect = async dbtcpClient => {
-  await tunnel(port)
-  await tcpClient.connectAsync(port)
-  console.log('tcp client connected')
+      socket.on('close', () => {
+        this.clients.delete(socket)
+      })
+    })
+  }
+  sendAll(data) {
+    for (const client of this.clients) client.write(data)
+  }
+  async start() {
+    // if (process.env.NODE_ENV === 'development') await tunnel(this.port)
+    this.listen(this.port, () => console.log('tcp server started')).on(
+      'error',
+      e => console.error(e, 'problem with tcp server')
+    )
+  }
 }
 
-module.exports = tcpClientConnect
+module.exports = TCPServer
