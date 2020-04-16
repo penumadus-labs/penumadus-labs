@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "dev": "NODE_ENV=development nodemon server",
+    "start": "node index",
+    "dev": "NODE_ENV=development nodemon index",
     "commit": "git pull && git add . && git commit -m 'server update' && git push",
     "pull": "cd .. && git pull && cd node-server"
   },
@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.5.5",
     "socket.io": "^2.3.0",
+    "sockjs": "^0.3.20",
     "ws": "^7.2.3"
   },
   "devDependencies": {
