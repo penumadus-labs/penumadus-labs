@@ -3,6 +3,7 @@ export const createActions = disptach => ({
   async recieved(raw) {
     try {
       const data = await raw.text()
+      console.log(`recieved data from socket: ${data}`)
       disptach({ type: 'recieved', data })
     } catch (e) {
       console.error(e)

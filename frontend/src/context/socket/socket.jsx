@@ -17,14 +17,13 @@ export const SocketContextProvider = ({ children }) => {
     }
 
     socket.onmessage = ({ data }) => {
-      console.log('recieved data from socket')
-
       actions.recieved(data)
       socket.send('hello')
     }
 
     socket.onerror = error => {
-      actions.error(error.toString())
+      console.log(error)
+      actions.error(error)
     }
 
     return () => {
