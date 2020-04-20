@@ -30,19 +30,16 @@ const handleData = async data => {
     switch (type) {
       case 'D':
         // await insertOne('hank_1', 'standard_data', doc)
-        console.log('data')
         break
       case 'A':
         // await insertOne('hank_1', 'acceleration_data', doc)
         // console.log('A!')
         break
       case 'HELLO':
-        console.log('heartbeat')
         break
       default:
         throw new Error('recived invalid packet type from tcp server')
     }
-    console.log(doc)
   } catch (e) {
     console.error(e)
   }

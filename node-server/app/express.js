@@ -14,7 +14,14 @@ app.use(express.static(resolve(appPath)))
 
 // app.use('/api', apiRouter)
 
+app.use((req, res, next) => {
+  console.log('ping')
+  next()
+})
+
 app.get('*', (req, res) => {
-  if (!req.xhr) res.sendFile(indexPath)
-  else res.sendStatus(404)
+  res.send('hello')
+  // if (!req.xhr) res.sendFile(indexPath)
+  // else
+  // res.sendStatus(404)
 })
