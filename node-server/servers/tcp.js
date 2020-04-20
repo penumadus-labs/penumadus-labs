@@ -1,18 +1,7 @@
-const controller = require('./controller')
 const { createServer } = require('net')
-
-const handleTcpServerClient = socket => {
-  tcpHandler.clients.add(socket)
-
-  socket.on('data', data => {
-    console.log(`recieved "${data}" from tcp client`)
-
-    controller.sendDataToAllWebServerClients(data)
-  })
-  socket.on('close', () => {
-    tcpHandler.clients.delete(socket)
-  })
-}
+const controller = require('./controller')
+const { insertOne } = require('../db/client')
+const tunnel = require('../utils/ssh-tunnel')
 
 const tcpServer = createServer()
 const tcpHandler = {
@@ -20,9 +9,45 @@ const tcpHandler = {
 }
 controller.tcpClients = tcpHandler.clients
 
-tcpServer.on('connection', handleTcpServerClient)
+const handleConnection = socket => {
+  tcpHandler.clients.add(socket)
 
-module.exports = port => {
+  socket.on('data', handleData)
+
+  socket.on('close', () => {
+    tcpHandler.clients.delete(socket)
+  })
+}
+
+const handleData = async data => {
+  console.log('data')
+  try {
+    const doc = JSON.parse(data)
+    const { type } = doc
+    delete doc.type
+    delete doc.pad
+    switch (type) {
+      case 'D':
+        // await insertOne('hank_1', 'standard_data', doc)
+        console.log('D!')
+        break
+      case 'A':
+        // await insertOne('hank_1', 'acceleration_data', doc)
+        console.log('A!')
+        break
+      default:
+        throw new Error('recived invalid packet type from tcp server')
+    }
+  } catch (e) {
+    console.error(e)
+  }
+  controller.sendDataToAllWebServerClients(data)
+}
+
+tcpServer.on('connection', handleConnection)
+
+const start = async port => {
+  if (process.env.NODE_ENV === 'development') await tunnel(port)
   return new Promise((_, reject) => {
     tcpServer
       .listen(port, () => {
@@ -31,3 +56,5 @@ module.exports = port => {
       .on('error', reject)
   })
 }
+
+module.exports = start

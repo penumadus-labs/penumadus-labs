@@ -7,12 +7,14 @@ api.get('/test', (req, res) => {
   res.send('api is working!')
 })
 
-api.get('/tank', (req, res) => {
-  void (async () => {
-    const data = await read('environ_data')
+api.get('/tank', async (req, res) => {
+  try {
+    const data = await readTest()
 
     res.json(data)
-  })().catch(console.error)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 module.exports = api

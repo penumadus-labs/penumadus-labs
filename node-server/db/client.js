@@ -14,21 +14,25 @@ const client = new MongoClient(url, {
 
 const dbClient = {
   db: null,
-  async dbClientConnect(db = 'test') {
+  async dbClientConnect(db = 'hank_1') {
     await tunnel(27017)
 
     await client.connect()
     console.log('database client connected')
     dbClient.db = client.db(db)
   },
-  read(col) {
-    return dbClient.db
-      .collection(col)
+  readTest() {
+    return dbClient
+      .db('test')
+      .collection('environ_data')
       .find()
       .toArray()
   },
-  insertOne(col, doc) {
-    return dbClient.db.collection(col).insertOne(doc)
+  insertOne(db, col, doc) {
+    return dbClient
+      .db(db)
+      .collection(col)
+      .insertOne(doc)
   },
 }
 

@@ -1,5 +1,5 @@
-const webServer = require('./web')
-const tcpServer = require('./tcp')
+const startWebServer = require('./web')
+const startTcpServer = require('./tcp')
 
 module.exports = ({ expressApp, webPort, tcpPort }) =>
-  Promise.all([webServer(expressApp, webPort), tcpServer(tcpPort)])
+  Promise.all([startWebServer(expressApp, webPort), startTcpServer(tcpPort)])
