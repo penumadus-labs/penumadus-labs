@@ -30,5 +30,9 @@ export const device3 = async () => {
   return data
 }
 
-export const getData = async () =>
-  Promise.all([device1(), device2(), device2()])
+// export const getData = async () =>
+//   Promise.all([device1(), device2(), device2()])
+
+export const getData = async () => {
+  return ['', '', '']
+}

@@ -7,7 +7,7 @@ export const reducer = (state, action) => {
     //     error: null,
     //   }
     case 'recieved':
-    if (typeof action.data !== 'string') throw Error('invalid data recieved')
+      if (typeof action.data !== 'string') throw Error('invalid data recieved')
       return {
         ...state,
         data: action.data,

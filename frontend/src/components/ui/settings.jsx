@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Card from '../card'
 import Input from './input'
-import Button from './button'
+import Warning from '../warning'
 
 const Root = styled.form`
   display: flex;
@@ -27,26 +26,15 @@ const Setting = styled.div`
   }
 `
 
-const Warning = styled.p`
-  margin-top: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.color.red};
-`
-
-export default ({ list, onSubmit, warning }) => (
-  <>
-    <Root>
-      {list.map(({ value, current, unit, name, handleChange, warning }) => (
-        <Setting key={name}>
-          <p>{name}</p>
-          <p>curruent: {current + unit}</p>
-          <Input value={value} onChange={handleChange} />
-          {warning && <Warning>{warning}</Warning>}
-        </Setting>
-      ))}
-    </Root>
-    <Card>
-      <Button onClick={onSubmit}>Apply</Button>
-      {warning && <Warning>{warning}</Warning>}
-    </Card>
-  </>
+export default ({ list }) => (
+  <Root>
+    {list.map(({ value, current, unit, name, handleChange, warning }) => (
+      <Setting key={name}>
+        <p>{name}</p>
+        <p>curruent: {current + unit}</p>
+        <Input value={value} onChange={handleChange} />
+        {warning && <Warning>{warning}</Warning>}
+      </Setting>
+    ))}
+  </Root>
 )
