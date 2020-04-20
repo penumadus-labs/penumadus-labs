@@ -10,6 +10,7 @@ const tcpHandler = {
 controller.tcpClients = tcpHandler.clients
 
 const handleConnection = socket => {
+  socket.setEncoding('ascii')
   tcpHandler.clients.add(socket)
 
   socket.on('data', handleData)
@@ -20,8 +21,8 @@ const handleConnection = socket => {
 }
 
 const handleData = async data => {
-  console.log('data')
   try {
+    if (data.length > 200) throw Error('data packet too large')
     const doc = JSON.parse(data)
     const { type } = doc
     delete doc.type
@@ -29,19 +30,23 @@ const handleData = async data => {
     switch (type) {
       case 'D':
         // await insertOne('hank_1', 'standard_data', doc)
-        console.log('D!')
+        console.log('data')
         break
       case 'A':
         // await insertOne('hank_1', 'acceleration_data', doc)
-        console.log('A!')
+        // console.log('A!')
+        break
+      case 'HELLO':
+        console.log('heartbeat')
         break
       default:
         throw new Error('recived invalid packet type from tcp server')
     }
+    console.log(doc)
   } catch (e) {
     console.error(e)
   }
-  controller.sendDataToAllWebServerClients(data)
+  // controller.sendDataToAllWebServerClients(data)
 }
 
 tcpServer.on('connection', handleConnection)
