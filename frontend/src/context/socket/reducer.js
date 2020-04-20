@@ -1,10 +1,20 @@
 export const reducer = (state, action) => {
   switch (action.type) {
+    // case 'status-update':
+    //   return {
+    //     ...state,
+    //     status: action.message,
+    //     error: null,
+    //   }
     case 'recieved':
-      return { data: action.data, error: null }
+    if (typeof action.data !== 'string') throw Error('invalid data recieved')
+      return {
+        ...state,
+        data: action.data,
+        error: null,
+      }
     case 'error':
       return {
-        data: null,
         error: action.error.toString(),
       }
     default:
@@ -12,6 +22,6 @@ export const reducer = (state, action) => {
   }
 }
 
-export const initialState = { data: null, error: null }
+export const initialState = { error: null }
 
 export { createActions } from './actions'

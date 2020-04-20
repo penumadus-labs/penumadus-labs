@@ -1,5 +1,5 @@
 import React, { createContext, useEffect } from 'react'
-import useAsyncReducer from '../../hooks/use-async-reducer'
+import useAsyncReducer from '../../hooks/use-reducer-with-actions'
 import { reducer, initialState, createActions } from './reducer'
 
 const DatabaseContext = createContext()

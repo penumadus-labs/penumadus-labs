@@ -1,5 +1,5 @@
 import React, { createContext, useEffect } from 'react'
-import useAsyncReducer from '../../hooks/use-async-reducer'
+import useAsyncReducer from '../../hooks/use-reducer-with-actions'
 import { reducer, initialState, createActions } from './reducer'
 // import io from 'socket.io-client'
 import { wsURL } from '../../utils/url'
@@ -12,13 +12,11 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     const socket = new WebSocket(wsURL)
 
-    socket.onopen = () => {
-      console.log('connected to socket')
-    }
+    // socket.onopen = () => console.log('connected to socket')
+    
 
     socket.onmessage = ({ data }) => {
       actions.recieved(data)
-      socket.send('hello')
     }
 
     socket.onerror = error => {

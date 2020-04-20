@@ -2,9 +2,9 @@ export const createActions = disptach => ({
   connect() {},
   async recieved(raw) {
     try {
-      const data = await raw.text()
-      console.log(`recieved data from socket: ${data}`)
-      disptach({ type: 'recieved', data })
+      const data = JSON.parse(await raw.text())
+      // const data = raw
+      disptach({ type: 'recieved', data: data.status })
     } catch (e) {
       console.error(e)
     }
