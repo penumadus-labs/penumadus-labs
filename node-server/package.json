@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "dev": "NODE_ENV=development nodemon index",
+    "dev": "DEV=true nodemon index",
+    "tunnel": "DEV=true SSH=true nodemon index",
     "commit": "git pull && git add . && git commit -m 'server update' && git push",
     "pull": "cd .. && git pull && cd node-server"
   },

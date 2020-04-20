@@ -15,7 +15,7 @@ const client = new MongoClient(url, {
 const dbClient = {
   db: null,
   async dbClientConnect(db = 'hank_1') {
-    await tunnel(27017)
+    if (process.env.SSH) await tunnel(27017)
 
     await client.connect()
     console.log('database client connected')

@@ -6,11 +6,9 @@ const apiRouter = require('../api/routes')
 const appPath = '../frontend/build/'
 const indexPath = resolve(appPath + 'index.html')
 
-const development = process.env.NODE_ENV === 'development'
-
 const app = express()
 
-if (development) app.use(cors())
+if (process.env.DEV) app.use(cors())
 
 app.use(express.static(resolve(appPath)))
 

@@ -52,7 +52,7 @@ const handleData = async data => {
 tcpServer.on('connection', handleConnection)
 
 const start = async port => {
-  if (process.env.NODE_ENV === 'development') await tunnel(port)
+  if (process.env.SSH) await tunnel(port)
   return new Promise((_, reject) => {
     tcpServer
       .listen(port, () => {
