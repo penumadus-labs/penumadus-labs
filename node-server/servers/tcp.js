@@ -36,7 +36,9 @@ const handleData = async data => {
         // console.log('A!')
         break
       case 'HELLO':
-        controller.sendDataToWebClients(Buffer.from(JSON.stringify({ status: `${doc.id} alive` })))
+        controller.sendDataToWebClients(
+          Buffer.from(JSON.stringify({ status: `${doc.id} alive` }))
+        )
         break
       default:
         throw new Error('recived invalid packet type from tcp server')
