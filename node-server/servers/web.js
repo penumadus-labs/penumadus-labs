@@ -3,14 +3,13 @@ const { createServer } = require('http')
 const { Server } = require('ws')
 
 const handleConnection = socket => {
-  socket.send(Buffer.from('socket connected'))
+  socket.send(Buffer.from(JSON.stringify({ status: 'socket connected' })))
   socket.on('message', handleData)
 }
 
 const handleData = async data => {
   try {
-    console.log(`recieved "${data}" from web client`)
-    controller.sendDataToAllTcpServerClients(data)
+    controller.sendDataToTcpClients(data)
   } catch (e) {}
 }
 

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "dev": "DEV=true nodemon index",
-    "tunnel": "DEV=true SSH=true nodemon index",
+    "start": "node server",
+    "dev": "DEV=true nodemon server",
+    "tunnel": "DEV=true SSH=true nodemon server",
     "commit": "git pull && git add . && git commit -m 'server update' && git push",
     "pull": "cd .. && git pull && cd node-server"
   },

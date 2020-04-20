@@ -13,7 +13,6 @@ const client = new MongoClient(url, {
 })
 
 const dbClient = {
-  db: null,
   async dbClientConnect(db = 'hank_1') {
     if (process.env.SSH) await tunnel(27017)
 
@@ -22,14 +21,14 @@ const dbClient = {
     dbClient.db = client.db(db)
   },
   readTest() {
-    return dbClient
+    return client
       .db('test')
       .collection('environ_data')
       .find()
       .toArray()
   },
-  insertOne(db, col, doc) {
-    return dbClient
+  insertOne(db, col, raw) {
+    return client
       .db(db)
       .collection(col)
       .insertOne(doc)

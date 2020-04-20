@@ -12,7 +12,7 @@ if (process.env.DEV) app.use(cors())
 
 // app.use(express.static(resolve(appPath)))
 
-// app.use('/api', apiRouter)
+app.use('/api', apiRouter)
 
 app.get('*', (req, res) => {
   if (!req.xhr) res.sendFile(indexPath)

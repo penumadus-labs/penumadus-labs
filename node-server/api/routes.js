@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { read } = require('../db/client')
+const { readTest } = require('../db/client')
 
 const api = Router()
 
