@@ -39,7 +39,7 @@ export default () => {
           </>
         )}
       </Menu>
-      <Status>device status: {socketError || data}</Status>
+      <Status>{socketError? 'error: ' + socketError: 'device status: ' + data}</Status>
     </Root>
   )
 }

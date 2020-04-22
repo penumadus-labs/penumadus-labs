@@ -5,11 +5,13 @@ const ctx = {}
 const open = () => {
   const socket = (ctx.socket = new WebSocket(wsURL))
 
-  // socket.onopen = () => console.log('connected to socket')
+  socket.onopen = () => {
+    getPressure()
+  }
 
-  socket.onmessage = async raw => {
+  socket.onmessage = async ({ data: raw }) => {
     try {
-      const { status } = JSON.parse(raw.text ? await raw.text() : raw)
+      const { status } = JSON.parse(await raw.text())
       ctx.disptach({ type: 'message', data: status })
     } catch (e) {
       console.error(e)
@@ -17,7 +19,8 @@ const open = () => {
   }
 
   socket.onerror = error => {
-    ctx.disptach({ type: 'error', error })
+    console.log(error)
+    ctx.disptach({ type: 'error', error: 'socket could not connect' })
   }
 }
 
@@ -26,7 +29,7 @@ const close = () => {
 }
 
 const getPressure = () => {
-  ctx.socket.send('P')
+  ctx.socket.send('GETPRESS')
 }
 
 export const createActions = disptach => {

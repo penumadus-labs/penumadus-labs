@@ -1,11 +1,15 @@
 import React from 'react'
+import styled from 'styled-components'
 import Card from './card'
-import Warning from './warning'
+
+const ErrorMessage = styled.p`
+  color: ${({ theme }) => theme.color.red};
+`
 
 export default ({ children = 'caught error' }) => {
   return (
     <Card>
-      <Warning>{children}</Warning>
+      <ErrorMessage>{children}</ErrorMessage>
     </Card>
   )
 }

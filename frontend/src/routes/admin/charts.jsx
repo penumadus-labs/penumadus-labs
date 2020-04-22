@@ -6,11 +6,13 @@ import { filterData } from '../../utils/data'
 
 export default () => {
   const {
-    selected: { data },
+    selected: {data},
     error,
   } = useDatabaseContextState()
 
   if (error) return <Error>error: charts not loaded</Error>
+
+
 
   // don't render while wating for data
   if (data) {

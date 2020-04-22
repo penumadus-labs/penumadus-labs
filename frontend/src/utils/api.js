@@ -31,6 +31,6 @@ export const getData = async () => {
     const responses = await Promise.all([api.get('tank')])
     return responses.map(({ data }) => data)
   } catch (e) {
-    throw new Error('could not get tank data')
+    throw new Error('could not get tank data from database')
   }
 }
