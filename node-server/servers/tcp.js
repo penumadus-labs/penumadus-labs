@@ -27,6 +27,7 @@ const handleData = async data => {
     const { type } = doc
     delete doc.type
     delete doc.pad
+    console.log(doc)
     switch (type) {
       case 'D':
         // await insertOne('hank_1', 'standard_data', doc)
