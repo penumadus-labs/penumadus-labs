@@ -1,20 +1,40 @@
-import socket from '../../utils/socket'
+import { wsURL } from '../../utils/url'
 
-export const createActions = disptach => ({
-  connect() {},
-  async recieved(raw) {
+const ctx = {}
+
+const open = () => {
+  const socket = (ctx.socket = new WebSocket(wsURL))
+
+  // socket.onopen = () => console.log('connected to socket')
+
+  socket.onmessage = async raw => {
     try {
-      const data = JSON.parse(await raw.text())
-      // const data = raw
-      disptach({ type: 'recieved', data: data.status })
+      const { status } = JSON.parse(raw.text ? await raw.text() : raw)
+      ctx.disptach({ type: 'message', data: status })
     } catch (e) {
       console.error(e)
     }
-  },
-  getPressure() {
-    socket.send('something :(')
-  },
-  error(error) {
-    disptach({ type: 'error', error })
-  },
-})
+  }
+
+  socket.onerror = error => {
+    ctx.disptach({ type: 'error', error })
+  }
+}
+
+const close = () => {
+  ctx.socket.close()
+}
+
+const getPressure = () => {
+  ctx.socket.send('P')
+}
+
+export const createActions = disptach => {
+  ctx.disptach = disptach
+
+  return {
+    open,
+    close,
+    getPressure,
+  }
+}

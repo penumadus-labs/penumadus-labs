@@ -9,19 +9,9 @@ export const SocketContextProvider = ({ children }) => {
   const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   useEffect(() => {
-    // socket.onopen = () => console.log('connected to socket')
+    actions.open()
 
-    socket.onmessage = ({ data }) => {
-      actions.recieved(data)
-    }
-
-    socket.onerror = error => {
-      actions.error(error)
-    }
-
-    return () => {
-      socket.close()
-    }
+    return actions.close
   }, [actions])
 
   return (
