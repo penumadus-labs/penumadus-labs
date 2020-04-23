@@ -1,18 +1,16 @@
 import React from 'react'
 import LineChart from '../../components/line-chart'
-import Error from '../../components/error'
+import Loading from '../../components/loading'
 import { useDatabaseContextState } from '../../hooks/use-database-context'
 import { filterData } from '../../utils/data'
 
 export default () => {
   const {
-    selected: {data},
+    selected: { data },
     error,
   } = useDatabaseContextState()
 
-  if (error) return <Error>error: charts not loaded</Error>
-
-
+  if (error) return null
 
   // don't render while wating for data
   if (data) {
@@ -28,5 +26,5 @@ export default () => {
       </>
     )
   }
-  return null
+  return <Loading />
 }

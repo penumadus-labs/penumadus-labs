@@ -4,7 +4,7 @@ import Summary from '../../components/ui/summary'
 import Card from '../card'
 import Button from './button'
 import Warning from '../warning'
-import Error from '../error'
+import Loading from '../../components/loading'
 import useSettings from '../../hooks/use-settings'
 
 export default () => {
@@ -40,7 +40,7 @@ export default () => {
     reset()
   }
 
-  if (error) return <Error>error: settings panel not loaded</Error>
+  if (error) return null
 
   return settings.length ? (
     <>
@@ -57,5 +57,7 @@ export default () => {
         />
       )}
     </>
-  ) : null
+  ) : (
+    <Loading />
+  )
 }

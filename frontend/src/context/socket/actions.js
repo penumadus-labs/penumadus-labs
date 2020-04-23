@@ -19,7 +19,6 @@ const open = () => {
   }
 
   socket.onerror = error => {
-    console.log(error)
     ctx.disptach({ type: 'error', error: 'socket could not connect' })
   }
 }

@@ -6,7 +6,7 @@ const ErrorMessage = styled.p`
   color: ${({ theme }) => theme.color.red};
 `
 
-export default ({ children = 'caught error' }) => {
+export default ({ children = 'error' }) => {
   return (
     <Card>
       <ErrorMessage>{children}</ErrorMessage>
