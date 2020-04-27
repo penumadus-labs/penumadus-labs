@@ -1,0 +1,41 @@
+void
+kluge(void)
+{
+
+	const char *filename = "/device.ini";
+	SD.remove(filename);
+	if(fd_SD=SD.open(filename,FILE_WRITE)){
+			//PONDSCUM TEST
+			Serial.println(F("for write open SD file"));
+			fd_open=true;
+			fd_SDwriteMode=true;
+			setLocalTimer(SDFLUSHTIMER,15000,MILLISECS); 
+		}
+fd_SD.println("[server info]");
+fd_SD.println("server_ip = 18.219.216.145");
+fd_SD.println("server_port = 32159");
+fd_SD.println(" ");
+fd_SD.println("[filled def]");
+fd_SD.println("psi_pre_fill = 30");
+fd_SD.println("psi_post_fill = 40");
+fd_SD.println(" ");
+fd_SD.println("[sec between]");
+fd_SD.println("sec_between = 10");
+fd_SD.println("samp_interval = 50");
+fd_SD.println(" ");
+fd_SD.println("[device id]");
+fd_SD.println("device_id = unit_3");
+fd_SD.println("device_region = car");
+fd_SD.println(" ");
+fd_SD.println("[maximum g]");
+fd_SD.println("maximum_g = 3.5");
+fd_SD.println(" ");
+fd_SD.println("[fill max]");
+fd_SD.println("fill_max = 20");
+fd_SD.println(" ");
+fd_SD.println("[transducer params]");
+fd_SD.println("full_scale = 100");
+fd_SD.println("excitation_voltage = 4.9845");
+fd_SD.println("calibration_factor = 3.41");
+fd_SD.close();
+}

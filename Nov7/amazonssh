@@ -1,0 +1,1 @@
+ssh -i asron.pem ubuntu@18.219.216.145
