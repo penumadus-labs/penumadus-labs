@@ -13,23 +13,28 @@ const handleConnection = socket => {
   socket.setEncoding('ascii')
   tcpHandler.clients.add(socket)
 
+  console.log('tcp client connected')
+  socket.write('GETPRESS'.padEnd(200))
+
   socket.on('data', handleData)
 
   socket.on('close', () => {
+    console.log('closed')
     tcpHandler.clients.delete(socket)
   })
 }
 
 const handleData = async data => {
+  console.log(data)
   try {
     if (data.length > 200) throw Error('data packet too large')
     const doc = JSON.parse(data)
     const { type } = doc
     delete doc.type
     delete doc.pad
-    console.log(doc)
     switch (type) {
       case 'D':
+
         // await insertOne('hank_1', 'standard_data', doc)
         break
       case 'A':
