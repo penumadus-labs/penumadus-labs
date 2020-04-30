@@ -36,10 +36,7 @@ function formatRequest(request, args) {
     throw new Error(
       `expected ${request.args} args. recieved ${args.length} args`
     )
-  return [request.command]
-    .concat(args)
-    .split(' ')
-    .padEnd(200)
+  return [request.command].concat(args).split(' ').padEnd(200)
 }
 
 const methods = {

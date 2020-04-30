@@ -3,69 +3,70 @@ const { requests, responses } = require('./tcp-protocol')
 class Device {
   constructor(socket) {
     this.socket = socket
-    this.online = null
-    this.ipSettings = {}
-    this.sampleSettings = {}
-    this.pressureSettings = {}
-    this.accelerationSettings = {}
+    this.settings = {}
+    this.online = false
 
     socket.on('data', this.handleData.bind(this))
 
-    const requestsKeys = Object.keys(requests)
+    const requestNames = Object.keys(requests)
 
-    requests.forEacb(key => {
-      this[key] = function(...args) {
-        this.write(key, ...args)
+    requestNames.forEach((name) => {
+      const request = requests[name]
+      this[name] = (...args) => {
+        socket.write(request(...args))
       }
     })
 
-    this.getIP()
+    this.getIPSettings()
     this.getSampleSettings()
     this.getPressureSettings()
     this.getAccelerationSettings()
   }
   async handleData(raw) {
     try {
-      const data = JSON.parse(raw)
-      // create method name
-      const response = responses[data.type]
-      delete data.type
-      delete data.pad
-      delete data.id
-      if (!this[response]) console.log(`unknown type ${type}`)
-      else this[response](data)
+      const { type, pad, id, ...data } = JSON.parse(raw)
+      if (type === 'HELLO') return
+      const response = responses[type]
+      console.log(response)
+      if (this[response]) this[response](data)
+      else console.log(`unknown type ${type}`)
+      this.setStatus()
     } catch (error) {
       console.error(error)
     }
   }
 
-  write(requestName, ...args) {
-    socket.write(requests[requestName](...args))
+  setStatus() {
+    this.online = true
+    setTimeout(() => (this.online = false), 10000)
   }
 
-  handleStatus() {}
+  // responses
+
   standardDataResponse(data) {}
   accelerationDataResponse(data) {}
   logDataResponse(data) {}
+
   shutdownResponse(data) {}
   commitResponse(data) {}
   eraseBufferedDataResponse(data) {}
+
   getIPSettingsResponse(data) {
-    this.ipSettings = data
+    this.settings.ip = data
+  }
+  getPressureSettingsResponse(data) {
+    this.settings.pressure = data
+  }
+  getAccelerationSettingsResponse(data) {
+    this.settings.acceleration = data
+  }
+  getSampleSettingsResponse(data) {
+    this.settings.sample = data
   }
   setIPSettingsResponse(data) {}
-  getPressureSettingsResponse(data) {
-    this.pressureSettings = data
-  }
   setPressureSettingsResponse(data) {}
-  getSampleSettingsResponse(data) {
-    this.sampleSettings = data
-  }
-  setSampleSettingsResponse(data) {}
-  getAccelerationSettingsResponse(data) {
-    this.accelerationSettings = data
-  }
   setAccelerationSettingsResponse(data) {}
+  setSampleSettingsResponse(data) {}
 }
 
 module.exports = Device

@@ -29,7 +29,8 @@ const protocol = {
     response: 'GETIP',
   },
   setIPSettings: {
-    request: { command: 'SETIP', args: 0 },
+    // address port
+    request: { command: 'SETIP', args: 2 },
     response: 'SETIP', // ?
   },
   getPressureSettings: {
@@ -37,43 +38,47 @@ const protocol = {
     response: 'GETPRESS',
   },
   setPressureSettings: {
-    request: { command: 'SETPRESS', args: 0 },
+    // psiPreFill(%d) psiPostFill(%d) fill(%d) fillMax(%d) fullScale(%f) excitation(%f) calFactor(%f)
+    request: { command: 'SETPRESS', args: 7 },
     response: 'SETPRESS', // ?
-  },
-  getSampleSettings: {
-    request: { command: 'GETSAMPLEPARAMS', args: 0 },
-    response: 'GETSAMP',
-  },
-  setSampleSettings: {
-    request: { command: 'SETSAMPLEPARAMS', args: 0 },
-    response: 'SETSAMPLEPARAMS', // ?
   },
   getAccelerationSettings: {
     request: { command: 'GETACCELPARAMS', args: 0 },
-    response: 'ACCELPARAMS',
+    response: 'GETACCELPARAMS',
   },
   setAccelerationSettings: {
-    request: { command: 'SETACCELPARAMS', args: 0 },
+    // mag(%f)
+    request: { command: 'SETACCELPARAMS', args: 1 },
     response: 'SETACCELPARAMS',
+  },
+  getSampleSettings: {
+    request: { command: 'GETSAMPLEPARAMS', args: 0 },
+    response: 'GETSAMPLEPARAMS',
+  },
+  setSampleSettings: {
+    // secBetween(%d) sampleinterval(%d) accelsampint(%d)
+    request: { command: 'SETSAMPLEPARAMS', args: 3 },
+    response: 'SETSAMPLEPARAMS', // ?
   },
 }
 
-const keys = Object.keys(procotol)
+const protocolNames = Object.keys(protocol)
 
-const requests = keys.reduce((acc, key) => {
+const requests = protocolNames.reduce((acc, key) => {
   const { request } = protocol[key]
   acc[key] = (...args) => {
     if (request.args !== args.length)
       throw new Error(
         `expected ${request.args} args. recieved ${args.length} args`
       )
-    return [request.command, ...args].split(' ').padEnd(200)
+    return [request.command, ...args].join(' ').padEnd(200)
   }
+  return acc
 }, {})
 
-const responses = keys.reduce((acc, key) => {
-  const { response } = protocol[key]
-  acc[response] = key + 'Response'
+const responses = protocolNames.reduce((acc, name) => {
+  const { response } = protocol[name]
+  acc[response] = name + 'Response'
   return acc
 }, {})
 
