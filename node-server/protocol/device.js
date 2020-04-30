@@ -1,4 +1,4 @@
-const {responses, methods} = require('./tcp-protocol')
+const { responses, methods } = require('./tcp-protocol')
 
 class Device {
   constructor(socket) {
@@ -96,7 +96,7 @@ class Device {
   commit() {}
   handleCommit() {}
 
-  eraseSDCard() {}
+  eraseBufferedData() {}
   handleErase() {}
 
   getIp() {
@@ -150,7 +150,7 @@ module.exports = Device
 //     this.accelerationSettings = {}
 //   }
 //   setTime() {},
-//   eraseSDCard() {},
+//   eraseBufferedData() {},
 //   commit() {},
 //   shutdown() {},
 //   getIp() {},
@@ -167,7 +167,7 @@ module.exports = Device
 //   pressure_settings: {},
 //   accelleration_settings: {},
 //   setTime() {},
-//   eraseSDCard() {},
+//   eraseBufferedData() {},
 //   commit() {},
 //   shutdown() {},
 //   getIp() {},
