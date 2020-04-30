@@ -11,10 +11,10 @@ const config = {
 
 const development = process.env.NODE_ENV === 'development'
 
-const tunnelPromise = port => {
+const tunnelPromise = (port) => {
   if (!development) return
   return new Promise((resolve, reject) => {
-    const client = tunnel({ ...config, dstPort: port.toString() }, err => {
+    const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
       if (err) reject(err)
       console.log(`ssh tunnel opened for port ${port}`)
       resolve()

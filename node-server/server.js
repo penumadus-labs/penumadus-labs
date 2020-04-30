@@ -8,7 +8,7 @@ const tcpPort = 32100
 void (async () => {
   await dbClientConnect()
   await startServers({ expressApp, webPort, tcpPort })
-})().catch(e => {
+})().catch((e) => {
   console.error(e)
   process.exit(1)
 })

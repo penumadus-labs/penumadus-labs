@@ -1,29 +1,36 @@
+const {responses, methods} = require('./tcp-protocol')
+
 class Device {
   constructor(socket) {
     this.socket = socket
     this.online = null
-    this.ip = ''
+    this.ip = {}
     this.sampleSettings = {}
     this.pressureSettings = {}
     this.accelerationSettings = {}
 
     socket.on('data', this.handleData.bind(this))
+
+    this.getIp()
+    this.getSampleSettings()
+    this.getPressureSettings()
+    this.getAccelerationSettings()
   }
   async handleData(raw) {
     try {
       const data = JSON.parse(raw)
       const { type } = data
-      console.log(type)
-      delete doc.type
-      delete doc.pad
+      delete data.type
+      delete data.pad
+      // console.log(`type: ${type}`)
       switch (type) {
-        case 'D':
+        case responses.standardData:
           this.handleStandardData(data)
           break
-        case 'A':
+        case responses.accelerationData:
           this.handleAccelerationData(data)
           break
-        case 'L':
+        case responses.logData:
           this.handleLogData(data)
           break
         // set time
@@ -34,7 +41,7 @@ class Device {
         case 'ERASED':
           this.handleErase(data)
           break
-        case 'GETIP':
+        case 'GETIPPARAMS':
           this.handleGetIp(data)
           break
         // set ip
@@ -42,25 +49,33 @@ class Device {
           this.handleGetPressureSettings(data)
           break
         // set press
-        case 'GETSAMPLE':
+        case 'GETSAMP':
           this.handleGetSampleSettings(data)
           break
         // set sample
-        case 'GETACCELPARAMS':
+        case 'ACCELPARAMS':
           this.handleGetAccelerationSettings(data)
           break
         case 'SETACCELPARAMS':
           this.handleSetAccelerationSettings(data)
           break
+        case 'HELLO':
+          break
         default:
           console.log(`uknown type ${type}`)
           break
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   write(message) {
-    this.socket.write(message.padEnd(200))
+    const padded = message.padEnd(200)
+
+    console.log(`sent ${message}`)
+
+    this.socket.write(padded)
   }
 
   handleStatus() {}
@@ -69,9 +84,13 @@ class Device {
   handleAccelerationData() {}
   handleLogData() {}
 
-  setTime() {}
+  setTime(seconds, useconds) {
+    this.write('')
+  }
 
-  shutdown() {}
+  shutdown() {
+    this.write('')
+  }
   handleShutdown() {}
 
   commit() {}
@@ -84,30 +103,44 @@ class Device {
     this.write('GETIP')
   }
   handleGetIp(data) {
-    console.log(data)
+    this.ip = data
   }
 
   setIp() {}
   handleSetIp() {}
 
-  getPressureSettings() {}
-  handleGetPressureSettings() {}
+  getPressureSettings() {
+    this.write('GETPRESS')
+  }
+  handleGetPressureSettings(data) {
+    this.pressureSettings = data
+  }
 
   setPressureSettings() {}
   handleSetPressureSettings() {}
 
-  getSampleSettings() {}
-  handleGetSampleSettings() {}
+  getSampleSettings() {
+    this.write('GETSAMPLEPARAMS')
+  }
+  handleGetSampleSettings(data) {
+    this.sampleSettings = data
+  }
 
   setSampleSettings() {}
   handleSetSampleSettings() {}
 
-  getAccelerationSettings() {}
-  handleGetAccelerationSettings() {}
+  getAccelerationSettings() {
+    this.write('GETACCELPARAMS')
+  }
+  handleGetAccelerationSettings(data) {
+    this.accelerationSettings = data
+  }
 
   setAccelerationSettings() {}
   handleSetAccelerationSettings() {}
 }
+
+module.exports = Device
 
 // class Device {
 //   constructor() {

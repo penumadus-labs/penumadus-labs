@@ -21,17 +21,10 @@ const dbClient = {
     dbClient.db = client.db(db)
   },
   readTest() {
-    return client
-      .db('test')
-      .collection('environ_data')
-      .find()
-      .toArray()
+    return client.db('test').collection('environ_data').find().toArray()
   },
   insertOne(db, col, raw) {
-    return client
-      .db(db)
-      .collection(col)
-      .insertOne(doc)
+    return client.db(db).collection(col).insertOne(doc)
   },
 }
 
