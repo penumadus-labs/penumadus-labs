@@ -26,7 +26,7 @@ const handleData = async data => {
         break
       default:
         console.log(`invalid case: ${type}`)
-        // throw new Error('recived invalid packet type from tcp server')
+      // throw new Error('recived invalid packet type from tcp server')
     }
   } catch (e) {
     console.error(e)

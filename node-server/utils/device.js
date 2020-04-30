@@ -1,6 +1,7 @@
 class Device {
   constructor(socket) {
     this.socket = socket
+    this.online = null
     this.ip = ''
     this.sampleSettings = {}
     this.pressureSettings = {}
@@ -8,47 +9,105 @@ class Device {
 
     socket.on('data', this.handleData.bind(this))
   }
-  async handleData(data) {
+  async handleData(raw) {
     try {
-      const doc = JSON.parse(data)
-      const { type } = doc
+      const data = JSON.parse(raw)
+      const { type } = data
+      console.log(type)
       delete doc.type
       delete doc.pad
       switch (type) {
-        case '':
+        case 'D':
+          this.handleStandardData(data)
           break
-        case '':
+        case 'A':
+          this.handleAccelerationData(data)
           break
-        case '':
+        case 'L':
+          this.handleLogData(data)
           break
-        case '':
+        // set time
+        // shut down
+        case 'COMMITPARAMS':
+          this.handleCommit(data)
           break
-        case '':
+        case 'ERASED':
+          this.handleErase(data)
           break
-        case '':
+        case 'GETIP':
+          this.handleGetIp(data)
           break
-        case '':
+        // set ip
+        case 'GETPRESS':
+          this.handleGetPressureSettings(data)
           break
-      
+        // set press
+        case 'GETSAMPLE':
+          this.handleGetSampleSettings(data)
+          break
+        // set sample
+        case 'GETACCELPARAMS':
+          this.handleGetAccelerationSettings(data)
+          break
+        case 'SETACCELPARAMS':
+          this.handleSetAccelerationSettings(data)
+          break
         default:
+          console.log(`uknown type ${type}`)
           break
       }
-    } catch (error) {
-      
-    }
-  },
-  setTime() {},
-  eraseSDCard() {},
-  commit() {},
-  shutdown() {},
-  getIp() {},
-  setIp() {},
-  getPressureSettings() {},
-  setPressureSettings() {},
-  getSampleSettings() {},
-  setSampleSettings() {},
-}
+    } catch (error) {}
+  }
 
+  write(message) {
+    this.socket.write(message.padEnd(200))
+  }
+
+  handleStatus() {}
+
+  handleStandardData() {}
+  handleAccelerationData() {}
+  handleLogData() {}
+
+  setTime() {}
+
+  shutdown() {}
+  handleShutdown() {}
+
+  commit() {}
+  handleCommit() {}
+
+  eraseSDCard() {}
+  handleErase() {}
+
+  getIp() {
+    this.write('GETIP')
+  }
+  handleGetIp(data) {
+    console.log(data)
+  }
+
+  setIp() {}
+  handleSetIp() {}
+
+  getPressureSettings() {}
+  handleGetPressureSettings() {}
+
+  setPressureSettings() {}
+  handleSetPressureSettings() {}
+
+  getSampleSettings() {}
+  handleGetSampleSettings() {}
+
+  setSampleSettings() {}
+  handleSetSampleSettings() {}
+
+  getAccelerationSettings() {}
+  handleGetAccelerationSettings() {}
+
+  setAccelerationSettings() {}
+  handleSetAccelerationSettings() {}
+}
 
 // class Device {
 //   constructor() {
@@ -68,8 +127,6 @@ class Device {
 //   getSampleSettings() {},
 //   setSampleSettings() {},
 // }
-
-
 
 // const device = {
 //   ip: '',
