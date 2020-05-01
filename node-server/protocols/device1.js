@@ -8,28 +8,44 @@ class Device {
 
     socket.on('data', this.handleData.bind(this))
 
-    const requestNames = Object.keys(requests)
+    const requestEntries = Object.entries(requests)
 
-    requestNames.forEach((name) => {
-      const request = requests[name]
+    requestEntries.forEach(([name, request]) => {
       this[name] = (...args) => {
+        console.log(`request: ${name}`)
         socket.write(request(...args))
       }
     })
+    // this.setTime()
 
-    this.getIPSettings()
-    this.getSampleSettings()
-    this.getPressureSettings()
-    this.getAccelerationSettings()
+    // shutdown
+
+    // this.reset()
+    // this.commitSettings()
+    // this.eraseBufferedData()
+
+    // this.getIPSettings()
+    // this.getPressureSettings()
+    // this.getAccelerationSettings()
+    // this.getSampleSettings()
+
+    // set ip
+    // this.setPressureSettings(1, 1, 1, 2, 1, 1, 1)
+    // this.setAccelerationSettings(100)
+    // this.setSampleSettings(3, 1, 1)
+
+    // this.badCommand()
   }
   async handleData(raw) {
+    console.log(raw.length)
     try {
-      const { type, pad, id, ...data } = JSON.parse(raw)
+      const { type, pad, id, time, ...data } = JSON.parse(raw)
       if (type === 'HELLO') return
       const response = responses[type]
-      console.log(response)
-      if (this[response]) this[response](data)
-      else console.log(`unknown type ${type}`)
+      if (this[response]) {
+        console.log(`response: ${type}`, data)
+        this[response](data)
+      } else console.log(`unknown type ${type}`)
       this.setStatus()
     } catch (error) {
       console.error(error)
@@ -47,8 +63,12 @@ class Device {
   accelerationDataResponse(data) {}
   logDataResponse(data) {}
 
+  setTimeResponse(data) {}
+
   shutdownResponse(data) {}
-  commitResponse(data) {}
+  resetResponse(data) {}
+
+  commitSettingsResponse(data) {}
   eraseBufferedDataResponse(data) {}
 
   getIPSettingsResponse(data) {
@@ -66,7 +86,9 @@ class Device {
   setIPSettingsResponse(data) {}
   setPressureSettingsResponse(data) {}
   setAccelerationSettingsResponse(data) {}
-  setSampleSettingsResponse(data) {}
+  setSampleSettingsResponse(data) {
+    this.getSampleSettings()
+  }
 }
 
 module.exports = Device

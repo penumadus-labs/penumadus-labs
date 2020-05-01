@@ -1,34 +1,8 @@
 const { createServer } = require('net')
 const controller = require('./controller')
-const Device = require('../protocol2/device')
+const Device = require('../protocols/device1')
 const tunnel = require('../utils/ssh-tunnel')
 const { insertOne } = require('../db/client')
-
-// const handleData = async (data) => {
-//   try {
-//     const doc = JSON.parse(data)
-//     const { type } = doc
-//     delete doc.type
-//     delete doc.pad
-//     switch (type) {
-//       case 'D':
-//         await insertOne('hank_1', 'standard_data', doc)
-//         break
-//       case 'A':
-//         await insertOne('hank_1', 'acceleration_data', doc)
-//         console.log('A!')
-//         break
-//       case 'HELLO':
-//         break
-//       case 'GETPRESS':
-//         break
-//       default:
-//         console.log(`invalid case: ${type}`)
-//     }
-//   } catch (e) {
-//     console.error(e)
-//   }
-// }
 
 const handleConnection = (socket) => {
   socket.setEncoding('ascii')
