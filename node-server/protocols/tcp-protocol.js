@@ -51,7 +51,32 @@ const responses = protocolEntries.reduce((acc, [name, { command }]) => {
   return acc
 }, {})
 
+const events = protocolEntries.reduce(
+  (acc, [name, { command, args: requestArgs }]) => {
+    const request = (...args) => {
+      if (requestArgs !== args.length) {
+        throw new Error(
+          `expected ${requestArgs} args. recieved ${args.length} args`
+        )
+      }
+
+      return [command, ...args].join(' ').padEnd(200)
+    }
+
+    const response = name + 'Response'
+
+    acc[name] = {
+      request,
+      response,
+    }
+
+    return acc
+  },
+  {}
+)
+
 module.exports = {
   requests,
   responses,
+  events,
 }
