@@ -1,16 +1,13 @@
 const protocol = {
-  standardData: {
-    command: 'D',
-  },
-  accelerationData: {
-    command: 'A',
-  },
-  logData: {
-    command: 'L',
-  },
+  standardData: { command: 'D' },
+  accelerationData: { command: 'A' },
+  logData: { command: 'L' },
+
   setTime: { command: 'TIME', args: 0 },
+
   shutdown: { command: 'SHUTDOWN', args: 0 },
   reset: { command: 'RESETDEVICE', args: 0 },
+
   commitSettings: { command: 'COMMITPARAMS', args: 0 },
   eraseBufferedData: { command: 'ERASESD', args: 0 },
 
@@ -30,7 +27,7 @@ const protocol = {
   // secBetween(%d) sampleinterval(%d) accelsampint(%d)
   setSampleSettings: { command: 'SETSAMPLEPARAMS', args: 3 },
 
-  badCommand: { command: 'BlahBlahBlah', args: 0 },
+  badCommand: { command: 'BADCMND', args: 0 },
 }
 
 const protocolEntries = Object.entries(protocol)

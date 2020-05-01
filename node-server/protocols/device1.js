@@ -18,9 +18,9 @@ class Device {
     })
     // this.setTime()
 
-    // shutdown
-
+    // this.shutdown()
     // this.reset()
+
     // this.commitSettings()
     // this.eraseBufferedData()
 
@@ -29,7 +29,7 @@ class Device {
     // this.getAccelerationSettings()
     // this.getSampleSettings()
 
-    // set ip
+    // this.setIPSettings('18.222.29.175', '32159')
     // this.setPressureSettings(1, 1, 1, 2, 1, 1, 1)
     // this.setAccelerationSettings(100)
     // this.setSampleSettings(3, 1, 1)
@@ -37,15 +37,14 @@ class Device {
     // this.badCommand()
   }
   async handleData(raw) {
-    console.log(raw.length)
     try {
-      const { type, pad, id, time, ...data } = JSON.parse(raw)
+      const { pad, type, id, time, ...data } = JSON.parse(raw)
       if (type === 'HELLO') return
       const response = responses[type]
       if (this[response]) {
         console.log(`response: ${type}`, data)
         this[response](data)
-      } else console.log(`unknown type ${type}`)
+      } else console.log(`unknown type ${type}`, data)
       this.setStatus()
     } catch (error) {
       console.error(error)
@@ -83,12 +82,16 @@ class Device {
   getSampleSettingsResponse(data) {
     this.settings.sample = data
   }
-  setIPSettingsResponse(data) {}
+  setIPSettingsResponse(data) {
+    this.getIPSettings()
+  }
   setPressureSettingsResponse(data) {}
   setAccelerationSettingsResponse(data) {}
   setSampleSettingsResponse(data) {
     this.getSampleSettings()
   }
+
+  badCommandResponse(data) {}
 }
 
 module.exports = Device
