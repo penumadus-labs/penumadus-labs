@@ -2,12 +2,12 @@ const controller = require('./controller')
 const { createServer } = require('http')
 const { Server } = require('ws')
 
-const handleConnection = (socket) => {
+const handleConnection = socket => {
   socket.send(Buffer.from(JSON.stringify({ status: 'socket connected' })))
   socket.on('message', handleData)
 }
 
-const handleData = async (data) => {
+const handleData = async data => {
   try {
     controller.sendDataToTcpClients(data)
   } catch (e) {}

@@ -1,26 +1,34 @@
-const { createServer } = require('net')
+const net = require('net')
 const controller = require('./controller')
 const Device = require('../protocols/device2')
 const tunnel = require('../utils/ssh-tunnel')
 const { insertOne } = require('../db/client')
 
+class X extends net.Socket {}
+
+net.Socket.prototype = net.Socket.prototype
+
 const handleConnection = socket => {
+
+  console.log(socket)
+
   socket.setEncoding('ascii')
-  tcpHandler.clients.add(socket)
+  const device = new Device(socket)
+  const ref = device
+  tcpHandler.clients.add(ref)
 
   console.log('tcp client connected')
 
-  new Device(socket)
 
   socket.on('error', error => console.error(error))
 
   socket.on('close', () => {
     console.log('tcp client closed')
-    tcpHandler.clients.delete(socket)
+    tcpHandler.clients.delete(ref)
   })
 }
 
-const tcpServer = createServer()
+const tcpServer = net.createServer()
 const tcpHandler = {
   clients: new Set(),
 }
