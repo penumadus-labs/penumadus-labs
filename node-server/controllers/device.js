@@ -1,4 +1,5 @@
 const EventEmitter = require('events')
+const { insertOne } = require('../controllers/database')
 const {
   config,
   commands,
@@ -6,7 +7,7 @@ const {
   setters,
   requests,
   all,
-} = require('./tcp-protocol')
+} = require('../protocols/tcp-protocol')
 
 class Device extends EventEmitter {
   constructor(socket) {
@@ -48,17 +49,17 @@ class Device extends EventEmitter {
     }
   }
 
-  getAll() {
+  getAllSettings() {
     return Promise.all(this.getters.map((getter) => this[getter]()))
   }
 
   createSetter(name, command, numArgs) {
     return (...args) => {
-      // if (args !== numArgs) {
-      //   throw new Error(`expected ${numArgs} args. recieved ${args.length} args`)
-      // }
+      if (args.length !== numArgs) {
+        throw new Error(`expected ${numArgs} args. recieved ${args.length} args`)
+      }
 
-      return createRequest(name, [command, ...args].join(' '))
+      return this.createRequest(name, [command, ...args].join(' '))()
     }
   }
 
@@ -77,17 +78,17 @@ class Device extends EventEmitter {
   }
 
   createEvents() {
-    for (const [name, { command, args }] of commands) {
+    for (const [name, { command }] of commands) {
       this[name] = this.createRequest(name, command)
     }
 
-    for (const [name, { command, args }] of getters) {
+    for (const [name, { command }] of getters) {
       this.getters.push(name)
       this[name] = this.createRequest(name, command)
     }
 
     for (const [name, { command, args }] of setters) {
-      this[name] = this.createSetter(name, command)
+      this[name] = this.createSetter(name, command, args)
     }
 
     for (const [name, { command, args }] of all) {

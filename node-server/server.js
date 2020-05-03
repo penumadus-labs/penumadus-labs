@@ -1,5 +1,5 @@
 const expressApp = require('./app/express')
-const { dbClientConnect } = require('./db/client')
+const { dbClientConnect } = require('./controllers/database')
 const startServers = require('./servers')
 
 const webPort = 8080

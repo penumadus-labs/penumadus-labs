@@ -1,8 +1,7 @@
 const net = require('net')
-const controller = require('./controller')
-const Device = require('../protocol/device')
+const controller = require('../controllers/socket-pipe')
+const Device = require('../controllers/device')
 const tunnel = require('../utils/ssh-tunnel')
-const { insertOne } = require('../db/client')
 
 const handleConnection = (socket) => {
   socket.setEncoding('ascii')
@@ -15,6 +14,11 @@ const handleConnection = (socket) => {
   void (async () => {
     const pressureSettings = await device.getPressureSettings()
     console.log(pressureSettings)
+    delete pressureSettings.time
+    const res = await device.setPressureSettings(...Object.values(pressureSettings))
+    console.log(res)
+    const status = await device.reset()
+    console.log(status)
   })().catch(console.error)
 
   socket.on('error', (error) => console.error(error))

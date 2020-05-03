@@ -1,6 +1,6 @@
-const controller = require('./controller')
 const { createServer } = require('http')
 const { Server } = require('ws')
+const controller = require('../controllers/socket-pipe')
 
 const handleConnection = (socket) => {
   socket.send(Buffer.from(JSON.stringify({ status: 'socket connected' })))
