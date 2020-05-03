@@ -1,26 +1,23 @@
 const net = require('net')
 const controller = require('./controller')
-const Device = require('../protocols/device2')
+const Device = require('../protocol/device')
 const tunnel = require('../utils/ssh-tunnel')
 const { insertOne } = require('../db/client')
 
-class X extends net.Socket {}
-
-net.Socket.prototype = net.Socket.prototype
-
-const handleConnection = socket => {
-
-  console.log(socket)
-
+const handleConnection = (socket) => {
   socket.setEncoding('ascii')
   const device = new Device(socket)
-  const ref = device
+  const ref = socket
   tcpHandler.clients.add(ref)
 
   console.log('tcp client connected')
 
+  void (async () => {
+    const pressureSettings = await device.getPressureSettings()
+    console.log(pressureSettings)
+  })().catch(console.error)
 
-  socket.on('error', error => console.error(error))
+  socket.on('error', (error) => console.error(error))
 
   socket.on('close', () => {
     console.log('tcp client closed')
@@ -37,7 +34,7 @@ controller.tcpClients = tcpHandler.clients
 
 tcpServer.on('connection', handleConnection)
 
-const start = async port => {
+const start = async (port) => {
   if (process.env.SSH) await tunnel(port)
   return new Promise((_, reject) => {
     tcpServer
