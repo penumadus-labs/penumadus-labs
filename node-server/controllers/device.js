@@ -1,29 +1,82 @@
 const EventEmitter = require('events')
-const { insertOne } = require('../controllers/database')
+const controller = require('./socket-pipeline')
+const { insertOne } = require('./database')
 const {
   config,
   commands,
   getters,
   setters,
-  requests,
-  all,
+  table,
 } = require('../protocols/tcp-protocol')
 
+/*
+this class wraps the tcp client
+it grabs all device settings when a client connects
+it updates all settings whenever a setter is resolved
+*/
+
 class Device extends EventEmitter {
+  settings = {}
   constructor(socket) {
     super()
+    socket.setEncoding('ascii')
+    socket.on('error', console.error)
+    socket.on('close', () => {
+      console.log('tcp client closed')
+      controller.tcpClients.delete(this)
+    })
 
     this.socket = socket
-
-    this.getters = []
-    this.responses = {}
-
-    this.createEvents()
-    this.addEventListeners()
-    this.socket.on('data', this.handleResponses.bind(this))
+    this.createRequests()
+    this.addDataStreams()
+    this.socket.on('data', this.emitResponses.bind(this))
   }
 
-  addEventListeners() {
+  async initialize() {
+    await this.getSettings()
+    controller.tcpClients.add(this)
+    console.log(this.settings)
+  }
+
+  getSettings() {
+    return Promise.all(
+      getters.map(([name, { dataLabel }]) =>
+        (async () => {
+          this.write(name)
+          const settings = await this.createPromise(name)
+          this.settings[dataLabel] = settings
+        })()
+      )
+    )
+  }
+
+  write(name, ...args) {
+    console.log(`request: ${name}`)
+    const command = table[name]
+    const message = args.length ? [command, ...args].join(' ') : command
+    this.socket.write(message.padEnd(config.packetSize))
+  }
+
+  createPromise(name) {
+    return new Promise((resolve) => {
+      this.once(name, (err, data) => {
+        if (err) reject(err)
+        resolve(data)
+      })
+    })
+  }
+
+  createRequests() {
+    for (const [name, _] of commands) {
+      this[name] = this.createCommand(name)
+    }
+
+    for (const [name, { args, dataLabel }] of setters) {
+      this[name] = this.createSetter(name, args, dataLabel)
+    }
+  }
+
+  addDataStreams() {
     this.on('standardData', (data) => {})
 
     this.on('accelerationData', (data) => {})
@@ -33,10 +86,37 @@ class Device extends EventEmitter {
     })
   }
 
-  handleResponses(raw) {
-    const { pad, type, id, status, ...data } = JSON.parse(raw)
+  createCommand(name) {
+    return () => {
+      console.log(`request: ${name}`)
+      this.write(name)
+      return this.createPromise(name)
+    }
+  }
+
+  createSetter(name, args, dataLabel) {
+    return (settings) => {
+      const params = Object.values(settings)
+      if (params.length !== args) {
+        throw new Error(
+          `expected ${args} args. recieved ${settings.length} args`
+        )
+      }
+
+      this.write(name, ...params)
+
+      return this.createPromise(name).then((data) => {
+        this.settings[dataLabel] = settings
+        return data
+      })
+    }
+  }
+
+  emitResponses(raw) {
+    const { pad, type, id, status, time, ...data } = JSON.parse(raw)
+    if (!this.id) this.id = id
     if (type === 'HELLO') return
-    const response = this.responses[type]
+    const response = table[type]
     console.log(`response: ${response}`)
 
     if (this.listenerCount(response)) {
@@ -49,51 +129,21 @@ class Device extends EventEmitter {
     }
   }
 
-  getAllSettings() {
-    return Promise.all(this.getters.map((getter) => this[getter]()))
-  }
+  async test() {
+    const settings = await this.getAllSettings()
+    console.log('get', this.settings)
 
-  createSetter(name, command, numArgs) {
-    return (...args) => {
-      if (args.length !== numArgs) {
-        throw new Error(`expected ${numArgs} args. recieved ${args.length} args`)
-      }
+    await Promise.all([
+      this.setIPSettings(this.settings.ip),
+      this.setPressureSettings(this.settings.pressure),
+      this.setAccelerationSettings(this.settings.acceleration),
+      this.setSampleSettings(this.settings.sample),
+    ])
+    console.log('set', this.settings)
 
-      return this.createRequest(name, [command, ...args].join(' '))()
-    }
-  }
-
-  createRequest(name, command) {
-    return () => {
-      console.log(`request: ${name}`)
-      this.socket.write(command.padEnd(config.packetSize))
-
-      return new Promise((resolve) => {
-        this.once(name, (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        })
-      })
-    }
-  }
-
-  createEvents() {
-    for (const [name, { command }] of commands) {
-      this[name] = this.createRequest(name, command)
-    }
-
-    for (const [name, { command }] of getters) {
-      this.getters.push(name)
-      this[name] = this.createRequest(name, command)
-    }
-
-    for (const [name, { command, args }] of setters) {
-      this[name] = this.createSetter(name, command, args)
-    }
-
-    for (const [name, { command, args }] of all) {
-      this.responses[command] = name
-    }
+    await this.reset()
+    console.log('finished')
+    process.exit(0)
   }
 }
 

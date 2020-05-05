@@ -2,6 +2,29 @@ const protocol = {
   config: {
     packetSize: 200,
   },
+  data: {
+    ip: {
+      address: null,
+      port: null,
+    },
+    pressure: {
+      psiPreFill: null,
+      psiPostFill: null,
+      fill: null,
+      fillMax: null,
+      fullScale: null,
+      excitation: null,
+      calcFactor: null,
+    },
+    acceleration: {
+      magnitude: null,
+    },
+    sample: {
+      secondsBetween: null,
+      pressureSampleIntverval: null,
+      accelerationSampleInverval: null,
+    },
+  },
   streams: {
     standardData: { command: 'D' },
     accelerationData: { command: 'A' },
@@ -9,32 +32,60 @@ const protocol = {
   },
   requests: {
     commands: {
-      setTime: { command: 'TIME', args: 0 },
+      setTime: { command: 'TIME' },
 
-      shutdown: { command: 'SHUTDOWN', args: 0 },
-      reset: { command: 'RESETDEVICE', args: 0 },
+      shutdown: { command: 'SHUTDOWN' },
+      reset: { command: 'RESETDEVICE' },
 
-      commitSettings: { command: 'COMMITPARAMS', args: 0 },
-      eraseBufferedData: { command: 'ERASESD', args: 0 },
+      commitSettings: { command: 'COMMITPARAMS' },
+      eraseBufferedData: { command: 'ERASESD' },
     },
     getters: {
-      getIPSettings: { command: 'GETIP', args: 0 },
-      getPressureSettings: { command: 'GETPRESS', args: 0 },
-      getAccelerationSettings: { command: 'GETACCELPARAMS', args: 0 },
-      getSampleSettings: { command: 'GETSAMPLEPARAMS', args: 0 },
+      getIPSettings: {
+        command: 'GETIP',
+        dataLabel: 'ip',
+      },
+      getPressureSettings: {
+        command: 'GETPRESS',
+        dataLabel: 'pressure',
+      },
+      getAccelerationSettings: {
+        command: 'GETACCELPARAMS',
+        dataLabel: 'acceleration',
+      },
+      getSampleSettings: {
+        command: 'GETSAMPLEPARAMS',
+        dataLabel: 'sample',
+      },
     },
     setters: {
       // address port
-      setIPSettings: { command: 'SETIP', args: 2 },
+      setIPSettings: {
+        command: 'SETIP',
+        args: 2,
+        dataLabel: 'ip',
+      },
       // psiPreFill(%d) psiPostFill(%d) fill(%d) fillMax(%d) fullScale(%f) excitation(%f) calFactor(%f)
-      setPressureSettings: { command: 'SETPRESS', args: 7 },
+      setPressureSettings: {
+        command: 'SETPRESS',
+        args: 7,
+        dataLabel: 'pressure',
+      },
       // mag(%f)
-      setAccelerationSettings: { command: 'SETACCELPARAMS', args: 1 },
+      setAccelerationSettings: {
+        command: 'SETACCELPARAMS',
+        args: 1,
+        dataLabel: 'acceleration',
+      },
       // secBetween(%d) sampleinterval(%d) accelsampint(%d)
-      setSampleSettings: { command: 'SETSAMPLEPARAMS', args: 3 },
+      setSampleSettings: {
+        command: 'SETSAMPLEPARAMS',
+        args: 3,
+        dataLabel: 'sample',
+      },
     },
     errors: {
-      badCommand: { command: 'BADCMND', args: 0 },
+      badCommand: { command: 'BADCMND' },
     },
   },
 }
@@ -46,8 +97,14 @@ const getters = Object.entries(protocol.requests.getters)
 const setters = Object.entries(protocol.requests.setters)
 const errors = Object.entries(protocol.requests.errors)
 
-const requests = [...commands, ...getters, ...setters, ...errors]
-const all = [...streams, ...requests]
+const all = [...streams, ...commands, ...getters, ...setters, ...errors]
+
+const table = {}
+
+for (const [name, { command }] of all) {
+  table[name] = command
+  table[command] = name
+}
 
 const entries = {
   streams,
@@ -55,8 +112,7 @@ const entries = {
   getters,
   setters,
   errors,
-  requests,
-  all,
+  table,
 }
 
 module.exports = { config: protocol.config, ...entries }

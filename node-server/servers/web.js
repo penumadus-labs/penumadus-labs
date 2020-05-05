@@ -1,6 +1,6 @@
 const { createServer } = require('http')
 const { Server } = require('ws')
-const controller = require('../controllers/socket-pipe')
+const controller = require('../controllers/socket-pipeline')
 
 const handleConnection = (socket) => {
   socket.send(Buffer.from(JSON.stringify({ status: 'socket connected' })))
@@ -9,7 +9,7 @@ const handleConnection = (socket) => {
 
 const handleData = async (data) => {
   try {
-    controller.sendDataToTcpClients(data)
+    controller.sendDataToTCPClients(data)
   } catch (e) {}
 }
 
