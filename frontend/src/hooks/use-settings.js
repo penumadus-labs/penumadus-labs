@@ -39,7 +39,7 @@ export default () => {
   }, [settings])
 
   const reset = () => {
-    list.forEach(item => (item.value = ''))
+    list.forEach((item) => (item.value = ''))
     setList([...list])
   }
 

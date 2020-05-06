@@ -21,10 +21,10 @@ const Root = styled.nav`
 
 const NavBar = ({ width }) => (
   <Root width={width}>
-    <NavBarLink Icon={Chart} label="Charts" />
-    <NavBarLink Icon={Dash} label="Control panel" />
-    <NavBarLink Icon={Devices} label="Register" />
-    <NavBarLink Icon={Logout} label="Logout" />
+    <NavBarLink Icon={Chart} label='Charts' />
+    <NavBarLink Icon={Dash} label='Control panel' />
+    <NavBarLink Icon={Devices} label='Register' />
+    <NavBarLink Icon={Logout} label='Logout' />
   </Root>
 )
 

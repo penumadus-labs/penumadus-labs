@@ -1,118 +1,98 @@
-const protocol = {
-  config: {
-    packetSize: 200,
-  },
-  data: {
-    ip: {
-      address: null,
-      port: null,
-    },
-    pressure: {
-      psiPreFill: null,
-      psiPostFill: null,
-      fill: null,
-      fillMax: null,
-      fullScale: null,
-      excitation: null,
-      calcFactor: null,
-    },
-    acceleration: {
-      magnitude: null,
-    },
-    sample: {
-      secondsBetween: null,
-      pressureSampleIntverval: null,
-      accelerationSampleInverval: null,
-    },
-  },
-  streams: {
-    standardData: { command: 'D' },
-    accelerationData: { command: 'A' },
-    logData: { command: 'L' },
-  },
-  requests: {
-    commands: {
-      setTime: { command: 'TIME' },
+const config = {
+  packetSize: 200,
+}
 
-      shutdown: { command: 'SHUTDOWN' },
-      reset: { command: 'RESETDEVICE' },
-
-      commitSettings: { command: 'COMMITPARAMS' },
-      eraseBufferedData: { command: 'ERASESD' },
-    },
-    getters: {
-      getIPSettings: {
-        command: 'GETIP',
-        dataLabel: 'ip',
-      },
-      getPressureSettings: {
-        command: 'GETPRESS',
-        dataLabel: 'pressure',
-      },
-      getAccelerationSettings: {
-        command: 'GETACCELPARAMS',
-        dataLabel: 'acceleration',
-      },
-      getSampleSettings: {
-        command: 'GETSAMPLEPARAMS',
-        dataLabel: 'sample',
-      },
-    },
-    setters: {
-      // address port
-      setIPSettings: {
-        command: 'SETIP',
-        args: 2,
-        dataLabel: 'ip',
-      },
-      // psiPreFill(%d) psiPostFill(%d) fill(%d) fillMax(%d) fullScale(%f) excitation(%f) calFactor(%f)
-      setPressureSettings: {
-        command: 'SETPRESS',
-        args: 7,
-        dataLabel: 'pressure',
-      },
-      // mag(%f)
-      setAccelerationSettings: {
-        command: 'SETACCELPARAMS',
-        args: 1,
-        dataLabel: 'acceleration',
-      },
-      // secBetween(%d) sampleinterval(%d) accelsampint(%d)
-      setSampleSettings: {
-        command: 'SETSAMPLEPARAMS',
-        args: 3,
-        dataLabel: 'sample',
-      },
-    },
-    errors: {
-      badCommand: { command: 'BADCMND' },
-    },
+const messages = {
+  ip: {
+    address: null,
+    port: null,
+  },
+  pressure: {
+    psiPreFill: null,
+    psiPostFill: null,
+    fill: null,
+    fillMax: null,
+    fullScale: null,
+    excitation: null,
+    calcFactor: null,
+  },
+  acceleration: {
+    magnitude: null,
+  },
+  sample: {
+    secondsBetween: null,
+    pressureSampleIntverval: null,
+    accelerationSampleInverval: null,
   },
 }
 
-const streams = Object.entries(protocol.streams)
-
-const commands = Object.entries(protocol.requests.commands)
-const getters = Object.entries(protocol.requests.getters)
-const setters = Object.entries(protocol.requests.setters)
-const errors = Object.entries(protocol.requests.errors)
-
-const all = [...streams, ...commands, ...getters, ...setters, ...errors]
-
-const table = {}
-
-for (const [name, { command }] of all) {
-  table[name] = command
-  table[command] = name
+const events = {
+  streams: [
+    { name: 'standardData', command: 'D' },
+    { name: 'accelerationData', command: 'A' },
+    { name: 'logData', command: 'L' },
+  ],
+  commands: [
+    { name: 'setTime', command: 'TIME' },
+    { name: 'shutdown', command: 'SHUTDOWN' },
+    { name: 'reset', command: 'RESETDEVICE' },
+    { name: 'commitSettings', command: 'COMMITPARAMS' },
+    { name: 'eraseBufferedData', command: 'ERASESD' },
+  ],
+  getters: [
+    { name: 'getIPSettings', command: 'GETIP', dataLabel: 'ip' },
+    {
+      name: 'getPressureSettings',
+      command: 'GETPRESS',
+      dataLabel: 'pressure',
+    },
+    {
+      name: 'getAccelerationSettings',
+      command: 'GETACCELPARAMS',
+      dataLabel: 'acceleration',
+    },
+    {
+      name: 'getSampleSettings',
+      command: 'GETSAMPLEPARAMS',
+      dataLabel: 'sample',
+    },
+  ],
+  setters: [
+    {
+      name: 'setIPSettings',
+      command: 'SETIP',
+      args: 2,
+      dataLabel: 'ip',
+    },
+    {
+      name: 'setPressureSettings',
+      command: 'SETPRESS',
+      args: 7,
+      dataLabel: 'pressure',
+    },
+    {
+      name: 'setAccelerationSettings',
+      command: 'SETACCELPARAMS',
+      args: 1,
+      dataLabel: 'acceleration',
+    },
+    {
+      name: 'setSampleSettings',
+      command: 'SETSAMPLEPARAMS',
+      args: 3,
+      dataLabel: 'sample',
+    },
+  ],
+  errors: [{ name: 'badCommand', command: 'BADCMND' }],
 }
 
-const entries = {
-  streams,
-  commands,
-  getters,
-  setters,
-  errors,
-  table,
+const table = []
+
+for (const event of Object.values(events)) {
+  for (const { name, command } of event) {
+    table[command] = name
+    table[name] = command
+  }
 }
 
-module.exports = { config: protocol.config, ...entries }
+module.exports = { config, ...events, table }

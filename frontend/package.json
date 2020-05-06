@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "dev": "react-scripts start",
     "serve": "serve build -s",
-    "commit": "git pull && git add . && git commit -m 'frontend updates' && git push"
+    "commit": "git pull && git add . && git commit -m 'frontend updates' && git push",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\""
   },
   "eslintConfig": {
     "extends": "react-app"

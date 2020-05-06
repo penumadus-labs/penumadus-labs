@@ -8,13 +8,13 @@ const handleConnection = async (socket) => {
   try {
     const device = new Device(socket)
     await device.initialize()
+    await device.test()
   } catch (error) {
     console.error(error)
   }
 }
 
 const tcpServer = net.createServer()
-
 
 tcpServer.on('connection', handleConnection)
 

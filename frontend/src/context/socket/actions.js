@@ -18,7 +18,7 @@ const open = () => {
     }
   }
 
-  socket.onerror = error => {
+  socket.onerror = (error) => {
     ctx.disptach({ type: 'error', error: 'socket could not connect' })
   }
 }
@@ -31,7 +31,7 @@ const getPressure = () => {
   ctx.socket.send('GETPRESS')
 }
 
-export const createActions = disptach => {
+export const createActions = (disptach) => {
   ctx.disptach = disptach
 
   return {

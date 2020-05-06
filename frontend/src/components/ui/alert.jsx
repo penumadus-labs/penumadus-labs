@@ -46,11 +46,11 @@ const Root = styled.div`
 
 const Alert = ({ settings, children, onAccept, onCancel }) => (
   <Root>
-    <div className="opaque-cover" />
+    <div className='opaque-cover' />
     <main>
-      <div className="content">{children}</div>
+      <div className='content'>{children}</div>
       <div>
-        <Button color="green" onClick={onAccept}>
+        <Button color='green' onClick={onAccept}>
           accept
         </Button>
         <Button onClick={onCancel}>cancel</Button>

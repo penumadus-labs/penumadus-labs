@@ -19,14 +19,14 @@ export default () => {
 
   return (
     <Router>
-      <Login path="/" />
-      <Callback path="callback" />
+      <Login path='/' />
+      <Callback path='callback' />
       {authorized ? (
-        <Layout path="admin">
-          <Charts path="charts" />
-          <ControlPanel path="control-panel" />
-          <Register path="register" />
-          <Logout path="logout" />
+        <Layout path='admin'>
+          <Charts path='charts' />
+          <ControlPanel path='control-panel' />
+          <Register path='register' />
+          <Logout path='logout' />
           <InvalidRoute default />
         </Layout>
       ) : null}

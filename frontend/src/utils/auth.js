@@ -44,7 +44,7 @@ export const checkAuth = () => {
   if (now < expiresAt) return true
 }
 
-const setSession = authResult => {
+const setSession = (authResult) => {
   const expiresAt = JSON.stringify(
     authResult.expiresIn * 1000 + new Date().getTime()
   )

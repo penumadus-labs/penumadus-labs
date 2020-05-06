@@ -29,15 +29,7 @@ const Root = styled(Link)`
 `
 
 const NavBarLink = ({ Icon, label, theme }) => (
-  <Root
-    to={
-      '/admin/' +
-      label
-        .toLowerCase()
-        .split(' ')
-        .join('-')
-    }
-  >
+  <Root to={'/admin/' + label.toLowerCase().split(' ').join('-')}>
     <div>
       <Icon size={responsive({ layout: 36, default: 48 })} />
       <p>{label}</p>

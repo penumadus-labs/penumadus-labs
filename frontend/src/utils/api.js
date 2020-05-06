@@ -28,8 +28,8 @@ export const getSettings = async () => [settings]
 // used as array because context api expects multiple devices
 export const getData = async () => {
   try {
-    const responses = await Promise.all([api.get('tank')])
-    return responses.map(({ data }) => data)
+    const { data } = api.get('tank')
+    return data
   } catch (e) {
     throw new Error('could not get tank data from database')
   }

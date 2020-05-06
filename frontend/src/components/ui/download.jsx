@@ -9,7 +9,7 @@ export default () => {
   const file = selected ? makeCSVFile(selected.csv) : null
 
   return file ? (
-    <a href={file} download="data">
+    <a href={file} download='data'>
       <Button>Download CSV</Button>
     </a>
   ) : (

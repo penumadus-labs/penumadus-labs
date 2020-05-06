@@ -25,7 +25,7 @@ const Root = styled.label`
 export default ({ value, onChange }) => {
   return (
     <Root>
-      <input type="text" value={value} onChange={onChange} />
+      <input type='text' value={value} onChange={onChange} />
     </Root>
   )
 }

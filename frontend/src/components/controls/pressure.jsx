@@ -12,10 +12,10 @@ export default () => {
   const [warning, setWarning] = useState('')
   const [error, settings, update, reset] = useSettings()
 
-  const handleSubmit = e => {
-    if (settings.every(props => props.value === '')) {
+  const handleSubmit = (e) => {
+    if (settings.every((props) => props.value === '')) {
       setWarning('no valus entered')
-    } else if (settings.some(props => props.warning)) {
+    } else if (settings.some((props) => props.warning)) {
       setWarning('invalid input')
     } else {
       setWarning('')

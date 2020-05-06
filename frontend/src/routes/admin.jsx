@@ -15,11 +15,11 @@ export default ({ navigate }) => {
 
   return authenticated ? (
     <Layout>
-      <Router path="admin">
-        <Charts path="charts" />
-        <ControlPanel path="control-panel" />
-        <Register path="register" />
-        <Logout path="logout" />
+      <Router path='admin'>
+        <Charts path='charts' />
+        <ControlPanel path='control-panel' />
+        <Register path='register' />
+        <Logout path='logout' />
         <InvalidRoute default />
       </Router>
     </Layout>
