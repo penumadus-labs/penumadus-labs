@@ -13,12 +13,11 @@ struct ini_params {
 	int fillMax = 90;
 	float maxg = 3.0;
 	char deviceId[20] = {'u','n','i','t','_','3',0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	char deviceReg[20] = {'c','a','r',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	float fullScale = 100.0;
 	float excitation = 5.0;
 	float calFactor = 3.42;
-	unsigned long sampleinterval = 50;  //interval in mS between samples to be averaged
-	unsigned long accelsampint = 5;  //interval in mS between samples to be averaged
+	int sampleinterval = 50;  //interval in mS between samples to be averaged
+	int accelsampint = 5;  //interval in mS between samples to be averaged
 } tankInit;
 		
 void getTankInit(const char *filename);  //load tank values from ini file

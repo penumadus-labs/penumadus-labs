@@ -57,6 +57,10 @@ getTankInit(const char *filename){
 			defaultflag=true;
 		}
 
+		if(!ini.getValue("sec between", "accel_interval", buffer, bufferLen, tankInit.accelsampint)) {
+			defaultflag=true;
+		}
+
 		if(!ini.getValue("maximum g", "maximum_g", buffer, bufferLen, tankInit.maxg)) {
 			defaultflag=true;
 		}
@@ -73,16 +77,6 @@ getTankInit(const char *filename){
 				tankInit.deviceId[i] = buffer[i];
 			}
 			tankInit.deviceId[i] = '\0';
-		}
-
-		if(!ini.getValue("device id", "device_region", buffer, bufferLen)) {
-			defaultflag=true;
-		}
-		else{
-			for(i = 0; (i < sizeof(buffer)) && (buffer[i] != '\0'); i++) {
-				tankInit.deviceReg[i] = buffer[i];
-			}
-			tankInit.deviceReg[i]='\0';
 		}
 
 		if(!ini.getValue("transducer params", "full_scale", buffer, bufferLen, tankInit.fullScale)) {
@@ -130,10 +124,6 @@ getTankInit(const char *filename){
 
 	Serial.print(F("tankInit.deviceId:"));
 	sprintf(spbuf,"%s",tankInit.deviceId);
-	Serial.println(spbuf);
-
-	Serial.print(F("tankInit.deviceReg;"));
-	sprintf(spbuf,"%s",tankInit.deviceReg);
 	Serial.println(spbuf);
 
 	Serial.print(F("tankInit.fullScale:"));

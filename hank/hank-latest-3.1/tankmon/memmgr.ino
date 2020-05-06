@@ -170,7 +170,7 @@ removeFirstElement(struct elementlist *list){
 void
 printlist(struct elementlist *list){
 	elementindex index;
-	sprintf(spbuf,"Num Elems: %d head: %d  tail: %d\n",list->numelements,list->head,list->tail);
+	sprintf(spbuf,"Num:%d hd:%d tail:%d\n",list->numelements,list->head,list->tail);
 	Serial.println(spbuf);
 	for(index=list->head;index != 0xFF; index=elements[index].fwd){
 		sprintf(spbuf,"index %d  fwd: %d",index,elements[index].fwd);

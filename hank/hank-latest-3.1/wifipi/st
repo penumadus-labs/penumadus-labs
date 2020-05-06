@@ -1,0 +1,38 @@
+#!/bin/bash
+set -x
+
+if [ $(id -u) != 0 ]
+then
+	echo Must be run as root
+	exit
+fi
+	
+while true
+do
+	# clean up
+	killall wifipi
+	while [ $? -eq 0 ]
+	do
+		killall wifipi 
+	done
+
+	>/home/hank/log1
+	>/home/hank/log2
+
+	# find the port 
+	if [ -c "/dev/ttyUSB0" ]
+	then
+		echo using ttyUSB0
+		/home/pi/tankmon/hank/hank-latest-3.1/wifipi/wifipi /dev/ttyUSB0 >/home/hank/log1 2>/home/hank/log2 
+	elif [ -c "/dev/ttyUSB1" ] 
+	then
+		echo using ttyUSB1
+		/home/pi/tankmon/hank/hank-latest-3.1/wifipi/wifipi /dev/ttyUSB1 >/home/hank/log1 2>/home/hank/log2 
+	else
+		echo NO SERIAL PORTS!
+		/* wait and try again */
+		sleep 5
+	fi
+	sleep 5
+done
+

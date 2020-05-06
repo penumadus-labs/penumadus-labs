@@ -6,15 +6,38 @@
 * used by permission to UTK civil engineering
 *********************************************************/
 
+/* notes on WIFI PROCESSING
+*1.) WIFI boots and sends a WIFIBOOTED to hank meaning it is up but
+        not connected to server or internet
+*2.) hank calls check checkwifiavail()
+        which sends a command to server via back channel.
+        (sendUDPsneaky)
+	this informs wifipi of server address 
+*3.) wifipi  waits for a response from UDPengine server to query, polls every 
+        few seconds
+*4.) wifipi sends a WIFIUP to hank once query is successful
+*5.) hank wets wifi_avail flag and the sendudp routine uses the serial port
+	instead of the serial3 port for sending data
+*6.) wifipi can invalidate its connection status at any time if server link
+	or wifi fails by sending WIFIDOWN and hank will revert to cell
+	a subsequent WIFUP we revalidate.  WIFIBOOTED will only be sent after
+        a powerup
+*/
 
 int statframes=0;
 int ackframes=0;
+
+/* WARNING: this can not be called twice in a row without an
+ * intervening sendApiFrame because of static data inside
+ * make sure sendApiFrame is called immediately after this 
+ * all data is  utilized and buffer free again
+ */
 
 /* construct an xbee api frame
  * with checksum and header to send to xbee
  */
 unsigned char *
-makeApiFrame(unsigned char frameType, 
+makeApiFrame(char frameType, 
 		unsigned char *data, 
 		short datalen)
 {
@@ -56,7 +79,7 @@ makeApiFrame(unsigned char frameType,
  * escape any control characters by stuffing
  */
 void
-sendApiFrame(unsigned char *frame){
+sendApiFrame(unsigned char *frame, HardwareSerial *serialPort){
 	int i;
 	int len;
 	int stuffedlen;
@@ -64,8 +87,8 @@ sendApiFrame(unsigned char *frame){
 	unsigned char buf[MAXBUFSIZE];
 
 	/* frame to be sent */
-	DEB_PRINT("SEND: ");
-	printApiFrame(frame);
+	//DEB_PRINT(F("SEND: "));
+	//printApiFrame(frame);
 
 	len=(frame[LENHI]<<8)|frame[LENLO];
 
@@ -98,7 +121,7 @@ sendApiFrame(unsigned char *frame){
 	DEB_PRINTLN("");
 #endif
 
-	sent=Serial3.write(buf,stuffedlen);
+	sent=serialPort->write(buf,stuffedlen);
 	DEB_WRITE("Sent: ",6);
 	DEB_PRINTLN(sent);
 					
@@ -115,9 +138,9 @@ printApiFrame(unsigned char *frame){
 	return;
 #endif
 
-	len=(frame[LENHI]<<8)|frame[LENLO];
+	len=((frame[LENHI]&0xFF)<<8)|(frame[LENLO]&0xFF);
 
-#ifdef FULLDEBUG
+#ifdef FULL_DEBUG
 	sprintf(spbuf,"Len=%d\r\n",len);
 	Serial.write(spbuf);
 	for(i=0;i<len+FRAMETYPE+1;i++){
@@ -135,13 +158,22 @@ printApiFrame(unsigned char *frame){
 
 }
 
+/* WARNING: this can not be called twice in a row without an
+ * intervening checkframes because of static data inside
+ * make sure checkframes is called immediately after this and 
+ * all data is consumed 
+ */
 /* if no frame ready, return null, else receive and return it */
+
 unsigned char *
-recvApiFrame()
+recvApiFrame(HardwareSerial *serialPort)
 {
-	int i;
+	//static to save stack space from possible multiple 
+	//declarations in calling functions
 	static unsigned char recv_apiFrame[MAXBUFSIZE];
+
 	bool startframe;
+	int i;
 	int lenhi, lenlo, len;
 	unsigned char retchar;
 	int checksum;
@@ -152,8 +184,8 @@ recvApiFrame()
 
 	i=0;
 	startframe=false;
-	while(Serial3.available() > 0){
-		a=Serial3.read();
+	while(serialPort->available() > 0){
+		a=serialPort->read();
 
 		deb_sprintf(spbuf,"r-%02X ",a);
 		DEB_PRINT(spbuf);
@@ -170,7 +202,7 @@ recvApiFrame()
 	if(startframe){
 		/* wait on the next char for 3000 uSec (3mS) */
 		/* next char is len hi */
-		if(waitonchar(&retchar,3000)){;
+		if(waitonchar(&retchar,3000,serialPort)){;
 			recv_apiFrame[i++]=retchar;
 			lenhi=retchar;
 		}
@@ -180,7 +212,7 @@ recvApiFrame()
 		}
 	
 		/* next char is len lo */
-		if(waitonchar(&retchar,3000)){;
+		if(waitonchar(&retchar,3000,serialPort)){;
 			recv_apiFrame[i++]=retchar;
 			lenlo=retchar;
 		}
@@ -189,10 +221,10 @@ recvApiFrame()
 			return(NULL);
 		}
 
-		len=(lenhi<<8)|lenlo;
+		len=((lenhi&0xFF)<<8)|(lenlo&0xFF);
 		checksum=0;
 		for(i=FRAMETYPE;i<len+FRAMETYPE+1;i++){
-			if(waitonchar(&retchar,3000)){;
+			if(waitonchar(&retchar,3000,serialPort)){;
 				recv_apiFrame[i]=retchar;
 				checksum+=retchar;
 			}
@@ -208,9 +240,11 @@ recvApiFrame()
 			return(NULL);
 		}
 		else{
-			DEB_PRINTLN(" ");
-			DEB_PRINT("RECV:");
+			DEB_PRINTLN(F(" "));
+			DEB_PRINT(F("RECV:"));
 			printApiFrame(recv_apiFrame);
+			/* replace checksum with \0 to terminate string */
+			recv_apiFrame[i-1]='\0';
 			return(recv_apiFrame);
 		}
 	}
@@ -221,7 +255,7 @@ recvApiFrame()
 
 /* monitor the xbee waiting for a particular incoming frameid */
 unsigned char *
-waitForFrameId(unsigned char frameid){
+waitForFrameId(unsigned char frameid, HardwareSerial *serialPort){
 
 	unsigned char *frameptr;
 	bool gotframeid;
@@ -229,7 +263,7 @@ waitForFrameId(unsigned char frameid){
 	gotframeid=false;
 	while(!gotframeid){
 		setLocalTimer(LOCSOCKTIMER,LOC_SOCKTIMEOUT,LOC_MILLISECS);
-		while( (frameptr=recvApiFrame()) == NULL){
+		while( (frameptr=recvApiFrame(serialPort)) == NULL){
 			if(timerExpired(LOCSOCKTIMER)){
 				Serial.println(F("Timeout on waitForFrameId"));
 				return(NULL);
@@ -255,9 +289,11 @@ waitForFrameId(unsigned char frameid){
 void
 checkReceivedFrames(unsigned char *frameptr){
 
+	unsigned char *msg;
+
 	switch(frameptr[FRAMETYPE]){
 		case ATCMNDRESP:
-			Serial.println(F("AT resp"));
+			DEB_PRINTLN(F("AT resp"));
 			/* is upper nibble equal to cellstat ids */
 			if((frameptr[FRAMEID]&0xF0)==CELLSTATID){
 				ackframes++;
@@ -329,129 +365,165 @@ checkReceivedFrames(unsigned char *frameptr){
 			break;
 
 		case APITXREQRESP:
-			DEB_PRINTLN(F("TX cmnd response"));
+			DEB_PRINTLN(F("TX response"));
 			/* is upper nibble equal to cellstat ids */
 			if((frameptr[FRAMEID])==packetpending){
 				packetpending=0;
-				switch(frameptr[FRAMEID+1]){
-					case 0x0: 
-						DEB_PRINTLN(F("Succesful Transmit"));
-						break;
-					case 0x21: 
-						Serial.println(F("Fail xmit to cell network"));
-						cell_avail=false;
-						packetslost++;
-						break;
-					case 0x22: 
-						Serial.println(F("Not registered to net"));
-						packetslost++;
-						cell_avail=false;
-						break;
-					case 0x2c: 
-						Serial.println(F("Invalid frame values"));
-						packetslost++;
-						break;
-					case 0x31: 
-						//this has to be bad
-						Serial.println(F("Internal error"));
-						packetslost++;
-						hdwreset();
-						break;
-					case 0x32: 
-						//out of sockets,  big problem
-						Serial.println(F("Resource error"));
-						packetslost++;
-						hdwreset();
-						break;
-					case 0x74: 
-						Serial.println(F("Message too long"));
-						packetslost++;
-						break;
-					case 0x76: 
-						Serial.println(F("Socket closed,surprise!"));
-						packetslost++;
-						break;
-					case 0x78: 
-						Serial.println(F("Invalid UDP port"));
-						packetslost++;
-						break;
-					case 0x79: 
-						Serial.println(F("Invalid TCP port"));
-						packetslost++;
-						break;
-					case 0x7A: 
-						Serial.println(F("Invalid host address"));
-						packetslost++;
-						break;
-					case 0x7B: 
-						Serial.println(F("Invalid data mode"));
-						packetslost++;
-						break;
-					case 0x7C: 
-						Serial.println(F("Invalid interface"));
-						packetslost++;
-						break;
-					case 0x7D: 
-						Serial.println(F("Interface relay err"));
-						packetslost++;
-						break;
-					case 0x80: 
-						Serial.println(F("Connect refused"));
-						packetslost++;
-						break;
-					case 0x81: 
-						Serial.println(F("Socket connection lost"));
-						packetslost++;
-						break;
-					case 0x82: 
-						Serial.println(F("No server"));
-						packetslost++;
-						break;
-					case 0x83: 
-						Serial.println(F("Socket closed"));
-						packetslost++;
-						break;
-					case 0x84: 
-						Serial.println(F("Unknown server"));
-						packetslost++;
-						break;
-					case 0x85: 
-						//this isn't good either
-						packetslost++;
-						Serial.println(F("Unknown error"));
-						hdwreset();
-						break;
-					case 0x86: 
-						Serial.println(F("Invalid TLS"));
-						packetslost++;
-						break;
-					default:
-						Serial.println(F("Invalid Status"));
-						packetslost++;
-						
-				}
+			}
+			else if((frameptr[FRAMEID]&0xF0)==SNEAKYFRAME){
+				DEB_PRINTLN(F("Sneaky Frame"));
 			}
 			else{
-				sprintf(spbuf,
-					"TX RESP: frame 0x%02x order",frameptr[FRAMEID]);
-				Serial.println(spbuf);
+				Serial.print(F("UNSOLICITIED TX RESP: frame 0x"));
+				Serial.println(frameptr[FRAMEID],HEX);
+				return;	//don't process garbage TXREQRESP
+			}
+
+			/* its an APITXREQRESP from UDP or UDPSneaky, process it */
+			/* difference is sendUDP is waited on and timed,  UDPSneaky is not */
+			/* and can have many outstanding */
+			switch(frameptr[FRAMEID+1]){
+				//any interface can return success
+				case 0x0: 
+					DEB_PRINTLN(F("Succesful Transmit"));
+					break;
+
+				//these codes are reserved for xbee by spec
+				case 0x21: 
+					Serial.println(F("Fail xmit to cell network"));
+					cell_avail=false;
+					packetslost++;
+					break;
+				case 0x22: 
+					Serial.println(F("Not registered to net"));
+					packetslost++;
+					cell_avail=false;
+					break;
+				case 0x2c: 
+					Serial.println(F("Invalid frame values"));
+					packetslost++;
+					break;
+				case 0x31: 
+					//this has to be bad
+					Serial.println(F("Internal error"));
+					packetslost++;
+					hdwreset();
+					break;
+				case 0x32: 
+					//out of sockets,  big problem
+					Serial.println(F("Resource error"));
+					packetslost++;
+					hdwreset();
+					break;
+				case 0x74: 
+					Serial.println(F("Message too long"));
+					packetslost++;
+					break;
+				case 0x76: 
+					Serial.println(F("Socket closed,surprise!"));
+					packetslost++;
+					break;
+				case 0x78: 
+					Serial.println(F("Invalid UDP port"));
+					packetslost++;
+					break;
+				case 0x79: 
+					Serial.println(F("Invalid TCP port"));
+					packetslost++;
+					break;
+				case 0x7A: 
+					Serial.println(F("Invalid host address"));
+					packetslost++;
+					break;
+				case 0x7B: 
+					Serial.println(F("Invalid data mode"));
+					packetslost++;
+					break;
+				case 0x7C: 
+					Serial.println(F("Invalid interface"));
+					packetslost++;
+					break;
+				case 0x7D: 
+					Serial.println(F("Interface relay err"));
+					packetslost++;
+					break;
+				case 0x80: 
+					Serial.println(F("Connect refused"));
+					packetslost++;
+					break;
+				case 0x81: 
+					Serial.println(F("Socket connection lost"));
+					packetslost++;
+					break;
+				case 0x82: 
+					Serial.println(F("No server"));
+					packetslost++;
+					break;
+				case 0x83: 
+					Serial.println(F("Socket closed"));
+					packetslost++;
+					break;
+				case 0x84: 
+					Serial.println(F("Unknown server"));
+					packetslost++;
+					break;
+				case 0x85: 
+					//this isn't good either
+					packetslost++;
+					Serial.println(F("Unknown error"));
+					hdwreset();
+					break;
+				case 0x86: 
+					Serial.println(F("Invalid TLS"));
+					packetslost++;
+					break;
+
+				//this one, code 0x42, is unused by xbee, 
+				//put wifi errs under here
+				case WIFI_RET_ERR: 
+					Serial.println(F("No Wifi!"));
+					wifi_avail=false;
+					break;
+
+				default:
+					Serial.println(F("Invalid Status"));
+					packetslost++;
 			}
 
 			deb_sprintf(spbuf,"Stats:%d/%d",packetslost,packetstotal);
 			DEB_PRINTLN(spbuf);
-
 			break;
+
+		/* this is a 0xB0 frame from XBEE or WIFI 
+			as defined in xbee spec
+			only thing incoming should be from UDPengine
+                        which means check the first character for an
+                        an instruction code  and do it*/
 
 		case RECVDATA:
 			DEB_PRINTLN(F("Incoming msg"));
-			if(strncmp((const char *)(frameptr+14),"<t=",3)==0){
-				resynctime((const char *)frameptr+17);
-				break;
+			//to account for ip hdr and command code and ' '
+			msg=frameptr+14; 
+			if(!parsecommand(msg)){
+				Serial.println(F("UDP: random recv traffic"));
+				Serial.write(frameptr+14,strlen((char *)frameptr+14));
+				Serial.println(" ");
 			}
-			Serial.println(F("random recv traffic"));
 			break;
 
+		/* commands direct from wifipi,  not from server via UDP */
+		case WIFICMND:
+			//to account for header and WIFICMND command code 
+			msg=frameptr+FRAMETYPE+1; 
+			if(!parsecommand(msg)){
+				Serial.println(F("WIFIPI: random recv traffic"));
+				Serial.write(msg,strlen((char *)msg));
+				Serial.println(" ");
+			}
+			break;
 		default:
 			Serial.println(F("random status traffic"));
 	}
 }
+
+

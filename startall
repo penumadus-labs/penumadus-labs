@@ -1,0 +1,1 @@
+cd DM ; nohup ./st >start.log 2>&1 &

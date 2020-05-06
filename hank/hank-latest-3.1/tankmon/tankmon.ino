@@ -1,20 +1,25 @@
 #include "hdw.h" 
 #include "calib.h" 
 #include <EEPROM.h>
-#include <IniFile.h>
 #include <IPAddress.h>
+#include <HardwareSerial.h>
 #include <SPI.h>
 #include <SD.h>
+#include <IniFile.h>
 #include <Protocentral_ADS1220.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+//because of limitations of stupid arduino environ,
+//shared headers between proc/environs can't be in a common
+//include.  thus netcomms.h must be symbolic linked into the current dir
 #include "netcomms.h" 
+#include "protocol.h" 
 #include "queues.h" 
 #include "loctimers.h" 
 #include "tankinit.h" 
 #include "apiframes.h" 
-#include "LocEEprom.h" 
+#include "Loceeprom.h" 
 #include "debug.h" 
 
 /* The at2650 talks to an xbee in API 2  mode using virtual frames over serial connect 
@@ -90,6 +95,7 @@ unsigned char packetpending=0;  //frame id of any sendUDP outstanding, 0 means n
 bool cell_avail=false;		//false till cell signal detected by xbee
 byte recovertries=0;		//count of number of times recovery cell signal has been tried
 bool wifi_avail=false;		//false till wifi is connected
+bool time_sync=false;		//false till time is synced
 
 char spbuf[MAXBUFSIZE]; 		// temp buf for sprintfs, reused all over
 
@@ -112,6 +118,25 @@ bool dataONSD=true;      /* indicates there is data on SD card and card is close
 			 /* make it true first time and check for stranded files then set it false */
 
 short globbufcounter=0;
+
+/*WIFI PROCESSING
+*1.) WIFI boots and sends a WIFIBOOTED to hank meaning it is up but
+        not connected to server or internet
+*2.) hank calls check checkwifiavail()
+        which sends a command to server via back channel.
+        (sendUDPsneaky)
+	this informs wifipi of server address 
+*3.) wifipi  waits for a response from UDPengine server to query, polls every 
+        few seconds
+*4.) wifipi sends a WIFIUP to hank once query is successful
+*5.) hank wets wifi_avail flag and the sendudp routine uses the serial port
+	instead of the serial3 port for sending data
+*6.) wifipi can invalidate its connection status at any time if server link
+	or wifi fails by sending WIFIDOWN and hank will revert to cell
+	a subsequent WIFUP we revalidate.  WIFIBOOTED will only be sent after
+        a powerup
+*/
+
 
 /************  setup routine,  first entry point ****************/
 void setup() {
@@ -216,7 +241,7 @@ void setup() {
 
 	/* open the SD card for access */
 	for(i=0;(i<6) && (!SD.begin(SD_CS)) ;i++){
-		sprintf(spbuf,"Failed to open SD - attempt: %d\n",i);
+		sprintf(spbuf,"SD open fail: %d\n",i);
 		Serial.print(spbuf);
 		delay(1000);
 	}
@@ -232,6 +257,8 @@ void setup() {
 	/* read in initial values from INI file */
 	getTankInit(filename);
 
+#ifdef OLD
+	THIS CODE IS NOW DONE BY ISSUING A ERASE SD COMMAND FROM ADMIN CONSOLE
 	/* remove any buffer file from last time after a powerup */
 	if(ee.reset1pwr0 == 0){
 		Serial.print(F("REMOVE "));
@@ -245,6 +272,7 @@ void setup() {
 		ee.reset1pwr0=0;
 		EEPROM.put(addr,ee);
 	}
+#endif
 
 	/* initialize the analog converter for pressure */
 	initadc(false);
@@ -259,11 +287,9 @@ void setup() {
 	/* we have to sync time somehow,  either wifi or cell */
 	/* till we get one or the other, at least for a time sync, gotta wait */
 	/* if the cell modem has no signal,  this will not return 
-	 * till it does 
+	 * till it does or until wifi is active
 	 */
 	setupSockets();
-
-
 
 	//calibrate the accelerometer
 	calibaccel();
@@ -271,13 +297,14 @@ void setup() {
 	/* set time between samples and time between server transmissions */
 	setLocalTimer(TRIGGERTIME,tankInit.sampleinterval,LOC_MILLISECS);
 	setLocalTimer(TRIGGERSERVER,tankInit.secBetween*1000,LOC_MILLISECS);
-	setLocalTimer(SDCHECKTIMER,8,LOC_MICROSECS); //just so it expires and we check for old data
+	setLocalTimer(SDCHECKTIMER,EXPIRENOW,LOC_MICROSECS); //just so it expires and we check for old data
+	setLocalTimer(TIMESYNCTIMER,EXPIRENOW,LOC_MILLISECS); //force the timesyc to go off the first time
 
 	//PONDSCUM FIX
 	//this one is not stored on SD card yet, just defaults
 	setLocalTimer(TRIGGERACCELSAMP,tankInit.accelsampint,LOC_MILLISECS);
 
-	/* set up the first job once we have signal to go and get the time 
+	/* set up the first job to go and get the time 
 	 *	from the server. response is processed in main task loop below 
 	 */
 	networktime.secs=0;
@@ -310,79 +337,28 @@ initadc(bool reinit){
 /* and init memory mgr and queues */
 void
 setupSockets(){
-	unsigned char setupseq;
-	unsigned char *frameptr;
-	bool blinkled;
 
-	blinkled=false;
+	/* send off a request for cell to report status */
+	/* PONDSCUM should this check end to end connect like wifi? */
+	checkcellavail();
 
-	setupseq=0;
-	setLocalTimer(WAITTIME,100,LOC_MILLISECS);
 
-	digitalWrite(errorPin, HIGH);
-	/* wait for radio service */
-	/* add wifi in here when we add the hardware */
-
-	while(!cell_avail){
-
-		if(timerExpired(WAITTIME)){
-
-			/* blink the green led at every 5 second poll */
-			if(blinkled){
-				digitalWrite(errorPin, LOW);
-				blinkled=false;
-			}
-			else{
-				digitalWrite(errorPin, HIGH);
-				blinkled=true;
-			}
-
-			if(setupseq++ > 8)
-				setupseq=0;
-			sprintf(spbuf,"%cAI",setupseq+CELLSTATID);
-
-			frameptr=makeApiFrame(ATCMND, (unsigned char *)spbuf, 3);
-			statframes++;
-			sendApiFrame(frameptr);
-
-			/* wait for the CELLSTATID frame to return 
-			 * checkReceivedFrames is called in waitForFrameId so cell_avail 
-			 * will be reset if cell becomes available
-			 */
-			if((frameptr=waitForFrameId(setupseq+CELLSTATID))==NULL){
-				Serial.println(F("No Frames Found waiting for cell_avail")) ;
-				hdwreset();
-			}
-			setLocalTimer(WAITTIME,5000,LOC_MILLISECS);
-			//PONDSCUM REMOVE AFTER TESTING OR WHEN WANT TO WORK 
-			//WITHOUT EVER SYNCING TIME
-#ifdef NOCELL
-			break;
-#endif
-			//END
-		}
-	}
 	digitalWrite(errorPin, HIGH);
 	
-	/* just to make sure all our packets came back and no poison pill is hanging
-         * around waiting to crash in on the traffic
-         */
-	Serial.print(F("stats:"));
-	Serial.println(statframes);
-	Serial.print(F("acks:"));
-	Serial.println(ackframes);
-
 	memsetup();	//setup memory manager
 	//dumpmem();	//dump memory to screen
 
-	/* initialze the queues in memmgr for sending packets and accelerometer */
-	/* if accel event occurs,  whole list is placed on sendq */
+	/* initialze the queues in memmgr for sending packets and 
+	 * accelerometer 
+	 * if accel event occurs,  whole list is placed on sendq 
+	 */
 	initList(&sendqueue);	/* the queue for packets to be sent */
-	initList(&accelqueue);	/* backward looking accel packets that may be joined
-				 * as an entire list to the send queue if a g event occurs 
-				 */
 
-	digitalWrite(errorPin, LOW);
+	/* backward looking accel packets that may be joined
+	 * as an entire list to the send queue if a g event occurs 
+	 */
+	initList(&accelqueue);	
+
 }
 
 /*continuously entered main loop */
@@ -412,16 +388,48 @@ loop() {
 	/********************* COMM/NETWORK STUFF , do this every loop ***********/
 	unsigned char *frameptr;	// local ptr for tracking api mode xbee comm frames
 
-	/* did we lose cell signal? */
-	if(!cell_avail){
-		recovercell();
+	/* did we lose cell signal? 
+	 * if have wifi, don't worry about it, it might recover on its own
+	 * when signal comes back in which case the recvApiFrame below on Serial 3
+         * will register the fact.  
+         */
+	if(INCOMINGWIFI){
+		DEB_PRINTLN(F("S:"));
+		/* any incoming frames from wifi interface? */
+		/* maybe a wifi avail ? */
+		if( (frameptr=recvApiFrame(&Serial)) != NULL){
+			checkReceivedFrames(frameptr);  //lots o comm work gets done in here
+		}
+
 	}
 
-	/* any incoming frames from cell interface? */
-	/* maybe a cell_avail report? */
-	if( (frameptr=recvApiFrame()) != NULL){
-		checkReceivedFrames(frameptr);  //lots o comm work gets done in here
+	if(INCOMINGCELL){
+		DEB_PRINTLN(F("S3:"));
+		/* any incoming frames from cell interface? */
+		/* maybe a cell_avail report? */
+		if( (frameptr=recvApiFrame(&Serial3)) != NULL){
+			checkReceivedFrames(frameptr);  //lots o comm work gets done in here
+		}
 	}
+
+	/* cell should give us a MODEM status when it comes up,
+	 * and cell_avail get set in checkReceivedFrames  PONDSCUM CHECK THIS 
+	 *
+	 * else
+	 *      recovercell();
+	 */
+
+	/* if not time synced just lock up the system until 
+         * a comm method comes up or we get a sync back from above
+         * frame code
+         */
+	if(!time_sync){
+		/* sends a request for time every TIMESYNCTIMER secs */
+		timesync();
+		return;
+	}
+
+
 
 	/* any work outstanding on sendUDP ? */
 	/* packetpending numbers frames from 1-9 so we always wait on right frame */
@@ -451,6 +459,8 @@ loop() {
 	
 	/********************* STUFF TO DO EVERY accelsampint mS ***********/
 	if(timerExpired(TRIGGERACCELSAMP)){
+		//reset trigger for sample
+		setLocalTimer(TRIGGERACCELSAMP,tankInit.accelsampint,LOC_MILLISECS);
 		/* process the accel data */
 		process_accelerometer();
 	}
@@ -472,8 +482,13 @@ loop() {
 			long pressure;
 			pressure = adc.Read_WaitForData();
 			if(pressure <0){
+#ifdef NOTPONDSCUM
 				initadc(true);
-				Serial.print("!");
+#else
+				//PONDSCUM, for testing
+				pressure=0x18FFFF;
+				pres_accum += pressure;
+#endif
 			}
 			else
 				pres_accum += pressure;
@@ -586,21 +601,21 @@ enqueue(struct elementlist *list,
 	enqBufptr->usecs=networktime.usecs;
 
 	switch(type){
-		case 'D':
+		case MAINDATA:
 			enqBufptr->buffer.Ddata.pressure = *((float *)arg1);
 			enqBufptr->buffer.Ddata.fills = *((int *)arg2);
 			enqBufptr->buffer.Ddata.temp = *((int *)arg3);
 			enqBufptr->buffer.Ddata.hum = *((int *)arg4);
 			break;
 
-		case 'A':
+		case ACCELDATA:
 			enqBufptr->buffer.Adata.arrx = *((float *)arg1);
 			enqBufptr->buffer.Adata.arry = *((float *)arg2);
 			enqBufptr->buffer.Adata.arrz = *((float *)arg3);
 			break;
 
-		case 'L':
-		case 'C':
+		case LOG:
+		case CMND:
 			/* log or cmnd entries can only be MEMCHARBUFFERSIZE (12)
 				 chars long incl \0 terminator */
 			len=snprintf(enqBufptr->buffer.Cdata.cbuf,
@@ -642,7 +657,7 @@ int
 prepdataC(char *buf, struct memelement *mptr){
 	int len;
 	len=snprintf(buf,FRAMESIZE,
-		"%c %s %x\n",
+		"%c %s %x",
 		mptr->type,
 		mptr->buffer.Cdata.cbuf,
 		mptr->msgnum
@@ -658,10 +673,9 @@ prepdataD(char *buf, struct memelement *mptr){
 	dptr=&(mptr->buffer.Ddata);
 
 	len=snprintf(buf,FRAMESIZE,
-		"%c %s %s %d.%02d %d %d %d %lx %lx %x\n",
+		"%c %s %d.%02d %d %d %d %lx %lx %x",
 		mptr->type,
 		tankInit.deviceId,
-		tankInit.deviceReg,
 		(int)(dptr->pressure),
 		abs(((int)((dptr->pressure)*100))%100),
 		dptr->fills,
@@ -680,10 +694,9 @@ prepdataA(char *buf, struct memelement *mptr){
 
 	aptr=&(mptr->buffer.Adata);
 	len=snprintf(buf,FRAMESIZE,
-		"%c %s %s %d.%02d %d.%02d %d.%02d %lx %lx %x\n",
+		"%c %s %d.%02d %d.%02d %d.%02d %lx %lx %x",
 		mptr->type,
 		tankInit.deviceId,
-		tankInit.deviceReg,
 		(int)(aptr->arrx),
 		abs(((int)((aptr->arrx)*100))%100),
 		(int)(aptr->arry),
@@ -717,13 +730,8 @@ sendNextQPacket(){
 		return(false);
 	}
 
-	/* send wifi if available */
-	if(wifi_avail){
-		//a stub for later
-		;
-	}
 	/* if not wifi, send cell if available */
-	else if(cell_avail){ 
+	else if(wifi_avail || cell_avail){ 
 
 		/* process the packet on queue */
 		oldestinQ=removeFirstElement(&sendqueue);
@@ -911,6 +919,8 @@ process_accelerometer(void){
 	struct memelement *mptr;
 	int arrxi,arryi,arrzi;
 
+	char buf[20]; //PONDSCUM DELETE ME
+
 	arrxi=analogRead(pin1);
 	arryi=analogRead(pin2);
 	arrzi=analogRead(pin3);
@@ -918,7 +928,6 @@ process_accelerometer(void){
 	arry = ((arryi - zeroGy)/scaleY);
 	arrz = ((arrzi - zeroGz)/scaleZ);
 	mag= sqrt( sq(arrx) + sq(arry) + sq(arrz) );
-
 	
 	/* are we tracking and sending samples */
 	if(!tracking){
@@ -949,7 +958,6 @@ process_accelerometer(void){
 				if( (tmp=removeFirstElement(&accelqueue)) == 0xFF){
 					/* just plain hosed, mem is locked, 
 						drop any predata on floor */ 
-					Serial.print("@");
 					return;
 				}
 			}
@@ -976,8 +984,9 @@ process_accelerometer(void){
 		if(fwdsamples++ < FWDSAMPLES){
 			enqueue(&sendqueue,'A',&arrx,&arry,&arrz, (void *) NULL);
 		}
-		else
+		else{
 			tracking=false;
+		}
 	}
 			
 }
@@ -1050,7 +1059,7 @@ recovercell()
 	if( (recovertries == 0) || timerExpired(CELLRECOVERYTIMER)){
 		sprintf(spbuf,"%cAI",CELLSTATID);
 		frameptr=makeApiFrame(ATCMND, (unsigned char *)spbuf, 3);
-		sendApiFrame(frameptr);
+		sendApiFrame(frameptr,&Serial3);
 		if(recovertries == 0){
 			Serial.print(F("*****"));
 			Serial.println(F("Recover Cell Signal"));
@@ -1089,9 +1098,15 @@ sendUDP(const char *addr,short port, const char *packetdata, int packetlen)
 		packetpending=0;
 	}
 
-
-	DEB_PRINTLN(F("SendUDP: "));
+	DEB_PRINT(F("SendUDP: [ "));
 	DEB_WRITE(packetdata,packetlen);
+	DEB_PRINTLN(F(" ]"));
+
+	//PONDSCUM keep this for debug for now so when go nonverbose 
+	//can still see it
+	Serial.print(F("SendUDP: [ "));
+	Serial.write(packetdata,packetlen);
+	Serial.println(F(" ]"));
 
 	packetstotal++;
 
@@ -1117,20 +1132,31 @@ sendUDP(const char *addr,short port, const char *packetdata, int packetlen)
 	for(i=11;i<packetlen+11;i++){
 		udpPacket[i] = *packetdata++;
 	}
+	udpPacket[i++] = '\0';
 
 	//make udp frame into api frame
-	packetptr=makeApiFrame(APITXREQ,udpPacket,FRAMESIZE);
+	//PONDSCUM TRY THIS variable length frame 04-02-2020
+	packetptr=makeApiFrame(APITXREQ,udpPacket,i);
+	//OLD packetptr=makeApiFrame(APITXREQ,udpPacket,FRAMESIZE);
+
 	//send udp encapsulated in api frame
-	sendApiFrame(packetptr);
+	if(wifi_avail)
+		sendApiFrame(packetptr,&Serial);
+	else
+		sendApiFrame(packetptr,&Serial3);
+
 	setLocalTimer(PACKETTIMEOUT,SENDUDP_TIMEOUT,LOC_MILLISECS);
 }
 
 
 /* same as above funcion except doesn't affect timers so can sneak a UDP packet 
    between timers.  too confusing with special cases so just duplicated code here */
-
+/* difference is sendUDP is waited on and timed,  UDPSneaky is not */
+/* and can have many outstanding.  added the serial port so can also force  */
+/* which interface to talk to regardless of whether currently up or not */
 void
-sendUDPSneaky(const char *addr,short port, const char *packetdata, int packetlen)
+sendUDPSneaky(const char *addr,short port, const char *packetdata, 
+		int packetlen,HardwareSerial *serialPort)
 {
 
 	unsigned char udpPacket[FRAMESIZE];
@@ -1140,6 +1166,12 @@ sendUDPSneaky(const char *addr,short port, const char *packetdata, int packetlen
 	static int framid=0;
 
 	packetstotal++;
+
+	//PONDSCUM keep this for debug for now so when go nonverbose 
+	//can still see it
+	Serial.print(F("SendUDP: [ "));
+	Serial.write(packetdata,packetlen);
+	Serial.println(F(" ]"));
 
 	memset(udpPacket,0,FRAMESIZE);
 
@@ -1163,29 +1195,39 @@ sendUDPSneaky(const char *addr,short port, const char *packetdata, int packetlen
 	for(i=11;i<packetlen+11;i++){
 		udpPacket[i] = *packetdata++;
 	}
+	udpPacket[i++] = '\0';
+
 
 	//make udp frame into api frame
-	packetptr=makeApiFrame(APITXREQ,udpPacket,FRAMESIZE);
+	//PONDSCUM TRY THIS 04-02-2020
+	packetptr=makeApiFrame(APITXREQ,udpPacket,i);
+	//OLD packetptr=makeApiFrame(APITXREQ,udpPacket,FRAMESIZE);
 	//send udp encapsulated in api frame
-	sendApiFrame(packetptr);
+	if(serialPort != NULL)
+		sendApiFrame(packetptr,serialPort);
+	else if(wifi_avail)
+		sendApiFrame(packetptr,&Serial);
+	else
+		sendApiFrame(packetptr,&Serial3);
 }
 
 /* wait the specified amount of time in utime for a character to show
    up on serial port.  used as an intercharacter timer mostly */
 bool
-waitonchar(unsigned char *retchar, unsigned long  utime){
+waitonchar(unsigned char *retchar, unsigned long  utime, HardwareSerial *serialPort){
 	unsigned char locchar;
 	
 	setLocalTimer(CHARSTART,utime,LOC_MICROSECS);
 
-	while(Serial3.available() == 0){
+	while(serialPort->available() == 0){
 		if( timerExpired(CHARSTART) ){
 			Serial.println(F("timeout in wait on char"));
 			return(false);  //bad,  timeout
 		}
 	}
 	
-	locchar=Serial3.read();
+	locchar=serialPort->read();
+
 
 	deb_sprintf(spbuf,"%02X ",locchar);
 	DEB_PRINT(spbuf);
@@ -1198,7 +1240,7 @@ waitonchar(unsigned char *retchar, unsigned long  utime){
 
 	else if(locchar==0x7d){
 		//oouuu,  recursion!
-		if( !waitonchar(&locchar,3000) )
+		if( !waitonchar(&locchar,3000, serialPort) )
 			return(false);  //error on fetching real char after stuffing
 		else{
 			*retchar=locchar^0x20;
@@ -1291,6 +1333,7 @@ errorProcessor(uint8_t error) {
 
 	static unsigned char  err0state=0x0;
 	static unsigned char  err1state=0x0;
+	static unsigned char  compstate=0x0;
 
 	
 	/* recoverable error 0 */
@@ -1370,6 +1413,22 @@ errorProcessor(uint8_t error) {
 		}
 		hdwreset();
 	}
+
+	/* simple complement of light at each call */
+	/* timing controlled by caller */
+	else if(error==2){
+		if(compstate==0){
+			digitalWrite(errorPin, HIGH);
+			compstate=1;
+		}
+		else{
+			digitalWrite(errorPin, LOW);
+			compstate=0;
+		}
+	}
+			
+		
+		
 }
 
 
@@ -1379,7 +1438,19 @@ errorProcessor(uint8_t error) {
 void
 timesync()
 {
-	enqueue(&sendqueue,'C',"TIME?",NULL,NULL,NULL);
+	const char timemsg[]=TIMESYNCREQSTRING;
+
+	if(timerExpired(TIMESYNCTIMER)){
+		setLocalTimer(TIMESYNCTIMER,TIMESYNCINTERVAL,LOC_MILLISECS);
+		errorProcessor(2);
+		if(cell_avail || wifi_avail){
+			DEB_PRINTLN(F("Sending timesync..."));
+			sendUDPSneaky(tankInit.xbeeIp,tankInit.xbeePort,timemsg,sizeof(timemsg)-1,NULL);
+		}
+		else
+			DEB_PRINTLN(F("No wifi/cell avail and not timesynced"));
+	}
+	
 }
 	
 
@@ -1408,17 +1479,6 @@ updateRealTimeClock(void)
 	networktime.localMicroSecs=nlocmicros;
 }
 
-/* called from checkReceivedFrames on a timesync response  */
-void
-resynctime(const char *timeptr){
-	sscanf(timeptr,"%ld %ld",&networktime.secs,&networktime.usecs);
-	networktime.localMicroSecs=micros();
-	networktime.usecs &= 0xFFFFFFFC;   //arduino time always ends in 00
-	Serial.print(F("Time Synced: "));
-	Serial.print(networktime.secs);
-	Serial.print(' ');
-	Serial.println(networktime.usecs);
-}
 
 
 
@@ -1568,3 +1628,49 @@ fd_SD.println("calibration_factor = 3.0");
 fd_SD.close();
 }
 #endif
+
+
+
+//INIT THE WIFI once it has responded it is booted and accepting commands
+// (see checkrecvframe)
+//wifipi just runs async since its intelligent and
+//just inform via recvframe that it is alive
+//need to kick off the process here by giving the wifipi the address
+//to use.   this is updated in EVERY packet sent everytime
+// from anywhere in tankmon.  inefficient but xbee requires it
+// so duplicated here
+
+/* send off a request for wifi to see if connected */
+/* check cell just checks for network connect, */
+/* check wifi checks end to end connect */
+/* since wifi processor intelligent, it will keep checking */
+/* independently and maintain link integrity */
+void
+checkwifiavail()
+{
+	/* force a packet to wifi even though it might not be ready yet */
+	/* called from check recvframes when wifipi is booted and responding */
+	sendUDPSneaky(tankInit.xbeeIp,tankInit.xbeePort,
+		WIFIQUERYSTRING,
+		sizeof(WIFIQUERYSTRING),&Serial);
+}
+
+void
+checkcellavail(void){
+
+	static unsigned char setupseq=0;
+	unsigned char *frameptr;
+
+	if(setupseq++ > 8)
+		setupseq=0;
+
+	if(!cell_avail){
+		sprintf(spbuf,"%cAI",setupseq+CELLSTATID);
+		frameptr=makeApiFrame(ATCMND, (unsigned char *)spbuf, 3);
+		sendApiFrame(frameptr,&Serial3);
+		statframes++;
+		/* do not wait for the CELLSTATID frame to return 
+		 * checkReceivedFrames will pick it up in normal polls
+		 */
+	}
+}

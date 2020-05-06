@@ -1,4 +1,4 @@
-#define LOC_DEBUG	//turns on debug prints to console
+//#define LOC_DEBUG	//turns on debug prints to console
 //#define NOCELL	//makes the unit proceed even if no cell signal
 
 //#define FULL_DEBUG    //turns on huge amounts of debug info for frames

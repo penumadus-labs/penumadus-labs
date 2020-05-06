@@ -1,0 +1,105 @@
+#!/bin/sh
+
+
+if [ $USER != "root" ]
+then
+	echo "ERROR:  This script must be run as root"
+	exit 1
+fi
+
+RFILE=initramfs-$(uname -r)
+
+#get the tools if needed
+#echo "checking for initramfs-tools"
+dpkg -s initramfs-tools >/dev/null 2>&1
+if [ $? -ne 0 ]
+then
+	echo -n "WARNING: adding initramfs-tools -"
+	apt-get update
+	apt-get install initramfs-tools
+	echo "FIXED"
+else
+	echo "CHECK: initramfs tools present"
+fi
+
+echo "INFO: installing initramfs files in /etc"
+cp root-ro /etc/initramfs-tools/scripts/init-bottom/root-ro
+chmod 0755 /etc/initramfs-tools/scripts/init-bottom/root-ro
+
+A=/etc/initramfs-tools/modules
+#echo "checking/adding overlay module to $A"
+grep -q "overlay" $A
+if [ $? -ne 0 ]
+then
+	echo -n "WARNING: adding overlay to $A - "
+	echo >> $A
+	echo overlay >> $A
+	echo "FIXED"
+else
+	echo "CHECK: overlay already in $A"
+fi
+
+echo making initramfs from existing kernel,  this will take a moment
+echo "mkinitramfs -o /tmp/$RFILE"
+mkinitramfs -o /tmp/$RFILE
+echo "place in /boot"
+cp  /tmp/$RFILE /boot
+
+#modify boot line
+#echo "checking and adding  boot line for usage of overlays"
+grep -q "root-ro-driver=overlay" /boot/cmdline.txt
+if [ $? -ne 0 ]
+then
+	echo -n "WARNING: adding overlay to cmdline.txt-"
+	cat /boot/cmdline.txt | sed '1s/$/ root-ro-driver=overlay/' >/tmp/cmdline.txt
+	mv /tmp/cmdline.txt /boot/cmdline.txt
+	echo "FIXED"
+else
+	echo "CHECK: overlay already in cmdline.txt"
+fi
+
+#add debug
+#echo "checking and adding  debug line "
+grep -q debug /boot/cmdline.txt
+if [ $? -ne 0 ]
+then
+	echo -n "WARNING: adding debug to cmdline.txt-"
+	cat /boot/cmdline.txt | sed '1s/$/ debug/' >/tmp/cmdline.txt
+	mv /tmp/cmdline.txt /boot/cmdline.txt
+	echo "FIXED"
+else
+	echo "CHECK: debug already in cmdline.txt"
+fi
+
+#check for initramfs usage setup
+
+#echo "checking and cmdline.txt for initrd lines or else no initramfs usage "
+grep -q "initrd=-1" /boot/cmdline.txt
+if [ $? -ne 0 ]
+then
+	echo "ERROR: please modify cmdline.txt to use initramfs"
+	echo "by adding initrd=-1"
+	echo "then run the install process AGAIN"
+	exit 1
+else
+	echo "CHECK: initrd already in cmdline.txt"
+fi
+
+#echo "checking config.txt for initramfs lines "
+for i in "initramfs $RFILE followkernel" "ramfsfile=$RFILE" "ramfsaddr=-1"
+do
+	grep -q "$i" /boot/config.txt
+	if [ $? -ne 0 ]
+	then
+		echo -n "WARNING: $i missing from config.txt -"
+		/bin/echo -e '\n#Added for initramfs to work' >> /boot/config.txt
+		echo "$i" >> /boot/config.txt
+		echo "FIXED"
+	else
+		echo "CHECK: $i in config.txt"
+	fi
+done
+
+echo "INFO: debug info in /run/initramfs directory after reboot"
+echo "Please reboot using shutdown -r now"
+echo "Layered File systems consist of /, /mnt/root-rw, /mnt/root-ro"

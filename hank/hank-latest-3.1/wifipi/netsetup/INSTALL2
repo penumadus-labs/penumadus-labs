@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#Second part of install,  make sure first part is already run
+
+	if [ $(id | cut -c5) != "0" ]
+	then
+		echo MUST BE RUN AS ROOT
+		exit 1
+	else
+		echo rootcheck passed
+	fi
+	
+	apt install apache2
+	find var | cpio -pdvum /
+	echo you will be put in raspi-config,  go to Interfacing
+	echo and turn on SSH and VNC,  hit Finish when done.
+	echo Ready?
+	read a
+	raspi-config
+
+	echo connect to this pi with ssh pi@192.168.4.1 passwd:utk
+	echo or with vnc viewer,  login id: pi passwd utk
+	echo continue?
+	read a
+	su pi chromium-browser http://127.0.0.1 &
+

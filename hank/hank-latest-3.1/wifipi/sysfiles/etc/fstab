@@ -1,0 +1,18 @@
+#
+#  This fstab is in RAM, the real one can be found at /mnt/root-ro/etc/fstab
+#  The original entry for '/' and all swap files have been removed.  The new
+#  entry for the read-only the real root fs follows. Write access can be
+#  enabled using:
+#    sudo mount -o remount,rw /mnt/root-ro
+#  re-mounting it read-only is done using:
+#    sudo mount -o remount,ro /mnt/root-ro
+#
+
+/dev/mmcblk0p2 /mnt/root-ro ext4 ro,relatime 0 0
+
+#
+#  remaining entries from the original /mnt/root-ro/etc/fstab follow.
+#
+proc            /proc           proc    defaults          0       0
+PARTUUID=738a4d67-01  /boot           vfat    defaults          0       2
+/dev/mmcblk0p3             /home/hank      ext4    defaults,noatime  0       1

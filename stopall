@@ -1,0 +1,3 @@
+killall UDPengine
+killall tail
+echo DONE

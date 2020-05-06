@@ -1,0 +1,27 @@
+#!/bin/bash
+
+	if [ $(id | cut -c5) != "0" ]
+	then
+		echo MUST BE RUN AS ROOT
+		exit 1
+	else
+		echo rootcheck passed
+	fi
+	
+	apt install dnsmasq hostapd
+
+	systemctl stop hostapd dnsmasq
+
+	service networking stop
+	ip link set down eth0
+	ip link set down wlan0
+	ip link set down lo
+
+	find etc | cpio -pdvum /
+	find home | cpio -pdvum /
+	systemctl unmask hostapd
+
+	echo System shutting down,  Plug in wlan USB adapter and 
+	echo Run INSTALL2 on reboot
+	sleep 5
+	shutdown -h now

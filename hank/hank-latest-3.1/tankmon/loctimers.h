@@ -12,8 +12,10 @@
 #define SDCHECKTIMER 11
 #define SDFLUSHTIMER 12
 #define TRIGGERACCELSAMP 13
-#define NUMTIMERS 14
+#define TIMESYNCTIMER 14
+#define NUMTIMERS 15
 
+#define EXPIRENOW 8
 /* structures for holding local timers */
 enum timertype_t {
 	LOC_MILLISECS=0,
