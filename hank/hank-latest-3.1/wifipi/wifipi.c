@@ -467,15 +467,22 @@ nextChar(int len){
 
 	/* special case for not gathering a frame or idle link 
 	 * read arbitrary if any chars in buffer, return them one at a time
-	 * else read and block. returns after CHARBURST, 128, or 100mS 
+	 * else read and block. returns after CHARBURST, 128 (VMIN), or 
+	 * 1 char + 100mS (VTIME)  
 	 */
-	if(len == 0){
+
+	//just browsing, not fetching known len
+	if(len == 0){	
 		if(unload==load){
 			/* might as well zero them on empty 
 			   queue to put off queue wrap slow fix */
 			unload=load=0;
+			len=CHARBURST;
 		}
-		len=CHARBURST;
+		//if load!=unload, at least one char in buffer
+		//so no read necessary
+		else
+			return(qbuf[unload++]);
 	}
 
 	//not enough in queue, gotta read something
