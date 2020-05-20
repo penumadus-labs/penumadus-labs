@@ -1,0 +1,31 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.5.5",
+    "ws": "^7.2.3"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "prettier-cli": "^0.1.0",
+    "tunnel-ssh": "^4.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carosaur/tankmon"
+  },
+  "scripts": {
+    "start": "node server",
+    "dev": "DEV=true nodemon server",
+    "dev:tunnel": "DEV=true SSH=true nodemon server"
+  }
+}
