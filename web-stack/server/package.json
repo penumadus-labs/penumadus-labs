@@ -25,7 +25,6 @@
   },
   "scripts": {
     "start": "node server",
-    "dev": "DEV=true nodemon server",
-    "dev:tunnel": "DEV=true SSH=true nodemon server"
+    "dev": "DEV=true nodemon server"
   }
 }

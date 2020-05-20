@@ -3,6 +3,7 @@
 legacy
 scratch
 build
+.env
 
 
 # dependencies

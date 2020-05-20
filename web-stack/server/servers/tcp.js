@@ -1,6 +1,5 @@
 const net = require('net')
 const Device = require('../controllers/device')
-const tunnel = require('../utils/ssh-tunnel')
 
 const handleConnection = async (socket) => {
   console.log('tcp client connected')
