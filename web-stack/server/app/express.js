@@ -1,10 +1,12 @@
 const express = require('express')
-const cors = require('cors')
 const { resolve } = require('path')
+const cors = require('cors')
 const apiRouter = require('../api/routes')
 
-const appPath = '../client/build/'
-const indexPath = resolve(appPath + 'index.html')
+const appPath = __dirname + '../../../client/build/'
+
+const staticDir = resolve(appPath)
+const appIndex = resolve(appPath + 'index.html')
 
 const app = express()
 
@@ -13,10 +15,10 @@ if (process.env.DEV) app.use(cors())
 app.use(express.json())
 app.use('/api', apiRouter)
 
-app.use(express.static(resolve(appPath)))
+app.use(express.static(staticDir))
 
 app.get('*', (req, res) => {
-  if (!req.xhr) res.sendFile(indexPath)
+  if (!req.xhr) res.sendFile(appIndex)
   else res.sendStatus(404)
 })
 
