@@ -1,8 +1,12 @@
 {
-  "eslint.enable": true,
-  "editor.formatOnSave": true,
+  "stylelint.enable": false,
+  "eslint.enable": false,
   "prettier.disableLanguages": [],
+  "editor.formatOnSave": true,
   "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
     "editor.formatOnSave": true
   },
   "files.watcherExclude": {

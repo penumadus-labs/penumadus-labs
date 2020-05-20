@@ -11,16 +11,18 @@
     "prettier-cli": "^0.1.0"
   },
   "scripts": {
+    "build": "cd client && npm run build",
     "dev": "run-p dev:client dev:server",
     "dev:client": "cd client && npm run dev",
-    "dev:server": "nodemon server/server",
-    "build": "cd client && npm run build",
-    "start": "node server/server",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "dev:server": "cd server && npm run dev",
     "install:client": "cd client && npm i",
     "install:server": "cd server && npm i",
     "postinstall": "run-p install:client install:server",
     "deploy": "npm run build && pm2 restart server",
-    "restart": "pm2 restart server"
+    "restart": "pm2 restart server",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "dependencies": {
+    "typescript": "^3.9.3"
   }
 }

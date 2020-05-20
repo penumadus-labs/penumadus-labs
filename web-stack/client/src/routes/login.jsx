@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '../components/ui/button'
-import { login } from '../utils/auth'
 import theme from '../style/theme'
-// import useTheme from '../utils/use-theme'
 
 const Root = styled.div`
   ${theme.mixins.card};
@@ -11,8 +9,8 @@ const Root = styled.div`
   margin-left: 0;
 `
 
-export default () => (
+export default ({ handleLogin }) => (
   <Root>
-    <Button onClick={login}>login</Button>
+    <Button onClick={handleLogin}>login</Button>
   </Root>
 )

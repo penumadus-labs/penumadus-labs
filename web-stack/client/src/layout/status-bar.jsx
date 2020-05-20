@@ -5,7 +5,7 @@ import Download from '../components/ui/download'
 import Warning from '../components/warning'
 
 import useDatabaseContext from '../hooks/use-database-context'
-import { useSocketContextState } from '../hooks/use-socket-context'
+import { useDeviceState } from '../hooks/use-device'
 
 const Root = styled.div`
   ${({ theme }) => theme.mixins.card}
@@ -27,7 +27,7 @@ export default () => {
     { selected, devices, error: dbError },
     { selectDevice },
   ] = useDatabaseContext()
-  const { data, error: socketError } = useSocketContextState()
+  const { data, error: socketError } = useDeviceState()
 
   return (
     <Root>

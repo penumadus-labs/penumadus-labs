@@ -1,7 +1,5 @@
-const base = `://${window.location.hostname}${process.env.REACT_APP_PORT}/`
+const base = `//${window.location.hostname}:8080/`
 
-const httpURL = 'http' + base
+export const wsURL = 'ws:' + base
 
-export default httpURL
-
-export const wsURL = 'ws' + base
+export default window.location.protocol + base

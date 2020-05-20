@@ -1,36 +1,43 @@
-const { verify } = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
-const userAuth = async (ctx, next) => {
-  const token = ctx.get('Authorization')
-
-  if (!token) ctx.throw(401)
-
+const verify = (token, secert) => {
   try {
-    ctx.user = verify(token, process.env.USER_SECRET)
+    jwt.verify(token, secret)
+    return true
   } catch (error) {
-    try {
-      ctx.user = verify(token, process.env.ADMIN_SECRET)
-    } catch (error) {
-      ctx.throw(403)
-    }
+    return false
   }
-  await next()
 }
 
-const adminAuth = async (ctx, next) => {
+const verifyUser = (req, res, next) => {
   const token = ctx.get('Authorization')
 
-  if (!token) ctx.throw(401)
+  if (!token) res.status(401)
 
-  try {
-    ctx.user = verify(token, process.env.ADMIN_SECRET)
-  } catch (error) {
-    ctx.throw(403)
+  if (
+    verify(token, process.env.USER_SECRET) ||
+    verify(token, process.env.ADMIN_SECRET)
+  ) {
+    next()
+  } else {
+    res.status(403)
   }
-  await next()
+}
+
+const verifyAdmin = async (ctx, next) => {
+  const token = ctx.get('Authorization')
+
+  if (!token) res.status(401)
+
+  if (verify(token, process.env.ADMIN_SECRET)) {
+    next()
+  } else {
+    res.status(403)
+  }
 }
 
 module.exports = {
-  userAuth,
-  adminAuth,
+  verifyUser,
+  verifyAdmin,
+  sign: jwt.sign,
 }

@@ -1,6 +1,6 @@
 import Card from '../card'
 import Button from './button'
-import { useSocketContextActions } from '../../hooks/use-socket-context'
+import { useSocketContextActions } from '../../hooks/use-device'
 
 export default () => {
   const { getPressure } = useSocketContextActions()

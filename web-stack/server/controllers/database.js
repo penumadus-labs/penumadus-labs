@@ -1,9 +1,7 @@
 const { connect, MongoClient } = require('mongodb')
 const tunnel = require('../utils/ssh-tunnel')
 
-const development = process.env.NODE_ENV === 'development'
-
-const url = development
+const url = process.env.SSH
   ? 'mongodb://localhost/admin'
   : 'mongodb://caro:Matthew85!!@localhost/admin'
 

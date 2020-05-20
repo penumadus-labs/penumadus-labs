@@ -1,36 +1,31 @@
 import React from 'react'
 import { Router } from '@reach/router'
-import Login from './login'
-import Callback from './callback'
-import InvalidRoute from './404'
-import NavigateRoute from './navigate-root'
-
+import Login from '../components/forms/login'
 import Layout from '../layout/layout'
 import Charts from './admin/charts'
 import ControlPanel from './admin/control-panel'
 import Register from './admin/register'
-import Logout from './admin/logout'
-import { checkAuth } from '../utils/auth'
+import NotFound from './404'
+
+import useAuth from '../hooks/use-auth'
 
 export default () => {
-  const authorized = checkAuth()
+  const [{ loading, loggedIn }, { login, logout }] = useAuth()
 
-  if (authorized) console.log('authorized')
+  if (loading) return <p>loading...</p>
 
-  return (
-    <Router>
-      <Login path='/' />
-      <Callback path='callback' />
-      {authorized ? (
-        <Layout path='admin'>
-          <Charts path='charts' />
-          <ControlPanel path='control-panel' />
-          <Register path='register' />
-          <Logout path='logout' />
-          <InvalidRoute default />
-        </Layout>
-      ) : null}
-      <NavigateRoute default />
-    </Router>
-  )
+  if (!loggedIn) return <Login handleLogin={login} />
+
+  return <button onClick={logout}>logout</button>
+
+  // return (
+  //   <Layout>
+  //     <Router>
+  //       <Charts path='' />
+  //       <ControlPanel path='control-panel' />
+  //       <Register path='register' />
+  //       <NotFound default />
+  //     </Router>
+  //   </Layout>
+  // )
 }

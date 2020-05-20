@@ -7,12 +7,14 @@ to allow async data fetching before updating context
 
 const ctx = {}
 
+const initialize = () => {}
+
 const getDevices = async () => {
   try {
     const [devices, settings, data] = await Promise.all([
-      getDevices(),
-      getSettings(),
-      getData(),
+      api.getDevices(),
+      api.getSettings(),
+      api.getData(),
     ])
 
     ctx.disptach({ type: 'get-devices', devices, settings, data })
@@ -25,12 +27,12 @@ const getDevices = async () => {
 const getData = async () => {
   try {
     const data = await api.getData()
-    dispatch({ type: 'get-data', data })
+    ctx.dispatch({ type: 'get-data', data })
   } catch (error) {}
 }
 
 const updateSettings = async (settings) => {
-  // await axios.post()
+  // await api.post()
   ctx.disptach({ type: 'update-settings', settings })
 }
 
@@ -38,9 +40,13 @@ const selectDevice = (name) => {
   ctx.disptach({ type: 'select-device', name })
 }
 
-export const createActions = (disptach) => {
+export const createActions = (dispatch) => {
   ctx.dispatch = dispatch
   return {
     initialize,
+    getData,
+    updateSettings,
+    selectDevice,
+    getDevices,
   }
 }
