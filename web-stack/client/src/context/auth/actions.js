@@ -3,6 +3,10 @@ import url from '../../utils/url'
 
 const auth = create({
   baseURL: url + 'api/auth/',
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    Accept: 'application/json; text/plain',
+  },
 })
 
 const ctx = {}

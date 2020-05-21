@@ -1,52 +1,37 @@
-import * as api from '../../utils/api'
+import url from '../../utils/url'
 
-/* 
-wrapper around React's default dispatch function returned from useReducer
-to allow async data fetching before updating context
- */
+import { create } from 'axios'
+
+let database
 
 const ctx = {}
 
-const initialize = () => {}
-
-const getDevices = async () => {
+const initialize = async (token) => {
+  if (!token) return
+  database = create({
+    baseURL: url + 'api/database/',
+    headers: {
+      token,
+      'X-Requested-With': 'XMLHttpRequest',
+      Accept: 'application/json; text/plain',
+    },
+  })
   try {
-    const [devices, settings, data] = await Promise.all([
-      api.getDevices(),
-      api.getSettings(),
-      api.getData(),
-    ])
-
-    ctx.disptach({ type: 'get-devices', devices, settings, data })
+    await getDeviceData()
   } catch (error) {
     console.error(error)
-    ctx.disptach({ type: 'error', error: error.toString() })
   }
 }
 
-const getData = async () => {
-  try {
-    const data = await api.getData()
-    ctx.dispatch({ type: 'get-data', data })
-  } catch (error) {}
+const getDeviceData = async (device = 'hank_1') => {
+  const { data } = await database.get('device-data', { params: { device } })
+  ctx.dispatch({ type: 'data', data })
 }
 
-const updateSettings = async (settings) => {
-  // await api.post()
-  ctx.disptach({ type: 'update-settings', settings })
-}
-
-const selectDevice = (name) => {
-  ctx.disptach({ type: 'select-device', name })
-}
-
-export const createActions = (dispatch) => {
+export const createActions = (state, dispatch) => {
+  ctx.state = state
   ctx.dispatch = dispatch
   return {
     initialize,
-    getData,
-    updateSettings,
-    selectDevice,
-    getDevices,
   }
 }

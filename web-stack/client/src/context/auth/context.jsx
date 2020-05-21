@@ -12,10 +12,8 @@ export const AuthProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    void (async () => {
-      await initialize(sessionStorage.getItem('token'))
-    })().catch(console.error)
-  }, [initialize])
+    if (state.loading) initialize(sessionStorage.getItem('token'))
+  }, [state.loading, initialize])
 
   return (
     <AuthContext.Provider value={[state, actions]}>

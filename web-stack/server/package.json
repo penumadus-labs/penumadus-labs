@@ -24,7 +24,6 @@
     "url": "https://github.com/carosaur/tankmon"
   },
   "scripts": {
-    "start": "node server",
     "dev": "DEV=true nodemon server"
   }
 }

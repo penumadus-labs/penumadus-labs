@@ -1,28 +1,26 @@
 import React from 'react'
 import LineChart from '../../components/line-chart'
 import Loading from '../../components/loading'
-import { useDatabaseContextState } from '../../hooks/use-database-context'
+import { useDatabaseState } from '../../hooks/use-database'
 import { filterData } from '../../utils/data'
 
 export default () => {
-  const {
-    selected: { data },
-    error,
-  } = useDatabaseContextState()
+  const { error, data } = useDatabaseState()
 
   if (error) return null
 
   // don't render while wating for data
+  console.log(data)
   if (data) {
-    const keys = ['hum', 'temp']
+    const keys = ['humidity', 'temperature']
     // const data = parseCSVData(csv)
-    const hum = filterData(data, keys[0])
-    const temp = filterData(data, keys[1])
+    const humidity = filterData(data, keys[0])
+    const tempurature = filterData(data, keys[1])
 
     return (
       <>
-        <LineChart data={hum} dataKey={keys[0]} />
-        <LineChart data={temp} dataKey={keys[1]} />
+        <LineChart data={humidity} dataKey={keys[0]} />
+        <LineChart data={tempurature} dataKey={keys[1]} />
       </>
     )
   }

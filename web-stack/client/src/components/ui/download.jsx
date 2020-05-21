@@ -1,18 +1,21 @@
 import React from 'react'
 import Button from './button'
-import { useDatabaseContextState } from '../../hooks/use-database-context'
-import { makeCSVFile } from '../../utils/data'
+import { useDatabaseState } from '../../hooks/use-database'
+// import { makeCSVFile } from '../../utils/data'
 
 export default () => {
-  const { selected } = useDatabaseContextState()
+  // eslint-disable-next-line
+  const { data } = useDatabaseState()
 
-  const file = selected ? makeCSVFile(selected.csv) : null
+  const error = true
 
-  return file ? (
-    <a href={file} download='data'>
-      <Button>Download CSV</Button>
-    </a>
-  ) : (
-    <Button />
-  )
+  if (error) return <Button>Download CSV</Button>
+
+  // const file = makeCSVFile(data)
+
+  // return (
+  //   <a href={file} download='data'>
+  //     <Button>Download CSV</Button>
+  //   </a>
+  // )
 }

@@ -8,7 +8,7 @@ const webPort = 8080
 const tcpPort = 32100
 
 void (async () => {
-  // await dbClientConnect()
+  await dbClientConnect()
   await startServers({ expressApp, webPort, tcpPort })
 })().catch((e) => {
   console.error(e)

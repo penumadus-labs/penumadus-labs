@@ -19,10 +19,7 @@ const verifyUser = (req, res, next) => {
 
   if (!token) res.status(401)
 
-  if (
-    verify(token, process.env.USER_SECRET) ||
-    verify(token, process.env.ADMIN_SECRET)
-  ) {
+  if (verify(token, userSecret) || verify(token, adminSecret)) {
     next()
   } else {
     res.status(403)
@@ -34,15 +31,24 @@ const verifyAdmin = async (ctx, next) => {
 
   if (!token) res.status(401)
 
-  if (verify(token, process.env.ADMIN_SECRET)) {
+  if (verify(token, adminSecret)) {
     next()
   } else {
     res.status(403)
   }
 }
 
+const signUser = (payload) => {
+  return jwt.sign(payload, adminUser)
+}
+
+const signAdmin = (payload) => {
+  return jwt.sign(payload, adminSecret)
+}
+
 module.exports = {
+  signUser,
+  signAdmin,
   verifyUser,
   verifyAdmin,
-  sign: jwt.sign,
 }

@@ -1,30 +1,10 @@
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case 'get-devices':
-      const result = action.devices.map((name, index) => ({
-        name,
-        settings: action.settings[index],
-        data: action.data[index],
-      }))
-
-      return {
-        ...state,
-        selected: result[0],
-        devices: result,
-        getError: 'get error',
-      }
-    case 'select-device':
-      return {
-        ...state,
-        selected: state.devices.find(({ name }) => name === action.name),
-      }
-    case 'update-settings':
-      state.selected.settings = action.settings
-      return { ...state }
+export const reducer = (state, { type, data, error, ...action }) => {
+  switch (type) {
+    case 'data':
+      return { data }
     case 'error':
       return {
-        ...state,
-        error: action.error,
+        error,
       }
     default:
       throw new Error('database reducer recieved invalid action type')
@@ -32,9 +12,7 @@ export const reducer = (state, action) => {
 }
 
 export const initialState = {
-  selected: {},
-  devices: [],
-  error: null,
+  initialized: false,
 }
 
 export { createActions } from './actions'

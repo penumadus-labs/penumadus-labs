@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import NavBarLink from './nav-bar-link'
 import { FaChartLine as Chart } from 'react-icons/fa'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import { FiLogOut as Logout } from 'react-icons/fi'
+import NavBarLink from './nav-bar-link'
+import { useAuthActions } from '../hooks/use-auth'
 
 const Root = styled.nav`
   ${({ theme }) => theme.mediaQueries.layout} {
@@ -19,13 +20,17 @@ const Root = styled.nav`
   background: ${({ theme }) => theme.color.navBackground};
 `
 
-const NavBar = ({ width }) => (
-  <Root width={width}>
-    <NavBarLink Icon={Chart} label='Charts' />
-    <NavBarLink Icon={Dash} label='Control panel' />
-    <NavBarLink Icon={Devices} label='Register' />
-    <NavBarLink Icon={Logout} label='Logout' />
-  </Root>
-)
+const NavBar = ({ width }) => {
+  const { logout } = useAuthActions()
+
+  return (
+    <Root width={width}>
+      <NavBarLink Icon={Chart} label='Charts' to='/' />
+      <NavBarLink Icon={Dash} label='Control panel' to='control-panel' />
+      <NavBarLink Icon={Devices} label='Register' to='register' />
+      <NavBarLink Icon={Logout} label='Logout' to='/' onClick={logout} />
+    </Root>
+  )
+}
 
 export default NavBar

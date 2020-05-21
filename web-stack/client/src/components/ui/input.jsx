@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 
 const Root = styled.label`
@@ -13,6 +13,7 @@ const Root = styled.label`
 
     width: 100%;
 
+    margin-top: ${({ theme }) => theme.spacing.xs};
     padding: ${({ theme }) => theme.spacing.xs};
     outline: none;
 
@@ -22,10 +23,11 @@ const Root = styled.label`
   }
 `
 
-export default ({ value, onChange }) => {
+export default forwardRef((props, ref) => {
   return (
     <Root>
-      <input type='text' value={value} onChange={onChange} />
+      {props.name}
+      <input ref={ref} {...props} />
     </Root>
   )
-}
+})

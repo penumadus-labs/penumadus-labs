@@ -9,10 +9,8 @@ const config = {
   privateKey: readFileSync(__dirname + '/../.ssh/server2.pem'),
 }
 
-const development = process.env.NODE_ENV === 'development'
-
 const tunnelPromise = (port) => {
-  if (!development) return
+  if (!process.env.DEV) return
   return new Promise((resolve, reject) => {
     const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
       if (err) reject(err)

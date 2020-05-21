@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import useDatabaseContext from './use-database-context'
+import useDatabase from './use-database'
 import validate from '../utils/validate-settings'
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
       error,
     },
     { updateSettings: update },
-  ] = useDatabaseContext()
+  ] = useDatabase()
 
   const [list, setList] = useState([])
 

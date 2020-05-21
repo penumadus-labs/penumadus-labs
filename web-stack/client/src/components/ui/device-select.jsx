@@ -10,18 +10,11 @@ const Root = styled.div`
   }
 `
 
-export default ({ selected, devices, selectDevice }) => {
-  const SelectProps = {
-    selected: selected.name,
-    options: devices.map(({ name }) => name),
-    handleSelect({ target }) {
-      selectDevice(target.value)
-    },
-  }
+export default (props) => {
   return (
     <Root>
       <p>select device:</p>
-      <Select {...SelectProps} />
+      <Select {...props} />
     </Root>
   )
 }
