@@ -1,13 +1,11 @@
 const net = require('net')
-const Device = require('../controllers/device')
+const createDevice = require('../controllers/device')
 
 const handleConnection = async (socket) => {
   console.log('tcp client connected')
 
   try {
-    const device = new Device(socket)
-    await device.initialize()
-    await device.test()
+    const device = await createDevice(socket)
   } catch (error) {
     console.error(error)
   }

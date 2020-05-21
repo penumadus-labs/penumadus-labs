@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { readTest } = require('../controllers/database')
+const { getDeviceData } = require('../controllers/database')
 
 const database = Router()
 
@@ -9,8 +9,9 @@ const database = Router()
 
 database.get('/device-data', async (req, res) => {
   try {
-    const data = await readTest()
-    res.send(data)
+    console.log(req.params)
+    // const device = await getDeviceData(id)
+    res.send({})
   } catch (error) {
     console.error(error)
   }

@@ -5,25 +5,39 @@ const url = process.env.SSH
   ? 'mongodb://localhost/admin'
   : 'mongodb://caro:Matthew85!!@localhost/admin'
 
-const client = new MongoClient(url, {
+const mongoClient = new MongoClient(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
-const dbClient = {
-  async dbClientConnect(db = 'hank_1') {
+const client = {
+  async connect() {
     if (process.env.SSH) await tunnel(27017)
 
-    await client.connect()
+    await mongoClient.connect()
     console.log('database client connected')
-    dbClient.db = client.db(db)
+
+    client.devices = mongoClient.db('app').collection('devices')
   },
-  readTest() {
-    return client.db('test').collection('environ_data').find().toArray()
+  // readTest() {
+  //   return client.db('test').collection('environ_data').find().toArray()
+  // },
+  // insertOne(col, doc) {
+  //   return client.db('app').collection('devices').insertOne(doc)
+  // },
+  insertStandardData(id, data) {
+    client.devices
+      .updateOne({ id }, { $push: { standardData: data } })
+      .catch(console.error)
   },
-  insertOne(db, col, raw) {
-    return client.db(db).collection(col).insertOne(doc)
+  inesertAccelerationData(id, data) {
+    client.devices
+      .updateOne({ id }, { $push: { accelerationData: data } })
+      .catch(console.error)
+  },
+  getDeviceData(id) {
+    return client.devices.findOne({ id })
   },
 }
 
-module.exports = dbClient
+module.exports = client

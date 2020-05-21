@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 const controller = require('./socket-pipeline')
-const { insertOne } = require('./database')
+const { insertStandardData, insertAccelerationData } = require('./database')
 const {
   config,
   streams,
@@ -36,9 +36,8 @@ class Device extends EventEmitter {
   }
 
   async initialize() {
-    await this.getSettings()
+    // await this.getSettings()
     controller.tcpClients.add(this)
-    console.log(this.settings)
   }
 
   getSettings() {
@@ -52,12 +51,12 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], (data) => {
-      // console.log('standard')
+    this.on(table['standardData'], (err, data) => {
+      insertStandardData(this.id, data)
     })
 
-    this.on(table['accelerationData'], (data) => {
-      // console.log('acceleration')
+    this.on(table['accelerationData'], (err, data) => {
+      insertAccelerationData(this.id, data)
     })
 
     this.on('error', (err) => {
@@ -106,7 +105,7 @@ class Device extends EventEmitter {
   }
 
   emitResponses(raw) {
-    const { pad, type: command, id, status, time, ...data } = JSON.parse(raw)
+    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
     if (!this.id) this.id = id
     if (command === 'HELLO') return
     if (this.listenerCount(command)) {
@@ -138,4 +137,8 @@ class Device extends EventEmitter {
   }
 }
 
-module.exports = Device
+module.exports = async (socket) => {
+  const device = new Device(socket)
+  await device.initialize()
+  return device
+}
