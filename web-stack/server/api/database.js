@@ -9,9 +9,8 @@ const database = Router()
 
 database.get('/device-data', async (req, res) => {
   try {
-    console.log(req.params)
-    // const device = await getDeviceData(id)
-    res.send({})
+    const data = await getDeviceData(req.query.id)
+    res.send(data)
   } catch (error) {
     console.error(error)
   }

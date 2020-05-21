@@ -1,7 +1,7 @@
 export const reducer = (state, { type, data, error, ...action }) => {
   switch (type) {
     case 'data':
-      return { data }
+      return data
     case 'error':
       return {
         error,
@@ -12,7 +12,7 @@ export const reducer = (state, { type, data, error, ...action }) => {
 }
 
 export const initialState = {
-  initialized: false,
+  loading: true,
 }
 
 export { createActions } from './actions'

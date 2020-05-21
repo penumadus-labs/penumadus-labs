@@ -6,26 +6,28 @@ let database
 
 const ctx = {}
 
-const initialize = async (token) => {
+const initialize = (token, id = 'unit_3') => {
   if (!token) return
-  database = create({
-    baseURL: url + 'api/database/',
-    headers: {
-      token,
-      'X-Requested-With': 'XMLHttpRequest',
-      Accept: 'application/json; text/plain',
-    },
-  })
+  if (ctx.state.loading) {
+    database = create({
+      baseURL: url + 'api/database/',
+      headers: {
+        token,
+        'X-Requested-With': 'XMLHttpRequest',
+        Accept: 'application/json; text/plain',
+      },
+    })
+  }
+  getDeviceData(id)
+}
+
+const getDeviceData = async (id) => {
   try {
-    await getDeviceData()
+    const { data } = await database.get('device-data', { params: { id } })
+    ctx.dispatch({ type: 'data', data })
   } catch (error) {
     console.error(error)
   }
-}
-
-const getDeviceData = async (device = 'hank_1') => {
-  const { data } = await database.get('device-data', { params: { device } })
-  ctx.dispatch({ type: 'data', data })
 }
 
 export const createActions = (state, dispatch) => {

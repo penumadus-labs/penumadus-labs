@@ -12,8 +12,7 @@ const app = express()
 
 if (process.env.DEV) app.use(cors())
 
-app.use(express.json())
-app.use('/api', apiRouter)
+app.use('/api', express.json(), apiRouter)
 
 app.use(express.static(staticDir))
 

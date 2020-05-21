@@ -19,7 +19,7 @@ const Status = styled.p`
 `
 
 export default () => {
-  const devices = [1, 2, 3]
+  const devices = ['unit_3']
   const [selected, setSelected] = useState(devices[0])
 
   const handleSelect = ({ target }) => {
