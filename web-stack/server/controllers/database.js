@@ -11,13 +11,15 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect() {
+  async connect(db = 'app') {
     if (process.env.SSH) await tunnel(27017)
 
     await mongoClient.connect()
-    console.log('database client connected')
 
-    client.devices = mongoClient.db('app').collection('devices')
+    console.log('database connection opened')
+
+    client.devices = await mongoClient.db(db).collection('devices')
+    client.users = await mongoClient.db(db).collection('users')
   },
   // readTest() {
   //   return client.db('test').collection('environ_data').find().toArray()
@@ -25,6 +27,24 @@ const client = {
   // insertOne(col, doc) {
   //   return client.db('app').collection('devices').insertOne(doc)
   // },
+  async close() {
+    try {
+      await mongoClient.close()
+      console.log('database connection closed')
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async wrap(op) {
+    try {
+      await client.connect()
+      if (op) await op()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      client.close()
+    }
+  },
   insertStandardData(id, data) {
     client.devices
       .updateOne({ id }, { $push: { standardData: data } })
@@ -37,6 +57,15 @@ const client = {
   },
   getDeviceData(id) {
     return client.devices.findOne({ id })
+  },
+  insertDevice: (data) => {
+    return client.devices.insertOne(data)
+  },
+  findUser(username) {
+    return client.users.findOne({ username })
+  },
+  insertUser(data) {
+    return client.users.insertOne(data)
   },
 }
 
