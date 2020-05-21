@@ -50,7 +50,7 @@ const client = {
       .updateOne({ id }, { $push: { standardData: data } })
       .catch(console.error)
   },
-  inesertAccelerationData(id, data) {
+  insertAccelerationData(id, data) {
     client.devices
       .updateOne({ id }, { $push: { accelerationData: data } })
       .catch(console.error)
