@@ -7,8 +7,8 @@ import ContextProvider from './context/provider'
 
 ReactDOM.render(
   <StrictMode>
-    <GlobalStyle />
     <ContextProvider>
+      <GlobalStyle />
       <Header />
       <Router />
     </ContextProvider>

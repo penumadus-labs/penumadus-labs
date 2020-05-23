@@ -6,6 +6,7 @@ const Root = styled.label`
 
   input {
     width: 100%;
+    margin-top: 3px;
     cursor: text;
     &:focus {
       filter: brightness(80%);

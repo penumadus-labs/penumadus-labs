@@ -20,13 +20,13 @@ const Content = styled.div`
   min-height: 400px;
 `
 
-const Alert = ({ settings, children, onAccept, onCancel }) => (
+export default ({ settings, children, onAccept, onCancel }) => (
   <Root className='center-child fixed'>
     <OpaqueCover className='fixed' />
     <main className='card'>
       <div className='content'>{children}</div>
       <div className='space-children-x'>
-        <button className='button' color='green' onClick={onAccept}>
+        <button className='button button-green' onClick={onAccept}>
           accept
         </button>
         <button className='button' onClick={onCancel}>
@@ -36,5 +36,3 @@ const Alert = ({ settings, children, onAccept, onCancel }) => (
     </main>
   </Root>
 )
-
-export default Alert

@@ -5,9 +5,17 @@ export const breakpoints = {
   layout: 820,
 }
 
-const mediaqueries = Object.entries(breakpoints).reduce((acc, [key, value]) => {
+export const le = Object.entries(breakpoints).reduce((acc, [key, value]) => {
   acc[key] = `@media screen and (max-width: ${value}px)`
   return acc
 }, {})
 
-export default mediaqueries
+export const gt = Object.entries(breakpoints).reduce((acc, [key, value]) => {
+  acc[key] = `@media screen and (min-width: ${value + 1}px)`
+  return acc
+}, {})
+
+export default {
+  le,
+  gt,
+}

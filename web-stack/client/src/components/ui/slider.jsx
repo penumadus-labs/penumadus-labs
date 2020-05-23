@@ -18,7 +18,7 @@ const Root = styled.div`
   }
 `
 
-const Slider = () => {
+export default () => {
   const [value, setValue] = useState(50)
   return (
     <Root className='button'>
@@ -35,5 +35,3 @@ const Slider = () => {
     </Root>
   )
 }
-
-export default Slider

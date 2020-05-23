@@ -11,7 +11,7 @@ const Root = styled.form`
 `
 
 const Setting = styled.div`
-  ${({ theme }) => theme.layout} {
+  ${({ theme }) => theme.le.layout} {
     flex-basis: 33%;
   }
   flex: 1 1 20%;

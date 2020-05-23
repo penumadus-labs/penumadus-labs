@@ -3,7 +3,7 @@ import { Router } from '@reach/router'
 import Login from '../components/forms/login'
 import Layout from '../layout/layout'
 import Charts from './charts'
-// import ControlPanel from './admin/control-panel'
+import Controls from './controls'
 import Register from './register'
 import NotFound from './404'
 
@@ -20,7 +20,7 @@ export default () => {
     <Layout>
       <Router className='space-children-y'>
         <Charts path='/' />
-        {/* <ControlPanel path='control-panel' /> */}
+        <Controls path='controls' />
         <Register path='register' />
         <NotFound default />
       </Router>

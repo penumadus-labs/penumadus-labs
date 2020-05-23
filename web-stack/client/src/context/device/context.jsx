@@ -4,7 +4,7 @@ import { reducer, initialState, createActions } from './reducer'
 
 const DeviceContext = createContext()
 
-export const DeviceProvider = ({ children }) => {
+export default ({ children }) => {
   const [state, actions] = useAsyncReducer(reducer, initialState, createActions)
 
   useEffect(() => {
@@ -19,5 +19,3 @@ export const DeviceProvider = ({ children }) => {
     </DeviceContext.Provider>
   )
 }
-
-export default DeviceContext

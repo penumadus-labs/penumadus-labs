@@ -1,10 +1,17 @@
 import React from 'react'
 import { Global, css } from '@emotion/core'
+import { le, gt } from './mediaqueries'
 
 // mixins
 const spaceChildrenY = css`
   > *:not(:first-child) {
     margin-top: var(--sm);
+  }
+`
+
+const spaceChildrenX = css`
+  > *:not(:first-of-type) {
+    margin-left: var(--sm);
   }
 `
 
@@ -107,10 +114,58 @@ const globalStyle = css`
     margin: auto;
   }
 
+  .flex-4 {
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    > * {
+      flex: 0 1 calc(25% - var(--sm) * 3 / 4);
+
+      ${gt.layout} {
+        :nth-child(n + 5) {
+          margin-top: var(--sm);
+        }
+      }
+
+      ${le.layout} {
+        flex-basis: calc(50% - var(--sm) * 1 / 2);
+        :nth-child(n + 3) {
+          margin-top: var(--sm);
+        }
+      }
+    }
+  }
+
+  .flex-2 {
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    > * {
+      flex: 0 1 calc(50% - var(--sm) * 1 / 2);
+
+      ${gt.layout} {
+        :nth-child(n + 3) {
+          margin-top: var(--sm);
+        }
+      }
+
+      ${le.layout} {
+        flex-basis: 100%;
+        :nth-child(n + 1) {
+          margin-top: var(--sm);
+        }
+      }
+    }
+  }
+
   .card {
     ${raised}
     ${spaceChildrenY}
-    background: var(--card-background);
+      background: var(--card-background);
   }
 
   .space-children-y {
@@ -118,9 +173,7 @@ const globalStyle = css`
   }
 
   .space-children-x {
-    > *:not(:first-of-type) {
-      margin-left: var(--sm);
-    }
+    ${spaceChildrenX}
   }
 
   .center-child {
@@ -143,6 +196,10 @@ const globalStyle = css`
     background: var(--button-background);
   }
 
+  .button-green {
+    background: var(--green);
+  }
+
   .fixed {
     position: fixed;
     top: 0;
@@ -155,5 +212,19 @@ const globalStyle = css`
     color: var(--red);
   }
 `
+
+/* .flex-4 {
+    display: flex;
+
+    flex-basis: 24.5%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    > * {
+      margin-top: var(--sm);
+      ${layout} {
+        flex-basis: 49.5%;
+      }
+    } */
 
 export default () => <Global styles={globalStyle} />
