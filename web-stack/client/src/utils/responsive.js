@@ -1,4 +1,4 @@
-import breakpoints from '../style/breakpoints'
+import { breakpoints } from '../style/mediaqueries'
 
 function responsive(settings) {
   if (window.innerWidth < breakpoints.sm && settings.sm !== undefined) {

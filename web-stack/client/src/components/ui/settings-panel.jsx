@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import Settings from '../../components/ui/settings'
 import Summary from '../../components/ui/summary'
-import Card from '../card'
-import Button from './button'
-import Warning from '../warning'
-import Loading from '../../components/loading'
+import { Warning } from '../style/components'
 import useSettings from '../../hooks/use-settings'
 
 export default () => {
@@ -45,10 +42,12 @@ export default () => {
   return settings.length ? (
     <>
       <Settings list={settings} onSubmit={handleSubmit} warning={warning} />
-      <Card>
-        <Button onClick={handleSubmit}>Apply</Button>
+      <div className='card'>
+        <button className='button' onClick={handleSubmit}>
+          Apply
+        </button>
         {warning && <Warning>{warning}</Warning>}
-      </Card>
+      </div>
       {alert && (
         <Summary
           list={settings}
@@ -58,6 +57,6 @@ export default () => {
       )}
     </>
   ) : (
-    <Loading />
+    <p>loading</p>
   )
 }

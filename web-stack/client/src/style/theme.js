@@ -1,9 +1,7 @@
-import mixins from './mixins'
 import mediaQueries from './mediaqueries'
 
 const theme = {
   mediaQueries,
-  mixins,
   color: {
     navBackground: '#272727',
     background: '#1e1e1e',
@@ -43,21 +41,5 @@ const theme = {
   // transitions: {},
   // shadows: {},
 }
-
-theme.mixins.style = `
-  font-family: ${theme.font.family};
-  font-size: ${theme.font.size.text}
-  letter-spacing: ${theme.font.letterSpacing}
-  color: ${theme.color.font};
-  background: ${theme.color.icon};
-  border-radius: ${theme.shape.borderRadius};
-`
-theme.mixins.card = `
-  margin: ${theme.spacing.sm};
-  margin-bottom: 0;
-
-  padding: ${theme.spacing.sm};
-  background: ${theme.color.navBackground};
-`
 
 export default theme

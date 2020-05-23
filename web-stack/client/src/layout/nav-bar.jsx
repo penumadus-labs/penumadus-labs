@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { FaChartLine as Chart } from 'react-icons/fa'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import { FiLogOut as Logout } from 'react-icons/fi'
@@ -16,17 +16,17 @@ const Root = styled.nav`
   position: fixed;
   bottom: 0;
   left: 0;
-  height: ${({ theme }) => `calc(100vh - ${theme.layout.header.height}) `};
-  background: ${({ theme }) => theme.color.navBackground};
+  height: calc(100vh - var(--header-size));
+  background: var(--card-background);
 `
 
 const NavBar = ({ width }) => {
   const { logout } = useAuthActions()
 
   return (
-    <Root width={width}>
+    <Root className='shadow' width={width}>
       <NavBarLink Icon={Chart} label='Charts' to='/' />
-      <NavBarLink Icon={Dash} label='Control panel' to='control-panel' />
+      <NavBarLink Icon={Dash} label='Controls' to='controls' />
       <NavBarLink Icon={Devices} label='Register' to='register' />
       <NavBarLink Icon={Logout} label='Logout' to='/' onClick={logout} />
     </Root>

@@ -10,7 +10,8 @@ const database = Router()
 database.get('/device-data', async (req, res) => {
   try {
     const data = await getDeviceData(req.query.id)
-    res.send(data)
+    const buf = Buffer.from(JSON.stringify(data))
+    res.send(buf)
   } catch (error) {
     console.error(error)
   }

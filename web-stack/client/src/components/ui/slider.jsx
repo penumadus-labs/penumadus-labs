@@ -1,22 +1,17 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Root = styled.div`
   input {
-    ${({
-      theme: {
-        mixins: { clickable, style },
-      },
-    }) => clickable + style}
     width: 100%;
     height: 3px;
-    background: ${({ theme }) => theme.color.icon};
+    background: var(--button-background);
     -webkit-appearance: none;
 
     ::-webkit-slider-thumb {
       width: 15px;
       height: 15px;
-      background: ${({ theme }) => theme.color.font};
+      background: var(--font-color);
       border-radius: 100%;
       -webkit-appearance: none;
     }
@@ -26,7 +21,7 @@ const Root = styled.div`
 const Slider = () => {
   const [value, setValue] = useState(50)
   return (
-    <Root>
+    <Root className='button'>
       <label htmlFor='slider'>slider: {value}</label>
       <br />
       <input

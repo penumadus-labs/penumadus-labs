@@ -1,8 +1,7 @@
 import React from 'react'
-import Card from '../../components/card'
 
 export default () => (
-  <Card>
+  <div className='card'>
     <p>Register</p>
-  </Card>
+  </div>
 )

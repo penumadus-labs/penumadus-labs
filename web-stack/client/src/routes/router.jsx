@@ -2,9 +2,9 @@ import React from 'react'
 import { Router } from '@reach/router'
 import Login from '../components/forms/login'
 import Layout from '../layout/layout'
-import Charts from './admin/charts'
+import Charts from './charts'
 // import ControlPanel from './admin/control-panel'
-import Register from './admin/register'
+import Register from './register'
 import NotFound from './404'
 
 import useAuth from '../hooks/use-auth'
@@ -18,7 +18,7 @@ export default () => {
 
   return (
     <Layout>
-      <Router>
+      <Router className='space-children-y'>
         <Charts path='/' />
         {/* <ControlPanel path='control-panel' /> */}
         <Register path='register' />

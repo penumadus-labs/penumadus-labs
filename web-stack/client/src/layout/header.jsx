@@ -1,33 +1,25 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Root = styled.header`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
 
-${({ theme }) => theme.mediaQueries.layout} {
-  justify-content: center;
-}
+  ${({ theme }) => theme.mediaQueries.layout} {
+    justify-content: center;
+  }
 
-height: ${({ theme }) => theme.layout.header.height};
-font-size: ${({ theme }) => theme.font.size.heading};
-background: ${({ theme }) => theme.color.navBackground};
-
-/* border-bottom: 1px solid ${({ theme }) => theme.color.border}; */
-
-svg {
-  cursor: pointer;
-}
-
-> * {
-  margin-left: ${({ theme }) => theme.spacing.lg};
-}
+  height: var(--header-size);
+  font-size: var(--lg);
+  background: var(--card-background);
 `
 
-const Header = ({ children }) => (
-  <Root>
-    <p>HankMon Dashboard</p>
+const Header = styled.p`
+  margin-left: var(--md);
+`
+
+export default ({ children }) => (
+  <Root className='shadow'>
+    <Header>HankMon Dashboard</Header>
   </Root>
 )
-
-export default Header

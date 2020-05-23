@@ -1,40 +1,26 @@
 import React from 'react'
 import { Link } from '@reach/router'
-import styled from 'styled-components'
-import responsive from '../utils/responsive'
+import styled from '@emotion/styled'
 
 const Root = styled(Link)`
-  ${({
-    theme: {
-      mixins: { centerChild, clickable },
-    },
-  }) => centerChild + clickable}
-  width: ${({ theme }) => theme.layout.navbar.size};
-  height: ${({ theme }) => theme.layout.navbar.size};
-  background: ${({ theme }) => theme.color.navBackground};
+  width: var(--nav-size);
+  height: var(--nav-size);
+  background: var(--card-background);
 
-  div {
-    svg {
-      color: ${({ theme }) => theme.color.icon};
-      font-size: 5rem;
-    }
+  svg {
+    color: var(--button-background);
+  }
 
-    p {
-      color: ${({ theme }) => theme.color.font};
-
-      font-size: ${({ theme }) => theme.font.size.link};
-      text-align: center;
-    }
+  p {
+    text-align: center;
   }
 `
 
-const NavBarLink = ({ Icon, label, theme, to, onClick }) => (
-  <Root to={to} onClick={onClick}>
+export default ({ Icon, label, to, onClick }) => (
+  <Root className='center-child clickable' to={to} onClick={onClick}>
     <div>
-      <Icon size={responsive({ layout: 36, default: 48 })} />
+      <Icon size='42' />
       <p>{label}</p>
     </div>
   </Root>
 )
-
-export default NavBarLink

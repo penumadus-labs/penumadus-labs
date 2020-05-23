@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from './button'
 
 class Panel extends React.Component {
   render() {
@@ -14,7 +13,7 @@ class Panel extends React.Component {
           </label>
           <br />
           <br />
-          <Button>update</Button>
+          <button className='button'>update</button>
         </div>
       </div>
     )

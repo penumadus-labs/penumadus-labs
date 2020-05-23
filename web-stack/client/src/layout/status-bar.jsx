@@ -1,25 +1,15 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import DeviceSelect from '../components/ui/device-select'
 import Download from '../components/ui/download'
-
-const Root = styled.div`
-  ${({ theme }) => theme.mixins.card}
-`
 
 const Menu = styled.div`
   display: flex;
   justify-content: space-between;
 `
 
-const Status = styled.p`
-  padding-top: ${({ theme }) => theme.spacing.xs};
-  color: ${({ error, theme }) => (error ? theme.color.red : 'inherit')};
-  font-size: ${({ theme }) => theme.font.size.link};
-`
-
 export default () => {
-  const devices = ['unit_3']
+  const devices = ['unit_3', 'unit_2', 'unit_1']
   const [selected, setSelected] = useState(devices[0])
 
   const handleSelect = ({ target }) => {
@@ -27,12 +17,12 @@ export default () => {
   }
 
   return (
-    <Root>
+    <div className='card'>
       <Menu>
         <DeviceSelect {...{ options: devices, selected, handleSelect }} />
         <Download />
       </Menu>
-      <Status>status test</Status>
-    </Root>
+      <p>status test</p>
+    </div>
   )
 }

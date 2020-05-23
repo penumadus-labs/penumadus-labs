@@ -1,6 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-import Button from './button'
+import styled from '@emotion/styled'
 
 const Root = styled.div`
   ${({ theme }) => theme.mixins.centerChild}
@@ -11,17 +10,7 @@ const Root = styled.div`
   left: 0;
   z-index: ${({ theme }) => theme.zIndex[0]};
 
-  .opaque-cover {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: ${({ theme }) => theme.color.background};
-    opacity: 0.5;
-  }
-
-  main {
+  .opaque-cover main {
     z-index: ${({ theme }) => theme.zIndex[1]};
     width: 60vw;
     max-width: 650px;
@@ -44,16 +33,28 @@ const Root = styled.div`
   }
 `
 
+const OpaqueCover = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: ${({ theme }) => theme.color.background};
+  opacity: 0.5;
+`
+
 const Alert = ({ settings, children, onAccept, onCancel }) => (
   <Root>
-    <div className='opaque-cover' />
+    <OpaqueCover />
     <main>
       <div className='content'>{children}</div>
       <div>
-        <Button color='green' onClick={onAccept}>
+        <button className='button' color='green' onClick={onAccept}>
           accept
-        </Button>
-        <Button onClick={onCancel}>cancel</Button>
+        </button>
+        <button className='button' onClick={onCancel}>
+          cancel
+        </button>
       </div>
     </main>
   </Root>

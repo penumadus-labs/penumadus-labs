@@ -1,36 +1,34 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { IoIosArrowDown as DownArrow } from 'react-icons/io'
 
 const Root = styled.div`
   position: relative;
-  height: ${({ theme }) => theme.shape.buttonHeight};
+  height: 32px;
+`
 
-  .dropdown {
-    ${({ theme }) => theme.mixins.style};
-    position: absolute;
-    z-index: ${({ theme }) => theme.zIndex[0]};
-    min-width: 100px;
-    overflow: hidden;
-    outline: none;
-    user-select: none;
-  }
-
-  .selected {
-    display: flex;
-    align-items: center;
-
-    p {
-      flex: 1 1 auto;
-    }
-  }
+const Dropdown = styled.div`
+  position: absolute;
+  z-index: var(--layer1);
+  min-width: 100px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  outline: none;
+  user-select: none;
 
   .selected,
   option {
-    ${({ theme }) => theme.mixins.clickable};
-    height: ${({ theme }) => theme.shape.buttonHeight};
-    padding: ${({ theme }) => theme.spacing.sm};
-    background: ${({ theme }) => theme.color.icon};
+    padding: var(--sm);
+    background: var(--button-background);
+  }
+`
+
+const Selected = styled.div`
+  display: flex;
+  align-items: center;
+
+  p {
+    flex: 1 1 auto;
   }
 `
 
@@ -46,23 +44,24 @@ export default ({ selected, options, handleSelect }) => {
 
   return (
     <Root>
-      <div
-        className='dropdown'
+      <Dropdown
+        className='shadow'
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         role='listbox'
         tabIndex={0}
       >
-        <div className='selected'>
+        <Selected className='selected clickable'>
           <p>{selected}</p>
           <DownArrow size={18} />
-        </div>
+        </Selected>
         {toggled && (
           <div>
             {options
               .filter((item) => item !== selected)
               .map((item) => (
                 <option
+                  className='clickable'
                   key={item}
                   value={item}
                   onClick={handleSelect}
@@ -73,7 +72,7 @@ export default ({ selected, options, handleSelect }) => {
               ))}
           </div>
         )}
-      </div>
+      </Dropdown>
     </Root>
   )
 }

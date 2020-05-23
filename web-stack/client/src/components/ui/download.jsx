@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from './button'
 import { useDatabaseState } from '../../hooks/use-database'
 // import { makeCSVFile } from '../../utils/data'
 
@@ -9,13 +8,13 @@ export default () => {
 
   const error = true
 
-  if (error) return <Button>Download CSV</Button>
+  if (error) return <button className='button'>unit_3</button>
 
   // const file = makeCSVFile(data)
 
   // return (
   //   <a href={file} download='data'>
-  //     <Button>Download CSV</Button>
+  //     <button className="button">Download CSV</button>
   //   </a>
   // )
 }

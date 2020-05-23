@@ -1,5 +1,5 @@
 {
-  "stylelint.enable": false,
+  "stylelint.enable": true,
   "eslint.enable": false,
   "prettier.disableLanguages": [],
   "editor.formatOnSave": true,
