@@ -8,7 +8,7 @@ export default () => {
 
   const error = true
 
-  if (error) return <button className='button'>unit_3</button>
+  if (error) return <button className='button'>Download</button>
 
   // const file = makeCSVFile(data)
 

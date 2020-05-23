@@ -5,7 +5,7 @@ const Root = styled.header`
   display: flex;
   align-items: center;
 
-  ${({ theme }) => theme.mediaQueries.layout} {
+  ${({ theme }) => theme.layout} {
     justify-content: center;
   }
 

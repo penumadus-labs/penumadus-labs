@@ -57,6 +57,6 @@ export default () => {
       )}
     </>
   ) : (
-    <p>loading</p>
+    <p className='card'>loading...</p>
   )
 }

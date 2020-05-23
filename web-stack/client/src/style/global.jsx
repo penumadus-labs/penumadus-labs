@@ -2,6 +2,12 @@ import React from 'react'
 import { Global, css } from '@emotion/core'
 
 // mixins
+const spaceChildrenY = css`
+  > *:not(:first-child) {
+    margin-top: var(--sm);
+  }
+`
+
 const raised = css`
   padding: var(--sm);
   border-radius: var(--radius);
@@ -22,8 +28,8 @@ const clickable = css`
 const globalStyle = css`
   :root {
     /* layout config */
-    --header-size: 65px;
-    --nav-size: 85px;
+    --header-size: 75px;
+    --nav-size: 75px;
 
     /* backgrounds */
     --body-background: #1e1e1e;
@@ -69,7 +75,8 @@ const globalStyle = css`
     color: #ddd;
     font-size: 0.8rem;
     font-family: 'Roboto', sans-serif;
-    letter-spacing: 0.05rem;
+
+    letter-spacing: 0.03rem;
     background: var(--body-background);
     * {
       margin: 0;
@@ -102,21 +109,16 @@ const globalStyle = css`
 
   .card {
     ${raised}
+    ${spaceChildrenY}
     background: var(--card-background);
-
-    > *:not(:first-child) {
-      margin-top: var(--sm);
-    }
   }
 
   .space-children-y {
-    > *:not(:first-child) {
-      margin-top: var(--sm);
-    }
+    ${spaceChildrenY}
   }
 
   .space-children-x {
-    > *:not(:first-child) {
+    > *:not(:first-of-type) {
       margin-left: var(--sm);
     }
   }
@@ -139,6 +141,18 @@ const globalStyle = css`
     ${raised}
     ${clickable}
     background: var(--button-background);
+  }
+
+  .fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .error {
+    color: var(--red);
   }
 `
 

@@ -11,8 +11,8 @@ export default () => {
     accelerationData: ad,
   } = useDatabaseState()
 
-  if (loading) return <p>loading</p>
-  if (error) return <p>error</p>
+  if (loading) return <p className='card'>loading...</p>
+  if (error) return <p className='card error'>error</p>
 
   // don't render while wating for data
   const keys = ['humidity', 'temperature', 'magnitude']

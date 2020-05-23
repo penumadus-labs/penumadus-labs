@@ -7,7 +7,7 @@ import NavBarLink from './nav-bar-link'
 import { useAuthActions } from '../hooks/use-auth'
 
 const Root = styled.nav`
-  ${({ theme }) => theme.mediaQueries.layout} {
+  ${({ theme }) => theme.layout} {
     right: 0;
     display: flex;
     justify-content: space-evenly;

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { verifyUser, signAdmin } = require('../utils/auth')
+const { verifyUser, signAdmin, signUser } = require('../utils/auth')
 const { findUser } = require('../controllers/database')
 const { compare } = require('bcrypt')
 
@@ -14,16 +14,19 @@ return user
 auth.post('/login', async ({ body: { username, password } }, res) => {
   try {
     const user = await findUser(username)
+
     if (!user) {
-      return res.send(400).send('user not found')
+      res.statusMessage = 'user not found'
+      return res.sendStatus(400)
     }
 
-    if (!compare(password, user.password)) {
-      return res.send(401).send('invalid password')
+    if (!(await compare(password, user.password))) {
+      res.statusMessage = 'invalid password'
+      return res.sendStatus(401)
     }
 
-    const token = signAdmin(username)
-    res.send({ token, admin: true })
+    const token = user.admin ? signAdmin(username) : signUser(username)
+    res.send({ token, admin: user.admin })
   } catch (error) {
     console.error(error)
   }

@@ -21,6 +21,7 @@ const login = async ({ username, password }) => {
     ctx.dispatch({ type: 'authorized', token })
   } catch (error) {
     ctx.dispatch({ type: 'unauthorized' })
+    if (error.response) throw error.response.statusText
   }
 }
 

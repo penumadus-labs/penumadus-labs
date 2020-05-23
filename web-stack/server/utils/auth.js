@@ -39,7 +39,7 @@ const verifyAdmin = async (ctx, next) => {
 }
 
 const signUser = (payload) => {
-  return jwt.sign(payload, adminUser)
+  return jwt.sign(payload, userSecret)
 }
 
 const signAdmin = (payload) => {

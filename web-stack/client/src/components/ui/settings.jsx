@@ -7,29 +7,20 @@ const Root = styled.form`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-left: ${({ theme }) => theme.spacing.sm};
+  padding: var(--sm);
 `
 
 const Setting = styled.div`
-  ${({ theme }) => theme.mediaQueries.layout} {
+  ${({ theme }) => theme.layout} {
     flex-basis: 33%;
   }
   flex: 1 1 20%;
-
-  margin-top: ${({ theme }) => theme.spacing.sm};
-  margin-right: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.color.navBackground};
-
-  > * {
-    margin-top: ${({ theme }) => theme.spacing.lg};
-  }
 `
 
 export default ({ list }) => (
-  <Root>
+  <Root className='space-children-y spade-children-x'>
     {list.map(({ value, current, unit, name, handleChange, warning }) => (
-      <Setting key={name}>
+      <Setting className='card' key={name}>
         <p>{name}</p>
         <p>curruent: {current + unit}</p>
         <Input value={value} onChange={handleChange} />

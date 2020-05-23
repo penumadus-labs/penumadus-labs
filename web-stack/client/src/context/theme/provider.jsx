@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider } from 'emotion-theming'
-import theme from '../../style/theme'
+import mediaqueries from '../../style/mediaqueries'
 
 export default ({ children }) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  <ThemeProvider theme={mediaqueries}>{children}</ThemeProvider>
 )
