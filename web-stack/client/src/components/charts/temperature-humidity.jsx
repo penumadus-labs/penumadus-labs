@@ -9,9 +9,9 @@ import {
   Legend,
   Line,
 } from 'recharts'
-import replace from '../../utils/replace-deprecated-recharts-method'
+// import replace from '../../utils/replace-deprecated-recharts-method'
 
-replace(LineChart, Line)
+// replace(LineChart, Line)
 
 export default ({ data, options }) => {
   return (

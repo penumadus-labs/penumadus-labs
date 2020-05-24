@@ -10,7 +10,7 @@ const spaceChildrenY = css`
 `
 
 const spaceChildrenX = css`
-  > *:not(:first-of-type) {
+  > *:not(:first-child) {
     margin-left: var(--sm);
   }
 `
@@ -124,14 +124,14 @@ const globalStyle = css`
       flex: 0 1 calc(25% - var(--sm) * 3 / 4);
 
       ${gt.layout} {
-        :nth-child(n + 5) {
+        :nth-of-type(n + 5) {
           margin-top: var(--sm);
         }
       }
 
       ${le.layout} {
         flex-basis: calc(50% - var(--sm) * 1 / 2);
-        :nth-child(n + 3) {
+        :nth-of-type(n + 3) {
           margin-top: var(--sm);
         }
       }
@@ -148,14 +148,14 @@ const globalStyle = css`
       flex: 0 1 calc(50% - var(--sm) * 1 / 2);
 
       ${gt.layout} {
-        :nth-child(n + 3) {
+        :nth-of-type(n + 3) {
           margin-top: var(--sm);
         }
       }
 
       ${le.layout} {
         flex-basis: 100%;
-        :nth-child(n + 1) {
+        :nth-of-type(n + 1) {
           margin-top: var(--sm);
         }
       }

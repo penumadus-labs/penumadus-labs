@@ -1,5 +1,5 @@
 const EventEmitter = require('events')
-const controller = require('./socket-pipeline')
+const controller = require('./bridge')
 const { insertStandardData, insertAccelerationData } = require('./database')
 const {
   config,
@@ -8,7 +8,7 @@ const {
   getters,
   setters,
   table,
-} = require('../protocols/tcp-protocol')
+} = require('../utils/tcp-protocol')
 
 /*
 this class wraps the tcp client
@@ -119,22 +119,22 @@ class Device extends EventEmitter {
     }
   }
 
-  async test() {
-    await this.getSettings()
-    console.log(this.settings)
+  // async test() {
+  //   await this.getSettings()
+  //   console.log(this.settings)
 
-    await Promise.all([
-      this.setIPSettings(this.settings.ip),
-      this.setPressureSettings(this.settings.pressure),
-      this.setAccelerationSettings(this.settings.acceleration),
-      this.setSampleSettings(this.settings.sample),
-    ])
-    console.log(this.settings)
+  //   await Promise.all([
+  //     this.setIPSettings(this.settings.ip),
+  //     this.setPressureSettings(this.settings.pressure),
+  //     this.setAccelerationSettings(this.settings.acceleration),
+  //     this.setSampleSettings(this.settings.sample),
+  //   ])
+  //   console.log(this.settings)
 
-    await this.reset()
-    console.log('finished')
-    process.exit(0)
-  }
+  //   await this.reset()
+  //   console.log('finished')
+  //   process.exit(0)
+  // }
 }
 
 module.exports = async (socket) => {

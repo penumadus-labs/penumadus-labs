@@ -22,12 +22,6 @@ const client = {
     client.devices = await mongoClient.db(db).collection('devices')
     client.users = await mongoClient.db(db).collection('users')
   },
-  // readTest() {
-  //   return client.db('test').collection('environ_data').find().toArray()
-  // },
-  // insertOne(col, doc) {
-  //   return client.db('app').collection('devices').insertOne(doc)
-  // },
   async close() {
     try {
       await mongoClient.close()
@@ -57,7 +51,6 @@ const client = {
       .catch(console.error)
   },
   async getDeviceData(id) {
-    // return client.devices.findOne({ id })
     const results = {}
     await Promise.all(
       queries.map(({ label, field, projection }) =>

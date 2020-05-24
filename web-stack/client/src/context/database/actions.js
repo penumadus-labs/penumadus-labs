@@ -17,7 +17,9 @@ const initialize = (token, id = 'unit_3') => {
       },
     })
   }
-  getDeviceData(id)
+  if (!ctx.state.pressure) {
+    getDeviceData(id)
+  }
 }
 
 const getDeviceData = async (id) => {

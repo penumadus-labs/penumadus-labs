@@ -1,6 +1,6 @@
 const { createServer } = require('http')
 const { Server } = require('ws')
-const controller = require('../controllers/socket-pipeline')
+const controller = require('../controllers/bridge')
 
 const handleConnection = (socket) => {
   socket.send(Buffer.from(JSON.stringify({ status: 'socket connected' })))
@@ -17,7 +17,7 @@ const start = async (expressApp, port) => {
   const server = createServer(expressApp)
 
   const webHandler = new Server({ server })
-  controller.webClients = webHandler.clients
+  controller.users = webHandler.clients
 
   webHandler.on('connection', handleConnection)
 
