@@ -1,6 +1,7 @@
 import React from 'react'
 import { Global, css } from '@emotion/core'
 import { le, gt } from './mediaqueries'
+import * as colors from '../utils/colors'
 
 // mixins
 const spaceChildrenY = css`
@@ -18,19 +19,29 @@ const spaceChildrenX = css`
 const raised = css`
   padding: var(--sm);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-dark);
 `
 
 const clickable = css`
+  box-shadow: var(--shadow-light);
   cursor: pointer;
+  transition: box-shadow 0.2s;
 
   :hover {
+    box-shadow: none;
     filter: brightness(90%);
   }
   :active {
     filter: brightness(80%);
   }
+  :focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--purple);
+  }
 `
+
+// purple #b24c7f
+// yellow #BFA33F
 
 const globalStyle = css`
   :root {
@@ -39,17 +50,20 @@ const globalStyle = css`
     --nav-size: 75px;
 
     /* backgrounds */
-    --body-background: #1e1e1e;
-    --card-background: #272727;
-    --button-background: #909090;
+    --body-background: ${colors.body};
+    --card-background: ${colors.card};
+    --button-background: ${colors.button};
 
     /* fonts */
-    --font-color: #ddd;
 
     /* colors */
-    --green: #388e3c;
-    --blue: #3f51b5;
-    --red: #c62828;
+
+    --white: ${colors.white};
+    --gray: ${colors.gray};
+    --red: ${colors.raspberry};
+    --green: ${colors.jade};
+    --blue: ${colors.steel};
+    --purple: ${colors.purple};
 
     /* sizes */
     --sm: 0.5rem;
@@ -58,8 +72,12 @@ const globalStyle = css`
     --radius: 0.2rem;
 
     /* shadow */
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-light: 0 4px 3px -1px rgba(26, 2, 71, 0.65);
+
+    /* 0 4px 6px -1px rgba(0, 0, 0, 0.5), */
+    --shadow-dark: 0 2px 4px -1px rgba(26, 2, 71, 0.61);
+
+    /* 0 4px 6px -1px rgba(0, 0, 0, 0.1), */
 
     /* z-index */
     --layer1: 1;
@@ -79,7 +97,7 @@ const globalStyle = css`
   body {
     height: 100vh;
     margin: 0;
-    color: #ddd;
+    color: var(--gray);
     font-size: 0.8rem;
     font-family: 'Roboto', sans-serif;
 
@@ -116,23 +134,27 @@ const globalStyle = css`
 
   .flex-4 {
     display: flex;
-
     flex-wrap: wrap;
-    justify-content: space-between;
 
     > * {
       flex: 0 1 calc(25% - var(--sm) * 3 / 4);
 
       ${gt.layout} {
-        :nth-of-type(n + 5) {
+        :nth-child(n + 5) {
           margin-top: var(--sm);
+        }
+        :not(:nth-child(4n - 3)) {
+          margin-left: var(--sm);
         }
       }
 
       ${le.layout} {
         flex-basis: calc(50% - var(--sm) * 1 / 2);
-        :nth-of-type(n + 3) {
+        :nth-child(n + 3) {
           margin-top: var(--sm);
+        }
+        :not(:nth-child(2n - 1)) {
+          margin-left: var(--sm);
         }
       }
     }
@@ -148,14 +170,17 @@ const globalStyle = css`
       flex: 0 1 calc(50% - var(--sm) * 1 / 2);
 
       ${gt.layout} {
-        :nth-of-type(n + 3) {
+        :nth-child(n + 3) {
           margin-top: var(--sm);
+        }
+        :not(:nth-child(2n - 1)) {
+          margin-left: var(--sm);
         }
       }
 
       ${le.layout} {
         flex-basis: 100%;
-        :nth-of-type(n + 1) {
+        :nth-child(n + 1) {
           margin-top: var(--sm);
         }
       }
@@ -183,7 +208,7 @@ const globalStyle = css`
   }
 
   .shadow {
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-dark);
   }
 
   .clickable {

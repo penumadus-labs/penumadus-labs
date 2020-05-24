@@ -1,7 +1,19 @@
-export const reducer = (state, { type, settings, error, ...action }) => {
+export const reducer = (
+  state,
+  { type, protocol, settings, error, ...action }
+) => {
   switch (type) {
+    case 'protocol':
+      return {
+        ...protocol,
+      }
+
     case 'settings':
-      return settings
+      return {
+        ...state,
+        settings,
+        error: null,
+      }
     case 'error':
       return {
         error,

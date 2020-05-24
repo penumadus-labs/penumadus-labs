@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import useStatus from '../../hooks/use-status'
 
@@ -27,6 +27,18 @@ export default ({ settings, children, onAccept, onCancel }) => {
     Status,
     { success },
   ] = useStatus()
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 27) onCancel()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  })
 
   const handleAccept = async () => {
     try {

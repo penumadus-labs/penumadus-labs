@@ -13,22 +13,20 @@ const Dropdown = styled.div`
   min-width: 100px;
   overflow: hidden;
   border-radius: var(--radius);
-  outline: none;
-  user-select: none;
 
   .selected,
   option {
     padding: var(--sm);
     background: var(--button-background);
   }
-`
 
-const Selected = styled.div`
-  display: flex;
-  align-items: center;
+  .selected {
+    display: flex;
+    align-items: center;
 
-  p {
-    flex: 1 1 auto;
+    p {
+      flex: 1 1 auto;
+    }
   }
 `
 
@@ -40,21 +38,23 @@ export default ({ selected, options, handleSelect }) => {
     setToggled(!toggled)
   }
 
-  const handleKeyDown = () => {}
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 27) setToggled(false)
+  }
 
   return (
     <Root>
       <Dropdown
-        className="shadow"
+        className="shadow clickable"
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         role="listbox"
         tabIndex={0}
       >
-        <Selected className="selected clickable">
+        <div className="selected">
           <p>{selected}</p>
           <DownArrow size={18} />
-        </Selected>
+        </div>
         {toggled && (
           <div>
             {options

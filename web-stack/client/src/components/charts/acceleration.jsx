@@ -10,6 +10,7 @@ import {
   Line,
 } from 'recharts'
 import replace from '../../utils/replace-deprecated-recharts-method'
+import * as colors from '../../utils/colors'
 
 replace(LineChart, Line)
 
@@ -23,9 +24,14 @@ export default ({ data }) => {
           <YAxis />
           {/* <Tooltip /> */}
           <Legend />
-          <Line dot={false} type="monotone" dataKey="x" stroke="red" />
-          <Line dot={false} type="monotone" dataKey="y" stroke="green" />
-          <Line dot={false} type="monotone" dataKey="z" stroke="blue" />
+          <Line
+            dot={false}
+            type="monotone"
+            dataKey="x"
+            stroke={colors.raspberry}
+          />
+          <Line dot={false} type="monotone" dataKey="y" stroke={colors.jade} />
+          <Line dot={false} type="monotone" dataKey="z" stroke={colors.steel} />
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Alert from '../ui/alert'
+import Alert, { useAlert } from '../ui/alert'
 import Input from '../ui/input'
 
 const currentValues = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -16,28 +16,27 @@ const settings = [
   'setting8',
 ]
 
-export default () => {
+export default ({ name, message, sendCommand }) => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState('')
-  const [alert, setAlert] = useState(false)
+  const [isOpen, open, close] = useAlert(false)
 
   const submit = (values) => {
-    console.log(values)
     if (Object.values(values).every((value) => value === ''))
       setError('no values entered')
-    else setAlert(true)
+    else open()
   }
 
-  const handleAccept = () => setAlert(false)
-  const handleCancel = () => setAlert(false)
+  const handleAccept = () => sendCommand(name)
 
   return (
     <>
       <form className="card" onSubmit={handleSubmit(submit)}>
+        <p>{name}</p>
         <div className="flex-4">
-          {settings.map((setting, i) => (
+          {Object.keys(message).map((setting, i) => (
             <div key={i}>
-              Current Value: {currentValues[i]}
+              {/* Current Value: {currentValues[i]} */}
               <Input ref={register()} name={setting} />
             </div>
           ))}
@@ -45,7 +44,7 @@ export default () => {
         <button className="button">Submit</button>
         {error ? <p className="error">{error}</p> : null}
       </form>
-      {alert ? <Alert onAccept={handleAccept} onCancel={handleCancel} /> : null}
+      {isOpen ? <Alert onAccept={handleAccept} onCancel={close} /> : null}
     </>
   )
 }

@@ -9,6 +9,7 @@ import {
   Legend,
   Line,
 } from 'recharts'
+import * as colors from '../../utils/colors'
 // import replace from '../../utils/replace-deprecated-recharts-method'
 
 // replace(LineChart, Line)
@@ -27,13 +28,13 @@ export default ({ data, options }) => {
             dot={false}
             type="monotone"
             dataKey="temperature"
-            stroke="red"
+            stroke={colors.raspberry}
           />
           <Line
             dot={false}
             type="monotone"
             dataKey="humidity"
-            stroke="yellow"
+            stroke={colors.steel}
           />
         </LineChart>
       </ResponsiveContainer>

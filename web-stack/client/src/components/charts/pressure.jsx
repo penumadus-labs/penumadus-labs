@@ -9,6 +9,7 @@ import {
   Legend,
   Line,
 } from 'recharts'
+import * as colors from '../../utils/colors'
 // import replace from '../../utils/replace-deprecated-recharts-method'
 
 // replace(LineChart, Line)
@@ -23,7 +24,12 @@ export default ({ data }) => {
           <YAxis />
           {/* <Tooltip /> */}
           <Legend />
-          <Line dot={false} type="monotone" dataKey="pressure" stroke="blue" />
+          <Line
+            dot={false}
+            type="monotone"
+            dataKey="pressure"
+            stroke={colors.white}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
