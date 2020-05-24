@@ -1,5 +1,6 @@
 const { connect, MongoClient } = require('mongodb')
 const tunnel = require('../utils/ssh-tunnel')
+const queries = require('../utils/queries')
 
 const url = process.env.SSH
   ? 'mongodb://localhost/admin'
@@ -55,8 +56,17 @@ const client = {
       .updateOne({ id }, { $push: { accelerationData: data } })
       .catch(console.error)
   },
-  getDeviceData(id) {
-    return client.devices.findOne({ id })
+  async getDeviceData(id) {
+    const results = {}
+    await Promise.all(
+      queries.map(({ label, field, projection }) =>
+        devices.findOne({ id }, { projection }).then((res) => {
+          result[label] = res[field]
+        })
+      )
+    )
+
+    return results
   },
   insertDevice: (data) => {
     return client.devices.insertOne(data)
