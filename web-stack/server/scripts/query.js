@@ -69,8 +69,6 @@ void (async () => {
       devices.findOne({ id }, { projection }).then((res) => res[field])
     )
   )
-
-  console.log(res[2])
 })()
   .catch(console.error)
   .finally(() => client.close().catch(console.error))

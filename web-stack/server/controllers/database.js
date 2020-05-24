@@ -57,11 +57,12 @@ const client = {
       .catch(console.error)
   },
   async getDeviceData(id) {
+    // return client.devices.findOne({ id })
     const results = {}
     await Promise.all(
       queries.map(({ label, field, projection }) =>
-        devices.findOne({ id }, { projection }).then((res) => {
-          result[label] = res[field]
+        client.devices.findOne({ id }, { projection }).then((res) => {
+          results[label] = res[field]
         })
       )
     )

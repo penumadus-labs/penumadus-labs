@@ -6,8 +6,12 @@ const Root = styled.div`
   z-index: var(--layer1);
   main {
     z-index: var(--layer1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     width: 60vw;
     max-width: 650px;
+    min-height: 300px;
     text-align: center;
   }
 `
@@ -15,10 +19,6 @@ const Root = styled.div`
 const OpaqueCover = styled.div`
   background: var(--body-background);
   opacity: 0.5;
-`
-
-const Content = styled.div`
-  min-height: 400px;
 `
 
 export default ({ settings, children, onAccept, onCancel }) => {
@@ -42,22 +42,24 @@ export default ({ settings, children, onAccept, onCancel }) => {
     <Root className='center-child fixed'>
       <OpaqueCover className='fixed' />
       <main className='card'>
-        <Content>{children}</Content>
+        <div>{children}</div>
         <Status />
-        {!success ? (
-          <div className='space-children-x'>
-            <button className='button button-green' onClick={handleAccept}>
-              Accept
+        <div className='space-children-x'>
+          {!success ? (
+            <>
+              <button className='button button-green' onClick={handleAccept}>
+                Accept
+              </button>
+              <button className='button' onClick={onCancel}>
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button className='button button-red' onClick={onCancel}>
+              Close
             </button>
-            <button className='button' onClick={onCancel}>
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <button className='button button-red' onClick={onCancel}>
-            Close
-          </button>
-        )}
+          )}
+        </div>
       </main>
     </Root>
   )

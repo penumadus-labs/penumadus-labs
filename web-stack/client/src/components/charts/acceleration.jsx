@@ -5,15 +5,15 @@ import {
   CartesianAxis,
   XAxis,
   YAxis,
-  Tooltip,
+  // Tooltip,
   Legend,
   Line,
 } from 'recharts'
-import replace from '../utils/replace-deprecated-recharts-method'
+import replace from '../../utils/replace-deprecated-recharts-method'
 
 replace(LineChart, Line)
 
-export default ({ data, dataKey }) => {
+export default ({ data }) => {
   return (
     <div className='card'>
       <ResponsiveContainer width='100%' height={300}>
@@ -21,9 +21,11 @@ export default ({ data, dataKey }) => {
           <CartesianAxis />
           <XAxis />
           <YAxis />
-          <Tooltip />
+          {/* <Tooltip /> */}
           <Legend />
-          <Line dot={false} type='monotone' dataKey={dataKey} stroke='yellow' />
+          <Line dot={false} type='monotone' dataKey='x' stroke='red' />
+          <Line dot={false} type='monotone' dataKey='y' stroke='green' />
+          <Line dot={false} type='monotone' dataKey='z' stroke='blue' />
         </LineChart>
       </ResponsiveContainer>
     </div>
