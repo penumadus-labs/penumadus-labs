@@ -7,7 +7,7 @@ import Controls from './controls'
 import Register from './register'
 import NotFound from './404'
 
-import useAuth from '../hooks/use-auth'
+import useAuth from '../context/auth/context'
 
 export default () => {
   const [{ loading, loggedIn }, { login }] = useAuth()

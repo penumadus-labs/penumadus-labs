@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Alert from '../ui/alert'
 import Input from '../ui/input'
@@ -23,10 +23,9 @@ export default () => {
 
   const submit = (values) => {
     console.log(values)
-    // if (Object.values(values).every((value) => value === ''))
-    //   setError('no values entered')
-    // else
-    setAlert(true)
+    if (Object.values(values).every((value) => value === ''))
+      setError('no values entered')
+    else setAlert(true)
   }
 
   const handleAccept = () => setAlert(false)

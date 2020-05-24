@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useEffect, useContext } from 'react'
 import useReducerWithActions from '../../hooks/use-reducer-with-actions'
 import { reducer, initialState, createActions } from './reducer'
 
@@ -22,4 +22,4 @@ export const AuthProvider = ({ children }) => {
   )
 }
 
-export default AuthContext
+export default () => useContext(AuthContext)

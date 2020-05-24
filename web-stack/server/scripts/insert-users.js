@@ -8,7 +8,7 @@ const admin = {
 }
 
 const user = {
-  username: 'admin',
+  username: 'user',
   password: 'p@ssw0rd',
   admin: false,
 }

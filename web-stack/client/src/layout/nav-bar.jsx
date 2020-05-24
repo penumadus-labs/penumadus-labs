@@ -4,7 +4,7 @@ import { FaChartLine as Chart } from 'react-icons/fa'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import { FiLogOut as Logout } from 'react-icons/fi'
 import NavBarLink from './nav-bar-link'
-import { useAuthActions } from '../hooks/use-auth'
+import useAuth from '../context/auth/context'
 
 const Root = styled.nav`
   ${({ theme }) => theme.le.layout} {
@@ -21,7 +21,7 @@ const Root = styled.nav`
 `
 
 const NavBar = ({ width }) => {
-  const { logout } = useAuthActions()
+  const [, { logout }] = useAuth()
 
   return (
     <Root className='shadow' width={width}>

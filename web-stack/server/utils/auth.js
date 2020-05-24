@@ -5,7 +5,7 @@ const userSecret =
 const adminSecret =
   'X-f`cKADmAN9L3W/cbaDYGMa-X*-pveIhlmv/.;1lRD,db^q]O+)oZNz5ZIyR%S'
 
-const verify = (token, secert) => {
+const verify = (token, secret) => {
   try {
     jwt.verify(token, secret)
     return true
@@ -15,7 +15,7 @@ const verify = (token, secert) => {
 }
 
 const verifyUser = (req, res, next) => {
-  const token = ctx.get('Authorization')
+  const token = req.get('token')
 
   if (!token) res.status(401)
 
@@ -26,8 +26,8 @@ const verifyUser = (req, res, next) => {
   }
 }
 
-const verifyAdmin = async (ctx, next) => {
-  const token = ctx.get('Authorization')
+const verifyAdmin = (req, res, next) => {
+  const token = req.get('token')
 
   if (!token) res.status(401)
 

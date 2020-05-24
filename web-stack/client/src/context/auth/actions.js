@@ -13,7 +13,9 @@ const ctx = {}
 
 const login = async ({ username, password }) => {
   try {
-    const { data: token } = await auth.post('login', {
+    const {
+      data: { token },
+    } = await auth.post('login', {
       username,
       password,
     })
@@ -28,9 +30,10 @@ const login = async ({ username, password }) => {
 const initialize = async (token) => {
   if (!token) return ctx.dispatch({ type: 'unauthorized' })
   try {
-    // await test
+    await auth.get('verify', { headers: { token } })
     ctx.dispatch({ type: 'authorized', token })
   } catch (error) {
+    console.log(error)
     ctx.dispatch({ type: 'unauthorized' })
   }
 }

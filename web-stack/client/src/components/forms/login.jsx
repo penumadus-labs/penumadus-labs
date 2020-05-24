@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Input from '../ui/input'
 import { useForm } from 'react-hook-form'
-import { useAuthActions } from '../../hooks/use-auth'
+import useAuth from '../../context/auth/context'
 
 export default () => {
-  const { login } = useAuthActions()
+  const [, { login }] = useAuth()
   const [error, setError] = useState('')
 
   const { handleSubmit, register } = useForm({

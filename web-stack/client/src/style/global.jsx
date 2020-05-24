@@ -200,6 +200,10 @@ const globalStyle = css`
     background: var(--green);
   }
 
+  .button-red {
+    background: var(--red);
+  }
+
   .fixed {
     position: fixed;
     top: 0;
@@ -208,23 +212,17 @@ const globalStyle = css`
     left: 0;
   }
 
+  .loading {
+    color: var(--blue);
+  }
+
   .error {
     color: var(--red);
   }
+
+  .success {
+    color: var(--green);
+  }
 `
-
-/* .flex-4 {
-    display: flex;
-
-    flex-basis: 24.5%;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    > * {
-      margin-top: var(--sm);
-      ${layout} {
-        flex-basis: 49.5%;
-      }
-    } */
 
 export default () => <Global styles={globalStyle} />

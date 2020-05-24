@@ -1,10 +1,10 @@
 import React from 'react'
-import { useDatabaseState } from '../../hooks/use-database'
+import useDatabase from '../../context/database/context'
 // import { makeCSVFile } from '../../utils/data'
 
 export default () => {
   // eslint-disable-next-line
-  const { data } = useDatabaseState()
+  const [{ data }] = useDatabase()
 
   const error = true
 

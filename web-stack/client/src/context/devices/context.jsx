@@ -3,9 +3,9 @@ import useAsyncReducer from '../../hooks/use-reducer-with-actions'
 import { reducer, initialState, createActions } from './reducer'
 import useAuth from '../../context/auth/context'
 
-const DatabaseContext = createContext()
+const DevicesContext = createContext()
 
-export const DatabaseProvider = ({ children }) => {
+export const DevicesProvider = ({ children }) => {
   const [state, { initialize, ...actions }] = useAsyncReducer(
     reducer,
     initialState,
@@ -23,10 +23,10 @@ export const DatabaseProvider = ({ children }) => {
   )
 
   return (
-    <DatabaseContext.Provider value={[state, actions]}>
+    <DevicesContext.Provider value={[state, actions]}>
       {children}
-    </DatabaseContext.Provider>
+    </DevicesContext.Provider>
   )
 }
 
-export default () => useContext(DatabaseContext)
+export default () => useContext(DevicesContext)

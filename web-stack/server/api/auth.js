@@ -25,19 +25,15 @@ auth.post('/login', async ({ body: { username, password } }, res) => {
       return res.sendStatus(401)
     }
 
-    const token = user.admin ? signAdmin(username) : signUser(username)
+    const token = user.admin ? signAdmin({ username }) : signUser({ username })
     res.send({ token, admin: user.admin })
   } catch (error) {
     console.error(error)
   }
 })
 
-auth.get('/verify', verifyUser, async (req, res) => {
-  try {
-    res.status(200)
-  } catch (e) {
-    console.error(e)
-  }
+auth.get('/verify', verifyUser, (req, res) => {
+  res.sendStatus(200)
 })
 
 module.exports = auth

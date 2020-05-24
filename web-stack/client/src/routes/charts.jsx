@@ -1,15 +1,12 @@
 import React from 'react'
 import LineChart from '../components/line-chart'
-import { useDatabaseState } from '../hooks/use-database'
+import useDatabase from '../context/database/context'
 import { filterData } from '../utils/data'
 
 export default () => {
-  const {
-    loading,
-    error,
-    standardData: sd,
-    accelerationData: ad,
-  } = useDatabaseState()
+  const [
+    { loading, error, standardData: sd, accelerationData: ad },
+  ] = useDatabase()
 
   if (loading) return <p className='card'>loading...</p>
   if (error) return <p className='card error'>error</p>
@@ -23,9 +20,9 @@ export default () => {
   const mag = filterData(ad, keys[2])
 
   return (
-    <>
+    <div className='flex-2'>
       <LineChart data={humidity} dataKey={keys[0]} />
       <LineChart data={mag} dataKey={keys[2]} />
-    </>
+    </div>
   )
 }
