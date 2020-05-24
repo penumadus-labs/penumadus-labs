@@ -45,7 +45,7 @@ export default ({ selected, options, handleSelect }) => {
   return (
     <Root>
       <Dropdown
-        className="shadow clickable"
+        className="shadow-button clickable"
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         role="listbox"

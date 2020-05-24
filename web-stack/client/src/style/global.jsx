@@ -19,11 +19,12 @@ const spaceChildrenX = css`
 const raised = css`
   padding: var(--sm);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-dark);
+  box-shadow: var(--shadow-card);
 `
 
 const clickable = css`
-  box-shadow: var(--shadow-light);
+  border: 1px solid var(--dark-blue);
+  box-shadow: var(--shadow-button);
   cursor: pointer;
   transition: box-shadow 0.2s;
 
@@ -50,9 +51,9 @@ const globalStyle = css`
     --nav-size: 75px;
 
     /* backgrounds */
-    --body-background: ${colors.body};
-    --card-background: ${colors.card};
-    --button-background: ${colors.button};
+    --body-background: ${colors.darkBody};
+    --card-background: ${colors.darkCard};
+    --button-background: ${colors.darkButton};
 
     /* fonts */
 
@@ -63,6 +64,7 @@ const globalStyle = css`
     --red: ${colors.raspberry};
     --green: ${colors.jade};
     --blue: ${colors.steel};
+    --dark-blue ${colors.space};
     --purple: ${colors.purple};
 
     /* sizes */
@@ -72,12 +74,12 @@ const globalStyle = css`
     --radius: 0.2rem;
 
     /* shadow */
-    --shadow-light: 0 4px 3px -1px rgba(26, 2, 71, 0.65);
+    --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.8),
+      0 4px 3px 0 rgb(0, 0, 0, 0.6);
 
-    /* 0 4px 6px -1px rgba(0, 0, 0, 0.5), */
-    --shadow-dark: 0 2px 4px -1px rgba(26, 2, 71, 0.61);
-
-    /* 0 4px 6px -1px rgba(0, 0, 0, 0.1), */
+    /* 0 6px 4px -1px rgb(70, 130, 180, 0.3); */
+    --shadow-card: 0 4px 3px -1px rgb(0, 0, 0, 0.5),
+      0 4px 3px -1px rgb(29, 41, 81, 0.5);
 
     /* z-index */
     --layer1: 1;
@@ -197,6 +199,12 @@ const globalStyle = css`
     ${spaceChildrenY}
   }
 
+  .gt-space-children-y {
+    ${gt.layout} {
+      ${spaceChildrenY}
+    }
+  }
+
   .space-children-x {
     ${spaceChildrenX}
   }
@@ -207,8 +215,11 @@ const globalStyle = css`
     justify-content: center;
   }
 
-  .shadow {
-    box-shadow: var(--shadow-dark);
+  .shadow-button {
+    box-shadow: var(--shadow-button);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
   }
 
   .clickable {

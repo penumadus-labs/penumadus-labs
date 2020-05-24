@@ -6,6 +6,7 @@ const Root = styled(Link)`
   width: var(--nav-size);
   height: var(--nav-size);
   background: var(--card-background);
+  outline: none;
   box-shadow: none;
 
   svg {

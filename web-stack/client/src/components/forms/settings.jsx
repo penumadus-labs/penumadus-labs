@@ -16,7 +16,8 @@ const settings = [
   'setting8',
 ]
 
-export default ({ name, message, sendCommand }) => {
+export default ({ name, message, settings, sendCommand }) => {
+  console.log(settings)
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState('')
   const [isOpen, open, close] = useAlert(false)
@@ -34,10 +35,10 @@ export default ({ name, message, sendCommand }) => {
       <form className="card" onSubmit={handleSubmit(submit)}>
         <p>{name}</p>
         <div className="flex-4">
-          {Object.keys(message).map((setting, i) => (
+          {Object.entires(settings).map(([name, value], i) => (
             <div key={i}>
-              {/* Current Value: {currentValues[i]} */}
-              <Input ref={register()} name={setting} />
+              Current Value: {value}
+              <Input ref={register()} name={name} />
             </div>
           ))}
         </div>

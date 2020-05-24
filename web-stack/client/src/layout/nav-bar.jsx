@@ -13,6 +13,7 @@ const Root = styled.nav`
     justify-content: space-evenly;
     height: auto;
   }
+
   position: fixed;
   bottom: 0;
   left: 0;
@@ -24,7 +25,7 @@ const NavBar = ({ width }) => {
   const [, { logout }] = useAuth()
 
   return (
-    <Root className="shadow" width={width}>
+    <Root className="shadow-card gt-space-children-y" width={width}>
       <NavBarLink Icon={Chart} label="Charts" to="/" />
       <NavBarLink Icon={Dash} label="Controls" to="controls" />
       <NavBarLink Icon={Devices} label="Register" to="register" />
