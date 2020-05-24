@@ -17,9 +17,9 @@ const useStatus = () => {
 
   const Status = () => (
     <>
-      {error ? <p className='error'>{error}</p> : null}
-      {loading ? <p className='loading'>{loading}</p> : null}
-      {success ? <p className='success'>{success}</p> : null}
+      {error ? <p className="error">{error}</p> : null}
+      {loading ? <p className="loading">{loading}</p> : null}
+      {success ? <p className="success">{success}</p> : null}
     </>
   )
 

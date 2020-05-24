@@ -45,13 +45,13 @@ export default ({ selected, options, handleSelect }) => {
   return (
     <Root>
       <Dropdown
-        className='shadow'
+        className="shadow"
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
-        role='listbox'
+        role="listbox"
         tabIndex={0}
       >
-        <Selected className='selected clickable'>
+        <Selected className="selected clickable">
           <p>{selected}</p>
           <DownArrow size={18} />
         </Selected>
@@ -61,7 +61,7 @@ export default ({ selected, options, handleSelect }) => {
               .filter((item) => item !== selected)
               .map((item) => (
                 <option
-                  className='clickable'
+                  className="clickable"
                   key={item}
                   value={item}
                   onClick={handleSelect}

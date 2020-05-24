@@ -13,7 +13,7 @@ const Root = styled.main`
 `
 const Main = ({ children }) => {
   return (
-    <Root className='space-children-y'>
+    <Root className="space-children-y">
       <StatusBar />
       {children}
     </Root>

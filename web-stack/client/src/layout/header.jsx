@@ -19,7 +19,7 @@ const Header = styled.p`
 `
 
 export default ({ children }) => (
-  <Root className='shadow'>
+  <Root className="shadow">
     <Header>HankMon Dashboard</Header>
   </Root>
 )

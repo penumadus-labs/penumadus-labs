@@ -33,8 +33,8 @@ export default () => {
 
   return (
     <>
-      <form className='card' onSubmit={handleSubmit(submit)}>
-        <div className='flex-4'>
+      <form className="card" onSubmit={handleSubmit(submit)}>
+        <div className="flex-4">
           {settings.map((setting, i) => (
             <div key={i}>
               Current Value: {currentValues[i]}
@@ -42,8 +42,8 @@ export default () => {
             </div>
           ))}
         </div>
-        <button className='button'>Submit</button>
-        {error ? <p className='error'>{error}</p> : null}
+        <button className="button">Submit</button>
+        {error ? <p className="error">{error}</p> : null}
       </form>
       {alert ? <Alert onAccept={handleAccept} onCancel={handleCancel} /> : null}
     </>

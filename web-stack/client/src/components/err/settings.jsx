@@ -18,9 +18,9 @@ const Setting = styled.div`
 `
 
 export default ({ list }) => (
-  <Root className='space-children-y spade-children-x'>
+  <Root className="space-children-y spade-children-x">
     {list.map(({ value, current, unit, name, handleChange, warning }) => (
-      <Setting className='card' key={name}>
+      <Setting className="card" key={name}>
         <p>{name}</p>
         <p>curruent: {current + unit}</p>
         <Input value={value} onChange={handleChange} />

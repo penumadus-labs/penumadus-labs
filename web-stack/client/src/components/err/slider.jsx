@@ -21,15 +21,15 @@ const Root = styled.div`
 export default () => {
   const [value, setValue] = useState(50)
   return (
-    <Root className='button'>
-      <label htmlFor='slider'>slider: {value}</label>
+    <Root className="button">
+      <label htmlFor="slider">slider: {value}</label>
       <br />
       <input
-        type='range'
-        min='0'
-        max='100'
+        type="range"
+        min="0"
+        max="100"
         value={value}
-        name='slider'
+        name="slider"
         onChange={({ target }) => setValue(target.value)}
       ></input>
     </Root>

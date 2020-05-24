@@ -17,7 +17,7 @@ export default () => {
   }
 
   return (
-    <div className='card'>
+    <div className="card">
       <Menu>
         <DeviceSelect {...{ options: devices, selected, handleSelect }} />
         <Download />

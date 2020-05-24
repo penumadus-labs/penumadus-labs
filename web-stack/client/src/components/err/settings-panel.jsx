@@ -42,8 +42,8 @@ export default () => {
   return settings.length ? (
     <>
       <Settings list={settings} onSubmit={handleSubmit} warning={warning} />
-      <div className='card'>
-        <button className='button' onClick={handleSubmit}>
+      <div className="card">
+        <button className="button" onClick={handleSubmit}>
           Apply
         </button>
         {warning && <Warning>{warning}</Warning>}
@@ -57,6 +57,6 @@ export default () => {
       )}
     </>
   ) : (
-    <p className='card'>loading...</p>
+    <p className="card">loading...</p>
   )
 }

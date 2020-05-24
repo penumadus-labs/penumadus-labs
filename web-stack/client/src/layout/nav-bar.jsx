@@ -24,11 +24,11 @@ const NavBar = ({ width }) => {
   const [, { logout }] = useAuth()
 
   return (
-    <Root className='shadow' width={width}>
-      <NavBarLink Icon={Chart} label='Charts' to='/' />
-      <NavBarLink Icon={Dash} label='Controls' to='controls' />
-      <NavBarLink Icon={Devices} label='Register' to='register' />
-      <NavBarLink Icon={Logout} label='Logout' to='/' onClick={logout} />
+    <Root className="shadow" width={width}>
+      <NavBarLink Icon={Chart} label="Charts" to="/" />
+      <NavBarLink Icon={Dash} label="Controls" to="controls" />
+      <NavBarLink Icon={Devices} label="Register" to="register" />
+      <NavBarLink Icon={Logout} label="Logout" to="/" onClick={logout} />
     </Root>
   )
 }

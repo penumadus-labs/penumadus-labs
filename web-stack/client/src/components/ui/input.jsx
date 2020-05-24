@@ -18,7 +18,7 @@ export default forwardRef((props, ref) => {
   return (
     <Root>
       {props.name}
-      <input className='button' ref={ref} {...props} />
+      <input className="button" ref={ref} {...props} />
     </Root>
   )
 })

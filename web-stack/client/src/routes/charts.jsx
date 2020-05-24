@@ -9,11 +9,11 @@ export default () => {
     { loading, error, acceleration, pressure, temperatureAndHumidity },
   ] = useDatabase()
 
-  if (loading) return <p className='card'>loading...</p>
-  if (error) return <p className='card error'>error</p>
+  if (loading) return <p className="card">loading...</p>
+  if (error) return <p className="card error">error</p>
 
   return (
-    <div className='flex-2'>
+    <div className="flex-2">
       <AccelerationChart data={acceleration} />
       <PressureChart data={pressure} />
       <TemperatureAndHumidity data={temperatureAndHumidity} />

@@ -18,10 +18,10 @@ export default () => {
 
   return (
     <Layout>
-      <Router className='space-children-y'>
-        <Charts path='/' />
-        <Controls path='controls' />
-        <Register path='register' />
+      <Router className="space-children-y">
+        <Charts path="/" />
+        <Controls path="controls" />
+        <Register path="register" />
         <NotFound default />
       </Router>
     </Layout>

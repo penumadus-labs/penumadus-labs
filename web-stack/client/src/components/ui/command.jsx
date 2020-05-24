@@ -12,7 +12,7 @@ export default () => {
 
   return (
     <>
-      <button className='button' onClick={open}>
+      <button className="button" onClick={open}>
         Command
       </button>
       {isOpen ? <Alert onAccept={handleAccept} onCancel={close} /> : null}

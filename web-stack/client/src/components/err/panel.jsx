@@ -13,7 +13,7 @@ class Panel extends React.Component {
           </label>
           <br />
           <br />
-          <button className='button'>update</button>
+          <button className="button">update</button>
         </div>
       </div>
     )

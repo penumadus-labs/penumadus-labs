@@ -39,23 +39,23 @@ export default ({ settings, children, onAccept, onCancel }) => {
   }
 
   return (
-    <Root className='center-child fixed'>
-      <OpaqueCover className='fixed' />
-      <main className='card'>
+    <Root className="center-child fixed">
+      <OpaqueCover className="fixed" />
+      <main className="card">
         <div>{children}</div>
         <Status />
-        <div className='space-children-x'>
+        <div className="space-children-x">
           {!success ? (
             <>
-              <button className='button button-green' onClick={handleAccept}>
+              <button className="button button-green" onClick={handleAccept}>
                 Accept
               </button>
-              <button className='button' onClick={onCancel}>
+              <button className="button" onClick={onCancel}>
                 Cancel
               </button>
             </>
           ) : (
-            <button className='button button-red' onClick={onCancel}>
+            <button className="button button-red" onClick={onCancel}>
               Close
             </button>
           )}

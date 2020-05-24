@@ -17,9 +17,9 @@ const Root = styled(Link)`
 `
 
 export default ({ Icon, label, to, onClick }) => (
-  <Root className='center-child clickable' to={to} onClick={onClick}>
+  <Root className="center-child clickable" to={to} onClick={onClick}>
     <div>
-      <Icon size='42' />
+      <Icon size="42" />
       <p>{label}</p>
     </div>
   </Root>

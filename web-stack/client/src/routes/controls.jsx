@@ -7,7 +7,7 @@ export default () => {
   return (
     <>
       <Settings />
-      <div className='card'>
+      <div className="card">
         <Command />
       </div>
     </>
