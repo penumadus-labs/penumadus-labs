@@ -11,7 +11,6 @@ devices
     res.sendStatus(200)
   })
 devices.post('/command', async ({ body }, res) => {
-  console.log(body)
   try {
     await new Promise((resolve, reject) => setTimeout(resolve, 500))
     res.sendStatus(200)

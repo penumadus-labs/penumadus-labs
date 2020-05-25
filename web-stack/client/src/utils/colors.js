@@ -14,6 +14,8 @@ export const space = '#1d2951'
 
 export const purple = '#645394'
 
+export const yellow = '#BFA33F'
+
 export const card = '#272727'
 export const button = '#909090'
 export const body = '#1e1e1e'

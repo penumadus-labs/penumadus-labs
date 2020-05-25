@@ -4,6 +4,7 @@ legacy
 scratch
 build
 .env
+.yarn
 
 
 # dependencies

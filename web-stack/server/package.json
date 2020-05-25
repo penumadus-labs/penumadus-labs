@@ -1,5 +1,5 @@
 {
-  "name": "node-server",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "bcrypt": "^4.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.7",
     "ws": "^7.3.0"

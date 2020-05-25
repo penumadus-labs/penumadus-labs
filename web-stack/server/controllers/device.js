@@ -119,27 +119,26 @@ class Device extends EventEmitter {
     }
   }
 
-  async test() {
-    await this.getSettings()
-    console.log(this.settings)
+  // async test() {
+  //   await this.getSettings()
+  //   console.log(this.settings)
 
-    await Promise.all([
-      this.setIPSettings(this.settings.ip),
-      this.setPressureSettings(this.settings.pressure),
-      this.setAccelerationSettings(this.settings.acceleration),
-      this.setSampleSettings(this.settings.sample),
-    ])
-    console.log(this.settings)
+  //   await Promise.all([
+  //     this.setIPSettings(this.settings.ip),
+  //     this.setPressureSettings(this.settings.pressure),
+  //     this.setAccelerationSettings(this.settings.acceleration),
+  //     this.setSampleSettings(this.settings.sample),
+  //   ])
+  //   console.log(this.settings)
 
-    await this.reset()
-    console.log('finished')
-    process.exit(0)
-  }
+  //   await this.reset()
+  //   console.log('finished')
+  //   process.exit(0)
+  // }
 }
 
 module.exports = async (socket) => {
   const device = new Device(socket)
   await device.initialize()
-  await device.test()
   return device
 }

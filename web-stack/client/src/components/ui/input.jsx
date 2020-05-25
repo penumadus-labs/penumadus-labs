@@ -9,15 +9,15 @@ const Root = styled.label`
     margin-top: 3px;
     cursor: text;
     &:focus {
-      filter: brightness(80%);
+      filter: brightness(90%);
     }
   }
 `
 
 export default forwardRef((props, ref) => {
   return (
-    <Root>
-      {props.name}
+    <Root className="space-children-y-xs">
+      <p>{props.name}</p>
       <input className="button" ref={ref} {...props} />
     </Root>
   )

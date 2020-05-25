@@ -5,7 +5,7 @@ import Command from '../components/ui/command'
 import useDevices from '../context/devices/context'
 
 const settings = {
-  ip: { ipaddr: '18.222.29.175', ipport: '32159', time: '1590348850.0' },
+  ip: { ipaddr: '18.222.29.175', ipport: '32159' },
   pressure: {
     psiPreFill: '30',
     psiPostFill: '40',
@@ -14,14 +14,12 @@ const settings = {
     fullscale: '100.00',
     excitation: '5.00',
     calFactor: '3.00',
-    time: '1590348851.0',
   },
-  acceleration: { accelmagthresh: '3.500000', time: '1590348851.0' },
+  acceleration: { accelmagthresh: '3.500000' },
   sample: {
     secBetween: '10',
     sampleinterval: '50',
     accelsampint: '5',
-    time: '1590348851.0',
   },
 }
 
@@ -47,7 +45,6 @@ export default () => {
             />
           ))
         : null}
-      ))}
     </>
   )
 }

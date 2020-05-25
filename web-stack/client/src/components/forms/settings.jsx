@@ -3,49 +3,61 @@ import { useForm } from 'react-hook-form'
 import Alert, { useAlert } from '../ui/alert'
 import Input from '../ui/input'
 
-const currentValues = [1, 2, 3, 4, 5, 6, 7, 8]
-
-const settings = [
-  'setting1',
-  'setting2',
-  'setting3',
-  'setting4',
-  'setting5',
-  'setting6',
-  'setting7',
-  'setting8',
-]
-
 export default ({ name, message, settings, sendCommand }) => {
-  console.log(settings)
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState('')
+  const [Summary, setSummary] = useState(null)
+  const [args, setArgs] = useState(null)
   const [isOpen, open, close] = useAlert(false)
 
   const submit = (values) => {
-    if (Object.values(values).every((value) => value === ''))
-      setError('no values entered')
-    else open()
+    const formValues = Object.values(values)
+    if (formValues.every((value) => value === '')) setError('no values entered')
+    else {
+      const settingEntries = Object.entries(settings)
+      setSummary(
+        <div>
+          {settingEntries.map(([name, currentValue], i) => {
+            const newValue = formValues[i]
+            return newValue !== '' ? (
+              <p key={i}>
+                {name}: {currentValue} => {newValue}
+              </p>
+            ) : null
+          })}
+        </div>
+      )
+      setArgs(
+        settingEntries.map(([, currentValue], i) => {
+          const newValue = formValues[i]
+          return +(newValue === '' ? currentValue : newValue)
+        })
+      )
+      open()
+    }
   }
 
-  const handleAccept = () => sendCommand(name)
+  const handleAccept = () => sendCommand(name, args)
 
   return (
     <>
       <form className="card" onSubmit={handleSubmit(submit)}>
-        <p>{name}</p>
         <div className="flex-4">
-          {Object.entires(settings).map(([name, value], i) => (
-            <div key={i}>
-              Current Value: {value}
+          {Object.entries(settings).map(([name, value], i) => (
+            <div key={i} className="space-children-y-xs">
+              <p>Current Value: {value}</p>
               <Input ref={register()} name={name} />
             </div>
           ))}
         </div>
-        <button className="button">Submit</button>
+        <button className="button">{name}</button>
         {error ? <p className="error">{error}</p> : null}
       </form>
-      {isOpen ? <Alert onAccept={handleAccept} onCancel={close} /> : null}
+      {isOpen ? (
+        <Alert onAccept={handleAccept} onCancel={close}>
+          {Summary}
+        </Alert>
+      ) : null}
     </>
   )
 }

@@ -10,6 +10,12 @@ const spaceChildrenY = css`
   }
 `
 
+const spaceChildrenYXS = css`
+  > *:not(:first-child) {
+    margin-top: var(--xs);
+  }
+`
+
 const spaceChildrenX = css`
   > *:not(:first-child) {
     margin-left: var(--sm);
@@ -23,17 +29,12 @@ const raised = css`
 `
 
 const clickable = css`
-  border: 1px solid var(--dark-blue);
   box-shadow: var(--shadow-button);
   cursor: pointer;
   transition: box-shadow 0.2s;
 
   :hover {
-    box-shadow: none;
-    filter: brightness(90%);
-  }
-  :active {
-    filter: brightness(80%);
+    filter: brightness(85%);
   }
   :focus {
     outline: none;
@@ -51,9 +52,9 @@ const globalStyle = css`
     --nav-size: 75px;
 
     /* backgrounds */
-    --body-background: ${colors.darkBody};
-    --card-background: ${colors.darkCard};
-    --button-background: ${colors.darkButton};
+    --body-background: ${colors.body};
+    --card-background: ${colors.card};
+    --button-background: ${colors.button};
 
     /* fonts */
 
@@ -64,18 +65,20 @@ const globalStyle = css`
     --red: ${colors.raspberry};
     --green: ${colors.jade};
     --blue: ${colors.steel};
-    --dark-blue ${colors.space};
+    --dark-blue: ${colors.space};
     --purple: ${colors.purple};
+    --yellow: ${colors.yellow};
 
     /* sizes */
-    --sm: 0.5rem;
+    --xs: 0.3rem;
+    --sm: 0.6rem;
     --md: 1rem;
     --lg: 2rem;
     --radius: 0.2rem;
 
     /* shadow */
-    --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.8),
-      0 4px 3px 0 rgb(0, 0, 0, 0.6);
+    --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.4),
+      0 4px 10px -1px rgb(0, 0, 0, 0.3);
 
     /* 0 6px 4px -1px rgb(70, 130, 180, 0.3); */
     --shadow-card: 0 4px 3px -1px rgb(0, 0, 0, 0.5),
@@ -203,6 +206,10 @@ const globalStyle = css`
     ${gt.layout} {
       ${spaceChildrenY}
     }
+  }
+
+  .space-children-y-xs {
+    ${spaceChildrenYXS}
   }
 
   .space-children-x {
