@@ -172,22 +172,19 @@ const globalStyle = css`
     justify-content: space-between;
 
     > * {
-      flex: 0 1 calc(50% - var(--sm) * 1 / 2);
-
       ${gt.layout} {
+        flex-basis: calc(50% - var(--sm));
         :nth-child(n + 3) {
           margin-top: var(--sm);
         }
-        :not(:nth-child(2n - 1)) {
+        :nth-child(2n) {
           margin-left: var(--sm);
         }
       }
 
       ${le.layout} {
         flex-basis: 100%;
-        :nth-child(n + 1) {
-          margin-top: var(--sm);
-        }
+        ${spaceChildrenY};
       }
     }
   }
