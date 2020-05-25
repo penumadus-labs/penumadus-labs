@@ -1,3 +1,0 @@
-	float fullScale = 100.0;
-	float excitation = 5.0;
-	float calFactor = 3.42;

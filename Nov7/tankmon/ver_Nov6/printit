@@ -1,7 +1,0 @@
-rm print.txt
-for i in tankmon.ino loctimers.ino memmgr.ino tankinit.ino apiframes.ino 
-do
-	echo "*********************** BEGIN $i *****************************" >>print.txt
-	pr -n -t $i >> print.txt
-	echo "*********************END $i *********************************" >>print.txt
-done

@@ -1,1 +1,0 @@
-cat $1 | ssh -i asron.pem ubuntu@18.219.216.145 "cat >$1"
