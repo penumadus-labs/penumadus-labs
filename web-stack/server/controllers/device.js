@@ -106,6 +106,7 @@ class Device extends EventEmitter {
 
   emitResponses(raw) {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+    console.log(data)
     if (!this.id) this.id = id
     if (command === 'HELLO') return
     if (this.listenerCount(command)) {
