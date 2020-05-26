@@ -30888,3 +30888,75 @@ rnumadj: -0.007380
 [05/26-19:26:56] sendToDB: socket not connected 
                  errno: Broken pipe
 [05/26-19:26:56] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:06] 
+WARNING: Timeout #0 on select
+ 
+[05/26-19:27:06] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:06] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:06] doconnect:SOCKET DB attempting connect 
+[05/26-19:27:06] doconnect: in progress 
+[05/26-19:27:08] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:08] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Connection refused
+[05/26-19:27:08] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:08] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:08] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:08] hank->UDP:43: [ D unit_3 26.76 0 32 50 5ecd6d78 8b10c 4d90 ] 
+rnumadj: -0.150010
+[05/26-19:27:08] hank->hank:PATH  ->MEMQ->Net	, msg num: 3472,  Jitter: 20112.0801 mS 
+[05/26-19:27:08] UDP->DB:200: [ { "type":"D","id":"unit_3","pressure":"0.7","fills":"0","temperature":"32","humidity":"50","time":"1590521208.569612","pad":"                                                                         "} ] 
+[05/26-19:27:08] sendToDB: socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:08] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:16] hank->UDP:43: [ D unit_3 26.77 0 31 50 5ecd6d82 903d8 4d91 ] 
+rnumadj: 0.101862
+[05/26-19:27:16] hank->hank:PATH  ->MEMQ->Net	, msg num: 3473,  Jitter: 18105.6172 mS 
+[05/26-19:27:16] UDP->DB:200: [ { "type":"D","id":"unit_3","pressure":"0.7","fills":"0","temperature":"31","humidity":"50","time":"1590521218.590808","pad":"                                                                         "} ] 
+[05/26-19:27:16] sendToDB: socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:16] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:26] hank->UDP:43: [ D unit_3 26.96 0 32 50 5ecd6d8c 9540c 4d92 ] 
+rnumadj: -0.075110
+[05/26-19:27:26] hank->hank:PATH  ->MEMQ->Net	, msg num: 3474,  Jitter: 18095.8887 mS 
+[05/26-19:27:26] UDP->DB:200: [ { "type":"D","id":"unit_3","pressure":"0.7","fills":"0","temperature":"32","humidity":"50","time":"1590521228.611340","pad":"                                                                         "} ] 
+[05/26-19:27:26] sendToDB: socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:26] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:26] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:26] doconnect:SOCKET DB attempting connect 
+[05/26-19:27:26] doconnect: in progress 
+[05/26-19:27:28] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:28] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Connection refused
+[05/26-19:27:28] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:28] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:28] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:36] hank->UDP:43: [ D unit_3 26.77 0 32 51 5ecd6d96 9ab90 4d93 ] 
+rnumadj: -0.093367
+[05/26-19:27:36] hank->hank:PATH  ->MEMQ->Net	, msg num: 3475,  Jitter: 18105.4121 mS 
+[05/26-19:27:36] UDP->DB:200: [ { "type":"D","id":"unit_3","pressure":"0.6","fills":"0","temperature":"32","humidity":"51","time":"1590521238.633744","pad":"                                                                         "} ] 
+[05/26-19:27:36] sendToDB: socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:36] dbsock: 5  hanksock: 3 rnum: 3 
+[05/26-19:27:46] hank->UDP:43: [ D unit_3 26.96 0 31 51 5ecd6da0 a069c 4d94 ] 
+rnumadj: 0.155653
+[05/26-19:27:46] hank->hank:PATH  ->MEMQ->Net	, msg num: 3476,  Jitter: 18099.1387 mS 
+[05/26-19:27:46] UDP->DB:200: [ { "type":"D","id":"unit_3","pressure":"0.7","fills":"0","temperature":"31","humidity":"51","time":"1590521248.657052","pad":"                                                                         "} ] 
+[05/26-19:27:46] sendToDB: socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:46] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:46] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:46] doconnect:SOCKET DB attempting connect 
+[05/26-19:27:46] doconnect: in progress 
+[05/26-19:27:48] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:48] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Connection refused
+[05/26-19:27:48] UDP->DB:200: [ {"type":"HELLO","id":"unit_3","pad":"                                                                                                                                                                 "} ] 
+[05/26-19:27:48] sendHello:SOCKET ERROR DB socket not connected 
+                 errno: Broken pipe
+[05/26-19:27:48] dbsock: 5  hanksock: 3 rnum: 3 
