@@ -42,7 +42,7 @@ export default ({ name, message, settings, sendCommand }) => {
   return (
     <>
       <form className="card" onSubmit={handleSubmit(submit)}>
-        <div className="flex-4">
+        <div className="grid-4">
           {Object.entries(settings).map(([name, value], i) => (
             <div key={i} className="space-children-y-xs">
               <p>Current Value: {value}</p>

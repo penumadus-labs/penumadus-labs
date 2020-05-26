@@ -1,16 +1,14 @@
 import GlobalStyle from './style/global.jsx'
 import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
-import Header from './layout/header'
-import Router from './routes/router'
+import Layout from './layout/layout'
 import ContextProvider from './context/provider'
 
 ReactDOM.render(
   <StrictMode>
     <ContextProvider>
       <GlobalStyle />
-      <Header />
-      <Router />
+      <Layout />
     </ContextProvider>
   </StrictMode>,
   document.getElementById('root')

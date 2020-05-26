@@ -13,7 +13,7 @@ export default () => {
   if (error) return <p className="card error">error</p>
 
   return (
-    <div className="flex-2">
+    <div className="grid-2">
       <AccelerationChart data={acceleration} />
       <PressureChart data={pressure} />
       <TemperatureAndHumidity data={temperatureAndHumidity} />

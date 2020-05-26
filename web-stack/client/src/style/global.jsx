@@ -4,6 +4,13 @@ import { le, gt } from './mediaqueries'
 import * as colors from '../utils/colors'
 
 // mixins
+const grid = css`
+  display: grid;
+  column-gap: var(--sm);
+
+  row-gap: var(--sm);
+`
+
 const spaceChildrenY = css`
   > *:not(:first-child) {
     margin-top: var(--sm);
@@ -137,55 +144,18 @@ const globalStyle = css`
     margin: auto;
   }
 
-  .flex-4 {
-    display: flex;
-    flex-wrap: wrap;
-
-    > * {
-      flex: 0 1 calc(25% - var(--sm) * 3 / 4);
-
-      ${gt.layout} {
-        :nth-child(n + 5) {
-          margin-top: var(--sm);
-        }
-        :not(:nth-child(4n - 3)) {
-          margin-left: var(--sm);
-        }
-      }
-
-      ${le.layout} {
-        flex-basis: calc(50% - var(--sm) * 1 / 2);
-        :nth-child(n + 3) {
-          margin-top: var(--sm);
-        }
-        :not(:nth-child(2n - 1)) {
-          margin-left: var(--sm);
-        }
-      }
+  .grid-4 {
+    ${grid}
+    grid-template-columns: repeat(4, 1fr);
+    ${le.layout} {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
-
-  .flex-2 {
-    display: flex;
-
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    > * {
-      ${gt.layout} {
-        flex-basis: calc(50% - var(--sm));
-        :nth-child(n + 3) {
-          margin-top: var(--sm);
-        }
-        :nth-child(2n) {
-          margin-left: var(--sm);
-        }
-      }
-
-      ${le.layout} {
-        flex-basis: 100%;
-        ${spaceChildrenY};
-      }
+  .grid-2 {
+    ${grid}
+    grid-template-columns: repeat(2, 1fr);
+    ${le.layout} {
+      grid-template-columns: 1fr;
     }
   }
 
