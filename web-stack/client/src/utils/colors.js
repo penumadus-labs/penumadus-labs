@@ -1,4 +1,4 @@
-const light = true
+const dark = true
 
 export const gray = '#ddd'
 export const white = '#f5f5f5'
@@ -18,10 +18,14 @@ export const purple = '#645394'
 
 export const yellow = '#BFA33F'
 
-export const body = light ? '#1e1e1e' : '#323b44'
-export const card = light ? '#272727' : '#212a33'
-export const button = light ? '#909090' : '#8c99a2'
+const darkBody = '#323b44'
+const darkCard = '#212a33'
+const darkButton = '#8c99a2'
 
-export const darkBody = '#323b44'
-export const darkCard = '#212a33'
-export const darkButton = '#8c99a2'
+const lightBody = '#1e1e1e'
+const lightCard = '#272727'
+const lightButton = '#909090'
+
+export const body = dark ? darkBody : lightBody
+export const card = dark ? darkCard : lightCard
+export const button = dark ? darkButton : lightButton
