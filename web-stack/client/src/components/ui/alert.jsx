@@ -25,7 +25,7 @@ export default ({ settings, children, onAccept, onCancel }) => {
   const [
     { setLoading, setError, setSuccess },
     Status,
-    { success },
+    { success, loading },
   ] = useStatus()
 
   useEffect(() => {
@@ -50,28 +50,28 @@ export default ({ settings, children, onAccept, onCancel }) => {
     }
   }
 
+  const body = loading ? null : !success ? (
+    <>
+      <button className="button button-green" onClick={handleAccept}>
+        Accept
+      </button>
+      <button className="button" onClick={onCancel}>
+        Cancel
+      </button>
+    </>
+  ) : (
+    <button className="button button-red" onClick={onCancel}>
+      Close
+    </button>
+  )
+
   return (
     <Root className="center-child fixed">
       <OpaqueCover className="fixed" />
       <main className="card-spaced">
         <div>{children}</div>
         <Status />
-        <div className="space-children-x">
-          {!success ? (
-            <>
-              <button className="button button-green" onClick={handleAccept}>
-                Accept
-              </button>
-              <button className="button" onClick={onCancel}>
-                Cancel
-              </button>
-            </>
-          ) : (
-            <button className="button button-red" onClick={onCancel}>
-              Close
-            </button>
-          )}
-        </div>
+        <div className="space-children-x">{body}</div>
       </main>
     </Root>
   )

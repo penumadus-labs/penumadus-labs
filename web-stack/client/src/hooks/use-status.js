@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Loading from '../components/loading'
 
 const useStatus = () => {
   const [status, setStatus] = useState({})
@@ -18,7 +19,11 @@ const useStatus = () => {
   const Status = () => (
     <>
       {error ? <p className="error">{error}</p> : null}
-      {loading ? <p className="loading">{loading}</p> : null}
+      {loading ? (
+        <p>
+          <Loading />
+        </p>
+      ) : null}
       {success ? <p className="success">{success}</p> : null}
     </>
   )

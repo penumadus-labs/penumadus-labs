@@ -67,13 +67,12 @@ const globalStyle = css`
     --body-background: ${colors.body};
     --card-background: ${colors.card};
     --button-background: ${colors.button};
+    --font: ${colors.font};
 
     /* fonts */
 
     /* colors */
-
     --white: ${colors.white};
-    --gray: ${colors.gray};
     --red: ${colors.raspberry};
     --green: ${colors.jade};
     --blue: ${colors.steel};
@@ -93,7 +92,7 @@ const globalStyle = css`
       0 4px 10px -1px rgb(0, 0, 0, 0.3);
 
     /* 0 6px 4px -1px rgb(70, 130, 180, 0.3); */
-    --shadow-card: 0 4px 3px -1px rgb(0, 0, 0, 0.5),
+    --shadow-card: 2px 4px 3px -1px rgb(0, 0, 0, 0.5),
       0 4px 3px -1px rgb(29, 41, 81, 0.5);
 
     /* z-index */
@@ -114,7 +113,7 @@ const globalStyle = css`
   body {
     height: 100vh;
     margin: 0;
-    color: var(--gray);
+    color: var(--font);
     font-size: 0.8rem;
     font-family: 'Roboto', sans-serif;
 
@@ -232,7 +231,7 @@ const globalStyle = css`
     padding: var(--xs) var(--sm);
     color: #555;
     line-height: 1px;
-    background: var(--gray);
+    background: var(--font);
   }
 
   .button-green {

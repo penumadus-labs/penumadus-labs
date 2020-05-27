@@ -8,7 +8,7 @@ const Root = styled(Link)`
   box-shadow: none;
 
   svg {
-    color: var(--button-background);
+    color: var(--font);
   }
 
   p {
