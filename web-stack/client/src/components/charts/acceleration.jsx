@@ -1,6 +1,5 @@
 import React from 'react'
 import { Chart, Line } from './line-chart'
-import replace from '../../utils/replace-deprecated-recharts-method'
 import * as colors from '../../utils/colors'
 
 export default ({ data }) => {
