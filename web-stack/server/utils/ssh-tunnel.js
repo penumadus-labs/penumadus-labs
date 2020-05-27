@@ -14,7 +14,7 @@ const tunnelPromise = (port) => {
   return new Promise((resolve, reject) => {
     const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
       if (err) reject(err)
-      console.log(`ssh tunnel opened for port ${port}`)
+      console.info(`ssh tunnel opened for port ${port}`)
       resolve()
     })
 

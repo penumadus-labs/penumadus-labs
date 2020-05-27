@@ -33,7 +33,7 @@ const initialize = async (token) => {
     await auth.get('verify', { headers: { token } })
     ctx.dispatch({ type: 'authorized', token })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     ctx.dispatch({ type: 'unauthorized' })
   }
 }

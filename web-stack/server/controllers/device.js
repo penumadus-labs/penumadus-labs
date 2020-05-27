@@ -9,7 +9,7 @@ const {
   setters,
   table,
 } = require('../utils/tcp-protocol')
-const coerceNumbers = require('../utils/coerce-numers')
+const coerceNumbers = require('../utils/coerce-numbers')
 
 /*
 this class wraps the tcp client
@@ -26,7 +26,7 @@ class Device extends EventEmitter {
     socket.setEncoding('ascii')
     socket.on('error', console.error)
     socket.on('close', () => {
-      console.log('tcp client closed')
+      console.info('tcp client closed')
       controller.tcpClients.delete(this)
     })
 
@@ -61,12 +61,12 @@ class Device extends EventEmitter {
     })
 
     this.on('error', (err) => {
-      console.log(`device controller error: "${err}"`)
+      console.error(`device controller error: "${err}"`)
     })
   }
 
   createRequest(command, ...args) {
-    console.log(`request: ${table[command]}`)
+    console.info(`request: ${table[command]}`)
 
     const message = args.length ? [command, ...args].join(' ') : command
     this.socket.write(message.padEnd(config.packetSize))
@@ -107,18 +107,17 @@ class Device extends EventEmitter {
 
   emitResponses(raw) {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
-    console.log(data)
     if (!this.id) this.id = id
     if (command === 'HELLO') return
     if (this.listenerCount(command)) {
       if (status) {
-        console.log(`response: ${table[command]}`)
+        console.info(`response: ${table[command]}`)
 
         const err =
           status === 'NACK' ? new Error('command not acknowledged') : null
         this.emit(command, err, data)
       } else {
-        console.log(`stream: ${table[command]}`)
+        console.info(`stream: ${table[command]}`)
 
         this.emit(command, coerceNumbers(data))
       }

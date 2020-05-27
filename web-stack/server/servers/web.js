@@ -24,7 +24,7 @@ const start = async (expressApp, port) => {
   return new Promise((_, reject) => {
     server
       .listen(port, () => {
-        console.log(`web server listening on port ${port}`)
+        console.info(`web server listening on port ${port}`)
       })
       .on('error', reject)
   })

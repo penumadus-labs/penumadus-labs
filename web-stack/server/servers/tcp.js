@@ -2,7 +2,7 @@ const net = require('net')
 const createDevice = require('../controllers/device')
 
 const handleConnection = async (socket) => {
-  console.log('tcp client connected')
+  console.info('tcp client connected')
 
   try {
     const device = await createDevice(socket)
@@ -19,7 +19,7 @@ const start = (port) => {
   return new Promise((_, reject) => {
     tcpServer
       .listen(port, () => {
-        console.log(`tcp server listening on port ${port}`)
+        console.info(`tcp server listening on port ${port}`)
       })
       .on('error', reject)
   })
