@@ -16,7 +16,7 @@ const Dropdown = styled.div`
 
   .selected,
   option {
-    padding: var(--sm);
+    padding: var(--xs) var(--sm);
     background: var(--button-background);
   }
 

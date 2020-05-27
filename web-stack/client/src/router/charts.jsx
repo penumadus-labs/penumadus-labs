@@ -12,11 +12,13 @@ export default () => {
   if (loading) return <p className="card loading">loading...</p>
   if (error) return <p className="card error">error</p>
 
+  console.log('render')
+
   return (
     <div className="grid-2">
       <AccelerationChart data={acceleration} />
-      <PressureChart data={pressure} />
       <TemperatureAndHumidity data={temperatureAndHumidity} />
+      <PressureChart data={pressure} />
     </div>
   )
 }

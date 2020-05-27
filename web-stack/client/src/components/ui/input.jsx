@@ -4,6 +4,10 @@ import styled from '@emotion/styled'
 const Root = styled.label`
   display: block;
 
+  p {
+    white-space: nowrap;
+  }
+
   input {
     width: 100%;
     margin-top: 3px;
@@ -14,11 +18,12 @@ const Root = styled.label`
   }
 `
 
-export default forwardRef((props, ref) => {
+export default forwardRef(({ before, ...props }, ref) => {
   return (
     <Root className="space-children-y-xs">
       <p>{props.name}</p>
-      <input className="button" ref={ref} {...props} />
+      {before}
+      <input className="input" ref={ref} {...props} />
     </Root>
   )
 })

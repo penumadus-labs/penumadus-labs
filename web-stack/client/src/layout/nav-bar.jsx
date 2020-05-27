@@ -5,7 +5,7 @@ import { FiLogOut as Logout } from 'react-icons/fi'
 import NavBarLink from './nav-link'
 
 const NavBar = ({ handleLogout }) => (
-  <nav className="shadow-card gt-space-children-y">
+  <nav className="shadow-card">
     <NavBarLink Icon={Chart} label="Charts" to="/" />
     <NavBarLink Icon={Dash} label="Controls" to="controls" />
     <NavBarLink Icon={Devices} label="Register" to="register" />

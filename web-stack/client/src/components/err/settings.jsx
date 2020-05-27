@@ -15,12 +15,16 @@ const Setting = styled.div`
     flex-basis: 33%;
   }
   flex: 1 1 20%;
+
+  p {
+    white-space: nowrap;
+  }
 `
 
 export default ({ list }) => (
   <Root className="space-children-y spade-children-x">
     {list.map(({ value, current, unit, name, handleChange, warning }) => (
-      <Setting className="card" key={name}>
+      <Setting className="card-spaced" key={name}>
         <p>{name}</p>
         <p>curruent: {current + unit}</p>
         <Input value={value} onChange={handleChange} />

@@ -9,6 +9,7 @@ const {
   setters,
   table,
 } = require('../utils/tcp-protocol')
+const coerceNumbers = require('../utils/coerce-numers')
 
 /*
 this class wraps the tcp client
@@ -51,11 +52,11 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], (err, data) => {
+    this.on(table['standardData'], (data) => {
       insertStandardData(this.id, data)
     })
 
-    this.on(table['accelerationData'], (err, data) => {
+    this.on(table['accelerationData'], (data) => {
       insertAccelerationData(this.id, data)
     })
 
@@ -110,11 +111,17 @@ class Device extends EventEmitter {
     if (!this.id) this.id = id
     if (command === 'HELLO') return
     if (this.listenerCount(command)) {
-      const err =
-        status === 'NACK' ? new Error('command not acknowledged') : null
-      console.log(`response: ${table[command]}`)
+      if (status) {
+        console.log(`response: ${table[command]}`)
 
-      this.emit(command, err, data)
+        const err =
+          status === 'NACK' ? new Error('command not acknowledged') : null
+        this.emit(command, err, data)
+      } else {
+        console.log(`stream: ${table[command]}`)
+
+        this.emit(command, coerceNumbers(data))
+      }
     } else {
       this.emit('error', new Error(`unhandled response ${command}`))
     }

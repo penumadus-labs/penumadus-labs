@@ -6,7 +6,7 @@ export default () => {
   // eslint-disable-next-line
   const [{ data }] = useDatabase()
 
-  return <button className="button">Download</button>
+  return <button className="button">download</button>
 
   // const file = makeCSVFile(data)
 

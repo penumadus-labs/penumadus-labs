@@ -17,7 +17,7 @@ export default () => {
   }
 
   return (
-    <div className="card">
+    <div className="card-spaced">
       <Menu>
         <DeviceSelect {...{ options: devices, selected, handleSelect }} />
         <Download />

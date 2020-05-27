@@ -42,7 +42,7 @@ export default () => {
   return settings.length ? (
     <>
       <Settings list={settings} onSubmit={handleSubmit} warning={warning} />
-      <div className="card">
+      <div className="card-spaced">
         <button className="button" onClick={handleSubmit}>
           Apply
         </button>

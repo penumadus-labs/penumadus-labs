@@ -53,7 +53,7 @@ export default ({ settings, children, onAccept, onCancel }) => {
   return (
     <Root className="center-child fixed">
       <OpaqueCover className="fixed" />
-      <main className="card">
+      <main className="card-spaced">
         <div>{children}</div>
         <Status />
         <div className="space-children-x">

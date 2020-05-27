@@ -11,15 +11,14 @@ const Root = styled.div`
   height: 100vh;
 
   ${({ theme }) => theme.gt.layout} {
-    grid-template-rows: var(--nav-size) auto;
-    grid-template-columns: var(--nav-size) auto var(--nav-size);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
+    header {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
     nav {
       grid-row-start: 2;
-      grid-column-start: 1;
-    }
-    main {
-      grid-column-start: 2;
-      grid-column-end: 4;
     }
     .login {
       grid-column-start: 2;
@@ -28,21 +27,11 @@ const Root = styled.div`
   }
 
   ${({ theme }) => theme.le.layout} {
-    grid-template-rows: var(--nav-size) auto var(--nav-size);
-    grid-template-columns: 1fr;
-
-    main {
-      grid-row-start: 2;
-    }
-    nav {
-      grid-row-start: 3;
-    }
+    grid-template-rows: auto minmax(0, 1fr) auto;
   }
 
   header {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    padding: var(--md);
+    padding: var(--sm);
     font-size: var(--lg);
     background: var(--card-background);
 
@@ -52,12 +41,11 @@ const Root = styled.div`
   }
 
   nav {
+    background: var(--card-background);
     ${({ theme }) => theme.le.layout} {
       display: flex;
       justify-content: space-evenly;
     }
-
-    background: var(--card-background);
   }
 
   main {
@@ -71,26 +59,26 @@ const Root = styled.div`
 `
 
 const Layout = ({ children }) => {
-  const [{ loggedIn }, { login, logout }] = useAuth()
+  const [{ loading, loggedIn }, { login, logout }] = useAuth()
 
-  const body = !loggedIn ? (
+  const body = loading ? null : !loggedIn ? (
     <div className="login">
       <Login handleLogin={login} />
     </div>
   ) : (
     <>
-      <NavBar handleLogout={logout} />
       <main className="space-children-y">
         <StatusBar />
         <Router />
       </main>
+      <NavBar handleLogout={logout} />
     </>
   )
 
   return (
     <Root>
       <header>
-        <h3>HankMon Dashboard</h3>
+        <p>HankMon Dashboard</p>
       </header>
       {body}
     </Root>

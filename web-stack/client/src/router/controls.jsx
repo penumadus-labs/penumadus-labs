@@ -1,5 +1,4 @@
 import React from 'react'
-// import SettingsPanel from '../components/ui/settings-panel'
 import Settings from '../components/forms/settings'
 import Command from '../components/ui/command'
 import useDevices from '../context/devices/context'
@@ -30,7 +29,7 @@ export default () => {
 
   return (
     <>
-      <div className="card space-children-x">
+      <div className="card grid-commands">
         {commands.map((command, i) => (
           <Command key={i} {...command} sendCommand={sendCommand} />
         ))}
@@ -39,9 +38,9 @@ export default () => {
         ? setters.map((setter, i) => (
             <Settings
               key={i}
-              {...setter}
               settings={settings[setter.dataLabel]}
               sendCommand={sendCommand}
+              {...setter}
             />
           ))
         : null}

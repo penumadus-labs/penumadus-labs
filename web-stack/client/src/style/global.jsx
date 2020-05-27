@@ -24,8 +24,8 @@ const spaceChildrenYXS = css`
 `
 
 const spaceChildrenX = css`
-  > *:not(:first-child) {
-    margin-left: var(--sm);
+  > *:not(:last-child) {
+    margin-right: var(--sm);
   }
 `
 
@@ -33,6 +33,11 @@ const raised = css`
   padding: var(--sm);
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
+`
+
+const card = css`
+  ${raised}
+  background: var(--card-background);
 `
 
 const clickable = css`
@@ -77,10 +82,10 @@ const globalStyle = css`
     --yellow: ${colors.yellow};
 
     /* sizes */
-    --xs: 0.3rem;
+    --xs: 0.4rem;
     --sm: 0.6rem;
     --md: 1rem;
-    --lg: 2rem;
+    --lg: 1.8rem;
     --radius: 0.2rem;
 
     /* shadow */
@@ -126,6 +131,8 @@ const globalStyle = css`
     color: inherit;
     font-size: inherit;
     font-family: inherit;
+
+    /* line-height: inherit; */
     letter-spacing: inherit;
   }
 
@@ -144,6 +151,15 @@ const globalStyle = css`
     margin: auto;
   }
 
+  .card {
+    ${card}
+  }
+
+  .card-spaced {
+    ${card}
+    ${spaceChildrenY}
+  }
+
   .grid-4 {
     ${grid}
     grid-template-columns: repeat(4, 1fr);
@@ -151,18 +167,21 @@ const globalStyle = css`
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
+  .grid-commands {
+    ${grid}
+    grid-template-columns: repeat(5, 1fr);
+    ${le.layout} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
   .grid-2 {
     ${grid}
     grid-template-columns: repeat(2, 1fr);
     ${le.layout} {
       grid-template-columns: 1fr;
     }
-  }
-
-  .card {
-    ${raised}
-    ${spaceChildrenY}
-      background: var(--card-background);
   }
 
   .space-children-y {
@@ -203,7 +222,17 @@ const globalStyle = css`
   .button {
     ${raised}
     ${clickable}
+    padding: var(--xs) var(--sm);
     background: var(--button-background);
+  }
+
+  .input {
+    ${raised}
+    ${clickable}
+    padding: var(--xs) var(--sm);
+    color: #555;
+    line-height: 1px;
+    background: var(--gray);
   }
 
   .button-green {

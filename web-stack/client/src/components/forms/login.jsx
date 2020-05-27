@@ -21,13 +21,11 @@ export default () => {
     })
 
   return (
-    <div className="card">
-      <form className="space-children-y" onSubmit={handleSubmit(handleLogin)}>
-        <Input name="username" ref={register({})} />
-        <Input name="password" ref={register({})} type="password" />
-        <button className="button">Login</button>
-        {error ? <p className="error">{error}</p> : null}
-      </form>
-    </div>
+    <form className="card-spaced" onSubmit={handleSubmit(handleLogin)}>
+      <Input name="username" ref={register({})} />
+      <Input name="password" ref={register({})} type="password" />
+      <button className="button">Login</button>
+      {error ? <p className="error">{error}</p> : null}
+    </form>
   )
 }

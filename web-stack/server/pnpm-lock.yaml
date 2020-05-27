@@ -8,7 +8,6 @@ dependencies:
   ws: 7.3.0
 devDependencies:
   cors: 2.8.5
-  prettier-cli: 0.1.0
   tunnel-ssh: 4.1.4
 lockfileVersion: 5.1
 packages:
@@ -720,10 +719,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
-  /prettier-cli/0.1.0:
-    dev: true
-    resolution:
-      integrity: sha512-FzI6Hs9/YsrVCuxpcO0VG7sBQT7LWpeETEV0SzAFyNgb7oFjnnVf0CCYHieGI9B1RsgyaiH9HCUXYPluHRV0gw==
   /process-nextick-args/2.0.1:
     dev: false
     resolution:
@@ -1034,6 +1029,5 @@ specifiers:
   install: ^0.13.0
   jsonwebtoken: ^8.5.1
   mongodb: ^3.5.7
-  prettier-cli: ^0.1.0
   tunnel-ssh: ^4.1.4
   ws: ^7.3.0
