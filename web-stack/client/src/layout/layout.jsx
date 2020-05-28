@@ -77,7 +77,7 @@ const Layout = ({ children }) => {
 
   return (
     <Root>
-      <header>
+      <header className="shadow-card">
         <p>HankMon Dashboard</p>
       </header>
       {body}

@@ -9,7 +9,7 @@ export default ({ data }) => {
         dot={false}
         type="monotone"
         dataKey="pressure"
-        stroke={colors.plumb}
+        stroke={colors.violet}
       />
     </Chart>
   )

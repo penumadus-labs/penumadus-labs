@@ -54,9 +54,6 @@ const clickable = css`
   }
 `
 
-// purple #b24c7f
-// yellow #BFA33F
-
 const globalStyle = css`
   :root {
     /* layout config */
@@ -73,12 +70,14 @@ const globalStyle = css`
 
     /* colors */
     --white: ${colors.white};
-    --red: ${colors.raspberry};
-    --green: ${colors.jade};
-    --blue: ${colors.steel};
-    --dark-blue: ${colors.space};
-    --purple: ${colors.purple};
+    --red: ${colors.red};
+    --orange: ${colors.orange};
     --yellow: ${colors.yellow};
+    --green: ${colors.green};
+    --blue: ${colors.blue};
+    --purple: ${colors.purple};
+    --violet: ${colors.violet};
+    --dark-blue: ${colors.space};
 
     /* sizes */
     --xs: 0.4rem;

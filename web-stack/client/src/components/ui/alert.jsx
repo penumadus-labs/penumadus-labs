@@ -3,7 +3,33 @@ import styled from '@emotion/styled'
 import useStatus from '../../hooks/use-status'
 
 const Root = styled.div`
-  z-index: var(--layer1);
+  z-index: var;
+
+  @keyframes open {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes close {
+    0% {
+      opacity: 1;
+    }
+    20% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  animation: ${({ animation }) => animation} 0.3s 1 forwards;
   main {
     z-index: var(--layer1);
     display: flex;
@@ -21,7 +47,14 @@ const OpaqueCover = styled.div`
   opacity: 0.5;
 `
 
-export default ({ settings, children, onAccept, onCancel }) => {
+const Alert = ({
+  animation,
+  isOpen,
+  settings,
+  children,
+  onAccept,
+  onCancel,
+}) => {
   const [
     { setLoading, setError, setSuccess },
     Status,
@@ -39,6 +72,8 @@ export default ({ settings, children, onAccept, onCancel }) => {
       window.removeEventListener('keydown', handleKeyDown)
     }
   })
+
+  if (!isOpen) return null
 
   const handleAccept = async () => {
     try {
@@ -66,7 +101,7 @@ export default ({ settings, children, onAccept, onCancel }) => {
   )
 
   return (
-    <Root className="center-child fixed">
+    <Root animation={animation} className="center-child fixed">
       <OpaqueCover className="fixed" />
       <main className="card-spaced">
         <div>{children}</div>
@@ -78,10 +113,22 @@ export default ({ settings, children, onAccept, onCancel }) => {
 }
 
 export const useAlert = () => {
-  const [state, setState] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [animation, setAnimation] = useState('open')
 
-  const open = () => setState(true)
-  const close = () => setState(false)
+  const open = () => {
+    setAnimation('open')
+    setIsOpen(true)
+  }
 
-  return [state, open, close]
+  const close = () => {
+    setAnimation('close')
+    setTimeout(() => setIsOpen(false), 300)
+  }
+
+  return [
+    (props) => <Alert animation={animation} isOpen={isOpen} {...props} />,
+    open,
+    close,
+  ]
 }

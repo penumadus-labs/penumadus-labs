@@ -5,9 +5,9 @@ import * as colors from '../../utils/colors'
 export default ({ data }) => {
   return (
     <Chart data={data}>
-      <Line dot={false} type="monotone" dataKey="x" stroke={colors.redPurple} />
-      <Line dot={false} type="monotone" dataKey="y" stroke={colors.jade} />
-      <Line dot={false} type="monotone" dataKey="z" stroke={colors.blue2} />
+      <Line dot={false} type="monotone" dataKey="x" stroke={colors.red} />
+      <Line dot={false} type="monotone" dataKey="y" stroke={colors.yellow} />
+      <Line dot={false} type="monotone" dataKey="z" stroke={colors.blue} />
     </Chart>
   )
 }

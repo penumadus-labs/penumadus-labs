@@ -5,24 +5,35 @@ const dark = true
 // reds
 export const raspberry = '#d21f3c'
 export const firebrick = '#b22222'
-export const red = '#da2c43'
+export const red0 = '#da2c43'
 
-export const orange = '#ED6911'
+export const orange0 = '#ED6911'
+export const burntOrange = '#bf5700'
+export const bitterSweetShimmer = '#bf4f51'
 
-export const yellow = '#BFA33F'
+export const yellow0 = '#BFA33F'
 
-export const green = '#1cac78'
+export const green0 = '#1cac78'
 export const jade = '#00a86b'
 
-export const blue = '#6cbfee'
+export const blue0 = '#6cbfee'
 export const blue2 = 'rgb(0, 90, 125)'
 export const steel = '#4682b4'
 export const space = '#1d2951'
+export const cymkBlue = '#333399'
 
-export const purple = '#645394'
+export const ultraViolet = '#645394'
 export const plumb = 'rgb(128, 0, 90)'
 export const purpleRed = 'rgb(175, 90, 125)'
 export const redPurple = 'rgb(195, 0, 64)'
+
+export const red = '#b4464b'
+export const orange = '#b47846'
+export const yellow = '#bfaf46'
+export const green = '#46b478'
+export const blue = '#4682b4'
+export const purple = '#464bb4'
+export const violet = '#b44682'
 
 export const gray1 = '#333'
 export const gray2 = '#666'

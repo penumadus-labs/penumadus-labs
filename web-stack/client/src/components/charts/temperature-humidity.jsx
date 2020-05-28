@@ -9,13 +9,13 @@ export default ({ data, options }) => {
         dot={false}
         type="monotone"
         dataKey="temperature"
-        stroke={colors.redPurple}
+        stroke={colors.red}
       />
       <Line
         dot={false}
         type="monotone"
         dataKey="humidity"
-        stroke={colors.blue2}
+        stroke={colors.blue}
       />
     </Chart>
   )
