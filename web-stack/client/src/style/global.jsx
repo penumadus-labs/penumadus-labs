@@ -178,7 +178,7 @@ const globalStyle = css`
   .grid-2 {
     ${grid}
     grid-template-columns: repeat(2, 1fr);
-    ${le.layout} {
+    ${le.charts} {
       grid-template-columns: 1fr;
     }
   }
