@@ -61,6 +61,7 @@ unsigned char *makeApiFrame(unsigned char frameType,
 			    unsigned char *frame);
 void sendApiFrame(unsigned char *frame);
 
+void sendWifiUnavail(void);
 
 
 
@@ -69,7 +70,8 @@ void processframe(unsigned char *frame, int len);
 extern void printApiFrame(unsigned char *frame);
 unsigned char nextChar(int len);
 struct sockaddr_in RemoteIP;		/* address of amazon */
-bool remoteipinit=false;
+bool remoteipinit=false;		/* valid address for server recvd from hank */
+bool querysent=false;			/* toggles when waiting for a wifi up/down verify */
 
 int 
 main(int argc, char *argv[])
@@ -218,6 +220,7 @@ udp_readthreadproc(void *arg){
 			    WIFIQUERYRESP,
 			    sizeof(WIFIQUERYRESP)-1)==0) {
 
+			querysent=false;
 			buf[0]=WIFIAVAIL;
 				
 			makeApiFrame(WIFICMND,buf,1,frame);
@@ -287,15 +290,29 @@ udpsetup(unsigned short listenport){
  * 6. inform the server and DBASE that we are still here and active
  */
 
+
 void *
 udp_holdConnection(void *arg){
 	char *bufptr=WIFIQUERYSTRING;
 	g_err(NOEXIT,NOPERROR,"hold connect thread started\n");
 	while (true){
 		if(remoteipinit){
-			g_err(NOEXIT,NOPERROR,"WIFIPI->UDP send link hold");
-			sendUDP(&RemoteIP, bufptr, strlen(bufptr));
+			/* should have WIFIQUERY by now,  else wifi is down */
+			if(querysent){
+				/* this only occurs if sendUDP passes meaning wifi is connected */
+				g_err(NOEXIT,NOPERROR,"Wifi Down due to query delay");
+				sendWifiUnavail();
+			}
+			else if(sendUDP(&RemoteIP, bufptr, strlen(bufptr))){
+				g_err(NOEXIT,NOPERROR,"WIFIPI->UDP sent link hold");
+				querysent=true;
+			}
+			else{
+				g_err(NOEXIT,NOPERROR,"Wifi Down failed sendUDP");
+				sendWifiUnavail();
+			}
 		}
+		/* no remote ip init,  force hank to send one */
 		else{
 			sendbootedstatus();
 		}
@@ -558,3 +575,15 @@ sendbootedstatus()
 }
 
 
+void
+sendWifiUnavail(void)
+{
+	unsigned char frame[MAXFRAMEBUF];
+	unsigned char buf[MAXFRAMEBUF];
+
+	querysent=false;
+	buf[0]=WIFIDOWN;
+	makeApiFrame(WIFICMND,buf,1,frame);
+	sendApiFrame(frame);
+	g_err(NOEXIT,NOPERROR,"WIFIPI->HANK:1: Send WIFIDOWN");
+}
