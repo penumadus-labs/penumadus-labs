@@ -1,4 +1,4 @@
-#define LOGPATH "."
+#define LOGPATH "../logs"
 
 #define ERRBUFSZ 1024
 
