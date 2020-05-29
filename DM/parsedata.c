@@ -85,10 +85,10 @@ parsedata(char *incoming, char *outgoing, int size)
 			if((n=snprintf(outgoing,size,
 				"{ \"type\":\"%c\","
 				  "\"id\":\"%s\","
-				  "\"magnitude\":\"%.2f\","
-				  "\"x\":\"%.2f\","
-				  "\"y\":\"%.2f\","
-				  "\"z\":\"%.2f\","
+				  "\"magnitude\":%.2f,"
+				  "\"x\":%.2f,"
+				  "\"y\":%.2f,"
+				  "\"z\":%.2f,"
 				  "\"time\":\"%lu.%06lu\","
 				 "\"pad\":\"",
 				  ACCELDATA,	//start of args
@@ -150,10 +150,10 @@ parsedata(char *incoming, char *outgoing, int size)
 			if((n=snprintf(outgoing,size,
 				"{ \"type\":\"%c\","
 				  "\"id\":\"%s\","
-				  "\"pressure\":\"%.1f\","
-				  "\"fills\":\"%d\","
-				  "\"temperature\":\"%d\","
-				  "\"humidity\":\"%d\","
+				  "\"pressure\":%.1f,"
+				  "\"fills\":%d,"
+				  "\"temperature\":%d,"
+				  "\"humidity\":%d,"
 				  "\"time\":\"%lu.%06lu\","
 				  "\"pad\":\"",
 				MAINDATA,
