@@ -3,6 +3,7 @@ import Loading from '../components/loading'
 
 const useStatus = () => {
   const [status, setStatus] = useState({})
+  console.log(status)
 
   const { loading, error, success } = status
 
@@ -19,11 +20,7 @@ const useStatus = () => {
   const Status = () => (
     <>
       {error ? <p className="error">{error}</p> : null}
-      {loading ? (
-        <p>
-          <Loading />
-        </p>
-      ) : null}
+      {loading ? <Loading /> : null}
       {success ? <p className="success">{success}</p> : null}
     </>
   )

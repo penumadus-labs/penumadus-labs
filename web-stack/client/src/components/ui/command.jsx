@@ -5,7 +5,7 @@ export default ({ name, sendCommand }) => {
   const [Alert, open, close] = useAlert()
 
   const handleAccept = async () => {
-    await sendCommand(name)
+    await sendCommand(undefined, name)
   }
 
   return (

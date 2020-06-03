@@ -3,9 +3,9 @@ const { getDeviceData } = require('../controllers/database')
 
 const database = Router()
 
-database.get('/device-data', async (req, res) => {
+database.get('/device-data', async ({ query }, res) => {
   try {
-    const data = await getDeviceData(req.query.id)
+    const data = await getDeviceData(query.id)
     const buf = Buffer.from(JSON.stringify(data))
     res.send(buf)
   } catch (error) {

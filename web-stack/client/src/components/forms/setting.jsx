@@ -12,32 +12,32 @@ export default ({ name, message, settings, sendCommand }) => {
 
   const submit = (values) => {
     const formValues = Object.values(values)
-    if (formValues.every((value) => value === '')) setError('no values entered')
-    else {
-      const settingEntries = Object.entries(settings)
-      setSummary(
-        <div>
-          {settingEntries.map(([name, currentValue], i) => {
-            const newValue = formValues[i]
-            return newValue !== '' ? (
-              <p key={i}>
-                {name}: {currentValue} => {newValue}
-              </p>
-            ) : null
-          })}
-        </div>
-      )
-      setArgs(
-        settingEntries.map(([, currentValue], i) => {
-          const newValue = formValues[i]
-          return +(newValue === '' ? currentValue : newValue)
-        })
-      )
-      open()
-    }
+
+    if (formValues.every((value) => value === ''))
+      return setError('no values entered')
+
+    const args = []
+    const summary = []
+
+    Object.entries(settings).forEach(([name, currentValue], i) => {
+      const newValue = formValues[i]
+
+      if (newValue !== '') {
+        args.push(newValue)
+        summary.push(
+          <p key={i}>
+            {name}: {currentValue} => {newValue}
+          </p>
+        )
+      } else args.push(currentValue)
+    })
+
+    setArgs(args)
+    setSummary(summary)
+    open()
   }
 
-  const handleAccept = () => sendCommand(name, args)
+  const handleAccept = () => sendCommand(undefined, name, args)
 
   return (
     <>

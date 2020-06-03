@@ -28,13 +28,14 @@ const initialize = async (token) => {
   }
 }
 
-const getSettings = async (id) => {
+const getSettings = async (id = 'unit_3') => {
   const { data } = await devices.get('settings', { params: { id } })
+  console.log(data)
   ctx.dispatch({ type: 'settings', settings: data })
 }
 
-const sendCommand = async (command, args = {}) => {
-  const { data } = await devices.post('command', { command, args })
+const sendCommand = async (id = 'unit_3', command, args = []) => {
+  const { data } = await devices.post('command', { id, command, args })
   return data
 }
 

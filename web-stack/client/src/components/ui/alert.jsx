@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import useStatus from '../../hooks/use-status'
+import useEsc from '../../hooks/use-esc'
 
 const Root = styled.div`
   z-index: var;
@@ -42,6 +43,10 @@ const Root = styled.div`
   }
 `
 
+const Summary = styled.div`
+  margin: auto;
+`
+
 const OpaqueCover = styled.div`
   background: var(--body-background);
   opacity: 0.5;
@@ -61,17 +66,7 @@ const Alert = ({
     { success, loading },
   ] = useStatus()
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.keyCode === 27) onCancel()
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  })
+  useEsc(onCancel)
 
   if (!isOpen) return null
 
@@ -101,14 +96,16 @@ const Alert = ({
   )
 
   return (
-    <Root animation={animation} className="center-child fixed">
-      <OpaqueCover className="fixed" />
-      <main className="card-spaced">
-        <div>{children}</div>
-        <Status />
-        <div className="space-children-x">{body}</div>
-      </main>
-    </Root>
+    <>
+      <Root animation={animation} className="center-child fixed">
+        <main className="card-spaced">
+          {!loading ? <Summary>{children}</Summary> : null}
+          <Status />
+          <div className="space-children-x">{body}</div>
+        </main>
+        <OpaqueCover className="fixed" />
+      </Root>
+    </>
   )
 }
 

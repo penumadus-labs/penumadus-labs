@@ -12,13 +12,13 @@ const grid = css`
 `
 
 const spaceChildrenY = css`
-  > *:not(:first-child) {
+  > * + * {
     margin-top: var(--sm);
   }
 `
 
 const spaceChildrenYXS = css`
-  > *:not(:first-child) {
+  > * + * {
     margin-top: var(--xs);
   }
 `

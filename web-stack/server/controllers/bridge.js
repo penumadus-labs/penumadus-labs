@@ -1,10 +1,15 @@
 const controller = {
   users: null,
-  devices: new Set(),
+  devices: {},
   sendDataToUsers(data) {
-    this.users.forEach((client) => client.send(data))
+    controller.users.forEach((client) => client.send(data))
   },
-  makeTCPRequest(id, request, ...data) {},
+  sendDeviceCommand(id, request, args) {
+    return controller.devices[id](request, args)
+  },
+  getDeviceSettings(id) {
+    if (controller.devices[id]) return controller.devices[id].settings
+  },
 }
 
 module.exports = controller

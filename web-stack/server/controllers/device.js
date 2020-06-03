@@ -27,7 +27,7 @@ class Device extends EventEmitter {
     socket.on('error', console.error)
     socket.on('close', () => {
       console.info('tcp client closed')
-      controller.tcpClients.delete(this)
+      delete controller.devices[this.id]
     })
 
     this.socket = socket
@@ -37,8 +37,8 @@ class Device extends EventEmitter {
   }
 
   async initialize() {
-    // await this.getSettings()
-    controller.devices.add(this)
+    await this.getSettings()
+    controller.devices[this.id] = this
   }
 
   getSettings() {
@@ -53,11 +53,11 @@ class Device extends EventEmitter {
 
   addDataStreams() {
     this.on(table['standardData'], (data) => {
-      insertStandardData(this.id, data)
+      // insertStandardData(this.id, data)
     })
 
     this.on(table['accelerationData'], (data) => {
-      insertAccelerationData(this.id, data)
+      // insertAccelerationData(this.id, data)
     })
 
     this.on('error', (err) => {
@@ -65,7 +65,7 @@ class Device extends EventEmitter {
     })
   }
 
-  createRequest(command, ...args) {
+  createRequest(command, args = []) {
     console.info(`request: ${table[command]}`)
 
     const message = args.length ? [command, ...args].join(' ') : command
@@ -89,7 +89,7 @@ class Device extends EventEmitter {
         )
       }
 
-      const response = await this.createRequest(command, ...args)
+      const response = await this.createRequest(command, args)
       this.settings[dataLabel] = settings
       return response
     }
