@@ -1520,6 +1520,16 @@ queuetoSD(struct memelement *mptr){
 	DEB_PRINTLN(spbuf);
 
 	len=makefullpacket(mptr,lbuf);
+	/* add a separator which will be stripped on read back in */
+	if(len >= sizeof(lbuf) ){
+		Serial.println(F("SD Q SIZE OVRRUN"));
+		len=sizeof(lbuf);
+	}
+	else
+		len++;
+
+	lbuf[len-1]='\n';
+		
 	fd_SD.write(lbuf,len);
 	return(true);
 }
