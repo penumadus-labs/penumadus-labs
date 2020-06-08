@@ -1,19 +1,21 @@
 #!/bin/bash
 set -x
 
+STARTLOG=/home/hank/startup.log
+/bin/date > $STARTLOG
 if [ $(id -u) != 0 ]
 then
-	echo Must be run as root
+	echo Must be run as root >> $STARTLOG
 	exit
 fi
 	
 while true
 do
 	# clean up
-	killall wifipi
+	killall wifipi >> $STARTLOG
 	while [ $? -eq 0 ]
 	do
-		killall wifipi 
+		killall wifipi  >> $STARTLOG
 	done
 
 	>/home/hank/log1
@@ -22,14 +24,19 @@ do
 	# find the port 
 	if [ -c "/dev/ttyUSB0" ]
 	then
-		echo using ttyUSB0
+		echo using ttyUSB0 >>  $STARTLOG
 		/home/pi/tankmon/hank/hank-latest-3.1/wifipi/wifipi /dev/ttyUSB0 >/home/hank/log1 2>/home/hank/log2 
 	elif [ -c "/dev/ttyUSB1" ] 
 	then
-		echo using ttyUSB1
+		echo using ttyUSB1 >>  $STARTLOG
 		/home/pi/tankmon/hank/hank-latest-3.1/wifipi/wifipi /dev/ttyUSB1 >/home/hank/log1 2>/home/hank/log2 
+	elif [ -c "/dev/ttyAMA0" ] 
+	then
+		echo using /dev/ttyAMA0 >>  $STARTLOG
+		/home/pi/tankmon/hank/hank-latest-3.1/wifipi/wifipi /dev/ttyAMA0 >/home/hank/log1 2>/home/hank/log2 
+	
 	else
-		echo NO SERIAL PORTS!
+		echo NO SERIAL PORTS! >> $STARTLOG
 		/* wait and try again */
 		sleep 5
 	fi
