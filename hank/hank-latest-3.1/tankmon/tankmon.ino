@@ -1080,7 +1080,8 @@ recovercell()
 
 
 /* send a UDP frame to server */
-/* use fixed FRAMESIZE udp frames for simplicity on both ends */
+/* formerly used fixed FRAMESIZE udp frames for simplicity on both ends */
+/* now can be up to FRAMESIZE */
 void
 sendUDP(const char *addr,short port, const char *packetdata, int packetlen)
 {
@@ -1101,6 +1102,11 @@ sendUDP(const char *addr,short port, const char *packetdata, int packetlen)
 	DEB_PRINT(F("SendUDP: [ "));
 	DEB_WRITE(packetdata,packetlen);
 	DEB_PRINTLN(F(" ]"));
+
+	if(packetlen > sizeof(udpPacket)-12 ){
+		packetlen=sizeof(udpPacket)-12;
+		Serial.println(F("PACKET TRUNCATION"));
+	}
 
 	//PONDSCUM keep this for debug for now so when go nonverbose 
 	//can still see it
@@ -1167,11 +1173,17 @@ sendUDPSneaky(const char *addr,short port, const char *packetdata,
 
 	packetstotal++;
 
+	if(packetlen > sizeof(udpPacket)-12 ){
+		packetlen=sizeof(udpPacket)-12;
+		Serial.println(F("PACKET TRUNCATION"));
+	}
+
 	//PONDSCUM keep this for debug for now so when go nonverbose 
 	//can still see it
 	Serial.print(F("SendUDP: [ "));
 	Serial.write(packetdata,packetlen);
 	Serial.println(F(" ]"));
+
 
 	memset(udpPacket,0,FRAMESIZE);
 
