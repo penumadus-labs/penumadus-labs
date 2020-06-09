@@ -32,8 +32,9 @@
 *.exe
 dbtestmon
 DM/e_UDPengine.log
-UDPengine
-wifipi
+DM/UDPengine
+DM/dbtestmon
+hank/hank-latest-3.1/wifipi/wifipi
 archive/
 backups/
 new/
