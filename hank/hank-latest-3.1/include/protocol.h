@@ -65,9 +65,16 @@
     xbee or parser on hank
 */
 
+
+
 //arduino doesn't support floating point printf so have
 //to use this goofy macro and %ld.%02ld to make it work.
 #define FAKEFLOAT(X) (int)X,((int)((X)*100))%100
+
+/* keep all code tags either capital letters or out of the range
+ * a-f to avoid ever confusing ascii encoded number data with command 
+ * letters
+ */
 
 #define ACK 'A'
 #define NACK 'N'
