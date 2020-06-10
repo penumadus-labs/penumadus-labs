@@ -109,14 +109,18 @@ const globalStyle = css`
     border-width: 0;
   }
 
+  html {
+    font-size: 110%;
+  }
+
   body {
     height: 100vh;
     margin: 0;
     color: var(--font);
     font-size: 0.8rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Segoe UI' 'Roboto', sans-serif;
 
-    letter-spacing: 0.03rem;
+    letter-spacing: 0.04rem;
     background: var(--body-background);
     * {
       margin: 0;

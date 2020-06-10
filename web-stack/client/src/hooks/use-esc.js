@@ -7,7 +7,6 @@ export default (callback) =>
     }
 
     window.addEventListener('keydown', handleKeyDown)
-    console.log('mount')
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)

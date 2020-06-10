@@ -3,7 +3,6 @@ import Loading from '../components/loading'
 
 const useStatus = () => {
   const [status, setStatus] = useState({})
-  console.log(status)
 
   const { loading, error, success } = status
 

@@ -30,14 +30,16 @@ devices
   .get('/protocol', async (req, res) => {
     res.send({ commands, setters })
   })
-  .get('/settings', ({ query }, res) => {
-    const settings = getDeviceSettings(query.id) || dummySettings
-    res.send(settings)
+  .get('/settings', async ({ query }, res) => {
+    try {
+      const settings = await getDeviceSettings(query.id)
+      res.send(settings)
+    } catch (error) {}
   })
 devices.post('/command', async ({ body: { id, command, args } }, res) => {
   try {
-    await new Promise((resolve, reject) => setTimeout(resolve, 500))
-    // await sendDeviceCommand(id, command, args)
+    // await new Promise((resolve, reject) => setTimeout(resolve, 500))
+    await sendDeviceCommand(id, command, args)
     res.sendStatus(200)
   } catch (error) {
     res.statusMessage = "Command didn't make it :("

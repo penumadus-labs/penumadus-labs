@@ -19,7 +19,8 @@ extends EventEmitter and creates promise based methods for issuing requests to t
 */
 
 class Device extends EventEmitter {
-  settings = {}
+  // settings = {}
+  initialized = false
 
   constructor(socket) {
     super()
@@ -36,19 +37,24 @@ class Device extends EventEmitter {
     this.socket.on('data', this.emitResponses.bind(this))
   }
 
-  async initialize() {
-    await this.getSettings()
-    controller.devices[this.id] = this
+  initialize(id) {
+    // await this.getSettings()
+    controller.devices[id] = this
+    this.initialized = true
   }
 
-  getSettings() {
-    return Promise.all(
+  async getSettings() {
+    const settings = {}
+
+    await Promise.all(
       getters.map(({ command, dataLabel }) =>
         this.createRequest(command).then(
-          (response) => (this.settings[dataLabel] = response)
+          ({ time, ...data }) => (settings[dataLabel] = data)
         )
       )
     )
+
+    return settings
   }
 
   addDataStreams() {
@@ -71,7 +77,7 @@ class Device extends EventEmitter {
     const message = args.length ? [command, ...args].join(' ') : command
     this.socket.write(message.padEnd(config.packetSize))
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.once(command, (err, data) => {
         if (err) reject(err)
 
@@ -90,7 +96,7 @@ class Device extends EventEmitter {
       }
 
       const response = await this.createRequest(command, args)
-      this.settings[dataLabel] = settings
+      // this.settings[dataLabel] = settings
       return response
     }
   }
@@ -107,20 +113,17 @@ class Device extends EventEmitter {
 
   emitResponses(raw) {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
-    if (!this.id) this.id = id
+    if (data.time) data.time = +data.time
+
+    if (!this.initialized) this.initialize(id)
     if (command === 'HELLO') return
     if (this.listenerCount(command)) {
-      if (status) {
-        console.info(`response: ${table[command]}`)
+      console.info(`response: ${table[command]}`)
 
-        const err =
-          status === 'NACK' ? new Error('command not acknowledged') : null
-        this.emit(command, err, data)
-      } else {
-        console.info(`stream: ${table[command]}`)
+      const err =
+        status === 'NACK' ? new Error('command not acknowledged') : null
 
-        this.emit(command, coerceNumbers(data))
-      }
+      this.emit(command, err, data)
     } else {
       this.emit('error', new Error(`unhandled response ${command}`))
     }
@@ -146,6 +149,6 @@ class Device extends EventEmitter {
 
 module.exports = async (socket) => {
   const device = new Device(socket)
-  await device.initialize()
+  // await device.initialize()
   return device
 }

@@ -16,7 +16,6 @@ export default () => {
 
   const handleLogin = (...args) =>
     login(...args).catch((error) => {
-      // console.error('hi', error.toString())
       setError(error)
     })
 
