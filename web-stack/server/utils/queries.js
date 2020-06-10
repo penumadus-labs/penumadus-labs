@@ -7,6 +7,7 @@ const queries = [
       'accelerationData.x': 1,
       'accelerationData.y': 1,
       'accelerationData.z': 1,
+      'accelerationData.magnitude': 1,
     },
   },
   {

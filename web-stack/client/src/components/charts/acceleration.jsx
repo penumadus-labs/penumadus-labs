@@ -8,6 +8,12 @@ export default ({ data }) => {
       <Line dot={false} type="monotone" dataKey="x" stroke={colors.red} />
       <Line dot={false} type="monotone" dataKey="y" stroke={colors.yellow} />
       <Line dot={false} type="monotone" dataKey="z" stroke={colors.blue} />
+      <Line
+        dot={false}
+        type="monotone"
+        dataKey="magnitude"
+        stroke={colors.green}
+      />
     </Chart>
   )
 }

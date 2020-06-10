@@ -42,7 +42,7 @@ export const gray4 = '#ccc'
 
 export const white = '#f5f5f5'
 
-const opacity = '.95'
+const opacity = '.99'
 
 const darkBody = `rgb(50, 59, 68, 1)`
 const darkCard = `rgb(33, 42, 51, ${opacity})`

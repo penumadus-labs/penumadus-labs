@@ -40,6 +40,7 @@ class Device extends EventEmitter {
   initialize(id) {
     // await this.getSettings()
     controller.devices[id] = this
+    this.id = id
     this.initialized = true
   }
 
@@ -58,12 +59,12 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], (data) => {
+    this.on(table['standardData'], (err, data) => {
       // insertStandardData(this.id, data)
     })
 
-    this.on(table['accelerationData'], (data) => {
-      // insertAccelerationData(this.id, data)
+    this.on(table['accelerationData'], (err, data) => {
+      insertAccelerationData(this.id, data)
     })
 
     this.on('error', (err) => {
