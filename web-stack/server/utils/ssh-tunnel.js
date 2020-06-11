@@ -4,7 +4,7 @@ const tunnel = require('tunnel-ssh')
 
 const config = {
   username: 'ubuntu',
-  host: '18.222.29.175',
+  host: '18.222.197.43',
   port: '22',
   privateKey: readFileSync(__dirname + '/../.ssh/server2.pem'),
 }

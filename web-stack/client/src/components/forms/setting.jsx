@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAlert } from '../ui/alert'
-import Input from '../ui/input'
+import { useAlert } from '../alert'
+import Input from '../inputs/input'
 
 export default ({ name, message, settings, sendCommand }) => {
   const { register, handleSubmit } = useForm()

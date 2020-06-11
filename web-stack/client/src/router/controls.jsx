@@ -1,6 +1,6 @@
 import React from 'react'
 import Setting from '../components/forms/setting'
-import Command from '../components/ui/command'
+import Command from '../components/inputs/command'
 import useDevices from '../context/devices/context'
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
   if (loading) return <p className="card loading">loading...</p>
 
   return (
-    <>
+    <div className="main">
       <div className="card grid-commands">
         {commands.map((command, i) => (
           <Command key={i} {...command} sendCommand={sendCommand} />
@@ -28,6 +28,6 @@ export default () => {
             />
           ))
         : null}
-    </>
+    </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Input from '../ui/input'
+import Input from '../inputs/input'
 import { useForm } from 'react-hook-form'
 import useAuth from '../../context/auth/context'
 

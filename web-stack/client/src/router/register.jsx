@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default () => (
-  <div className="card-spaced">
-    <p>Register</p>
+  <div className="main">
+    <p className="card">Register</p>
   </div>
 )

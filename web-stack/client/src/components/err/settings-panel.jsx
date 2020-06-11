@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Settings from '../../components/ui/settings'
-import Summary from '../../components/ui/summary'
+import Settings from '../../components/inputs/settings'
+import Summary from '../../components/inputs/summary'
 import { Warning } from '../style/components'
 import useSettings from '../../hooks/use-settings'
 

@@ -2,15 +2,14 @@ import React, { forwardRef } from 'react'
 import styled from '@emotion/styled'
 
 const Root = styled.label`
-  display: block;
-
-  p {
+  label {
     white-space: nowrap;
   }
 
   input {
-    width: 100%;
-    margin-top: 3px;
+    width: 4rem;
+    margin-top: 0;
+    margin-left: 3px;
     cursor: text;
     &:focus {
       filter: brightness(90%);
@@ -20,8 +19,8 @@ const Root = styled.label`
 
 export default forwardRef(({ before, ...props }, ref) => {
   return (
-    <Root className="space-children-y-xs">
-      <p>{props.name}</p>
+    <Root>
+      <label>{props.name}</label>
       {before}
       <input className="input" ref={ref} {...props} />
     </Root>

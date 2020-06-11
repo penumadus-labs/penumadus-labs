@@ -50,7 +50,7 @@ const clickable = css`
   }
   :focus {
     outline: none;
-    box-shadow: 0 0 0 3px var(--purple);
+    box-shadow: var(--select);
   }
 `
 
@@ -85,10 +85,10 @@ const globalStyle = css`
     --md: 1rem;
     --lg: 1.8rem;
     --radius: 0.2rem;
+    --select: 0 0 0 3px var(--purple);
 
     /* shadow */
-    --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.4),
-      0 4px 10px -1px rgb(0, 0, 0, 0.3);
+    --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.4), 0 4px 10px -1px rgb;
 
     /* 0 6px 4px -1px rgb(70, 130, 180, 0.3); */
     --shadow-card: 2px 4px 3px -1px rgb(0, 0, 0, 0.5),
@@ -263,6 +263,18 @@ const globalStyle = css`
 
   .success {
     color: var(--green);
+  }
+
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0 var(--sm);
+  }
+
+  .main {
+    ${spaceChildrenY}
+    padding: var(--sm);
   }
 `
 

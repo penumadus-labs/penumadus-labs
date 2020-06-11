@@ -1,5 +1,5 @@
 import React from 'react'
-import Alert from './alert'
+import Alert from '../alert'
 
 export default ({ list, onAccept, onCancel }) => (
   <Alert onAccept={onAccept} onCancel={onCancel}>

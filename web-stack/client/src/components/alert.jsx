@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import useStatus from '../../hooks/use-status'
-import useEsc from '../../hooks/use-esc'
+import useStatus from '../hooks/use-status'
+import useEsc from '../hooks/use-esc'
 
 const Root = styled.div`
   z-index: var;

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import NavBar from './nav-bar'
-import StatusBar from './status-bar'
 import Router from '../router/router'
 import Login from '../components/forms/login'
 import useAuth from '../context/auth/context'
@@ -49,8 +48,7 @@ const Root = styled.div`
   }
 
   main {
-    padding: var(--sm);
-    overflow-y: auto;
+    overflow: auto;
   }
 
   .login {
@@ -68,7 +66,7 @@ const Layout = ({ children }) => {
   ) : (
     <>
       <main className="space-children-y">
-        <StatusBar />
+        {/* <StatusBar /> */}
         <Router />
       </main>
       <NavBar handleLogout={logout} />

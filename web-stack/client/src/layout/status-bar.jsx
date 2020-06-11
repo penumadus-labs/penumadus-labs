@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import DeviceSelect from '../components/ui/device-select'
-import Download from '../components/ui/download'
+import DeviceSelect from '../components/inputs/device-select'
+import Download from '../components/inputs/download'
 
 const Menu = styled.div`
   display: flex;

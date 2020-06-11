@@ -17,6 +17,12 @@ export default ({ data, options }) => {
         dataKey="humidity"
         stroke={colors.blue}
       />
+      <Line
+        dot={false}
+        type="monotone"
+        dataKey="pressure"
+        stroke={colors.violet}
+      />
     </Chart>
   )
 }
