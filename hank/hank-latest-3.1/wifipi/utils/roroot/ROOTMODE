@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ "$1" == "RO" ]
+then
+	cp /boot/RO_cmdline.txt /boot/cmdline.txt
+elif [ "$1" == "RW" ]
+then
+	cp /boot/RW_cmdline.txt /boot/cmdline.txt
+else
+	echo usage: $0: [RW or RO]
+fi

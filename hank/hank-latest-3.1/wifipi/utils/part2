@@ -1,0 +1,20 @@
+#!/bin/bash
+set -x
+
+apt-get install apache2 php libgpiod-dev libgpiod-doc git sshfs gpiod
+
+echo disable bluetooth so get high speed UART back
+set -x
+echo "#disable bluetooth to get hs uart back on ttyAMA0" >>/boot/config.txt
+echo "dtoverlay=disable-bt" >>/boot/config.txt
+systemctl disable hciuart
+
+
+#set up swap
+echo setting up swap,  this will take awhile
+sudo dd if=/dev/zero of=/home/hank/emergswap bs=1MiB count=4096
+sudo mkswap /home/hank/emergswap
+
+#set up rc.local
+echo set up rc.local
+sudo cp files/rc.local /etc/rc.local
