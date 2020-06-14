@@ -98,6 +98,9 @@ main(int argc, char *argv[])
 	}
 
 
+	/* turn off led */
+	led(0);
+
 	/* let hank know we are ready to process commands */
 	sendbootedstatus();
 	
@@ -226,6 +229,7 @@ udp_readthreadproc(void *arg){
 			makeApiFrame(WIFICMND,buf,1,frame);
 			sendApiFrame(frame);
 			g_err(NOEXIT,NOPERROR,"WIFIPI->HANK:1: Send AVAIL");
+			led(1);
 		}
 
 
@@ -293,23 +297,38 @@ udpsetup(unsigned short listenport){
 
 void *
 udp_holdConnection(void *arg){
+
+	static bool sentDownReport=false;
+
 	char *bufptr=WIFIQUERYSTRING;
 	g_err(NOEXIT,NOPERROR,"hold connect thread started\n");
 	while (true){
 		if(remoteipinit){
-			/* should have WIFIQUERY by now,  else wifi is down */
+			/* should have WIFIQUERY ret from server by now ,  
+			//if one was sent, else wifi is down */
+			//there is a race condition here,  receiver on udp will
+			//set querysent=false if a good one comes back
+			//if this happens, wifi may go down for 5 seconds then back up
+			//likelihood is zip since query returns should be 100mS and
+			//this the timer on this loop is 5 seconds
 			if(querysent){
 				/* this only occurs if sendUDP passes meaning wifi is connected */
 				g_err(NOEXIT,NOPERROR,"Wifi Down due to query delay");
-				sendWifiUnavail();
+				querysent=false;
+				sendWifiUnavail(); 
 			}
 			else if(sendUDP(&RemoteIP, bufptr, strlen(bufptr))){
-				g_err(NOEXIT,NOPERROR,"WIFIPI->UDP sent link hold");
+				g_err(NOEXIT,NOPERROR,"WIFIPI->UDP success sent link hold");
 				querysent=true;
+				sentDownReport=false;
 			}
 			else{
 				g_err(NOEXIT,NOPERROR,"Wifi Down failed sendUDP");
-				sendWifiUnavail();
+				querysent=false;
+				if(!sentDownReport){
+					sendWifiUnavail(); 
+					sentDownReport=true;
+				}
 			}
 		}
 		/* no remote ip init,  force hank to send one */
@@ -385,7 +404,7 @@ sendUDP( struct sockaddr_in *rem_IP, char *msg, int msglen){
 		(struct sockaddr *) rem_IP,
 		sizeof(struct sockaddr_in))) != msglen) 
 	{
-		g_err(NOEXIT,NOPERROR,
+		g_err(NOEXIT,PERROR,
 			"sendto() sent  %d bytes expecing %d\n",n,msglen);
 		return(false);
 	}
@@ -450,6 +469,8 @@ processframe(unsigned char *frame, int len){
 			//since a sendUDP should only fail if link is down
 			//the udpholdconnect check will bring it back up if it reappears
 			buf[1]=WIFI_RET_ERR;  
+			led(0);
+			querysent=false;
 		}
 		buf[0]= frame[FRAMETYPE+1]; //hank waiting on this frame#
 		makeApiFrame(APITXREQRESP,buf,2,locframe);
@@ -552,12 +573,20 @@ testAddress()
 	int n;
 	n=sprintf(buf,SETIPFMT,
 			SETIPPARAMS,
-			TEST_SERVER_ADDR,
-			TEST_SERVER_PORT
+			AWS_SERVER_ADDR,
+			AWS_SERVER_PORT
 	);
 	makeApiFrame(WIFICMND,buf,n,frame);
 	sendApiFrame(frame);
 	g_err(NOEXIT,NOPERROR,"WIFIPI->HANK: sent ip address change");
+
+	/*
+	buf[0]=COMMITPARAMS;
+	buf[1]='\0';
+	makeApiFrame(WIFICMND,buf,n,frame);
+	sendApiFrame(frame);
+	g_err(NOEXIT,NOPERROR,"COMMITED IP address change");
+	*/
 }
 
 void
@@ -565,7 +594,8 @@ sendbootedstatus()
 {
 	char buf[4];
 
-	//testAddress(); only needed for local testing
+	//only needed on a damaged hank
+	//testAddress(); //only needed for local testing
 
 	buf[0]=WIFIBOOTED;
 	unsigned char frame[MAXFRAMEBUF];
@@ -581,9 +611,9 @@ sendWifiUnavail(void)
 	unsigned char frame[MAXFRAMEBUF];
 	unsigned char buf[MAXFRAMEBUF];
 
-	querysent=false;
 	buf[0]=WIFIDOWN;
 	makeApiFrame(WIFICMND,buf,1,frame);
 	sendApiFrame(frame);
 	g_err(NOEXIT,NOPERROR,"WIFIPI->HANK:1: Send WIFIDOWN");
+	led(0);
 }

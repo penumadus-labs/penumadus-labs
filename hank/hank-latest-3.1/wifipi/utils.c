@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -19,6 +20,7 @@
 #include <libgen.h>
 #include <bool.h>
 #include <utils.h>
+#include <linux/gpio.h>
 
 
 int errfd=0;
@@ -287,3 +289,50 @@ init_devmem(long mymaplen, long myoffset){
 	return((volatile unsigned char *)mem_map);
 
 }
+
+
+bool
+led(int value)
+{
+
+static struct gpiohandle_request req;
+static struct gpiohandle_data data;
+static int fd=0;
+static int errorstate=false;
+
+if(errorstate){
+	return(false);
+}
+else{
+	if( fd == 0){
+		if((fd=open("/dev/gpiochip0",0)) < 0){
+			g_err(NOEXIT,NOPERROR,"could not open gpiochip0\n");
+			errorstate=true;
+			return(false);
+		}
+
+		req.lineoffsets[0]=25;
+		req.flags=GPIOHANDLE_REQUEST_OUTPUT;
+		memcpy(req.default_values, &data, sizeof(req.default_values));
+		strcpy(req.consumer_label, "led25");
+		req.lines = 1;
+
+		if(ioctl(fd,GPIO_GET_LINEHANDLE_IOCTL,&req) < 0){
+			g_err(NOEXIT,NOPERROR,"Could not ioctl GET_LINE_HANDLE");
+			fd=0;
+			errorstate=true;
+			return(false);
+		}
+	}
+
+	data.values[0]=value;
+	if(ioctl(req.fd,GPIOHANDLE_SET_LINE_VALUES_IOCTL, &data) < 0){
+		g_err(NOEXIT,NOPERROR,"Could not ioctl SET_LINE_VALUES");
+		errorstate=true;
+		return(false);
+	}
+}
+return(true);
+
+}
+
