@@ -11,12 +11,18 @@ export default () => {
   if (error) return <p className="card error">error</p>
   if (loading) return <Loading />
 
+  console.log(acceleration)
+
   return (
     <>
       <ChartControls />
       <div className="main">
-        {/* <StandardChart data={standard} /> */}
-        {/* <AccelerationChart data={{}} /> */}
+        <StandardChart data={standard} />
+        {acceleration.length < 3000 ? (
+          <AccelerationChart data={acceleration} />
+        ) : (
+          <p>too many data points :(</p>
+        )}
       </div>
     </>
   )

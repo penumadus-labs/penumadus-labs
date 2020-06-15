@@ -19,7 +19,6 @@ const tooltipContentStyle = {
 }
 
 export const Chart = memo(({ children, data }) => {
-  console.log('render')
   useEffect(() => {
     setImmediate(() => {
       document.querySelectorAll('tspan').forEach(
