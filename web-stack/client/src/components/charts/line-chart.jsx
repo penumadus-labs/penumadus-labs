@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import {
   ResponsiveContainer,
   LineChart,
@@ -19,8 +19,20 @@ const tooltipContentStyle = {
 }
 
 export const Chart = memo(({ children, data }) => {
+  console.log('render')
+  useEffect(() => {
+    setImmediate(() => {
+      document.querySelectorAll('tspan').forEach(
+        (elm) => {
+          elm.setAttribute('fill', colors.font)
+        },
+        [data]
+      )
+    })
+  })
+
   return (
-    <div className="card-spaced">
+    <div className="card-spaced chart">
       <ResponsiveContainer width="100%" height={600}>
         <LineChart
           data={data}
@@ -30,13 +42,7 @@ export const Chart = memo(({ children, data }) => {
           <Label value="hi" position="top" />
           <Legend verticalAlign="top" />
           <XAxis dataKey="time">
-            <Label
-              content={({ viewBox: { x, y, width, height } }) => (
-                <text x={width / 2} y={y + height + 10} fill={colors.font}>
-                  Time (s)
-                </text>
-              )}
-            ></Label>
+            <Label>hello</Label>
           </XAxis>
 
           <YAxis />
