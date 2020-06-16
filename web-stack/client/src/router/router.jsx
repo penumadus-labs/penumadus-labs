@@ -9,8 +9,8 @@ import Colors from './colors'
 
 export default () => {
   return (
-    <Router className="relative">
-      <Charts path="/" />
+    <Router>
+      <Charts path="/charts" />
       <Controls path="controls" />
       <Register path="register" />
       <NotFound default />

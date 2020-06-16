@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 import Input from '../inputs/input'
 import { useForm } from 'react-hook-form'
 import useAuth from '../../context/auth/context'
+import styled from '@emotion/styled'
+
+const StyledForm = styled.form`
+  width: 200px;
+`
 
 export default () => {
   const [, { login }] = useAuth()
-  const [error, setError] = useState('')
+  const [{ loading, error }, setStatus] = useState({})
 
   const { handleSubmit, register } = useForm({
     defaultValues: {
@@ -14,17 +19,23 @@ export default () => {
     },
   })
 
-  const handleLogin = (...args) =>
+  const handleLogin = (...args) => {
+    setStatus({ loading: true })
     login(...args).catch((error) => {
-      setError(error)
+      setStatus({ error })
     })
+  }
 
   return (
-    <form className="card-spaced" onSubmit={handleSubmit(handleLogin)}>
+    <StyledForm
+      className="card-spaced inline center"
+      onSubmit={handleSubmit(handleLogin)}
+    >
       <Input name="username" ref={register({})} />
       <Input name="password" ref={register({})} type="password" />
       <button className="button">Login</button>
+      {loading ? <p className="loading">loaidng...</p> : null}
       {error ? <p className="error">{error}</p> : null}
-    </form>
+    </StyledForm>
   )
 }

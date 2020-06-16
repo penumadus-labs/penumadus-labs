@@ -60,11 +60,13 @@ class Device extends EventEmitter {
 
   addDataStreams() {
     this.on(table['standardData'], (err, data) => {
+      controller.updateUsers('standard')
       // insertStandardData(this.id, data)
     })
 
     this.on(table['accelerationData'], (err, data) => {
-      insertAccelerationData(this.id, data)
+      controller.updateUsers('acceleration')
+      // insertAccelerationData(this.id, data)
     })
 
     this.on('error', (err) => {

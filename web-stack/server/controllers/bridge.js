@@ -1,8 +1,8 @@
 const controller = {
-  users: null,
+  users: new Set(),
   devices: {},
-  sendDataToUsers(data) {
-    controller.users.forEach((client) => client.send(data))
+  updateUsers(type, data = null) {
+    controller.users.forEach((client) => client.send({ type, data }))
   },
   sendDeviceCommand(id, request, args) {
     console.log(id)

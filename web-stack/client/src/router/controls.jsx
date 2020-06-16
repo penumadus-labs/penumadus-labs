@@ -13,21 +13,25 @@ export default () => {
 
   return (
     <div className="main">
-      <div className="card grid-commands">
-        {commands.map((command, i) => (
-          <Command key={i} {...command} sendCommand={sendCommand} />
-        ))}
-      </div>
-      {settings
-        ? setters.map((setter, i) => (
+      {settings ? (
+        <>
+          <div className="card grid-commands">
+            {commands.map((command, i) => (
+              <Command key={i} {...command} sendCommand={sendCommand} />
+            ))}
+          </div>
+          {setters.map((setter, i) => (
             <Setting
               key={i}
               settings={settings[setter.dataLabel]}
               sendCommand={sendCommand}
               {...setter}
             />
-          ))
-        : null}
+          ))}
+        </>
+      ) : (
+        <p className="card loading">Trying to connect...</p>
+      )}
     </div>
   )
 }

@@ -1,13 +1,13 @@
 import React from 'react'
-import Slider from '../inputs/slider'
-import Box from '../inputs/box'
+// import Slider from '../../components/inputs/slider'
+import Box from '../../components/inputs/box'
 import { useForm } from 'react-hook-form'
 import styled from '@emotion/styled'
 
 const StyledFrom = styled.form`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 `
 
 export default () => {
@@ -18,10 +18,10 @@ export default () => {
   }
   return (
     <>
-      <StyledFrom className="card space-children-x bar">
+      <StyledFrom className="space-children-x">
         <Box before="start time:" />
         <Box before="stop time:" />
-        <Slider />
+        <div></div>
         <button className="button" onClick={onReset}>
           Apply
         </button>

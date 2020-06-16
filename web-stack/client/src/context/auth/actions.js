@@ -1,4 +1,5 @@
 import { create } from 'axios'
+import { navigate } from '@reach/router'
 import url from '../../utils/url'
 
 const auth = create({
@@ -21,9 +22,10 @@ const login = async ({ username, password }) => {
     })
     sessionStorage.setItem('token', token)
     ctx.dispatch({ type: 'authorized', token })
+    await navigate('/charts')
   } catch (error) {
     ctx.dispatch({ type: 'unauthorized' })
-    if (error.response) throw error.response.statusText
+    throw error.response ? error.response.statusText : error.toString()
   }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import NavBar from './nav-bar'
+import StatusBar from './status-bar'
 import Router from '../router/router'
 import Login from '../components/forms/login'
 import useAuth from '../context/auth/context'
@@ -30,6 +31,10 @@ const Root = styled.div`
   }
 
   header {
+    z-index: var(--layer1);
+  }
+
+  header > p {
     padding: var(--sm);
     font-size: var(--lg);
     background: var(--card-background);
@@ -65,8 +70,7 @@ const Layout = ({ children }) => {
     </div>
   ) : (
     <>
-      <main className="space-children-y">
-        {/* <StatusBar /> */}
+      <main>
         <Router />
       </main>
       <NavBar handleLogout={logout} />
@@ -77,6 +81,7 @@ const Layout = ({ children }) => {
     <Root>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
+        <StatusBar loggedIn={loggedIn} />
       </header>
       {body}
     </Root>

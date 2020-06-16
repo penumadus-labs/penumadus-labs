@@ -55,6 +55,7 @@ const client = {
     await Promise.all(
       queries.map(({ label, field, projection }) =>
         client.devices.findOne({ id }, { projection }).then((res) => {
+          res[field].sort((a, b) => a.time - b.time)
           results[label] = res[field]
         })
       )

@@ -1,6 +1,6 @@
 import React from 'react'
-import useDatabase from '../../context/database/context'
-// import { makeCSVFile } from '../../utils/data'
+import useDatabase from '../context/database/context'
+// import { makeCSVFile } from '../utils/data'
 
 export default () => {
   // eslint-disable-next-line

@@ -153,6 +153,10 @@ const globalStyle = css`
     margin: auto;
   }
 
+  .raised {
+    z-index: var(--layer1);
+  }
+
   .card {
     ${card}
   }
@@ -231,6 +235,7 @@ const globalStyle = css`
   .input {
     ${raised}
     ${clickable}
+    width: 100%;
     padding: var(--xs) var(--sm);
     color: #555;
     line-height: 1px;

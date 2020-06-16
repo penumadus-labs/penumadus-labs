@@ -3,6 +3,8 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  ScatterChart,
+  Scatter,
   XAxis,
   YAxis,
   Tooltip,
@@ -12,13 +14,11 @@ import {
 import replace from '../../utils/replace-deprecated-recharts-method'
 import * as colors from '../../utils/colors'
 
-replace(LineChart, Line)
-
 const tooltipContentStyle = {
   background: colors.card,
 }
 
-export const Chart = memo(({ children, data }) => {
+export const Chart = memo(({ children, data, Chart = LineChart }) => {
   useEffect(() => {
     setImmediate(() => {
       document.querySelectorAll('tspan').forEach(
@@ -33,25 +33,26 @@ export const Chart = memo(({ children, data }) => {
   return (
     <div className="card-spaced chart">
       <ResponsiveContainer width="100%" height={600}>
-        <LineChart
+        <Chart
           data={data}
           margin={{ left: -30, right: 10, bottom: 20, top: 10 }}
-          onClick={(e) => console.log(e)}
         >
           <Label value="hi" position="top" />
           <Legend verticalAlign="top" />
           <XAxis dataKey="time">
-            <Label>hello</Label>
+            <Label position="bottom">Time</Label>
           </XAxis>
 
           <YAxis />
 
           {children}
           <Tooltip contentStyle={tooltipContentStyle} />
-        </LineChart>
+        </Chart>
       </ResponsiveContainer>
     </div>
   )
 })
 
-export { Line }
+replace(LineChart, Line, ScatterChart, Scatter)
+
+export { LineChart, Line, ScatterChart, Scatter }
