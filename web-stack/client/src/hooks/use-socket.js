@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import useDevices from '../context/devices/context'
 import { wsURL } from '../utils/url'
 
 const initialStatus = {
@@ -9,10 +10,12 @@ const initialStatus = {
 
 const useSocket = () => {
   const [{ data, acceleration }, setStatus] = useState(initialStatus)
+  const [{settings}, {getSettings}] useDevices()
   useEffect(() => {
     const ws = new WebSocket(wsURL)
 
     ws.onmessage = async ({ message: { type, data } }) => {
+      if (!settings) await getSettings()
       const date = Date.now()
       try {
         switch (type) {
