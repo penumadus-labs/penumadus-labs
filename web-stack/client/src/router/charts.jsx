@@ -12,7 +12,7 @@ export default () => {
   if (loading) return <Loading />
 
   return (
-    <div className="main">
+    <div className="space-children-y">
       <StandardChart data={standard} />
       <AccelerationChart data={acceleration} />
       <AccelerationEventsChart data={events} />

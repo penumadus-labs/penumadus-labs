@@ -6,7 +6,7 @@ import NavBarLink from './nav-link'
 
 const NavBar = ({ handleLogout }) => (
   <nav className="shadow-card raised">
-    <NavBarLink Icon={Chart} label="Charts" to="/" />
+    <NavBarLink Icon={Chart} label="Charts" to="/charts" />
     <NavBarLink Icon={Dash} label="Controls" to="controls" />
     <NavBarLink Icon={Devices} label="Register" to="register" />
     <NavBarLink Icon={Logout} label="Logout" to="/" onClick={handleLogout} />

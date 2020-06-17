@@ -2,21 +2,14 @@ dependencies:
   '@emotion/core': 10.0.28_react@16.13.1
   '@emotion/styled': 10.0.27_c989b1aa057905c7a8b69bf973f55a19
   '@reach/router': 1.3.3_react-dom@16.13.1+react@16.13.1
-  apexcharts: 3.19.2
   axios: 0.19.2
-  chart.js: 2.9.3
-  csv-parse: 4.10.1
   emotion-theming: 10.0.27_c989b1aa057905c7a8b69bf973f55a19
-  install: 0.13.0
   react: 16.13.1
-  react-apexcharts: 1.3.7_apexcharts@3.19.2+react@16.13.1
-  react-chartjs-2: 2.9.0_993042a9951b76ec634148f49ee6c836
   react-dom: 16.13.1_react@16.13.1
   react-hook-form: 5.7.2_react@16.13.1
   react-icons: 3.10.0_react@16.13.1
-  react-scripts: 3.4.1_typescript@3.9.3
+  react-scripts: 3.4.1
   recharts: 1.8.5_react-dom@16.13.1+react@16.13.1
-  typescript: 3.9.3
 lockfileVersion: 5.1
 packages:
   /@babel/code-frame/7.8.3:
@@ -1747,15 +1740,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-xrvhZ4DZewMDhoH1utLtOAwYQy60eYFoXeje30TzM3VOvQlBwQaEpKFq5m34k1wOw2AKIi2pwtiAjdmhvlBUzg==
-  /@typescript-eslint/eslint-plugin/2.34.0_4d7b57a2de70d5f860ec42d3f1ecdb5d:
+  /@typescript-eslint/eslint-plugin/2.34.0_984cbb313f9ea271f36cadd8f9814e06:
     dependencies:
-      '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0+typescript@3.9.3
-      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.3
+      '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0
+      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0
       eslint: 6.8.0
       functional-red-black-tree: 1.0.1
       regexpp: 3.1.0
-      tsutils: 3.17.1_typescript@3.9.3
-      typescript: 3.9.3
+      tsutils: 3.17.1
     dev: false
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
@@ -1768,10 +1760,10 @@ packages:
         optional: true
     resolution:
       integrity: sha512-4zY3Z88rEE99+CNvTbXSyovv2z9PNOVffTWD2W8QF5s2prBQtwN2zadqERcrHpcR7O/+KMI3fcTAmUUhK/iQcQ==
-  /@typescript-eslint/experimental-utils/2.34.0_eslint@6.8.0+typescript@3.9.3:
+  /@typescript-eslint/experimental-utils/2.34.0_eslint@6.8.0:
     dependencies:
       '@types/json-schema': 7.0.4
-      '@typescript-eslint/typescript-estree': 2.34.0_typescript@3.9.3
+      '@typescript-eslint/typescript-estree': 2.34.0
       eslint: 6.8.0
       eslint-scope: 5.0.0
       eslint-utils: 2.0.0
@@ -1780,17 +1772,15 @@ packages:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
     peerDependencies:
       eslint: '*'
-      typescript: '*'
     resolution:
       integrity: sha512-eS6FTkq+wuMJ+sgtuNTtcqavWXqsflWcfBnlYhg/nS4aZ1leewkXGbvBhaapn1q6qf4M71bsR1tez5JTRMuqwA==
-  /@typescript-eslint/parser/2.34.0_eslint@6.8.0+typescript@3.9.3:
+  /@typescript-eslint/parser/2.34.0_eslint@6.8.0:
     dependencies:
       '@types/eslint-visitor-keys': 1.0.0
-      '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0+typescript@3.9.3
-      '@typescript-eslint/typescript-estree': 2.34.0_typescript@3.9.3
+      '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0
+      '@typescript-eslint/typescript-estree': 2.34.0
       eslint: 6.8.0
       eslint-visitor-keys: 1.1.0
-      typescript: 3.9.3
     dev: false
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
@@ -1802,7 +1792,7 @@ packages:
         optional: true
     resolution:
       integrity: sha512-03ilO0ucSD0EPTw2X4PntSIRFtDPWjrVq7C3/Z3VQHRC7+13YB55rcJI3Jt+YgeHbjUdJPcPa7b23rXCBokuyA==
-  /@typescript-eslint/typescript-estree/2.34.0_typescript@3.9.3:
+  /@typescript-eslint/typescript-estree/2.34.0:
     dependencies:
       debug: 4.1.1
       eslint-visitor-keys: 1.1.0
@@ -1810,8 +1800,7 @@ packages:
       is-glob: 4.0.1
       lodash: 4.17.15
       semver: 7.3.2
-      tsutils: 3.17.1_typescript@3.9.3
-      typescript: 3.9.3
+      tsutils: 3.17.1
     dev: false
     engines:
       node: ^8.10.0 || ^10.13.0 || >=11.10.1
@@ -2157,17 +2146,6 @@ packages:
       node: '>= 8'
     resolution:
       integrity: sha512-mM8522psRCqzV+6LhomX5wgp25YVibjh8Wj23I5RPkPppSVSjyKD2A2mBJmWGa+KN7f2D6LNh9jkBCeyLktzjg==
-  /apexcharts/3.19.2:
-    dependencies:
-      svg.draggable.js: 2.2.2
-      svg.easing.js: 2.0.0
-      svg.filter.js: 2.0.2
-      svg.pathmorphing.js: 0.1.3
-      svg.resize.js: 1.4.3
-      svg.select.js: 3.0.1
-    dev: false
-    resolution:
-      integrity: sha512-hMFLRE2Lyx4WrN9pYfQLvBDcn+HOodZrqRwc+kucxM+hcUmI2NHY4z+GI14+VcSFmD4aKiMbS3z3Q2jiBxUrcg==
   /aproba/1.2.0:
     dev: false
     resolution:
@@ -3004,26 +2982,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
-  /chart.js/2.9.3:
-    dependencies:
-      chartjs-color: 2.4.1
-      moment: 2.26.0
-    dev: false
-    resolution:
-      integrity: sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==
-  /chartjs-color-string/0.6.0:
-    dependencies:
-      color-name: 1.1.4
-    dev: false
-    resolution:
-      integrity: sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==
-  /chartjs-color/2.4.1:
-    dependencies:
-      chartjs-color-string: 0.6.0
-      color-convert: 1.9.3
-    dev: false
-    resolution:
-      integrity: sha512-haqOg1+Yebys/Ts/9bLo/BqUcONQOdr/hoEr2LLTRl6C5LXctUdHxsCYfvQVg5JIxITrfCNUDr4ntqmQk9+/0w==
   /chokidar/2.1.8:
     dependencies:
       anymatch: 2.0.0
@@ -3743,10 +3701,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-D34BqZU4cIlMCY93rZHbrq9pjTAQJ3U8S8rfBqjwHxkGPThWFjzZDQpgMJY0QViLxth6ZKYiwFBo14RdN44U/w==
-  /csv-parse/4.10.1:
-    dev: false
-    resolution:
-      integrity: sha512-gdDJVchi0oSLIcYXz1H/VSgLE6htHDqJyFsRU/vTkQgmVOZ3S0IR2LXnNbWUYG7VD76dYVwdfBLyx8AX9+An8A==
   /cyclist/1.0.1:
     dev: false
     resolution:
@@ -4334,8 +4288,8 @@ packages:
       integrity: sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==
   /eslint-config-react-app/5.2.1_f8f91f27f800428497667fb337aaf85d:
     dependencies:
-      '@typescript-eslint/eslint-plugin': 2.34.0_4d7b57a2de70d5f860ec42d3f1ecdb5d
-      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.3
+      '@typescript-eslint/eslint-plugin': 2.34.0_984cbb313f9ea271f36cadd8f9814e06
+      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0
       babel-eslint: 10.1.0_eslint@6.8.0
       confusing-browser-globals: 1.0.9
       eslint: 6.8.0
@@ -5790,12 +5744,6 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-5fJMWEmikSYu0nv/flMc475MhGbB7TSPd/2IpFV4I4rMklboCH2rQjYY5kKiYGHqUF9gvaambupcJFFG9dvReg==
-  /install/0.13.0:
-    dev: false
-    engines:
-      node: '>= 0.10'
-    resolution:
-      integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==
   /internal-ip/4.3.0:
     dependencies:
       default-gateway: 4.2.0
@@ -7412,10 +7360,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
-  /moment/2.26.0:
-    dev: false
-    resolution:
-      integrity: sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
   /move-concurrently/1.0.1:
     dependencies:
       aproba: 1.2.0
@@ -8249,14 +8193,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
-  /pnp-webpack-plugin/1.6.4_typescript@3.9.3:
+  /pnp-webpack-plugin/1.6.4:
     dependencies:
-      ts-pnp: 1.1.6_typescript@3.9.3
+      ts-pnp: 1.1.6
     dev: false
     engines:
       node: '>=6'
-    peerDependencies:
-      typescript: '*'
     resolution:
       integrity: sha512-7Wjy+9E3WwLOEL30D+m8TSTF7qJJUJLONBnwQp0518siuMxUQUbgZwssaFX+QKlZkjHZcw/IpZCt/H0srrntSg==
   /portfinder/1.0.26:
@@ -9219,17 +9161,6 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-4Oz8DUIwdvoa5qMJelxipzi/iJIi40O5cGV1wNYp5hvZP8ZN0T+jiNkL0QepXs+EsQ9XJ8ipEDoiH70ySUJP3Q==
-  /react-apexcharts/1.3.7_apexcharts@3.19.2+react@16.13.1:
-    dependencies:
-      apexcharts: 3.19.2
-      prop-types: 15.7.2
-      react: 16.13.1
-    dev: false
-    peerDependencies:
-      apexcharts: ^3.18.0
-      react: '>=0.13'
-    resolution:
-      integrity: sha512-2OFhEHd70/WHN0kmrJtVx37UfaL71ZogVkwezmDqwQWgwhK6upuhlnEEX7tEq4xvjA+RFDn6hiUTNIuC/Q7Zqw==
   /react-app-polyfill/1.0.6:
     dependencies:
       core-js: 3.6.5
@@ -9243,20 +9174,6 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-OfBnObtnGgLGfweORmdZbyEz+3dgVePQBb3zipiaDsMHV1NpWm0rDFYIVXFV/AK+x4VIIfWHhrdMIeoTLyRr2g==
-  /react-chartjs-2/2.9.0_993042a9951b76ec634148f49ee6c836:
-    dependencies:
-      chart.js: 2.9.3
-      lodash: 4.17.15
-      prop-types: 15.7.2
-      react: 16.13.1
-      react-dom: 16.13.1_react@16.13.1
-    dev: false
-    peerDependencies:
-      chart.js: ^2.3
-      react: ^0.14.0 || ^15.0.0 || ^16.0.0-beta || ^16.0.0
-      react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0-beta || ^16.0.0
-    resolution:
-      integrity: sha512-IYwqUUnQRAJ9SNA978vxulHJTcUFTJk2LDVfbAyk0TnJFZZG7+6U/2flsE4MCw6WCbBjTTypy8T82Ch7XrPtRw==
   /react-dev-utils/10.2.1:
     dependencies:
       '@babel/code-frame': 7.8.3
@@ -9341,12 +9258,12 @@ packages:
       react: ^0.14.7 || ^15.0.0 || ^16.0.0
     resolution:
       integrity: sha512-oCAddEWWeFWYH5FAcHdBYcZjAw9fMzRUK9sWSx6WvSSOPVRxcHd5zTIGy/mOus+AhN/u6T4TMiWxvq79PywnJQ==
-  /react-scripts/3.4.1_typescript@3.9.3:
+  /react-scripts/3.4.1:
     dependencies:
       '@babel/core': 7.9.0
       '@svgr/webpack': 4.3.3
-      '@typescript-eslint/eslint-plugin': 2.34.0_4d7b57a2de70d5f860ec42d3f1ecdb5d
-      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.3
+      '@typescript-eslint/eslint-plugin': 2.34.0_984cbb313f9ea271f36cadd8f9814e06
+      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0
       babel-eslint: 10.1.0_eslint@6.8.0
       babel-jest: 24.9.0_@babel+core@7.9.0
       babel-loader: 8.1.0_@babel+core@7.9.0+webpack@4.42.0
@@ -9375,7 +9292,7 @@ packages:
       jest-watch-typeahead: 0.4.2
       mini-css-extract-plugin: 0.9.0_webpack@4.42.0
       optimize-css-assets-webpack-plugin: 5.0.3_webpack@4.42.0
-      pnp-webpack-plugin: 1.6.4_typescript@3.9.3
+      pnp-webpack-plugin: 1.6.4
       postcss-flexbugs-fixes: 4.1.0
       postcss-loader: 3.0.0
       postcss-normalize: 8.0.1
@@ -9389,8 +9306,7 @@ packages:
       semver: 6.3.0
       style-loader: 0.23.1
       terser-webpack-plugin: 2.3.5_webpack@4.42.0
-      ts-pnp: 1.1.6_typescript@3.9.3
-      typescript: 3.9.3
+      ts-pnp: 1.1.6
       url-loader: 2.3.0_file-loader@4.3.0+webpack@4.42.0
       webpack: 4.42.0_webpack@4.42.0
       webpack-dev-server: 3.10.3_webpack@4.42.0
@@ -10726,67 +10642,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ==
-  /svg.draggable.js/2.2.2:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-JzNHBc2fLQMzYCZ90KZHN2ohXL0BQJGQimK1kGk6AvSeibuKcIdDX9Kr0dT9+UJ5O8nYA0RB839Lhvk4CY4MZw==
-  /svg.easing.js/2.0.0:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha1-iqmUawqOJ4V6XEChDrpAkeVpHxI=
-  /svg.filter.js/2.0.2:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha1-kQCOFROJ3ZIwd5/L5uLJo2LRwgM=
-  /svg.js/2.7.1:
-    dev: false
-    resolution:
-      integrity: sha512-ycbxpizEQktk3FYvn/8BH+6/EuWXg7ZpQREJvgacqn46gIddG24tNNe4Son6omdXCnSOaApnpZw6MPCBA1dODA==
-  /svg.pathmorphing.js/0.1.3:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-49HWI9X4XQR/JG1qXkSDV8xViuTLIWm/B/7YuQELV5KMOPtXjiwH4XPJvr/ghEDibmLQ9Oc22dpWpG0vUDDNww==
-  /svg.resize.js/1.4.3:
-    dependencies:
-      svg.js: 2.7.1
-      svg.select.js: 2.1.2
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-9k5sXJuPKp+mVzXNvxz7U0uC9oVMQrrf7cFsETznzUDDm0x8+77dtZkWdMfRlmbkEEYvUn9btKuZ3n41oNA+uw==
-  /svg.select.js/2.1.2:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-tH6ABEyJsAOVAhwcCjF8mw4crjXSI1aa7j2VQR8ZuJ37H2MBUbyeqYr5nEO7sSN3cy9AR9DUwNg0t/962HlDbQ==
-  /svg.select.js/3.0.1:
-    dependencies:
-      svg.js: 2.7.1
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-h5IS/hKkuVCbKSieR9uQCj9w+zLHoPh+ce19bBYyqF53g6mnPB8sAtIbe1s9dh2S2fCmYX2xel1Ln3PJBbK4kw==
   /svgo/1.3.2:
     dependencies:
       chalk: 2.4.2
@@ -11003,9 +10858,7 @@ packages:
     dev: false
     resolution:
       integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=
-  /ts-pnp/1.1.6_typescript@3.9.3:
-    dependencies:
-      typescript: 3.9.3
+  /ts-pnp/1.1.6:
     dev: false
     engines:
       node: '>=6'
@@ -11020,10 +10873,9 @@ packages:
     dev: false
     resolution:
       integrity: sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
-  /tsutils/3.17.1_typescript@3.9.3:
+  /tsutils/3.17.1:
     dependencies:
       tslib: 1.13.0
-      typescript: 3.9.3
     dev: false
     engines:
       node: '>= 6'
@@ -11086,13 +10938,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-  /typescript/3.9.3:
-    dev: false
-    engines:
-      node: '>=4.2.0'
-    hasBin: true
-    resolution:
-      integrity: sha512-D/wqnB2xzNFIcoBG9FG8cXRDjiqSTbG2wd8DMZeQyJlP1vfTkIxH4GKveWaEBYySKIg+USu+E+EDIR47SqnaMQ==
   /unicode-canonical-property-names-ecmascript/1.0.4:
     dev: false
     engines:
@@ -11843,18 +11688,11 @@ specifiers:
   '@emotion/core': ^10.0.28
   '@emotion/styled': ^10.0.27
   '@reach/router': ^1.3.3
-  apexcharts: ^3.19.2
   axios: ^0.19.1
-  chart.js: ^2.9.3
-  csv-parse: ^4.9.1
   emotion-theming: ^10.0.27
-  install: ^0.13.0
   react: ^16.12.0
-  react-apexcharts: ^1.3.7
-  react-chartjs-2: ^2.9.0
   react-dom: ^16.12.0
   react-hook-form: ^5.7.2
   react-icons: ^3.10.0
   react-scripts: 3.4.1
   recharts: ^1.8.5
-  typescript: ^3.9.3

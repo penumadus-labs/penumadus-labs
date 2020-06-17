@@ -12,7 +12,7 @@ export default () => {
   if (loading) return <p className="card loading">loading...</p>
 
   return (
-    <div className="main">
+    <>
       {settings ? (
         <>
           <div className="card grid-commands">
@@ -32,6 +32,6 @@ export default () => {
       ) : (
         <p className="card loading">Trying to connect...</p>
       )}
-    </div>
+    </>
   )
 }

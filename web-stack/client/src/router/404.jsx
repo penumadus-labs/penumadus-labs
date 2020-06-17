@@ -1,3 +1,3 @@
 import React from 'react'
 
-export default () => <p>404: invalid route</p>
+export default () => <p className="main card">404: invalid route</p>

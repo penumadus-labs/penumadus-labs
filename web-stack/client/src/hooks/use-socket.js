@@ -10,7 +10,7 @@ const initialStatus = {
 
 const useSocket = () => {
   const [{ data, acceleration }, setStatus] = useState(initialStatus)
-  const [{settings}, {getSettings}] useDevices()
+  const [{ settings }, { getSettings }] = useDevices()
   useEffect(() => {
     const ws = new WebSocket(wsURL)
 

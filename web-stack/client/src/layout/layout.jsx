@@ -54,6 +54,7 @@ const Root = styled.div`
 
   main {
     overflow: auto;
+    padding: var(--sm);
   }
 
   .login {
