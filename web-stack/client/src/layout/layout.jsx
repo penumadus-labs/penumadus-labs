@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import NavBar from './nav-bar'
-// import StatusBar from './status-bar'
+import StatusBar from './status-bar'
 import Router from '../router/router'
 import Login from '../components/forms/login'
 import useAuth from '../context/auth/context'
@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
     <Root>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
-        {/* <StatusBar loggedIn={loggedIn} /> */}
+        <StatusBar loggedIn={loggedIn} />
       </header>
       {body}
     </Root>

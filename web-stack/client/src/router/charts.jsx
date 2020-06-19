@@ -1,5 +1,5 @@
 import React from 'react'
-import Chart from '../components/charts/vis/line-chart'
+// import Chart from '../components/charts/vis/line-chart'
 import StandardChart from '../components/charts/standard'
 // import AccelerationChart from '../components/charts/acceleration'
 // import AccelerationEventsChart from '../components/charts/acceleration-events'
