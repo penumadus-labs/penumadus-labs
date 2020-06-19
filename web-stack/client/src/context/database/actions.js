@@ -5,7 +5,7 @@ let database
 
 const ctx = {}
 
-const initialize = (token, id = 'unit_3') => {
+const initialize = async (token, id = 'unit_3') => {
   if (!token) return
   if (ctx.state.loading) {
     database = create({
@@ -17,15 +17,22 @@ const initialize = (token, id = 'unit_3') => {
       },
     })
   }
-  if (!ctx.state.pressure) {
-    getDeviceData(id)
+  try {
+    let data = sessionStorage.getItem('data')
+    if (!data) {
+      data = await getDeviceData(id)
+    }
+    ctx.dispatch({ type: 'data', data })
+  } catch (error) {
+    console.error(error)
   }
 }
 
 const getDeviceData = async (id) => {
   try {
     const { data } = await database.get('device-data', { params: { id } })
-    ctx.dispatch({ type: 'data', data })
+    // sessionStorage.setItem('data', data)
+    return data
   } catch (error) {
     console.error(error)
   }

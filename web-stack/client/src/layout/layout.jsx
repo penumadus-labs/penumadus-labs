@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import NavBar from './nav-bar'
-import StatusBar from './status-bar'
+// import StatusBar from './status-bar'
 import Router from '../router/router'
 import Login from '../components/forms/login'
 import useAuth from '../context/auth/context'
@@ -19,10 +19,6 @@ const Root = styled.div`
     }
     nav {
       grid-row-start: 2;
-    }
-    .login {
-      grid-column-start: 2;
-      margin-right: var(--nav-size);
     }
   }
 
@@ -53,12 +49,8 @@ const Root = styled.div`
   }
 
   main {
+    padding: var(--sm);
     overflow: auto;
-    padding: var(--sm);
-  }
-
-  .login {
-    padding: var(--sm);
   }
 `
 
@@ -66,7 +58,7 @@ const Layout = ({ children }) => {
   const [{ loading, loggedIn }, { login, logout }] = useAuth()
 
   const body = loading ? null : !loggedIn ? (
-    <div className="login">
+    <div>
       <Login handleLogin={login} />
     </div>
   ) : (
@@ -82,7 +74,7 @@ const Layout = ({ children }) => {
     <Root>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
-        <StatusBar loggedIn={loggedIn} />
+        {/* <StatusBar loggedIn={loggedIn} /> */}
       </header>
       {body}
     </Root>

@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 
 const StyledForm = styled.form`
   width: 200px;
+  margin: var(--sm);
 `
 
 export default () => {

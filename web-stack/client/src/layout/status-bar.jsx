@@ -21,20 +21,12 @@ export default ({ loggedIn }) => {
   //   setSelected(target.value)
   // }
 
-  return (
-    <div className="card-spaced">
-      {/* <Menu> */}
-      {/* <DeviceSelect {...{ options: devices, selected, handleSelect }} /> */}
-      {/* <Download /> */}
-      {/* </Menu> */}
-      {loggedIn ? (
-        <Menu>
-          {status}
-          <Router className="router">
-            <ChartControls path="/charts" />
-          </Router>
-        </Menu>
-      ) : null}
-    </div>
-  )
+  return loggedIn ? (
+    <Menu className="card">
+      {status}
+      <Router className="router">
+        <ChartControls path="/charts" />
+      </Router>
+    </Menu>
+  ) : null
 }
