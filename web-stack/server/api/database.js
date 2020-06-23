@@ -9,17 +9,33 @@ database.get('/device-data', async ({ query }, res) => {
   try {
     const data = await getDeviceData(query.id)
 
-    writeFileSync('data.json', JSON.stringify(data.humidity))
-    console.log('written')
+    // writeFileSync('data.json', JSON.stringify(data.humidity))
+    // console.log('written')
 
     const humidity = filterData('humidity', data.humidity)
     const temperature = filterData('temperature', data.temperature)
+    const pressure = filterData('temperature', data.pressure)
 
-    res.send({
-      humidity,
-      temperature,
-      tRaw: data.temperature,
-    })
+    const x = filterData('humidity', data.x)
+    const y = filterData('temperature', data.y)
+    const z = filterData('temperature', data.z)
+    const magnitude = filterData('temperature', data.magnitude)
+
+    const filtered = {
+      standard: {
+        humidity,
+        temperature,
+        pressure,
+      },
+      acceleration: {
+        x,
+        y,
+        z,
+        magnitude,
+      },
+    }
+
+    res.send(filtered)
   } catch (error) {
     console.error(error)
   }
