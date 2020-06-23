@@ -10,15 +10,17 @@ export default () => {
   // console.log(useDatabase())
   const [{ loading, error, standard, acceleration }] = useDatabase()
 
+  console.log(loading)
+
   if (error) return <p className="card error">error</p>
   if (loading) return <Loading />
 
   return (
-    <div className="space-children-y">
+    <>
       {/* <Chart data={temperature} /> */}
       <StandardChart data={standard} />
       <AccelerationChart data={acceleration} />
       {/*<AccelerationEventsChart data={events} /> */}
-    </div>
+    </>
   )
 }

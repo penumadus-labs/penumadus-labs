@@ -21,6 +21,8 @@ const initialize = async (token, id = 'unit_3') => {
     let data = sessionStorage.getItem('data')
     if (!data) {
       data = await getDeviceData(id)
+    } else {
+      data = JSON.parse(data)
     }
     ctx.dispatch({ type: 'data', data })
   } catch (error) {
@@ -31,7 +33,7 @@ const initialize = async (token, id = 'unit_3') => {
 const getDeviceData = async (id) => {
   try {
     const { data } = await database.get('device-data', { params: { id } })
-    // sessionStorage.setItem('data', data)
+    sessionStorage.setItem('data', JSON.stringify(data))
     return data
   } catch (error) {
     console.error(error)

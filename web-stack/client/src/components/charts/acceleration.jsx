@@ -3,11 +3,6 @@ import { Chart, Line } from './chart'
 import * as colors from '../../utils/colors'
 
 export default ({ data }) => {
-  console.log(data)
-  for (const point of data) {
-    const date = new Date(point.time * 1000)
-    point.time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-  }
   return (
     <Chart data={data}>
       <Line dot={false} type="monotone" dataKey="x" stroke={colors.red} />

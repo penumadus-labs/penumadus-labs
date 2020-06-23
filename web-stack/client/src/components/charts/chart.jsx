@@ -37,7 +37,7 @@ export const Chart = memo(({ children, data, Chart = LineChart }) => {
           data={data}
           margin={{ left: -30, right: 10, bottom: 20, top: 10 }}
         >
-          <Label value="hi" position="top" />
+          {/* <Label value="label" position="top" /> */}
           <Legend verticalAlign="top" />
           <XAxis dataKey="time">
             <Label position="bottom">Time</Label>

@@ -9,7 +9,7 @@ import Colors from './colors'
 
 export default () => {
   return (
-    <Router>
+    <Router className="space-children-y">
       <Charts path="/charts" />
       <Controls path="controls" />
       <Register path="register" />

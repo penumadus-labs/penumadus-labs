@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
     <Root>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
-        <StatusBar loggedIn={loggedIn} />
+        {/* <StatusBar loggedIn={loggedIn} /> */}
       </header>
       {body}
     </Root>
