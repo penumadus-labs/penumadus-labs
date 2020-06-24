@@ -17,7 +17,7 @@ const client = {
 
     await mongoClient.connect()
 
-    console.info('database connection opened')
+    console.info('database client connected')
 
     client.devices = await mongoClient.db(db).collection('devices')
     client.users = await mongoClient.db(db).collection('users')
@@ -25,7 +25,7 @@ const client = {
   async close() {
     try {
       await mongoClient.close()
-      console.info('database connection closed')
+      console.info('database client disconnected')
     } catch (error) {
       console.error(error)
     }
