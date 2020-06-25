@@ -127,6 +127,7 @@ parsedata(char *incoming, char *outgoing, int size)
 				&usecs,
 				&msgnum
 			);
+#ifdef SIMULATOR
 			//PONDSCUM simulated pressure for testing
 			//pressure can only go up or down +/-10% / sample
 			{
@@ -144,6 +145,7 @@ parsedata(char *incoming, char *outgoing, int size)
 			simpress *= (1+rnum);
 			pressure=simpress;
 			}
+#endif
 			//end PONDSCUM
 			microsecs=(secs*1000*1000)+(usecs);
 			memset(outgoing,PADCHAR,size);
