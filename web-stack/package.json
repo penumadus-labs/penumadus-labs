@@ -1,9 +1,5 @@
 {
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "name": "web-stack",
   "version": "1.0.0",
   "description": "",
