@@ -200,6 +200,9 @@ udp_readthreadproc(void *arg){
 		incomingBuf[recvMsgSize]='\0';
 		messagecnt++;
 		
+		//PONDSCUM
+		g_err(NOEXIT,NOPERROR,"\nCaroline: size: %d Msg: %s\n",recvMsgSize,incomingBuf);
+
 		g_err(NOEXIT,NOPERROR,
 			"UDP->WIFIPI: client %s Msg# %ld Len: %d\n",
 			inet_ntoa(incomingAddr.sin_addr),
