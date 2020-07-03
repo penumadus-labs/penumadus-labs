@@ -173,13 +173,6 @@ parseB0packet(unsigned char *xbeeframebuf,
 
 	strncpy(xbeeframebuf+10,incomingBuf,recvMsgSize);
 
-	//PONDSCUM add later to shutdown wifipi also 
-	/*
-	if(*incomingBuf == SHUTDOWN){
-		startproc("/sbin/shutdown",2,"1","min");
-	}
-	*/
-
 	return(recvMsgSize+10);
 }
 
@@ -207,6 +200,9 @@ udp_readthreadproc(void *arg){
 		incomingBuf[recvMsgSize]='\0';
 		messagecnt++;
 		
+		//PONDSCUM
+		g_err(NOEXIT,NOPERROR,"\nCaroline: size: %d Msg: %s\n",recvMsgSize,incomingBuf);
+
 		g_err(NOEXIT,NOPERROR,
 			"UDP->WIFIPI: client %s Msg# %ld Len: %d\n",
 			inet_ntoa(incomingAddr.sin_addr),
@@ -232,6 +228,20 @@ udp_readthreadproc(void *arg){
 			led(1);
 		}
 
+		/* this command can come from admin interface, UDPengine, or on a 
+		 * looparound from hank via 127.0.0.1 
+		 * normally a shutdown would be sent to hank who would send a shutdown 
+		 * back up to wifipi to get here */
+		else if(strncmp(incomingBuf,
+			    SHUTDOWNLOOP,
+			    sizeof(SHUTDOWNLOOP)-1)==0) {
+
+			startproc("/sbin/shutdown",2,"-h","now");
+			g_err(NOEXIT,NOPERROR,"SHUTDOWN COMMAND RECEIVED");
+			led(1);
+			sleep(5);
+			exit(0);
+		}
 
 		//not for wifipi,  just send message on to hank
 		else {
