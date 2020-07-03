@@ -124,7 +124,12 @@
 
 
 
-/****************  WIFIPI TALKING DIRECT TO UDPengine ***********/
+/********** WIFIPI TALKING DIRECT TO UDPengine,
+ * 		local admin interface,
+ * 		hank looparound
+ *   these can be verbose as never transit hank's slow serial
+ *   interface, only wifi
+ */
 //this one is special as response received by wifipi, not hank,
 //even though it may be sent by hank or wifipi
 //if no wifi, hank gets and processes response as a recv'd response (xbee format 0xB0)
@@ -141,6 +146,7 @@
 //expected downstream response
 #define WIFIQUERYRESP "U UP!"	 //what UDPserver should return
 
+#define SHUTDOWNLOOP	"U SHUTDOWN"  //a command to wifip, not hank, on its UDP interface
 
 
 /***********   WIFIPI TALKING TO HANK  ******************/
