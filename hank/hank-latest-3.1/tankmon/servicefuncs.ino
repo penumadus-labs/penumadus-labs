@@ -128,6 +128,7 @@ shutdown(unsigned char *msg)
 {
 
 	int n;
+	char lbuf[sizeof(SHUTDOWNLOOP)+2];
 	DEB_PRINTLN(F("SHUT DOWN LOOP"));
 	if(fd_open){
 		fd_SD.flush();
@@ -136,6 +137,10 @@ shutdown(unsigned char *msg)
 
 	Serial3.flush();
 	Serial.flush();
+
+	sendack(SHUTDOWN,0,ACK);
+	n=sprintf(lbuf, "%s", SHUTDOWNLOOP);
+	sendUDPSneaky("127.0.0.1",tankInit.xbeePort,lbuf,n,&Serial);
 
 	/* hang and blink led really fast */
 	setLocalTimer(LOCSOCKTIMER,100,LOC_MILLISECS);
