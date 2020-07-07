@@ -45,5 +45,6 @@ export const createActions = (state, dispatch) => {
   return {
     initialize,
     sendCommand,
+    getSettings,
   }
 }

@@ -9,39 +9,42 @@ const initialStatus = {
 }
 
 const useSocket = () => {
-  const [{ data, acceleration }, setStatus] = useState(initialStatus)
+  const [status, setStatus] = useState(initialStatus)
+  const { data, acceleration } = status
   const [{ settings }, { getSettings }] = useDevices()
+  console.log(!!settings)
   useEffect(() => {
     const ws = new WebSocket(wsURL)
 
-    ws.onmessage = async ({ message: { type, data } }) => {
-      if (!settings) await getSettings()
-      const date = Date.now()
+    ws.onmessage = async (raw) => {
+      const { type, data } = JSON.parse(raw.data)
+      // if (!settings) await getSettings()
+      const date = new Date(Date.now())
       try {
         switch (type) {
           case 'standard':
-            setStatus(
-              (status) =>
-                (status.data = `${date.getHours()}:${
-                  date.getMinutes
-                }:${date.getSeconds()}`)
-            )
+            setStatus((status) => {
+              console.log(status)
+              status.data = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+              return { ...status }
+            })
             break
           case 'acceleration':
-            setStatus(
-              (status) =>
-                (status.acceleration = `${date.getHours()}:${
-                  date.getMinutes
-                }:${date.getSeconds()}`)
-            )
+            setStatus((status) => {
+              status.acceleration = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+              return { ...status }
+            })
             break
           default:
             throw new Error('socket sent invalid action type')
         }
         setStatus(await data.text())
-      } catch (error) {}
+      } catch (error) {
+        console.error(error)
+      }
     }
   })
+
   return (
     <div>
       <p>Last data packet: {data}</p>
