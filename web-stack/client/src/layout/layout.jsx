@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import NavBar from './nav-bar'
+// eslint-disable-next-line
 import StatusBar from './status-bar'
 import Router from '../router/router'
 import Login from '../components/forms/login'

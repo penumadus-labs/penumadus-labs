@@ -18,12 +18,8 @@ const initialize = async (token, id = 'unit_3') => {
     })
   }
   try {
-    let data = sessionStorage.getItem('data')
-    if (!data) {
-      data = await getDeviceData(id)
-    } else {
-      data = JSON.parse(data)
-    }
+    const storage = sessionStorage.getItem('data')
+    const data = storage ? JSON.parse(storage) : await getDeviceData(id)
     ctx.dispatch({ type: 'data', data })
   } catch (error) {
     console.error(error)
