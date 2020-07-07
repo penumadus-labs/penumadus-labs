@@ -1,4 +1,4 @@
-const queriesGrouped = [
+const groupedQueries = [
   {
     label: 'standard',
     field: 'standardData',
@@ -91,4 +91,4 @@ const queries = [
   },
 ]
 
-module.exports = queriesGrouped
+module.exports = queries

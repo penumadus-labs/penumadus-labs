@@ -5,7 +5,6 @@ const controller = {
     controller.users.forEach((client) => client.send({ type, data }))
   },
   sendDeviceCommand(id, request, args) {
-    console.log(id)
     return controller.devices['unit_3'][request](args)
   },
   getDeviceSettings(id) {

@@ -80,6 +80,7 @@ const globalStyle = css`
     --dark-blue: ${colors.space};
 
     /* sizes */
+    --xxs: 0.2rem;
     --xs: 0.4rem;
     --sm: 0.6rem;
     --md: 1rem;
@@ -240,6 +241,19 @@ const globalStyle = css`
     color: #555;
     line-height: 1px;
     background: var(--font);
+    cursor: text;
+  }
+
+  .input-box {
+    ${raised}
+    ${clickable}
+    height: var(--lg);
+    margin-left: var(--xxs);
+    padding: var(--xs) var(--sm);
+    color: #555;
+    line-height: 1px;
+    background: var(--font);
+    cursor: text;
   }
 
   .button-green {

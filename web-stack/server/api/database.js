@@ -18,44 +18,31 @@ const database = Router()
 
 database.get('/device-data', async ({ query }, res) => {
   try {
-    const data = await getDeviceData(query.id)
+    const {
+      humidity,
+      temperature,
+      pressure,
+      x,
+      y,
+      z,
+      magnitude,
+    } = await getDeviceData(query.id)
 
-    // writeFileSync('data.json', JSON.stringify(data.humidity))
-    // console.log('written')
+    const data = {
+      standard: {
+        humidity,
+        temperature,
+        pressure,
+      },
+      // acceleration: {
+      //   x,
+      //   y,
+      //   z,
+      //   magnitude,
+      // },
+    }
 
-    // const humidity = filterData('humidity', data.humidity)
-    // const temperature = filterData('temperature', data.temperature)
-    // const pressure = filterData('temperature', data.pressure)
-
-    // const x = filterData('humidity', data.x)
-    // const y = filterData('temperature', data.y)
-    // const z = filterData('temperature', data.z)
-    // const magnitude = filterData('temperature', data.magnitude)
-
-    // const filtered = {
-    //   standard: {
-    //     humidity,
-    //     temperature,
-    //     pressure,
-    //   },
-    //   acceleration: {
-    //     x,
-    //     y,
-    //     z,
-    //     magnitude,
-    //   },
-    // }
-
-    const standard = filterStandard(data.standard)
-    const acceleration = filterAcceleration(data.acceleration)
-
-    formatTimes(standard)
-    formatTimes(acceleration)
-
-    res.send({
-      standard,
-      acceleration,
-    })
+    res.send(data)
   } catch (error) {
     console.error(error)
   }
