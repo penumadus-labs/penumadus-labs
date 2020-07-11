@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Loading from './loading'
+import Loading from '../loading'
 
 export const useStatus = () => {
   const [status, setStatus] = useState({})

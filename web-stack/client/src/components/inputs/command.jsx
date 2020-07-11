@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAlert } from '../alert-old'
+import { useAlert } from '../alerts/alert-old'
 
 export default ({ name, sendCommand }) => {
   const [Alert, open] = useAlert()

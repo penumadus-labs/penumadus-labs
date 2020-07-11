@@ -11,8 +11,8 @@ const Ellipsis = styled.div`
   div {
     position: absolute;
     top: 33px;
-    width: 13px;
-    height: 13px;
+    width: 10px;
+    height: 10px;
     background: #fff;
     border-radius: 50%;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);

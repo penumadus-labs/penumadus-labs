@@ -2,24 +2,34 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Alert from './alert'
 import Status, { useStatus } from './status'
+// import useStatus from '../../hooks/use-status'
 
 const Controls = styled.div`
   text-align: center;
 `
 
-export default ({ children, onAccept, isOpen, close }) => {
+export default ({ children, onAccept, ...bind }) => {
+  const { isOpen, close } = bind
   if (!isOpen) return null
-
-  const bind = { isOpen, close }
 
   const [{ setLoading, setError, setSuccess }, status] = useStatus()
   const { success, loading } = status
+
+  // const [
+  //   { setLoading, setError, setSuccess },
+  //   Status,
+  //   { success, loading },
+  // ] = useStatus()
+  // const status = {}
 
   if (loading)
     return (
       <Alert {...bind}>
         <div className="center-child">
-          <Status {...status} />
+          <div>
+            <Status {...status} />
+            <p>please leave this box open while command executes.</p>
+          </div>
         </div>
       </Alert>
     )

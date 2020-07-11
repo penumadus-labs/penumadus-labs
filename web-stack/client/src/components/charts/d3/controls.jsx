@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import Alert, { useAlert } from '../../alert-request'
+import Alert, { useAlert } from '../../alerts/alert'
 
 const Controls = styled.div`
   display: flex;

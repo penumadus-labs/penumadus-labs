@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import useEsc from '../hooks/use-esc'
+import useEsc from '../../hooks/use-esc'
+import { IoMdClose as Close } from 'react-icons/io'
 
 /* @keyframes open {
     0% {
@@ -32,7 +33,14 @@ const Anchor = styled.div`
   z-index: var(--layer3);
 `
 
+const ClickOut = styled.button`
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+`
+
 const StyledDiv = styled.div`
+  z-index: 50;
   width: 60vw;
   max-width: 650px;
 
@@ -53,9 +61,10 @@ export default ({ children, isOpen, close }) => {
   return (
     <>
       <Anchor className="center-child fixed">
+        <ClickOut className="fixed" onClick={close} />
         <StyledDiv className="card-spaced">
-          <button className="button-text-red" onClick={close}>
-            close
+          <button className="button-text" onClick={close}>
+            <Close size="20" />
           </button>
           {children}
         </StyledDiv>

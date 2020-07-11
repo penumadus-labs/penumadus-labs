@@ -249,9 +249,10 @@ const globalStyle = css`
     background: var(--button-background);
   }
 
-  .button-text-red {
+  .button-text {
     ${clickableText}
-    color: var(--red);
+    background: none;
+    cursor: pointer;
   }
 
   .input {
