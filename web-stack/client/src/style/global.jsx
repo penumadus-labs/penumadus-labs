@@ -41,16 +41,30 @@ const card = css`
 `
 
 const clickable = css`
-  box-shadow: var(--shadow-button);
   cursor: pointer;
-  transition: box-shadow 0.2s;
-
   :hover {
     filter: brightness(85%);
   }
   :focus {
     outline: none;
+  }
+`
+
+const clickableBox = css`
+  ${clickable}
+  box-shadow: var(--shadow-button);
+  transition: box-shadow 0.2s;
+  :focus {
     box-shadow: var(--select);
+  }
+`
+
+const clickableText = css`
+  ${clickable}
+  background: none;
+  transition: color 0.2s;
+  :focus {
+    color: var(--purple);
   }
 `
 
@@ -96,7 +110,9 @@ const globalStyle = css`
       0 4px 3px -1px rgb(29, 41, 81, 0.5);
 
     /* z-index */
-    --layer1: 1;
+    --layer1: 10;
+    --layer2: 20;
+    --layer3: 30;
   }
 
   * {
@@ -222,36 +238,51 @@ const globalStyle = css`
     box-shadow: var(--shadow-card);
   }
 
-  .clickable {
-    ${clickable}
+  .clickable-box {
+    ${clickableBox}
   }
 
   .button {
     ${raised}
-    ${clickable}
+    ${clickableBox}
     padding: var(--xs) var(--sm);
     background: var(--button-background);
   }
 
+  .button-text-red {
+    ${clickableText}
+    color: var(--red);
+  }
+
   .input {
     ${raised}
-    ${clickable}
+    ${clickableBox}
     width: 100%;
     padding: var(--xs) var(--sm);
     color: #555;
-    line-height: 1px;
+    background: var(--font);
+    cursor: text;
+  }
+
+  .input-inline {
+    ${raised}
+    ${clickableBox}
+    height: var(--lg);
+    margin-left: var(--xxs);
+    padding: var(--xs) var(--sm);
+    color: #555;
     background: var(--font);
     cursor: text;
   }
 
   .input-box {
     ${raised}
-    ${clickable}
+    ${clickableBox}
+    width: 2.2rem;
     height: var(--lg);
     margin-left: var(--xxs);
     padding: var(--xs) var(--sm);
     color: #555;
-    line-height: 1px;
     background: var(--font);
     cursor: text;
   }

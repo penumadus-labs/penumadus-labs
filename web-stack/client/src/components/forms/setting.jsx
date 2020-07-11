@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAlert } from '../alert'
+import { useAlert } from '../alert-old'
 import Input from '../inputs/input'
 
 export default ({ name, message, settings, sendCommand }) => {
@@ -8,7 +8,7 @@ export default ({ name, message, settings, sendCommand }) => {
   const [error, setError] = useState('')
   const [Summary, setSummary] = useState(null)
   const [args, setArgs] = useState(null)
-  const [Alert, open, close] = useAlert(false)
+  const [Alert, open] = useAlert(false)
 
   const submit = (values) => {
     const formValues = Object.values(values)
@@ -56,9 +56,7 @@ export default ({ name, message, settings, sendCommand }) => {
         <button className="button">{name}</button>
         {error ? <p className="error">{error}</p> : null}
       </form>
-      <Alert onAccept={handleAccept} onCancel={close}>
-        {Summary}
-      </Alert>
+      <Alert onAccept={handleAccept}>{Summary}</Alert>
     </>
   )
 }

@@ -44,10 +44,10 @@ export const white = '#f5f5f5'
 
 const opacity = '.95'
 
-const darkBody = `rgb(50, 59, 68, 1)`
-const darkCard = `rgb(33, 42, 51, ${opacity})`
-const darkButton = `rgb(140, 153, 162, ${opacity})`
-const darkFont = `rgb(204, 204, 204, ${opacity})`
+const darkBody = `rgba(50, 59, 68, 1)`
+const darkCard = `rgba(33, 42, 51, ${opacity})`
+const darkButton = `rgba(120, 133, 142, ${opacity})`
+const darkFont = `rgb(240, 240, 240)`
 
 const lightBody = '#1e1e1e'
 const lightCard = '#272727'

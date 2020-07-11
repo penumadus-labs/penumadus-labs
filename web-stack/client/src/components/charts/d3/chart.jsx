@@ -90,8 +90,9 @@ export default ({ data }) => {
       <Global styles={SvgStyle} />
       <p>{date}</p>
       <ControlBar>
-        <Settings {...{ data }} />
+        <div></div>
         <Controls {...{ applyBrush, undo, reset, tool, setTool }} />
+        <Settings {...{ data }} />
       </ControlBar>
       <StyledSVG ref={rootRef} />
       <Legend labels={Object.keys(data)} colors={lineColors} units={units} />

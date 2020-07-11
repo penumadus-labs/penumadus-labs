@@ -1,8 +1,8 @@
 import React from 'react'
-import { useAlert } from '../alert'
+import { useAlert } from '../alert-old'
 
 export default ({ name, sendCommand }) => {
-  const [Alert, open, close] = useAlert()
+  const [Alert, open] = useAlert()
 
   const handleAccept = async () => {
     await sendCommand(undefined, name)
@@ -13,7 +13,7 @@ export default ({ name, sendCommand }) => {
       <button className="button" onClick={open}>
         {name}
       </button>
-      <Alert onAccept={handleAccept} onCancel={close} />
+      <Alert onAccept={handleAccept} />
     </>
   )
 }

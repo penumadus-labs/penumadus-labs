@@ -11,8 +11,9 @@ const initialStatus = {
 const useSocket = () => {
   const [status, setStatus] = useState(initialStatus)
   const { data, acceleration } = status
+  // eslint-disable-next-line
   const [{ settings }, { getSettings }] = useDevices()
-  console.log(!!settings)
+
   useEffect(() => {
     const ws = new WebSocket(wsURL)
 
