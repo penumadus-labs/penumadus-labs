@@ -3,7 +3,7 @@ const tunnel = require('../utils/ssh-tunnel')
 const queries = require('../utils/queries')
 
 const url = process.env.SSH
-  ? 'mongodb://localhost/admin'
+  ? 'mongodb://localhost'
   : 'mongodb://caro:Matthew85!!@localhost/admin'
 
 const mongoClient = new MongoClient(url, {
