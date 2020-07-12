@@ -115,7 +115,10 @@ class Device extends EventEmitter {
   }
 
   emitResponses(raw) {
-    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+    console.log(raw)
+    console.log('')
+    return
+    // const { pad, type: command, status, id, ...data } = JSON.parse(raw)
     if (data.time) data.time = +data.time
 
     if (!this.initialized) this.initialize(id)
