@@ -52,6 +52,12 @@ const ControlBar = styled.div`
 let timeout
 
 export default ({ data }) => {
+  if (!Object.values(data).length)
+    return (
+      <div className="card">
+        <p>no data to display</p>
+      </div>
+    )
   const rootRef = useRef()
   const chart = useMemo(() => new Chart({ data, colors: lineColors }), [data])
   const [tool, setTool] = useState('brush')
