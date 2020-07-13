@@ -34,7 +34,20 @@ class Device extends EventEmitter {
     this.socket = socket
     this.createRequestMethods()
     this.addDataStreams()
-    this.socket.on('data', this.emitResponses.bind(this))
+
+    const emitResponses = this.emitResponses.bind(this)
+
+    let packets = 0
+
+
+    this.socket.on('readable', function() {
+      // this.pause()
+      let chunk;
+      while (null !== (chunk = this.read(200))) {
+        emitResponses(chunk)
+      }
+      // this.resume()
+    })
   }
 
   initialize(id) {
@@ -115,7 +128,13 @@ class Device extends EventEmitter {
   }
 
   emitResponses(raw) {
-    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+    try {
+      const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+      console.log('parsed')
+    } catch (error) {
+      console.log('not parsed')
+    }
+    return
     // if (data.time) data.time = +data.time
 
     if (!this.initialized) this.initialize(id)

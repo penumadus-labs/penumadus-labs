@@ -25,6 +25,6 @@
     "postinstall": "run-p install:client install:server",
     "uninstall": "sudo rm -r node_modules && sudo rm -r client/node_modules && sudo rm -r server/node_modules",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "commit": "git pull && git add . && git commit -m updates && git push"
+    "commit": "git pull && git add . && git commit -m changes && git push"
   }
 }
