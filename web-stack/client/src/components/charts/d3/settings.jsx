@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { GoGear } from 'react-icons/go'
 import { FaFileDownload as Download } from 'react-icons/fa'
@@ -14,6 +14,8 @@ export default ({ data }) => {
   const [openSettings, bindSettings] = useAlert()
   const [openDownload, bindDownload] = useAlert()
 
+  const [times, setTimes] = useState({})
+
   return (
     <>
       <StyledDiv className="space-children-x">
@@ -25,7 +27,7 @@ export default ({ data }) => {
         </button>
       </StyledDiv>
       <Alert {...bindSettings}>
-        <ChartSettings />
+        <ChartSettings times={times} setTimes={setTimes} />
       </Alert>
       <Alert {...bindDownload}>:(</Alert>
     </>

@@ -9,14 +9,20 @@ const StyledForm = styled.form`
   margin: auto;
 `
 
-export default ({ ...bind }) => {
-  const { register, handleSubmit } = useForm()
+export default ({ times, setTimes }) => {
+  const { register, handleSubmit, setValue, reset } = useForm({
+    defaultValues: times,
+  })
 
   const [, { getStandardData }] = useDatabase()
 
   const [{ setLoading, setError, setSuccess }, status] = useStatus()
 
   const onSubmit = handleSubmit(async (data) => {
+    setTimes({
+      start: data.start,
+      end: data.end,
+    })
     const now = new Date(Date.now()).getTime() / 1000
     let start = new Date(data.start).getTime() / 1000
     let end = new Date(data.end).getTime() / 1000
@@ -48,6 +54,20 @@ export default ({ ...bind }) => {
     }
   })
 
+  const clearStart = () => {
+    setValue('start', '')
+    setTimes((times) => ({ ...times, start: '' }))
+  }
+  const clearEnd = () => {
+    setValue('end', '')
+    setTimes((times) => ({ ...times, end: '' }))
+  }
+
+  const resetValues = () => {
+    reset()
+    setTimes({})
+  }
+
   return (
     <>
       <StyledForm onSubmit={onSubmit} className="space-children-y">
@@ -56,13 +76,26 @@ export default ({ ...bind }) => {
           start:
           <input className="input" type="date" ref={register} name="start" />
         </label>
+        <br />
         <label className="label space-children-x-xxs">
           end:
           <input className="input" type="date" ref={register} name="end" />
         </label>
         <Status {...status} />
+        <p>unselected dates default to min max of the data set</p>
         <button className="button">submit</button>
       </StyledForm>
+      <div className="space-children-x">
+        <button className="button-text text-blue" onClick={clearStart}>
+          clear start
+        </button>
+        <button className="button-text text-blue" onClick={clearEnd}>
+          clear end
+        </button>
+        <button className="button-text text-blue" onClick={resetValues}>
+          reset
+        </button>
+      </div>
     </>
   )
 }

@@ -265,6 +265,18 @@ const globalStyle = css`
     cursor: pointer;
   }
 
+  .text-blue {
+    color: var(--blue);
+  }
+
+  .button-green {
+    background: var(--green);
+  }
+
+  .button-red {
+    background: var(--red);
+  }
+
   .input {
     ${raised}
     ${clickableBox}
@@ -294,14 +306,6 @@ const globalStyle = css`
     color: #555;
     background: var(--font);
     cursor: text;
-  }
-
-  .button-green {
-    background: var(--green);
-  }
-
-  .button-red {
-    background: var(--red);
   }
 
   .fixed {

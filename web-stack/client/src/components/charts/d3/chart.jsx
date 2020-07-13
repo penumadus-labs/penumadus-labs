@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import Chart from './d3'
 import styled from '@emotion/styled'
 import { Global, css } from '@emotion/core'
+import { extent } from 'd3'
 
 import Legend from './legend'
 import Controls from './brush-controls'
@@ -9,7 +10,12 @@ import Settings from './settings'
 
 import * as colors from '../../../utils/colors'
 
-const options = { year: 'numeric', month: 'long', day: 'numeric' }
+const parseDate = (date) =>
+  new Date(date * 1000).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 
 const units = {
   humidity: 'H',
@@ -52,12 +58,12 @@ const ControlBar = styled.div`
 let timeout
 
 export default ({ data }) => {
-  if (!Object.values(data).length)
-    return (
-      <div className="card">
-        <p>no data to display</p>
-      </div>
-    )
+  // if (!Object.values(data).length)
+  //   return (
+  //     <div className="card">
+  //       <p>no data to display</p>
+  //     </div>
+  //   )
   const rootRef = useRef()
   const chart = useMemo(() => new Chart({ data, colors: lineColors }), [data])
   const [tool, setTool] = useState('brush')
@@ -86,10 +92,11 @@ export default ({ data }) => {
     chart.setTool(tool)
   }, [chart, tool])
 
-  const date = new Date(data.humidity[0].time * 1000).toLocaleDateString(
-    undefined,
-    options
-  )
+  const dates = extent(data.humidity.map((d) => d.time))
+
+  const date = dates[0]
+    ? `${parseDate(dates[0])} - ${parseDate(dates[1])}`
+    : 'no data within range'
 
   return (
     <div className="card-spaced">
