@@ -17,14 +17,13 @@ const initialize = async (token, id = 'unit_3') => {
       },
     })
   }
-  try {
-    const standardStore = sessionStorage.getItem('standard-data')
-    const standard = standardStore
-      ? JSON.parse(standardStore)
-      : await getStandardData(id)
-    ctx.dispatch({ type: 'standard-data', standard })
-  } catch (error) {
-    console.error(error)
+
+  const standard = sessionStorage.getItem('standard-data')
+
+  if (standard) {
+    ctx.dispatch({ type: 'standard-data', data: JSON.parse(standard) })
+  } else {
+    await getStandardData(id)
   }
 }
 
@@ -43,8 +42,8 @@ const getStandardData = async ({ id, start, end }) => {
     const { data } = await database.get('device-standard-data', {
       params: { id, start, end },
     })
-    sessionStorage.setItem('standard-data', JSON.stringify(data))
-    return data
+    // sessionStorage.setItem('standard-data', JSON.stringify(data))
+    ctx.dispatch({ type: 'standard-data', data })
   } catch (error) {
     console.error(error)
   }
@@ -55,5 +54,6 @@ export const createActions = (state, dispatch) => {
   ctx.dispatch = dispatch
   return {
     initialize,
+    getStandardData,
   }
 }

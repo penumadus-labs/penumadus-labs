@@ -12,7 +12,7 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(db = 'gello') {
+  async connect(db = 'app') {
     if (process.env.SSH) await tunnel(27017)
 
     await mongoClient.connect()
@@ -108,8 +108,8 @@ const client = {
                 as: 'standardData',
                 cond: {
                   $and: [
-                    { $gte: ['$$standardData.time', start] },
-                    { $lte: ['$$standardData.time', end] },
+                    { $gte: ['$$standardData.time', +start] },
+                    { $lte: ['$$standardData.time', +end] },
                   ],
                 },
               },

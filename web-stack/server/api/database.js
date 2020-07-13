@@ -32,6 +32,7 @@ database.get('/device-data', async ({ query }, res) => {
 })
 
 database.get('/device-standard-data', async ({ query }, res) => {
+  console.log(query)
   try {
     const standard = await client.getStandardData(query)
 

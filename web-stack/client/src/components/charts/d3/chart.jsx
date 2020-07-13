@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Global, css } from '@emotion/core'
 
 import Legend from './legend'
-import Controls from './controls'
+import Controls from './brush-controls'
 import Settings from './settings'
 
 import * as colors from '../../../utils/colors'

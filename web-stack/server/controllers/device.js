@@ -39,10 +39,9 @@ class Device extends EventEmitter {
 
     let packets = 0
 
-
-    this.socket.on('readable', function() {
+    this.socket.on('readable', function () {
       // this.pause()
-      let chunk;
+      let chunk
       while (null !== (chunk = this.read(200))) {
         emitResponses(chunk)
       }

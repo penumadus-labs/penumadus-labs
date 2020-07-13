@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import Alert from './alert'
-import Status, { useStatus } from './status'
+import Status, { useStatus } from '../forms/status'
 // import useStatus from '../../hooks/use-status'
 
 const Controls = styled.div`

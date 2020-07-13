@@ -1,5 +1,5 @@
 import React from 'react'
-import Setting from '../components/forms/setting'
+import Setting from '../components/forms/device-setting'
 import Command from '../components/inputs/command'
 import useDevices from '../context/devices/context'
 
