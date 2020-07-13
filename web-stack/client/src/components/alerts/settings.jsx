@@ -9,8 +9,10 @@ const FormWrapper = styled.div`
 `
 
 const StyledForm = styled.form`
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  margin: auto;
 `
 
 export default ({ ...bind }) => {
@@ -19,21 +21,17 @@ export default ({ ...bind }) => {
       <FormWrapper>
         <StyledForm className="space-children-y">
           <p>time interval:</p>
-          <label className="label">
+          <label className="label space-children-x-xxs">
             start:
             <br />
             <input className="input-inline" type="date" />
             <input className="input-box" />
           </label>
-          <label className="label">
+          <label className="label space-children-x-xxs">
             end:
             <br />
             <input className="input-inline" type="date" />
             <input className="input-box" />
-          </label>
-          <label>
-            present:
-            <input type="checkbox" />
           </label>
         </StyledForm>
       </FormWrapper>

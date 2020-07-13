@@ -29,6 +29,12 @@ const spaceChildrenX = css`
   }
 `
 
+const spaceChildrenXXXS = css`
+  > *:not(:last-child) {
+    margin-right: var(--xxs);
+  }
+`
+
 const raised = css`
   padding: var(--sm);
   border-radius: var(--radius);
@@ -225,6 +231,10 @@ const globalStyle = css`
     ${spaceChildrenX}
   }
 
+  .space-children-x-xxs {
+    ${spaceChildrenXXXS}
+  }
+
   .center-child {
     display: flex;
     align-items: center;
@@ -269,7 +279,6 @@ const globalStyle = css`
     ${raised}
     ${clickableBox}
     height: var(--lg);
-    margin-left: var(--xxs);
     padding: var(--xs) var(--sm);
     color: #555;
     background: var(--font);
@@ -281,7 +290,6 @@ const globalStyle = css`
     ${clickableBox}
     width: 2.2rem;
     height: var(--lg);
-    margin-left: var(--xxs);
     padding: var(--xs) var(--sm);
     color: #555;
     background: var(--font);

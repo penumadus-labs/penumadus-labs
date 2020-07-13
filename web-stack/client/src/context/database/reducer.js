@@ -1,7 +1,11 @@
-export const reducer = (state, { type, data, error, ...action }) => {
+export const reducer = (state, { type, standard, error, ...action }) => {
   switch (type) {
-    case 'data':
-      return data
+    case 'standard-data':
+      return {
+        ...state,
+        standard,
+        loading: false,
+      }
     case 'error':
       return {
         error,

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { getDeviceData } = require('../controllers/database')
+const client = require('../controllers/database')
 const {
   filterData,
   filterStandard,
@@ -16,33 +16,26 @@ const formatTimes = (data, key) => {
 
 const database = Router()
 
+database.get('start-time', async ({ query }, res) => {
+  const startTime = await getStartTime(query.id)
+  res.send(startTime)
+})
+
 database.get('/device-data', async ({ query }, res) => {
   try {
-    const {
-      humidity,
-      temperature,
-      pressure,
-      x,
-      y,
-      z,
-      magnitude,
-    } = await getDeviceData(query.id)
-
-    const data = {
-      standard: {
-        humidity,
-        temperature,
-        pressure,
-      },
-      // acceleration: {
-      //   x,
-      //   y,
-      //   z,
-      //   magnitude,
-      // },
-    }
+    const data = await client.getDeviceData(query.id)
 
     res.send(data)
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+database.get('/device-standard-data', async ({ query }, res) => {
+  try {
+    const standard = await client.getStandardData(query)
+
+    res.send(standard)
   } catch (error) {
     console.error(error)
   }

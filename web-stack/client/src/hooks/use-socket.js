@@ -25,7 +25,6 @@ const useSocket = () => {
         switch (type) {
           case 'standard':
             setStatus((status) => {
-              console.log(status)
               status.data = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
               return { ...status }
             })

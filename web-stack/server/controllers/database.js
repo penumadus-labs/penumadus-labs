@@ -12,7 +12,7 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(db = 'gello') {
+  async connect(db = 'app') {
     if (process.env.SSH) await tunnel(27017)
 
     await mongoClient.connect()
@@ -50,20 +50,77 @@ const client = {
       .updateOne({ id }, { $push: { accelerationData: data } })
       .catch(console.error)
   },
+  // async getStartTime(id) {
+  //   const res = await client.devices.findOne({ id })
+  //   return res.standardData[0].time
+  // },
   async getDeviceData(id) {
-    const results = {}
-    await Promise.all(
-      queries.map(({ label, field, projection }) =>
+    const results = { standard: {}, acceleration: {} }
+    const standard = Promise.all(
+      queries.standard.map(({ label, field, projection }) =>
         client.devices.findOne({ id }, { projection }).then((res) => {
-          res[field].sort((a, b) => a.time - b.time)
-          results[label] = res[field]
+          // res[field].sort((a, b) => a.time - b.time)
+          results.standard[label] = res[field]
         })
       )
     )
 
+    const acceleration = Promise.all(
+      queries.acceleration.map(({ label, field, projection }) =>
+        client.devices.findOne({ id }, { projection }).then((res) => {
+          // res[field].sort((a, b) => a.time - b.time)
+          results.acceleration[label] = res[field]
+        })
+      )
+    )
+
+    await Promise.all([standard, acceleration])
+
     return results
   },
-  insertDevice: (data) => {
+  async getStandardData({ id, start = -Infinity, end = Infinity }) {
+    const res = {}
+    const proms = queries.standard.map(({ label }) =>
+      client.queryStandardData(id, label, start, end).then((data) => {
+        res[label] = data
+      })
+    )
+
+    await Promise.all(proms)
+
+    return res
+  },
+  async queryStandardData(id, label, start, end) {
+    const res = await client.devices
+      .aggregate([
+        { $match: { id: 'unit_3' } },
+        {
+          $project: {
+            ['standardData.' + label]: 1,
+            'standardData.time': 1,
+          },
+        },
+        {
+          $project: {
+            standardData: {
+              $filter: {
+                input: '$standardData',
+                as: 'standardData',
+                cond: {
+                  $and: [
+                    { $gte: ['$$standardData.time', start] },
+                    { $lte: ['$$standardData.time', end] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ])
+      .toArray()
+    return res[0].standardData
+  },
+  insertDevice(data) {
     return client.devices.insertOne(data)
   },
   findUser(username) {

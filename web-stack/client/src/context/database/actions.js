@@ -18,18 +18,32 @@ const initialize = async (token, id = 'unit_3') => {
     })
   }
   try {
-    const storage = sessionStorage.getItem('data')
-    const data = storage ? JSON.parse(storage) : await getDeviceData(id)
-    ctx.dispatch({ type: 'data', data })
+    const standardStore = sessionStorage.getItem('standard-data')
+    const standard = standardStore
+      ? JSON.parse(standardStore)
+      : await getStandardData(id)
+    ctx.dispatch({ type: 'standard-data', standard })
   } catch (error) {
     console.error(error)
   }
 }
 
-const getDeviceData = async (id) => {
+// const getDeviceData = async (id) => {
+//   try {
+//     const { data } = await database.get('device-data', { params: { id } })
+//     sessionStorage.setItem('data', JSON.stringify(data))
+//     return data
+//   } catch (error) {
+//     console.error(error)
+//   }
+// }
+
+const getStandardData = async ({ id, start, end }) => {
   try {
-    const { data } = await database.get('device-data', { params: { id } })
-    sessionStorage.setItem('data', JSON.stringify(data))
+    const { data } = await database.get('device-standard-data', {
+      params: { id, start, end },
+    })
+    sessionStorage.setItem('standard-data', JSON.stringify(data))
     return data
   } catch (error) {
     console.error(error)
