@@ -12,7 +12,7 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(db = 'app') {
+  async connect(db = 'gello') {
     if (process.env.SSH) await tunnel(27017)
 
     await mongoClient.connect()
