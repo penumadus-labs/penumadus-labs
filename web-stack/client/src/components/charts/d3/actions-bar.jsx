@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { GoGear } from 'react-icons/go'
-import { FaFileDownload as Download } from 'react-icons/fa'
-import ChartSettings from '../../forms/chart-settings'
+import { FaFileDownload as DownloadIcon } from 'react-icons/fa'
 import Alert, { useAlert } from '../../alerts/alert'
+import Download from '../../forms/chart-download'
+import ChartSettings from '../../forms/chart-settings'
 
 const StyledDiv = styled.div`
   display: flex;
   align-items: center;
 `
 
-export default ({ data }) => {
+export default ({ data, getDomain }) => {
   const [openSettings, bindSettings] = useAlert()
   const [openDownload, bindDownload] = useAlert()
 
@@ -20,7 +21,7 @@ export default ({ data }) => {
     <>
       <StyledDiv className="space-children-x">
         <button className="button" onClick={openDownload}>
-          <Download size="20" />
+          <DownloadIcon size="20" />
         </button>
         <button className="button" onClick={openSettings}>
           <GoGear size="20" />
@@ -29,7 +30,9 @@ export default ({ data }) => {
       <Alert {...bindSettings}>
         <ChartSettings times={times} setTimes={setTimes} />
       </Alert>
-      <Alert {...bindDownload}>:(</Alert>
+      <Alert {...bindDownload}>
+        <Download getDomain={getDomain} />
+      </Alert>
     </>
   )
 }

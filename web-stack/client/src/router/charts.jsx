@@ -1,5 +1,5 @@
 import React from 'react'
-import Chart from '../components/charts/d3/chart'
+import Chart from '../components/charts/d3/linechart'
 import useDatabase from '../context/database/context'
 import Loading from '../components/loading'
 

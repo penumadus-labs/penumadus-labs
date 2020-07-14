@@ -123,14 +123,7 @@ class Device extends EventEmitter {
   }
 
   emitResponses(raw) {
-    try {
-      const { pad, type: command, status, id, ...data } = JSON.parse(raw)
-      console.log('parsed')
-    } catch (error) {
-      console.log('not parsed')
-      process.exit(0)
-    }
-    return
+    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
     // if (data.time) data.time = +data.time
 
     if (!this.initialized) this.initialize(id)
@@ -149,7 +142,6 @@ class Device extends EventEmitter {
 
   // async test() {
   //   await this.getSettings()
-  //   console.log(this.settings)
 
   //   await Promise.all([
   //     this.setIPSettings(this.settings.ip),
@@ -157,10 +149,8 @@ class Device extends EventEmitter {
   //     this.setAccelerationSettings(this.settings.acceleration),
   //     this.setSampleSettings(this.settings.sample),
   //   ])
-  //   console.log(this.settings)
 
   //   await this.reset()
-  //   console.log('finished')
   //   process.exit(0)
   // }
 }

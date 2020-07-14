@@ -1,21 +1,15 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
-import Chart from './d3'
+import Chart from './d3-linechart'
 import styled from '@emotion/styled'
 import { Global, css } from '@emotion/core'
 import { extent } from 'd3'
 
 import Legend from './legend'
-import Controls from './brush-controls'
-import Settings from './settings'
+import BrushControls from './brush-controls'
+import ActionsBar from './actions-bar'
 
 import * as colors from '../../../utils/colors'
-
-const parseDate = (date) =>
-  new Date(date * 1000).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+import { parseDate } from '../../../utils/datetime'
 
 const units = {
   humidity: 'H',
@@ -103,6 +97,8 @@ export default ({ data }) => {
   const applyBrush = () => chart.applyBrush()
   const undo = () => chart.undo()
   const reset = () => chart.reset()
+  const getDomain = () => chart.getDomain()
+
   const changeTool = (tool) => {
     chart.setTool(tool)
     setTool(tool)
@@ -114,8 +110,8 @@ export default ({ data }) => {
       <p>{date}</p>
       <ControlBar>
         <div></div>
-        <Controls {...{ applyBrush, undo, reset, tool, changeTool }} />
-        <Settings {...{ data }} />
+        <BrushControls {...{ applyBrush, undo, reset, tool, changeTool }} />
+        <ActionsBar {...{ data, getDomain }} />
       </ControlBar>
       <StyledSVG ref={rootRef} />
       <Legend labels={Object.keys(data)} colors={lineColors} units={units} />

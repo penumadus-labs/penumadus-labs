@@ -9,11 +9,6 @@ const StyledForm = styled.form`
   margin: auto;
 `
 
-const StyledText = styled.p`
-  font-size: var(--md);
-  text-align: center;
-`
-
 export default ({ times, setTimes }) => {
   const { register, handleSubmit, setValue, reset } = useForm({
     defaultValues: times,
@@ -75,7 +70,7 @@ export default ({ times, setTimes }) => {
 
   return (
     <div className="space-children-y">
-      <StyledText>select time interval</StyledText>
+      <p className="title">select time interval</p>
       <p>unselected dates default to min max of the data set</p>
       <StyledForm onSubmit={onSubmit} className="space-children-y">
         <div>

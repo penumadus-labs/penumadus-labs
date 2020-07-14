@@ -7,12 +7,12 @@ const {
 } = require('../utils/filter-data')
 const { writeFileSync } = require('fs')
 
-const formatTimes = (data, key) => {
-  for (const point of data) {
-    const date = new Date(point.time * 1000)
-    point.time = `${date.getHours()}:${date.getMinutes()}`
-  }
-}
+// const formatTimes = (data, key) => {
+//   for (const point of data) {
+//     const date = new Date(point.time * 1000)
+//     point.time = `${date.getHours()}:${date.getMinutes()}`
+//   }
+// }
 
 const database = Router()
 

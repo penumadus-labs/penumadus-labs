@@ -1,10 +1,5 @@
 import * as d3 from 'd3'
-
-const formatHoursMinutes = (date) => {
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
-}
+import { formatHoursMinutes } from '../../../utils/datetime'
 
 // const zoomKey = 'altKey'
 
@@ -15,7 +10,6 @@ const marginTop = 5
 
 export default class {
   domains = []
-  brushed = false
   constructor({ data, colors }) {
     this.data = data
     this.entries = Object.entries(data)
@@ -24,6 +18,7 @@ export default class {
       `translate(${marginLeft} ${marginTop + height})`
     this.xDomain = d3.extent(this.data.humidity.map((d) => d.time))
     this.previousDomain = this.xDomain
+    this.currentDomain = this.xDomain
   }
   mount(root = this.rootNode) {
     this.rootNode = root
@@ -54,7 +49,9 @@ export default class {
             this.x.invert(selection[0]),
             this.x.invert(selection[1]),
           ]
-        } catch (error) {}
+        } catch (error) {
+          // suppress weird error if nothing is selected
+        }
       })
 
     this.zoom = d3
@@ -164,28 +161,37 @@ export default class {
   }
   applyBrush() {
     if (!this.brushedDomain) return
-    this.brushed = true
     this.pushDomain(this.brushedDomain)
     this.setX(this.brushedDomain)
     this.brushedDomain = null
     try {
       this.tool.select('.brush').call(this.brush.clear)
-    } catch (error) {}
+    } catch (error) {
+      // suppress weird error when nothing is selected
+    }
   }
   reset() {
     this.pushDomain()
-    this.brushed = false
     this.setX()
   }
   pushDomain(domain = this.xDomain) {
-    if (this.brushed) this.domains.push(this.previousDomain)
+    this.domains.push(this.previousDomain)
     this.previousDomain = domain
   }
 
+  getDomain() {
+    return this.currentDomain
+  }
+
   undo() {
-    this.setX(this.domains.pop())
+    if (!this.domains.length) return
+
+    const domain = this.domains.pop()
+    this.previousDomain = domain
+    this.setX(domain)
   }
   setX(domain = this.xDomain) {
+    this.currentDomain = domain
     this.x = d3.scaleLinear().domain(domain).range(this.xRange)
     this.rescaleX(this.x)
   }
@@ -200,8 +206,7 @@ export default class {
     return d3
       .axisBottom(this.x)
       .tickFormat((d) => {
-        const date = new Date(d * 1000)
-        return formatHoursMinutes(date)
+        return formatHoursMinutes(d)
       })
       .tickSizeOuter(0)
   }
