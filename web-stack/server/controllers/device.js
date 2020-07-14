@@ -18,6 +18,8 @@ updates all settings whenever a setter is resolved
 extends EventEmitter and creates promise based methods for issuing requests to the device
 */
 
+let prev
+
 class Device extends EventEmitter {
   // settings = {}
   initialized = false
@@ -40,12 +42,10 @@ class Device extends EventEmitter {
     let packets = 0
 
     this.socket.on('readable', function () {
-      // this.pause()
       let chunk
-      while (null !== (chunk = this.read(200))) {
+      while ((chunk = this.read(200))) {
         emitResponses(chunk)
       }
-      // this.resume()
     })
   }
 
@@ -132,6 +132,7 @@ class Device extends EventEmitter {
       console.log('parsed')
     } catch (error) {
       console.log('not parsed')
+      process.exit(0)
     }
     return
     // if (data.time) data.time = +data.time
