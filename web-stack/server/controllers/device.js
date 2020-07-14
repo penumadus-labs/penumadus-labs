@@ -18,8 +18,6 @@ updates all settings whenever a setter is resolved
 extends EventEmitter and creates promise based methods for issuing requests to the device
 */
 
-let prev
-
 class Device extends EventEmitter {
   // settings = {}
   initialized = false
@@ -38,8 +36,6 @@ class Device extends EventEmitter {
     this.addDataStreams()
 
     const emitResponses = this.emitResponses.bind(this)
-
-    let packets = 0
 
     this.socket.on('readable', function () {
       let chunk

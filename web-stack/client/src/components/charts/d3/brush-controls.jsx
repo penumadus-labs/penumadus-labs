@@ -7,7 +7,7 @@ const Controls = styled.div`
   justify-content: center;
 `
 
-export default ({ applyBrush, undo, reset, setTool, tool }) => {
+export default ({ applyBrush, undo, reset, changeTool, tool }) => {
   // const otherTool = tool === 'brush' ? 'zoom' : 'brush'
   const [open, bind] = useAlert()
 
@@ -22,9 +22,9 @@ export default ({ applyBrush, undo, reset, setTool, tool }) => {
         <button className="button" onClick={undo}>
           undo
         </button>
-        {/* <button className="button" onClick={() => setTool(otherTool)}>
-        switch to {otherTool}
-      </button> */}
+        {/* <button className="button" onClick={() => changeTool(otherTool)}>
+          switch to {otherTool}
+        </button> */}
         <button className="button" onClick={reset}>
           reset
         </button>

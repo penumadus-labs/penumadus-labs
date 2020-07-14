@@ -10,7 +10,7 @@ const StyledForm = styled.form`
 `
 
 const StyledText = styled.p`
-  font-sinze: var(--lg);
+  font-size: var(--md);
   text-align: center;
 `
 
@@ -74,19 +74,24 @@ export default ({ times, setTimes }) => {
   }
 
   return (
-    <>
+    <div className="space-children-y">
+      <StyledText>select time interval</StyledText>
+      <p>unselected dates default to min max of the data set</p>
       <StyledForm onSubmit={onSubmit} className="space-children-y">
-        <p>time interval:</p>
-        <label className="label space-children-x-xxs">
-          start:<br />
-          <input className="input" type="date" ref={register} name="start" />
-        </label>
-        
-        <label className="label space-children-x-xxs">
-          end:<br />
-          <input className="input" type="date" ref={register} name="end" />
-        </label>
-        <p>unselected dates default to min max of the data set</p>
+        <div>
+          <label className="label space-children-x-xxs">
+            start:
+            <br />
+            <input className="input" type="date" ref={register} name="start" />
+          </label>
+        </div>
+        <div>
+          <label className="label space-children-x-xxs">
+            end:
+            <br />
+            <input className="input" type="date" ref={register} name="end" />
+          </label>
+        </div>
         <Status {...status} />
         <button className="button">submit</button>
       </StyledForm>
@@ -101,6 +106,6 @@ export default ({ times, setTimes }) => {
           reset
         </button>
       </div>
-    </>
+    </div>
   )
 }

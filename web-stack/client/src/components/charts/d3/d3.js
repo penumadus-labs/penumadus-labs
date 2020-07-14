@@ -22,6 +22,8 @@ export default class {
     this.colors = colors
     this.translate = (height = 0) =>
       `translate(${marginLeft} ${marginTop + height})`
+    this.xDomain = d3.extent(this.data.humidity.map((d) => d.time))
+    this.previousDomain = this.xDomain
   }
   mount(root = this.rootNode) {
     this.rootNode = root
@@ -32,9 +34,7 @@ export default class {
     this.width = width - (marginLeft + marginRight)
     this.height = height - (marginBottom + marginTop)
 
-    this.xDomain = d3.extent(this.data.humidity.map((d) => d.time))
     this.xRange = [0, this.width]
-    this.previousDomain = this.xDomain
 
     this.x = d3.scaleLinear().domain(this.xDomain).range(this.xRange)
 

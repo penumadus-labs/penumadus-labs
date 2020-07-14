@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Chart from './d3'
 import styled from '@emotion/styled'
 import { Global, css } from '@emotion/core'
@@ -64,39 +64,49 @@ export default ({ data }) => {
   //       <p>no data to display</p>
   //     </div>
   //   )
+
+  const [chart, date] = useMemo(() => {
+    const chart = new Chart({ data, colors: lineColors })
+
+    const [start, end] = extent(data.humidity.map((d) => d.time))
+
+    const date =
+      start && end
+        ? `${parseDate(start)} - ${parseDate(end)}`
+        : 'no data within range'
+
+    return [chart, date]
+  }, [data])
+
   const rootRef = useRef()
-  const chart = useMemo(() => new Chart({ data, colors: lineColors }), [data])
   const [tool, setTool] = useState('brush')
 
-  const applyBrush = () => chart.applyBrush()
-  const undo = () => chart.undo()
-  const reset = () => chart.reset()
-
-  const resize = useCallback(() => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      chart.mount()
-    }, 250)
-  }, [chart])
-
   useEffect(() => {
+    const resize = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        chart.mount()
+        chart.setTool(tool)
+      }, 250)
+      // eslint-disable-next-line
+    }
     chart.mount(rootRef.current)
+    chart.setTool(tool)
     window.addEventListener('resize', resize)
     return () => {
       window.removeEventListener('resize', resize)
       chart.clean()
     }
-  }, [rootRef, chart, resize])
+    // eslint-disable-next-line
+  }, [chart])
 
-  useEffect(() => {
+  const applyBrush = () => chart.applyBrush()
+  const undo = () => chart.undo()
+  const reset = () => chart.reset()
+  const changeTool = (tool) => {
     chart.setTool(tool)
-  }, [chart, tool])
-
-  const dates = extent(data.humidity.map((d) => d.time))
-
-  const date = dates[0]
-    ? `${parseDate(dates[0])} - ${parseDate(dates[1])}`
-    : 'no data within range'
+    setTool(tool)
+  }
 
   return (
     <div className="card-spaced">
@@ -104,7 +114,7 @@ export default ({ data }) => {
       <p>{date}</p>
       <ControlBar>
         <div></div>
-        <Controls {...{ applyBrush, undo, reset, tool, setTool }} />
+        <Controls {...{ applyBrush, undo, reset, tool, changeTool }} />
         <Settings {...{ data }} />
       </ControlBar>
       <StyledSVG ref={rootRef} />
