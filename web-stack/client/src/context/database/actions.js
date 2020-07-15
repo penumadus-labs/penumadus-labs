@@ -23,7 +23,7 @@ const initialize = async (token, id = 'unit_3') => {
   if (standard) {
     ctx.dispatch({ type: 'standard-data', data: JSON.parse(standard) })
   } else {
-    await getStandardData(id)
+    await getStandardDataSplit(id)
   }
 }
 
@@ -38,11 +38,19 @@ const initialize = async (token, id = 'unit_3') => {
 // }
 
 const getStandardData = async ({ id, start, end }) => {
+  const { data } = await database.get('device-standard-csv', {
+    params: { id, start, end },
+  })
+
+  return data
+}
+
+const getStandardDataSplit = async ({ id, start, end }) => {
   try {
     const { data } = await database.get('device-standard-data', {
       params: { id, start, end },
     })
-    // sessionStorage.setItem('standard-data', JSON.stringify(data))
+    sessionStorage.setItem('standard-data', JSON.stringify(data))
     ctx.dispatch({ type: 'standard-data', data })
   } catch (error) {
     console.error(error)
@@ -55,5 +63,6 @@ export const createActions = (state, dispatch) => {
   return {
     initialize,
     getStandardData,
+    getStandardDataSplit,
   }
 }

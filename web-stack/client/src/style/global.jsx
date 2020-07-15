@@ -252,11 +252,6 @@ const globalStyle = css`
     ${clickableBox}
   }
 
-  .title {
-    font-size: var(--md);
-    text-align: center;
-  }
-
   .button {
     ${raised}
     ${clickableBox}

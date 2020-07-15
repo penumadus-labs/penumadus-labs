@@ -16,7 +16,7 @@ export default class {
     this.colors = colors
     this.translate = (height = 0) =>
       `translate(${marginLeft} ${marginTop + height})`
-    this.xDomain = d3.extent(this.data.humidity.map((d) => d.time))
+    this.xDomain = d3.extent(data.humidity.map((d) => d.time))
     this.previousDomain = this.xDomain
     this.currentDomain = this.xDomain
   }

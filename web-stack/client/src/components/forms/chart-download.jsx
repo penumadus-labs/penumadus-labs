@@ -1,14 +1,39 @@
 import React from 'react'
+import Status, { useStatus } from '../forms/status'
 import { parseDomain } from '../../utils/datetime'
 import useDatabase from '../../context/database/context'
 
 export default ({ getDomain }) => {
-  const domain = parseDomain(getDomain())
-  useDatabase()
+  const domain = getDomain()
+  const [start, end] = domain
+
+  const [startTime, endTime] = parseDomain(domain)
+  const [, { getStandardData }] = useDatabase()
+  const [{ setLoading, setError, setSuccess }, status] = useStatus()
+
+  const handleClick = async () => {
+    try {
+      setLoading()
+      const data = await getStandardData({ start, end })
+      setSuccess()
+      const file = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data)
+
+      const download = document.createElement('a')
+      download.href = file
+      download.download = `unit_3 ${startTime} - ${endTime}`
+      download.click()
+    } catch (error) {
+      setError()
+    }
+  }
   return (
-    <div className="space-children-y">
-      <p className="title">donwload selected domain</p>
-      <p>{domain}</p>
-    </div>
+    <>
+      <p>{startTime}</p>
+      <p>{endTime}</p>
+      <Status {...status} />
+      <button className="button" onClick={handleClick}>
+        download
+      </button>
+    </>
   )
 }

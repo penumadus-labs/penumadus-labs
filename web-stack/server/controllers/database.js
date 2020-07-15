@@ -78,10 +78,34 @@ const client = {
 
     return results
   },
-  async getStandardData({ id, start = -Infinity, end = Infinity }) {
+  getStandardData({ id, start = -Infinity, end = Infinity }) {
+    return client.devices
+      .aggregate([
+        { $match: { id: 'unit_3' } },
+        {
+          $project: {
+            standardData: {
+              $filter: {
+                input: '$standardData',
+                as: 'standardData',
+                cond: {
+                  $and: [
+                    { $gte: ['$$standardData.time', +start] },
+                    { $lte: ['$$standardData.time', +end] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ])
+      .toArray()
+      .then((res) => res[0].standardData)
+  },
+  async getStandardDataSplit({ id, start = -Infinity, end = Infinity }) {
     const res = {}
     const proms = queries.standard.map(({ label }) =>
-      client.queryStandardData(id, label, start, end).then((data) => {
+      client.queryStandardDataItem(id, label, start, end).then((data) => {
         res[label] = data
       })
     )
@@ -90,8 +114,8 @@ const client = {
 
     return res
   },
-  async queryStandardData(id, label, start, end) {
-    const res = await client.devices
+  queryStandardDataItem(id, label, start, end) {
+    return client.devices
       .aggregate([
         { $match: { id: 'unit_3' } },
         {
@@ -118,7 +142,7 @@ const client = {
         },
       ])
       .toArray()
-    return res[0].standardData
+      .then((res) => res[0].standardData)
   },
   insertDevice(data) {
     return client.devices.insertOne(data)

@@ -47,13 +47,32 @@ const StyledDiv = styled.div`
   /* min-height: 300px; */
 `
 
+const CloseButton = styled.button`
+  position: absolute;
+`
+
 const OpaqueCover = styled.div`
   z-index: var(--layer2);
   background: var(--body-background);
   opacity: 0.5;
 `
 
-export default ({ children, isOpen, close }) => {
+const Title = styled.p`
+  margin-bottom: var(--lg);
+  padding: 0;
+  font-size: var(--md);
+  text-align: center;
+`
+
+const Body = styled.div`
+  text-align: center;
+  > div {
+    display: inline-block;
+    text-align: initial;
+  }
+`
+
+export default ({ children, isOpen, close, title }) => {
   if (!isOpen) return null
 
   useEsc(close)
@@ -62,11 +81,14 @@ export default ({ children, isOpen, close }) => {
     <>
       <Anchor className="center-child fixed">
         <ClickOut className="fixed" onClick={close} />
-        <StyledDiv className="card-spaced">
-          <button className="button-text" onClick={close}>
+        <StyledDiv className="card">
+          <CloseButton className="button-text" onClick={close}>
             <Close size="20" />
-          </button>
-          {children}
+          </CloseButton>
+          {title && <Title className="title">{title}</Title>}
+          <Body>
+            <div className="space-children-y">{children}</div>
+          </Body>
         </StyledDiv>
       </Anchor>
       <OpaqueCover className="fixed" />

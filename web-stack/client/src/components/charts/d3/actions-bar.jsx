@@ -27,10 +27,10 @@ export default ({ data, getDomain }) => {
           <GoGear size="20" />
         </button>
       </StyledDiv>
-      <Alert {...bindSettings}>
+      <Alert {...bindSettings} title="select time domain">
         <ChartSettings times={times} setTimes={setTimes} />
       </Alert>
-      <Alert {...bindDownload}>
+      <Alert {...bindDownload} title="download seleted domain">
         <Download getDomain={getDomain} />
       </Alert>
     </>

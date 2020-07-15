@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const { unparse } = require('papaparse')
 const client = require('../controllers/database')
 const {
   filterData,
@@ -33,9 +34,22 @@ database.get('/device-data', async ({ query }, res) => {
 
 database.get('/device-standard-data', async ({ query }, res) => {
   try {
-    const standard = await client.getStandardData(query)
+    const standard = await client.getStandardDataSplit(query)
 
     res.send(standard)
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+database.get('/device-standard-csv', async ({ query }, res) => {
+  // client.getStandardData(query).then(res.send).catch(console.error)
+  try {
+    const data = await client.getStandardData(query)
+
+    const csv = unparse(data)
+
+    res.send(csv)
   } catch (error) {
     console.error(error)
   }

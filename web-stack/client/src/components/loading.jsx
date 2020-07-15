@@ -5,12 +5,13 @@ const Ellipsis = styled.div`
   position: relative;
   display: block;
   width: 80px;
-  height: 80px;
+
   margin: auto;
 
   div {
     position: absolute;
-    top: 33px;
+
+    top: 5px;
     width: 10px;
     height: 10px;
     background: #fff;

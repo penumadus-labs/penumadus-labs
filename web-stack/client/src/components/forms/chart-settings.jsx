@@ -14,7 +14,7 @@ export default ({ times, setTimes }) => {
     defaultValues: times,
   })
 
-  const [, { getStandardData }] = useDatabase()
+  const [, { getStandardDataSplit }] = useDatabase()
 
   const [{ setLoading, setError, setSuccess }, status] = useStatus()
 
@@ -47,18 +47,20 @@ export default ({ times, setTimes }) => {
 
     try {
       setLoading()
-      await getStandardData({ id: 'unit_3', start, end })
+      await getStandardDataSplit({ id: 'unit_3', start, end })
       setSuccess()
     } catch (error) {
       console.error(error)
     }
   })
 
-  const clearStart = () => {
+  const clearStart = (e) => {
+    e.preventDefault()
     setValue('start', '')
     setTimes((times) => ({ ...times, start: '' }))
   }
-  const clearEnd = () => {
+  const clearEnd = (e) => {
+    e.preventDefault()
     setValue('end', '')
     setTimes((times) => ({ ...times, end: '' }))
   }
@@ -70,7 +72,6 @@ export default ({ times, setTimes }) => {
 
   return (
     <div className="space-children-y">
-      <p className="title">select time interval</p>
       <p>unselected dates default to min max of the data set</p>
       <StyledForm onSubmit={onSubmit} className="space-children-y">
         <div>
@@ -78,27 +79,29 @@ export default ({ times, setTimes }) => {
             start:
             <br />
             <input className="input" type="date" ref={register} name="start" />
+            <br />
           </label>
+          <button className="button-text text-blue" onClick={clearStart}>
+            clear
+          </button>
         </div>
         <div>
           <label className="label space-children-x-xxs">
             end:
             <br />
             <input className="input" type="date" ref={register} name="end" />
+            <br />
           </label>
+          <button className="button-text text-blue" onClick={clearEnd}>
+            clear
+          </button>
         </div>
         <Status {...status} />
         <button className="button">submit</button>
       </StyledForm>
       <div className="space-children-x">
-        <button className="button-text text-blue" onClick={clearStart}>
-          clear start
-        </button>
-        <button className="button-text text-blue" onClick={clearEnd}>
-          clear end
-        </button>
         <button className="button-text text-blue" onClick={resetValues}>
-          reset
+          clear all
         </button>
       </div>
     </div>

@@ -10,7 +10,7 @@ const parseTime = (time) => {
 }
 
 export const parseDomain = ([start, end]) => {
-  return `${parseTime(start)} - ${parseTime(end)}`
+  return [parseTime(start), parseTime(end)]
 }
 
 export const formatHoursMinutes = (time) => {
