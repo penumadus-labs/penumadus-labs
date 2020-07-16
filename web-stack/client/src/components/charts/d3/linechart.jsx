@@ -52,25 +52,22 @@ const ControlBar = styled.div`
 let timeout
 
 export default ({ data }) => {
-  // if (!Object.values(data).length)
-  //   return (
-  //     <div className="card">
-  //       <p>no data to display</p>
-  //     </div>
-  //   )
+  const [chart, date] = useMemo(
+    (...ok) => {
+      const chart = new Chart({ data, colors: lineColors })
 
-  const [chart, date] = useMemo(() => {
-    const chart = new Chart({ data, colors: lineColors })
+      const [start, end] = extent(data.humidity.map((d) => d.time))
 
-    const [start, end] = extent(data.humidity.map((d) => d.time))
+      const date =
+        start && end
+          ? `${parseDate(start)} - ${parseDate(end)}`
+          : 'no data within range'
 
-    const date =
-      start && end
-        ? `${parseDate(start)} - ${parseDate(end)}`
-        : 'no data within range'
-
-    return [chart, date]
-  }, [data])
+      return [chart, date]
+      // eslint-disable-next-line
+    },
+    [data]
+  )
 
   const rootRef = useRef()
   const [tool, setTool] = useState('brush')

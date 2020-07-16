@@ -33,7 +33,7 @@ export default class {
 
     this.x = d3.scaleLinear().domain(this.xDomain).range(this.xRange)
 
-    this.y = d3.scaleLinear().range([this.height, 0]).domain([-1, 50])
+    this.y = d3.scaleLinear().range([this.height, 0]).domain([-1, 200])
 
     this.brush = d3
       .brushX()

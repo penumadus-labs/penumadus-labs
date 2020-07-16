@@ -70,7 +70,7 @@ class Device extends EventEmitter {
   addDataStreams() {
     this.on(table['standardData'], async (err, data) => {
       try {
-        // await insertStandardData('unit_3', data)
+        await insertStandardData(this.id, data)
       } catch (error) {
         console.error(error)
       }

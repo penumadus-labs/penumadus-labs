@@ -26,6 +26,4 @@ client.wrap(async () => {
     nPackets++
     iterations++
   }
-
-  console.log(events)
 })

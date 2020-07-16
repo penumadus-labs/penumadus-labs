@@ -38,6 +38,7 @@ const useSocket = () => {
               status.data = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
               return { ...status }
             })
+            getStandardData().catch(console.error)
             break
           case 'acceleration':
             setStatus((status) => {

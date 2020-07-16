@@ -46,7 +46,6 @@ const getStandardCSV = async ({ id, start, end }) => {
 }
 
 const getStandardData = async ({ id, start, end } = {}) => {
-  console.log('hey')
   try {
     const { data } = await database.get('device-standard-data', {
       params: { id, start, end },

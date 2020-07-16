@@ -8,15 +8,13 @@ const start = async (expressApp, port) => {
   const webHandler = new Server({ server })
   controller.users = webHandler.clients
 
-  webHandler.on('connection', (socket) => {
-    socket.on('error', () => {
-      console.log('socket error')
-    })
-  })
+  // webHandler.on('connection', (socket) => {
+  //   socket.on('error', () => {
+  //   })
+  // })
 
-  webHandler.on('error', () => {
-    console.log('handler error')
-  })
+  // webHandler.on('error', () => {
+  // })
 
   return new Promise((_, reject) => {
     server
