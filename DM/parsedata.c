@@ -89,7 +89,7 @@ parsedata(char *incoming, char *outgoing, int size)
 				  "\"x\":%.2f,"
 				  "\"y\":%.2f,"
 				  "\"z\":%.2f,"
-				  "\"time\":\"%lu.%06lu\","
+				  "\"time\":%lu.%06lu,"
 				 "\"pad\":\"",
 				  ACCELDATA,	//start of args
 				deviceID,
@@ -129,18 +129,18 @@ parsedata(char *incoming, char *outgoing, int size)
 			);
 #ifdef SIMULATOR
 			//PONDSCUM simulated pressure for testing
-			//pressure can only go up or down +/-10% / sample
+			//pressure can only go up or down +/-.02% / sample
 			{
 			static bool inited=false;
 			static float simpress=5000.0;
 			double rnum;
 			if(!inited){
 				inited=true;
-				srand48(0xfeedbeef);
+				srand48(time(NULL));
 			}
 			rnum=drand48();
 			rnum=(2*(rnum-.5)); //yields -1 to +1
-			rnum*=.2; //only let move max 20% at a time up or down
+			rnum*=.002; //only let move max 20% at a time up or down
 			printf("rnumadj: %f\n",rnum);
 			simpress *= (1+rnum);
 			pressure=simpress;
@@ -156,7 +156,7 @@ parsedata(char *incoming, char *outgoing, int size)
 				  "\"fills\":%d,"
 				  "\"temperature\":%d,"
 				  "\"humidity\":%d,"
-				  "\"time\":\"%lu.%06lu\","
+				  "\"time\":%lu.%06lu,"
 				  "\"pad\":\"",
 				MAINDATA,
 				deviceID,
@@ -182,7 +182,7 @@ parsedata(char *incoming, char *outgoing, int size)
 			g_err(NOEXIT,NOPERROR,"LOG DATA: %s\n",incoming);
 
 			if((n=snprintf(outgoing,size,
-				"{ \"type\":\"%c\",\"id\":\"%s\",\"log\":\"%s\",\"time\":\"%ld.%06ld\""
+				"{ \"type\":\"%c\",\"id\":\"%s\",\"log\":\"%s\",\"time\":%ld.%06ld,"
 				  "\"pad\":\"",
 				LOG,
 				deviceID,
