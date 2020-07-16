@@ -1,12 +1,6 @@
 import React from 'react'
-import styled from '@emotion/styled'
 import Alert from './alert'
 import Status, { useStatus } from '../forms/status'
-// import useStatus from '../../hooks/use-status'
-
-const Controls = styled.div`
-  text-align: center;
-`
 
 export default ({ children, onAccept, ...bind }) => {
   const { isOpen, close } = bind
@@ -25,12 +19,8 @@ export default ({ children, onAccept, ...bind }) => {
   if (loading)
     return (
       <Alert {...bind}>
-        <div className="center-child">
-          <div>
-            <Status {...status} />
-            <p>please leave this box open while command executes.</p>
-          </div>
-        </div>
+        <Status {...status} />
+        <p>please leave this box open while command executes.</p>
       </Alert>
     )
 
@@ -59,17 +49,11 @@ export default ({ children, onAccept, ...bind }) => {
     </button>
   )
 
-  const controls = (
-    <Controls className="space-children-y">
-      <Status {...status} />
-      <div className="center-child space-children-x">{buttons}</div>
-    </Controls>
-  )
-
   return (
     <Alert {...bind}>
       {children}
-      {controls}
+      <Status {...status} />
+      <div className="center-child space-children-x">{buttons}</div>
     </Alert>
   )
 }

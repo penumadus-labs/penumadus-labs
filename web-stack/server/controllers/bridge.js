@@ -2,7 +2,9 @@ const controller = {
   users: new Set(),
   devices: {},
   updateUsers(type, data = null) {
-    controller.users.forEach((client) => client.send({ type, data }))
+    controller.users.forEach((client) => {
+      client.send(JSON.stringify({ type, data }))
+    })
   },
   sendDeviceCommand(id, request, args) {
     return controller.devices['unit_3'][request](args)

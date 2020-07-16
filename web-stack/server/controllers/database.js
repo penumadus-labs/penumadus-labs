@@ -40,8 +40,8 @@ const client = {
       client.close()
     }
   },
-  insertStandardData(id, data) {
-    client.devices
+  insertStandardData(id = 'unit_3', data) {
+    return client.devices
       .updateOne({ id }, { $push: { standardData: data } })
       .catch(console.error)
   },
@@ -143,6 +143,31 @@ const client = {
       ])
       .toArray()
       .then((res) => res[0].standardData)
+  },
+  getAccelerationData({ id, start = -Infinity, end = Infinity }) {
+    return client.devices
+      .aggregate([
+        { $match: { id: 'unit_3' } },
+        { $sort: { 'accelerationData.time': -1 } },
+        {
+          $project: {
+            accelerationData: {
+              $filter: {
+                input: '$accelerationData',
+                as: 'accelerationData',
+                cond: {
+                  $and: [
+                    { $gte: ['$$accelerationData.time', +start] },
+                    { $lte: ['$$accelerationData.time', +end] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ])
+      .toArray()
+      .then((res) => res[0].accelerationData)
   },
   insertDevice(data) {
     return client.devices.insertOne(data)

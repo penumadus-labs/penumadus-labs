@@ -8,13 +8,13 @@ export default ({ getDomain }) => {
   const [start, end] = domain
 
   const [startTime, endTime] = parseDomain(domain)
-  const [, { getStandardData }] = useDatabase()
+  const [, { getStandardCSV }] = useDatabase()
   const [{ setLoading, setError, setSuccess }, status] = useStatus()
 
   const handleClick = async () => {
     try {
       setLoading()
-      const data = await getStandardData({ start, end })
+      const data = await getStandardCSV({ start, end })
       setSuccess()
       const file = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data)
 

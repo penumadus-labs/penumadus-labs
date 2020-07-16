@@ -37,10 +37,11 @@ class Device extends EventEmitter {
 
     const emitResponses = this.emitResponses.bind(this)
 
-    this.socket.on('readable', function () {
+    this.socket.on('readable', async function () {
       let chunk
       while ((chunk = this.read(200))) {
         emitResponses(chunk)
+        await new Promise((res) => setTimeout(res, 5))
       }
     })
   }
@@ -67,9 +68,13 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], (err, data) => {
+    this.on(table['standardData'], async (err, data) => {
+      try {
+        // await insertStandardData('unit_3', data)
+      } catch (error) {
+        console.error(error)
+      }
       controller.updateUsers('standard')
-      // insertStandardData(this.id, data)
     })
 
     this.on(table['accelerationData'], (err, data) => {

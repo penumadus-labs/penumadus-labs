@@ -5,8 +5,8 @@ const { connect } = require('./controllers/database')
 const startServers = require('./servers')
 
 const webPort = 8080
-// const tcpPort = 32100
-const tcpPort = 32000
+const tcpPort = 32100
+// const tcpPort = 32000
 
 const twoHours = 7200000
 

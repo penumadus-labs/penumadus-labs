@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import useDevices from '../context/devices/context'
+import useDatabase from '../context/database/context'
 import { wsURL } from '../utils/url'
 
 const initialStatus = {
@@ -8,18 +9,27 @@ const initialStatus = {
   acceleration: 'not recieved',
 }
 
+let ws
+
 const useSocket = () => {
   const [status, setStatus] = useState(initialStatus)
   const { data, acceleration } = status
   // eslint-disable-next-line
   const [{ settings }, { getSettings }] = useDevices()
+  const [, { getStandardData }] = useDatabase()
 
   useEffect(() => {
-    const ws = new WebSocket(wsURL)
+    ws = new WebSocket(wsURL)
+    return () => {
+      ws.close()
+    }
+  }, [])
 
+  useEffect(() => {
     ws.onmessage = async (raw) => {
-      const { type, data } = JSON.parse(raw.data)
-      // if (!settings) await getSettings()
+      if (!settings) getSettings().catch(console.error)
+
+      const { type } = JSON.parse(raw.data)
       const date = new Date(Date.now())
       try {
         switch (type) {
@@ -34,16 +44,17 @@ const useSocket = () => {
               status.acceleration = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
               return { ...status }
             })
+            getStandardData()
             break
           default:
             throw new Error('socket sent invalid action type')
         }
-        setStatus(await data.text())
       } catch (error) {
         console.error(error)
       }
     }
-  })
+    // eslint-disable-next-line
+  }, [settings])
 
   return (
     <div>

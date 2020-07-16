@@ -1,7 +1,5 @@
 import React /* , { useState } */ from 'react'
-import { Router } from '@reach/router'
 import styled from '@emotion/styled'
-import ChartControls from './controls/chart-controls'
 import useSocket from '../hooks/use-socket'
 
 const Menu = styled.div`
@@ -21,12 +19,5 @@ export default ({ loggedIn }) => {
   //   setSelected(target.value)
   // }
 
-  return loggedIn ? (
-    <Menu className="card">
-      {status}
-      <Router className="router">
-        <ChartControls path="/charts" />
-      </Router>
-    </Menu>
-  ) : null
+  return loggedIn ? <Menu className="card">{status}</Menu> : null
 }

@@ -14,7 +14,7 @@ export default ({ times, setTimes }) => {
     defaultValues: times,
   })
 
-  const [, { getStandardDataSplit }] = useDatabase()
+  const [, { getStandardData }] = useDatabase()
 
   const [{ setLoading, setError, setSuccess }, status] = useStatus()
 
@@ -47,7 +47,7 @@ export default ({ times, setTimes }) => {
 
     try {
       setLoading()
-      await getStandardDataSplit({ id: 'unit_3', start, end })
+      await getStandardData({ id: 'unit_3', start, end })
       setSuccess()
     } catch (error) {
       console.error(error)
