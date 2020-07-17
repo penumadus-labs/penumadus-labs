@@ -48,7 +48,7 @@ export default ({ name, message, settings, sendCommand }) => {
             <div key={i} className="space-children-y-xs">
               <Input
                 ref={register()}
-                before={<p>Currently: {value}</p>}
+                before={<p>currently: {value}</p>}
                 name={name}
               />
             </div>

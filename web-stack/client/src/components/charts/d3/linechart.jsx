@@ -14,7 +14,6 @@ import useDatabase from '../../../context/database/context'
 import { parseDate } from '../../../utils/datetime'
 import * as c from '../../../utils/colors'
 
-
 const colors = {
   humidity: c.blue,
   pressure: c.green,
@@ -42,9 +41,12 @@ const StyledSVG = styled.svg`
 
 const ControlBar = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--sm);
+  > * {
+    margin-bottom: var(--xs);
+  }
 `
 
 let timeout
@@ -123,15 +125,11 @@ export default ({ data }) => {
       <Global styles={SvgStyle} />
       <p>{date}</p>
       <ControlBar>
-        <button className="button" onClick={handleLive}>
-          {live ? 'disable' : 'enable'} live mode
-        </button>
+        <ActionsBar {...{ data, getDomain, live, handleLive }} />
         {!live ? (
           <BrushControls {...{ applyBrush, undo, reset, tool, changeTool }} />
         ) : null}
-        <ActionsBar {...{ data, getDomain }} />
       </ControlBar>
-
       <StyledSVG ref={rootRef} />
       <Legend labels={Object.keys(data)} colors={colors} />
     </div>

@@ -8,8 +8,9 @@ const initialize = () => {
   ws = new WebSocket(wsURL)
 
   ws.onmessage = ({ data }) => {
+    const parsed = JSON.parse(data)
     for (const task of tasks) {
-      task(data)
+      task(parsed)
     }
   }
 
@@ -20,7 +21,7 @@ const initialize = () => {
 
 export default initialize
 
-export const useMessage = (task, deps) => {
+export const useMessage = (task, deps = []) => {
   useEffect(() => {
     tasks.push(task)
     return () => {

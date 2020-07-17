@@ -4,7 +4,7 @@ import { formatHoursMinutes } from '../../../utils/datetime'
 // const zoomKey = 'altKey'
 
 const marginLeft = 30
-const marginRight = 10
+const marginRight = 0
 const marginBottom = 50
 const marginTop = 5
 

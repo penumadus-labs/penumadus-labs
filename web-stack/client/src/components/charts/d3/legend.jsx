@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from '@emotion/styled'
 
-
 const units = {
   humidity: '%',
   temperature: '°C',
@@ -17,7 +16,7 @@ const StyledItem = styled.li`
   color: ${(props) => props.color};
 `
 
-export default ({ labels }) => {
+export default ({ labels, colors }) => {
   const res = useMemo(
     () =>
       labels.map((label, i) => (
