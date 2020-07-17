@@ -20,7 +20,7 @@ export default ({ getDomain }) => {
 
       const download = document.createElement('a')
       download.href = file
-      download.download = `unit_3 ${startTime} - ${endTime}`
+      download.download = `unit_3 ${startTime} - ${endTime}.csv`
       download.click()
     } catch (error) {
       setError()

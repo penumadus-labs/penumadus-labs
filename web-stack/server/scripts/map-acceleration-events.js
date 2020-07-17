@@ -13,7 +13,7 @@ client.wrap(async () => {
   let iterations = 0
 
   for (const d of data.slice(1)) {
-    if (prev.time + 0.02 < d.time) {
+    if (prev.time + 0.005 < d.time) {
       events.push({
         start: start.time,
         end: prev.time,
@@ -26,4 +26,6 @@ client.wrap(async () => {
     nPackets++
     iterations++
   }
+
+  console.log(events)
 })

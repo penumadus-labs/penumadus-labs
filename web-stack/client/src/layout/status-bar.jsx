@@ -1,6 +1,7 @@
 import React /* , { useState } */ from 'react'
 import styled from '@emotion/styled'
 import useSocket from '../hooks/use-socket'
+import useMessage from '../context/socket/context'
 
 const Menu = styled.div`
   display: flex;

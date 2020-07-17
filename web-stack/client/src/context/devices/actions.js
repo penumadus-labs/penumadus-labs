@@ -21,7 +21,7 @@ const initialize = async (token) => {
       const { data } = await devices.get('protocol')
       ctx.dispatch({ type: 'protocol', protocol: data })
     }
-    // await getSettings()
+    await getSettings()
   } catch (error) {
     console.error(error)
     // ctx.dispatch({type: 'error'})

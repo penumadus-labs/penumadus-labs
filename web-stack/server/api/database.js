@@ -36,6 +36,11 @@ database.get('/device-standard-data', async ({ query }, res) => {
   try {
     const standard = await client.getStandardDataSplit(query)
 
+    standard.pressure = standard.pressure.map((d) => ({
+      ...d,
+      pressure: Math.floor(d.pressure / 100),
+    }))
+
     res.send(standard)
   } catch (error) {
     console.error(error)

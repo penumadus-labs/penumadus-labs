@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import useDevices from '../context/devices/context'
-import useDatabase from '../context/database/context'
 import { wsURL } from '../utils/url'
 
 const initialStatus = {
@@ -16,7 +15,7 @@ const useSocket = () => {
   const { data, acceleration } = status
   // eslint-disable-next-line
   const [{ settings }, { getSettings }] = useDevices()
-  const [, { getStandardData }] = useDatabase()
+  // const [, { getStandardData }] = useDatabase()
 
   useEffect(() => {
     ws = new WebSocket(wsURL)
@@ -27,7 +26,9 @@ const useSocket = () => {
 
   useEffect(() => {
     ws.onmessage = async (raw) => {
-      if (!settings) getSettings().catch(console.error)
+      if (!settings) {
+        getSettings().catch(console.error)
+      }
 
       const { type } = JSON.parse(raw.data)
       const date = new Date(Date.now())
@@ -38,14 +39,12 @@ const useSocket = () => {
               status.data = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
               return { ...status }
             })
-            getStandardData().catch(console.error)
             break
           case 'acceleration':
             setStatus((status) => {
               status.acceleration = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
               return { ...status }
             })
-            getStandardData()
             break
           default:
             throw new Error('socket sent invalid action type')

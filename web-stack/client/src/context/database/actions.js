@@ -50,7 +50,7 @@ const getStandardData = async ({ id, start, end } = {}) => {
     const { data } = await database.get('device-standard-data', {
       params: { id, start, end },
     })
-    sessionStorage.setItem('standard-data', JSON.stringify(data))
+    // sessionStorage.setItem('standard-data', JSON.stringify(data))
     ctx.dispatch({ type: 'standard-data', data })
   } catch (error) {
     console.error(error)

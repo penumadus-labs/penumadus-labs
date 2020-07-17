@@ -3,13 +3,17 @@ import ThemeProvider from './theme/provider'
 import { AuthProvider } from './auth/context'
 import { DatabaseProvider } from './database/context'
 import { DevicesProvider } from './devices/context'
+import { SocketProvider } from './socket/context'
 
 export default ({ children }) => {
   return (
     <ThemeProvider>
       <AuthProvider>
         <DatabaseProvider>
-          <DevicesProvider>{children}</DevicesProvider>
+          <DevicesProvider>
+            <SocketProvider />
+            {children}
+          </DevicesProvider>
         </DatabaseProvider>
       </AuthProvider>
     </ThemeProvider>

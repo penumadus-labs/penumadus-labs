@@ -1,5 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from '@emotion/styled'
+
+
+const units = {
+  humidity: '%',
+  temperature: '°C',
+  pressure: 'psi x 100',
+}
 
 const StyledList = styled.ul`
   display: flex;
@@ -10,14 +17,17 @@ const StyledItem = styled.li`
   color: ${(props) => props.color};
 `
 
-export default ({ labels, colors, units }) => {
-  return (
-    <StyledList className="space-children-x">
-      {labels.map((label, i) => (
+export default ({ labels }) => {
+  const res = useMemo(
+    () =>
+      labels.map((label, i) => (
         <StyledItem x={i * 100} key={i} color={colors[label]}>
           {`${label} (${units[label]})`}
         </StyledItem>
-      ))}
-    </StyledList>
+      )),
+    // eslint-disable-next-line
+    []
   )
+
+  return <StyledList className="space-children-x">{res}</StyledList>
 }

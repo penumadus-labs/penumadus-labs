@@ -8,19 +8,17 @@ import Legend from './legend'
 import BrushControls from './brush-controls'
 import ActionsBar from './actions-bar'
 
-import * as colors from '../../../utils/colors'
+import useMessage from '../../../context/socket/context'
+import useDatabase from '../../../context/database/context'
+
 import { parseDate } from '../../../utils/datetime'
+import * as c from '../../../utils/colors'
 
-const units = {
-  humidity: 'H',
-  temperature: 'C',
-  pressure: 'P',
-}
 
-const lineColors = {
-  humidity: colors.blue,
-  pressure: colors.green,
-  temperature: colors.red,
+const colors = {
+  humidity: c.blue,
+  pressure: c.green,
+  temperature: c.red,
 }
 
 const SvgStyle = css`
@@ -51,26 +49,28 @@ const ControlBar = styled.div`
 
 let timeout
 
+const defaultTool = 'brush'
+
 export default ({ data }) => {
-  const [chart, date] = useMemo(
-    (...ok) => {
-      const chart = new Chart({ data, colors: lineColors })
-
-      const [start, end] = extent(data.humidity.map((d) => d.time))
-
-      const date =
-        start && end
-          ? `${parseDate(start)} - ${parseDate(end)}`
-          : 'no data within range'
-
-      return [chart, date]
-      // eslint-disable-next-line
-    },
-    [data]
-  )
+  const [, { getStandardData }] = useDatabase()
 
   const rootRef = useRef()
-  const [tool, setTool] = useState('brush')
+  const [tool, setTool] = useState(defaultTool)
+  const [live, setLive] = useState(false)
+
+  const [chart, date] = useMemo(() => {
+    const chart = new Chart({ data, colors })
+
+    const [start, end] = extent(data.humidity.map((d) => d.time))
+
+    const date =
+      start && end
+        ? `${parseDate(start)} - ${parseDate(end)}`
+        : 'no data within range'
+
+    return [chart, date]
+    // eslint-disable-next-line
+  }, [data])
 
   useEffect(() => {
     const resize = () => {
@@ -91,6 +91,13 @@ export default ({ data }) => {
     // eslint-disable-next-line
   }, [chart])
 
+  useMessage(
+    (data) => {
+      if (live) getStandardData().catch(console.error)
+    },
+    [live]
+  )
+
   const applyBrush = () => chart.applyBrush()
   const undo = () => chart.undo()
   const reset = () => chart.reset()
@@ -101,17 +108,32 @@ export default ({ data }) => {
     setTool(tool)
   }
 
+  const handleLive = () => {
+    if (live) {
+      setLive(false)
+      changeTool(defaultTool)
+    } else {
+      setLive(true)
+      changeTool(null)
+    }
+  }
+
   return (
     <div className="card-spaced">
       <Global styles={SvgStyle} />
       <p>{date}</p>
       <ControlBar>
-        <div></div>
-        <BrushControls {...{ applyBrush, undo, reset, tool, changeTool }} />
+        <button className="button" onClick={handleLive}>
+          {live ? 'disable' : 'enable'} live mode
+        </button>
+        {!live ? (
+          <BrushControls {...{ applyBrush, undo, reset, tool, changeTool }} />
+        ) : null}
         <ActionsBar {...{ data, getDomain }} />
       </ControlBar>
+
       <StyledSVG ref={rootRef} />
-      <Legend labels={Object.keys(data)} colors={lineColors} units={units} />
+      <Legend labels={Object.keys(data)} colors={colors} />
     </div>
   )
 }
