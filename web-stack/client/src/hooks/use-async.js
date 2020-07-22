@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+// unused
 
-export default (initial, af, clean = null) => {
-  const [state, setState] = useState(initial)
+// import { useState, useEffect } from 'react'
 
-  useEffect(() => {
-    af(setState).catch(console.error)
-    if (clean) return clean
-  }, [af, setState, clean])
+// export default (initial, af, clean = null) => {
+//   const [state, setState] = useState(initial)
 
-  return state
-}
+//   useEffect(() => {
+//     af(setState).catch(console.error)
+//     if (clean) return clean
+//   }, [af, setState, clean])
+
+//   return state
+// }

@@ -22,15 +22,15 @@ database.get('start-time', async ({ query }, res) => {
   res.send(startTime)
 })
 
-database.get('/device-data', async ({ query }, res) => {
-  try {
-    const data = await client.getDeviceData(query.id)
+// database.get('/device-data', async ({ query }, res) => {
+//   try {
+//     const data = await client.getDeviceData(query.id)
 
-    res.send(data)
-  } catch (error) {
-    console.error(error)
-  }
-})
+//     res.send(data)
+//   } catch (error) {
+//     console.error(error)
+//   }
+// })
 
 database.get('/device-standard-data', async ({ query }, res) => {
   try {

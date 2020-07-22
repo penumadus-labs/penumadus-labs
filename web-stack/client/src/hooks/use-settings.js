@@ -1,47 +1,49 @@
-import { useState, useEffect } from 'react'
-import useDatabase from './use-database'
-import validate from '../utils/validate-settings'
+// unused
 
-export default () => {
-  const [
-    {
-      selected: { settings },
-      error,
-    },
-    { updateSettings: update },
-  ] = useDatabase()
+// import { useState, useEffect } from 'react'
+// import useDatabase from './use-database'
+// import validate from '../utils/validate-settings'
 
-  const [list, setList] = useState([])
+// export default () => {
+//   const [
+//     {
+//       selected: { settings },
+//       error,
+//     },
+//     { updateSettings: update },
+//   ] = useDatabase()
 
-  useEffect(() => {
-    if (!settings) return
+//   const [list, setList] = useState([])
 
-    const list = settings.map(({ name, value: current, unit }, index) => {
-      return {
-        name,
-        current,
-        unit,
-        value: '',
-        warning: '',
-        handleChange({ target: { value } }) {
-          let ref
-          const { name, current } = (ref = list[index])
+//   useEffect(() => {
+//     if (!settings) return
 
-          ref.value = value
-          ref.warning = validate[name](value, current)
+//     const list = settings.map(({ name, value: current, unit }, index) => {
+//       return {
+//         name,
+//         current,
+//         unit,
+//         value: '',
+//         warning: '',
+//         handleChange({ target: { value } }) {
+//           let ref
+//           const { name, current } = (ref = list[index])
 
-          setList([...list])
-        },
-      }
-    })
+//           ref.value = value
+//           ref.warning = validate[name](value, current)
 
-    setList(list)
-  }, [settings])
+//           setList([...list])
+//         },
+//       }
+//     })
 
-  const reset = () => {
-    list.forEach((item) => (item.value = ''))
-    setList([...list])
-  }
+//     setList(list)
+//   }, [settings])
 
-  return [error, list, update, reset]
-}
+//   const reset = () => {
+//     list.forEach((item) => (item.value = ''))
+//     setList([...list])
+//   }
+
+//   return [error, list, update, reset]
+// }

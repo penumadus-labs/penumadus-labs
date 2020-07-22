@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+// unused
 
-export default (initial, callback, clean) => {
-  const [state, setState] = useState(initial)
+// import { useState, useEffect } from 'react'
 
-  useEffect(() => {
-    callback(setState)
-    if (clean) return clean
-  }, [callback, setState, clean])
+// export default (initial, callback, clean) => {
+//   const [state, setState] = useState(initial)
 
-  return state
-}
+//   useEffect(() => {
+//     callback(setState)
+//     if (clean) return clean
+//   }, [callback, setState, clean])
+
+//   return state
+// }
