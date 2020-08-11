@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import useEsc from '../../hooks/use-esc'
+import useEsc from './use-esc'
 import { IoMdClose as Close } from 'react-icons/io'
 
 /* @keyframes open {

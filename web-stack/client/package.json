@@ -15,7 +15,9 @@
     "react-icons": "^3.10.0",
     "react-scripts": "3.4.1",
     "recharts": "^1.8.5",
-    "typescript": "^3.9.5"
+    "swr": "^0.3.0",
+    "typescript": "^3.9.5",
+    "zustand": "^2.2.3"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,4 +1,5 @@
 import React from 'react'
+// import { useAlert } from '../alerts/alert-old'
 import Alert, { useAlert } from '../alerts/async-alert'
 
 export default ({ name, sendCommand }) => {

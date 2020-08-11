@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form'
 import Alert, { useAlert } from '../alerts/async-alert'
 import Input from '../inputs/input'
 
-export default ({ name, message, settings, useSendCommand, getSettings }) => {
+export default ({ name, message, settings, sendCommand, getSettings }) => {
   const { register, handleSubmit } = useForm()
-  const [open, bind] = useAlert(false)
-  const [[summary, args], setSummary] = useState([null, []])
   const [error, setError] = useState('')
+  const [Summary, setSummary] = useState(null)
+  const [args, setArgs] = useState([])
+  const [open, bind] = useAlert(false)
 
   const submit = (values) => {
     const formValues = Object.values(values)
@@ -31,8 +32,14 @@ export default ({ name, message, settings, useSendCommand, getSettings }) => {
       } else args.push(currentValue)
     })
 
-    setSummary([summary, args])
+    setArgs(args)
+    setSummary(summary)
     open()
+  }
+
+  const handleAccept = async () => {
+    await sendCommand(undefined, name, args)
+    await getSettings()
   }
 
   return (
@@ -52,8 +59,8 @@ export default ({ name, message, settings, useSendCommand, getSettings }) => {
         <button className="button">{name}</button>
         {error ? <p className="error">{error}</p> : null}
       </form>
-      <Alert useRequest={useSendCommand} args={[name, args]} {...bind}>
-        {summary}
+      <Alert onAccept={handleAccept} {...bind} args={[name, args]}>
+        {Summary}
       </Alert>
     </>
   )

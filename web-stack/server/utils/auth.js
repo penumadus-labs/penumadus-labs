@@ -5,6 +5,14 @@ const userSecret =
 const adminSecret =
   'X-f`cKADmAN9L3W/cbaDYGMa-X*-pveIhlmv/.;1lRD,db^q]O+)oZNz5ZIyR%S'
 
+const signUser = (payload) => {
+  return jwt.sign(payload, userSecret)
+}
+
+const signAdmin = (payload) => {
+  return jwt.sign(payload, adminSecret)
+}
+
 const verify = (token, secret) => {
   try {
     jwt.verify(token, secret)
@@ -29,26 +37,20 @@ const verifyUser = (req, res, next) => {
 const verifyAdmin = (req, res, next) => {
   const token = req.get('token')
 
-  if (!token) res.status(401)
+  if (!token) return res.status(401)
 
   if (verify(token, adminSecret)) {
     next()
-  } else {
-    res.status(403)
-  }
+  } else res.sendStatus(403)
 }
 
-const signUser = (payload) => {
-  return jwt.sign(payload, userSecret)
-}
-
-const signAdmin = (payload) => {
-  return jwt.sign(payload, adminSecret)
-}
+const verifyUserSocket = (token) =>
+  verify(token, userSecret) || verify(token, adminSecret)
 
 module.exports = {
   signUser,
   signAdmin,
   verifyUser,
   verifyAdmin,
+  verifyUserSocket,
 }

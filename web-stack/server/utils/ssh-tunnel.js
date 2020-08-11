@@ -1,4 +1,4 @@
-// this code maps a port from the server to the local machine for development
+/* this code maps a port from the server to the local machine for development */
 const { readFileSync } = require('fs')
 const tunnel = require('tunnel-ssh')
 

@@ -3,7 +3,7 @@ const { commands, setters } = require('../utils/tcp-protocol')
 const {
   getDeviceSettings,
   sendDeviceCommand,
-} = require('../controllers/bridge')
+} = require('../controllers/sockets')
 
 const dummySettings = {
   ip: { ipaddr: '18.222.29.175', ipport: '32159' },
@@ -38,7 +38,6 @@ devices
   })
 devices.post('/command', async ({ body: { id, command, args } }, res) => {
   try {
-    // await new Promise((resolve, reject) => setTimeout(resolve, 500))
     await sendDeviceCommand(id, command, args)
     res.sendStatus(200)
   } catch (error) {

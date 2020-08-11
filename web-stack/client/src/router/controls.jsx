@@ -1,15 +1,21 @@
 import React from 'react'
 import Setting from '../components/forms/device-setting'
 import Command from '../components/inputs/command'
-import useDevices from '../context/devices/context'
+import useApi from '../context/api'
 
 export default () => {
   const [
-    { loading, commands, setters, settings },
-    { sendCommand },
-  ] = useDevices()
+    {
+      protocol: [status, protocol],
+      settings: [, settings],
+    },
+    { useSendCommand, useSendSetting },
+  ] = useApi()
 
-  if (loading) return <p className="card loading">loading...</p>
+  if (status) return status
+  if (!protocol) return null
+
+  const { commands, setters } = protocol
 
   return (
     <>
@@ -17,15 +23,15 @@ export default () => {
         <>
           <div className="card grid-commands">
             {commands.map((command, i) => (
-              <Command key={i} {...command} sendCommand={sendCommand} />
+              <Command key={i} {...command} useSendCommand={useSendCommand} />
             ))}
           </div>
           {setters.map((setter, i) => (
             <Setting
               key={i}
-              settings={settings[setter.dataLabel]}
-              sendCommand={sendCommand}
               {...setter}
+              settings={settings[setter.dataLabel]}
+              useSendCommand={useSendSetting}
             />
           ))}
         </>

@@ -1,9 +1,12 @@
 import React from 'react'
 import { Global, css } from '@emotion/core'
 import { le, gt } from './mediaqueries'
-import * as colors from '../utils/colors'
+import * as colors from './colors'
 
-// mixins
+import { ThemeProvider } from 'emotion-theming'
+import * as mediaqueries from './mediaqueries'
+
+/* mixins */
 const grid = css`
   display: grid;
   column-gap: var(--sm);
@@ -324,10 +327,12 @@ const globalStyle = css`
 
   .error {
     color: var(--red);
+    text-align: center;
   }
 
   .success {
     color: var(--green);
+    text-align: center;
   }
 
   .bar {
@@ -343,4 +348,9 @@ const globalStyle = css`
   }
 `
 
-export default () => <Global styles={globalStyle} />
+export default ({ children }) => (
+  <ThemeProvider theme={mediaqueries}>
+    <Global styles={globalStyle} />
+    {children}
+  </ThemeProvider>
+)

@@ -1,17 +1,22 @@
 import React from 'react'
-import Chart from '../components/charts/d3/linechart'
-import useDatabase from '../context/database/context'
-import Loading from '../components/loading'
+import Chart from '../components/charts/linechart.jsx'
+import useApi from '../context/api'
 
 export default () => {
-  const [{ loading, error, standard }] = useDatabase()
-
-  if (error) return <p className="card error">error</p>
-  if (loading) return <Loading />
+  const [
+    { standardData },
+    { getStandardData },
+    { useGetStandardData, useDownloadStandardData },
+  ] = useApi()
 
   return (
     <>
-      <Chart data={standard} />
+      <Chart
+        state={standardData}
+        getData={getStandardData}
+        useDownload={useDownloadStandardData}
+        useGetData={useGetStandardData}
+      />
     </>
   )
 }

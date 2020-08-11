@@ -1,5 +1,5 @@
 const EventEmitter = require('events')
-const controller = require('./bridge')
+const controller = require('./sockets')
 const { insertStandardData, insertAccelerationData } = require('./database')
 const {
   config,
@@ -9,7 +9,6 @@ const {
   setters,
   table,
 } = require('../utils/tcp-protocol')
-const coerceNumbers = require('../utils/coerce-numbers')
 
 /*
 this class wraps the tcp client
@@ -70,16 +69,20 @@ class Device extends EventEmitter {
   addDataStreams() {
     this.on(table['standardData'], async (err, data) => {
       try {
-        await insertStandardData(this.id, data)
+        // await insertStandardData(this.id, data)
+        controller.updateUsers('standard')
       } catch (error) {
         console.error(error)
       }
-      controller.updateUsers('standard')
     })
 
-    this.on(table['accelerationData'], (err, data) => {
-      controller.updateUsers('acceleration')
-      // insertAccelerationData(this.id, data)
+    this.on(table['accelerationData'], async (err, data) => {
+      try {
+        // await insertAccelerationData(this.id, data)
+        controller.updateUsers('acceleration')
+      } catch (error) {
+        console.error(error)
+      }
     })
 
     this.on('error', (err) => {
@@ -129,7 +132,6 @@ class Device extends EventEmitter {
 
   emitResponses(raw) {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
-    // if (data.time) data.time = +data.time
 
     if (!this.initialized) this.initialize(id)
     if (command === 'HELLO') return

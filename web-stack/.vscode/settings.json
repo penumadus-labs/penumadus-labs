@@ -1,6 +1,6 @@
 {
   "stylelint.enable": true,
-  "eslint.enable": false,
+  "eslint.enable": true,
   "prettier.disableLanguages": [],
   "editor.formatOnSave": true,
   "[javascript]": {

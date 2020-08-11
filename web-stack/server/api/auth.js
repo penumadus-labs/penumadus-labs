@@ -32,7 +32,7 @@ auth.post('/login', async ({ body: { username, password } }, res) => {
   }
 })
 
-auth.get('/verify', verifyUser, (req, res) => {
+auth.post('/verify', verifyUser, (req, res) => {
   res.sendStatus(200)
 })
 

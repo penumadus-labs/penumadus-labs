@@ -40,7 +40,7 @@ const client = {
       client.close()
     }
   },
-  insertStandardData(id = 'unit_3', data) {
+  insertStandardData(id, data) {
     return client.devices
       .updateOne({ id }, { $push: { standardData: data } })
       .catch(console.error)
@@ -50,48 +50,37 @@ const client = {
       .updateOne({ id }, { $push: { accelerationData: data } })
       .catch(console.error)
   },
-  // async getStartTime(id) {
-  //   const res = await client.devices.findOne({ id })
-  //   return res.standardData[0].time
-  // },
-  async getDeviceData(id) {
-    const results = { standard: {}, acceleration: {} }
-    const standard = Promise.all(
-      queries.standard.map(({ label, field, projection }) =>
-        client.devices.findOne({ id }, { projection }).then((res) => {
-          // res[field].sort((a, b) => a.time - b.time)
-          results.standard[label] = res[field]
-        })
-      )
-    )
-
-    const acceleration = Promise.all(
-      queries.acceleration.map(({ label, field, projection }) =>
-        client.devices.findOne({ id }, { projection }).then((res) => {
-          // res[field].sort((a, b) => a.time - b.time)
-          results.acceleration[label] = res[field]
-        })
-      )
-    )
-
-    await Promise.all([standard, acceleration])
-
-    return results
+  eraseStandardData(id) {
+    client.devices.updateOne({ $set: { standardData: [] } })
   },
-  getStandardData({ id, start = -Infinity, end = Infinity }) {
+  eraseAccelerationData(id) {
+    client.devices.updateOne({ $set: { accelerationData: [] } })
+  },
+  getDeviceList() {
+    return client.devices
+      .find(
+        {},
+        {
+          projection: { id: 1 },
+        }
+      )
+      .toArray()
+  },
+  getDataAsList(field, { id, start = -Infinity, end = Infinity }) {
     return client.devices
       .aggregate([
-        { $match: { id: 'unit_3' } },
+        { $match: { id } },
+        { $sort: { [field + '.time']: -1 } },
         {
           $project: {
-            standardData: {
+            data: {
               $filter: {
-                input: '$standardData',
-                as: 'standardData',
+                input: '$' + field,
+                as: field,
                 cond: {
                   $and: [
-                    { $gte: ['$$standardData.time', +start] },
-                    { $lte: ['$$standardData.time', +end] },
+                    { $gte: [`$$${field}.time`, +start] },
+                    { $lte: [`$$${field}.time`, +end] },
                   ],
                 },
               },
@@ -100,12 +89,12 @@ const client = {
         },
       ])
       .toArray()
-      .then((res) => res[0].standardData)
+      .then((res) => res[0].data)
   },
-  async getStandardDataSplit({ id, start = -Infinity, end = Infinity }) {
+  async getDataAsLists(field, { id, start = -Infinity, end = Infinity }) {
     const res = {}
     const proms = queries.standard.map(({ label }) =>
-      client.queryStandardDataItem(id, label, start, end).then((data) => {
+      client.queryItem(field, id, label, start, end).then((data) => {
         res[label] = data
       })
     )
@@ -114,61 +103,74 @@ const client = {
 
     return res
   },
-  queryStandardDataItem(id, label, start, end) {
+  queryItem(field, id, label, start, end) {
     return client.devices
       .aggregate([
-        { $match: { id: 'unit_3' } },
+        { $match: { id } },
         {
           $project: {
-            ['standardData.' + label]: 1,
-            'standardData.time': 1,
+            [field + '.' + label]: 1,
+            [field + '.time']: 1,
           },
         },
+        // shouldn't need, but... :/
+        { $sort: { [field + '.time']: -1 } },
         {
           $project: {
-            standardData: {
+            [field]: {
               $filter: {
-                input: '$standardData',
-                as: 'standardData',
+                input: '$' + field,
+                as: field,
                 cond: {
                   $and: [
-                    { $gte: ['$$standardData.time', +start] },
-                    { $lte: ['$$standardData.time', +end] },
+                    { $gte: [`$$${field}.time`, +start] },
+                    { $lte: [`$$${field}.time`, +end] },
                   ],
                 },
               },
             },
-          },
-        },
-      ])
-      .toArray()
-      .then((res) => res[0].standardData)
-  },
-  getAccelerationData({ id, start = -Infinity, end = Infinity }) {
-    return client.devices
-      .aggregate([
-        { $match: { id: 'unit_3' } },
-        { $sort: { 'accelerationData.time': -1 } },
-        {
-          $project: {
-            accelerationData: {
-              $filter: {
-                input: '$accelerationData',
-                as: 'accelerationData',
-                cond: {
-                  $and: [
-                    { $gte: ['$$accelerationData.time', +start] },
-                    { $lte: ['$$accelerationData.time', +end] },
-                  ],
-                },
-              },
+            [field]: {
+              $slice: ['$' + field, 5],
             },
+            // [field]: {
+            //   $reduce: {
+            //     input: '$' + field,
+            //     initialValue: [],
+            //     in: {
+            //       $concatArrays: [
+            //         '$$value',
+            //         ['$$this.time', '$$this.' + label],
+            //       ],
+            //     },
+            //   },
+            // },
           },
         },
+        // {
+        //   $project: {
+        //     [field]: {
+        //       $slice: ['$' + field, 1000],
+        //     },
+        //   },
+        // },
       ])
       .toArray()
-      .then((res) => res[0].accelerationData)
+      .then((res) => res[0][field])
   },
+
+  getStandardAsList(ctx) {
+    return client.getDataAsList('standardData', ctx)
+  },
+  getStandardAsLists(ctx) {
+    return client.getDataAsLists('standardData', ctx)
+  },
+  getAccelerationAsList(ctx) {
+    return client.getDataAsList('accelerationData', ctx)
+  },
+  getAccelerationAsLists(ctx) {
+    return client.getDataAsLists('accelerationData', ctx)
+  },
+
   insertDevice(data) {
     return client.devices.insertOne(data)
   },

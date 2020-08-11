@@ -5,8 +5,6 @@ import Controls from './controls'
 import Register from './register'
 import NotFound from './404'
 
-import Colors from './colors'
-
 export default () => {
   return (
     <Router className="space-children-y">
@@ -14,8 +12,6 @@ export default () => {
       <Controls path="controls" />
       <Register path="register" />
       <NotFound default />
-
-      <Colors path="colors" />
     </Router>
   )
 }
