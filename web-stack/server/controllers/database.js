@@ -92,6 +92,7 @@ const client = {
       .then((res) => res[0].data)
   },
   async getDataAsLists(field, { id, start = -Infinity, end = Infinity }) {
+    console.log(start, end)
     const res = {}
     const proms = queries.standard.map(({ label }) =>
       client.queryItem(field, id, label, start, end).then((data) => {

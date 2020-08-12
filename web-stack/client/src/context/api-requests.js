@@ -32,6 +32,7 @@ export const useApiStore = (initialState) => {
         ...state,
         [key]: value,
       }))
+
     return async (key, url, params, storeError = false) => {
       try {
         const data = await query(url, params)

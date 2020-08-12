@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Alert, { useAlert } from '../alerts/async-alert'
+import Alert, { useAlert } from './async-alert'
 import Input from '../inputs/input'
 
 export default ({ name, message, settings, useSendCommand, getSettings }) => {

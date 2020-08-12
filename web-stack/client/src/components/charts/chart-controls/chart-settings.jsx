@@ -12,7 +12,7 @@ export default ({ useGetData, intervalState: [interval, setInterval] }) => {
     defaultValues: interval,
   })
 
-  const [status, getData] = useGetData()
+  const [status, request, , setError] = useGetData()
 
   const onSubmit = handleSubmit(async (data) => {
     setInterval(data)
@@ -29,17 +29,17 @@ export default ({ useGetData, intervalState: [interval, setInterval] }) => {
     }
 
     if (start > now || end > now) {
-      // setError(<p className="error">'values must not exceed the present'</p>)
+      setError('values must not exceed the present')
       return
     }
 
     if (start >= end) {
-      // setError(<p className="error">'end must come after start'</p>)
+      setError('end must come after start')
       return
     }
 
     try {
-      await getData()
+      await request({ start, end })
     } catch (error) {
       console.error(error)
     }
