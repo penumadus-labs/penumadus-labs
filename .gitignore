@@ -34,9 +34,12 @@ dbtestmon
 DM/e_UDPengine.log
 DM/UDPengine
 DM/dbtestmon
+DM/start.log
 hank/hank-latest-3.1/wifipi/wifipi
 archive/
 backups/
 new/
 reftable
 tmp/
+DM/UDPengine
+DM/dbtestmon
