@@ -41,5 +41,9 @@ backups/
 new/
 reftable
 tmp/
+logs/
+gellotest/
+gellowifipi.c
+hank/hank-latest-3.1/tankmon/libraries/
 DM/UDPengine
 DM/dbtestmon
