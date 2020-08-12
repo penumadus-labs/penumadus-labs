@@ -1,6 +1,6 @@
 import React from 'react'
-import Setting from '../components/forms/device-setting'
-import Command from '../components/inputs/command'
+import Setting from '../components/controls/device-setting'
+import Command from '../components/controls/command'
 import useApi from '../context/api'
 
 export default () => {

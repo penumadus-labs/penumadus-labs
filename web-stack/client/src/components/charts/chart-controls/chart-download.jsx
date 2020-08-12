@@ -1,5 +1,5 @@
 import React from 'react'
-import { parseDomain } from '../datetime'
+import { parseDomain } from '../helpers/datetime'
 
 export default ({ getDomain, useDownload }) => {
   const domain = getDomain()

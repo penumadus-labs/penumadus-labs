@@ -21,6 +21,8 @@ export const ApiProvider = ({ children }) => {
   const [id, setId] = useState(null)
   const [actions, hooks, effect] = useActions(id, setId, requestAndStore)
 
+  console.log(state.standardData[1])
+
   useEffect(effect, [id])
 
   return (

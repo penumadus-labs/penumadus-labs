@@ -9,7 +9,7 @@ import BrushControls from './brush-controls'
 import ControlBar from './chart-controls/controls'
 
 import useMessage from '../../services/socket'
-import { parseDate } from './datetime'
+import { parseDate } from './helpers/datetime'
 import * as c from '../../style/colors'
 
 const colors = {

@@ -34,6 +34,7 @@ dbtestmon
 DM/e_UDPengine.log
 DM/UDPengine
 DM/dbtestmon
+DM/start.log
 hank/hank-latest-3.1/wifipi/wifipi
 archive/
 backups/
@@ -44,4 +45,5 @@ logs/
 gellotest/
 gellowifipi.c
 hank/hank-latest-3.1/tankmon/libraries/
-
+DM/UDPengine
+DM/dbtestmon

@@ -1,10 +1,20 @@
 import React from 'react'
-import Alert from './alert'
+import Alert, { useAlert } from '../alerts/alert'
 
 export default ({ children, useRequest, args, ...bind }) => {
   if (!bind.isOpen) return null
 
-  const [status, request] = useRequest()
+  const [status, request, { loading, success }] = useRequest()
+
+  const button = loading ? null : success ? (
+    <button className="button button-red" onClick={bind.close}>
+      close
+    </button>
+  ) : (
+    <button className="button button-green" onClick={() => request(...args)}>
+      send
+    </button>
+  )
 
   return (
     <Alert {...bind}>
@@ -22,4 +32,4 @@ export default ({ children, useRequest, args, ...bind }) => {
   )
 }
 
-export { useAlert } from './alert'
+export { useAlert }
