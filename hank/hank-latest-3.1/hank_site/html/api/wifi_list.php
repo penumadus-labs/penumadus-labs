@@ -1,16 +1,22 @@
 <?php
 $results = array();
 $return = NULL;
-//run script
-$script = "/home/pi/wifi_gen.sh";
+
+
+//run script to populate file
+$script = "/var/www/html/cgi-bin/wifi_gen.sh";
 exec($script, $results, $return);
-if($return != 1){
+
+//echo var_dump($results) .  " ";
+//echo $return .  "\n";
+if($return != 0){
     echo "error";
 }
 
-//read the file
-    $file="/home/pi/wifi_list.txt";
+//read the file we made
 
+    //create the file 
+    $file="/var/www/html/cgi-bin/wifi_list.txt";
     $fopen = fopen($file, r);
 
     $fread = fread($fopen,filesize($file));
