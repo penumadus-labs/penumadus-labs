@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { verifyUser, signAdmin, signUser } = require('../utils/auth')
-const { findUser } = require('../controllers/database')
+const { findUser } = require('../database/client')
 const { compare } = require('bcrypt')
 
 const auth = Router()

@@ -1,13 +1,13 @@
 const { createServer } = require('http')
 const { Server } = require('ws')
-const controller = require('../controllers/sockets')
+const channel = require('../controllers/channel')
 const { verifyUserSocket } = require('../utils/auth')
 
 const start = async (expressApp, port) => {
   const server = createServer(expressApp)
 
   const wsServer = new Server({ noServer: true })
-  controller.users = wsServer.clients
+  channel.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
     const token = req.headers['sec-websocket-protocol']

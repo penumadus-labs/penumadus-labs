@@ -22,7 +22,15 @@ export default (id, setId, requestAndStore) => {
     const getStandardData = (params, storeError) =>
       requestAndStore(
         'standardData',
-        'database/device-standard-data',
+        'database/standard-data',
+        { ...params, id },
+        storeError
+      )
+
+    const getAccelerationEvents = (params, storeError) =>
+      requestAndStore(
+        'accelerationEvents',
+        'database/acceleration-events',
         { ...params, id },
         storeError
       )
@@ -30,7 +38,7 @@ export default (id, setId, requestAndStore) => {
     const getAccelerationData = (params, storeError) =>
       requestAndStore(
         'accelerationData',
-        'database/device-acceleration-data',
+        'database/acceleration-data',
         { ...params, id },
         storeError
       )
@@ -39,12 +47,13 @@ export default (id, setId, requestAndStore) => {
       requestAndStore('settings', 'devices/settings', params, storeError)
 
     const useGetStandardData = createRequestHook(getStandardData)
+    const useGetAccelerationEvents = createRequestHook(getAccelerationEvents)
     const useGetAccelerationData = createRequestHook(getAccelerationData)
     const useDownloadStandardData = createRequestHook((start, end) =>
-      query('database/device-standard-data', { id, start, end })
+      query('database/standard-data', { id, start, end })
     )
     const useDownloadAccelerationData = createRequestHook((start, end) =>
-      query('database/device-accleration-data', { id, start, end })
+      query('database/accleration-data', { id, start, end })
     )
 
     const sendCommand = (command, args) =>
@@ -65,6 +74,7 @@ export default (id, setId, requestAndStore) => {
     const hooks = {
       initializeApi,
       useGetStandardData,
+      useGetAccelerationEvents,
       useGetAccelerationData,
       useDownloadStandardData,
       useDownloadAccelerationData,
@@ -73,9 +83,11 @@ export default (id, setId, requestAndStore) => {
     }
 
     const effect = () => {
-      getStandardData({}, true)
-      getAccelerationData({}, true)
       getSettings({}, true)
+      getStandardData({}, true)
+      getAccelerationEvents({}, true).then(([time]) =>
+        getAccelerationData({ time }, true)
+      )
     }
 
     return [actions, hooks, effect]

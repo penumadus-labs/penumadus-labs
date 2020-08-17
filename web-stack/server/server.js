@@ -1,7 +1,7 @@
 require('dotenv').config({ path: __dirname + '/.env' })
 
 const expressApp = require('./app/express')
-const { connect } = require('./controllers/database')
+const { connect } = require('./database/client')
 const startServers = require('./servers')
 
 const webPort = 8080

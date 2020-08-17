@@ -10,6 +10,7 @@ const initialState = {
   protocol: initialStatus,
   deviceList: initialStatus,
   standardData: initialStatus,
+  accelerationEvents: initialStatus,
   accelerationData: initialStatus,
   settings: initialStatus,
 }
@@ -20,8 +21,6 @@ export const ApiProvider = ({ children }) => {
   const [state, requestAndStore] = useApiStore(initialState)
   const [id, setId] = useState(null)
   const [actions, hooks, effect] = useActions(id, setId, requestAndStore)
-
-  console.log(state.standardData[1])
 
   useEffect(effect, [id])
 

@@ -1,11 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from '@emotion/styled'
-
-const units = {
-  humidity: '%',
-  temperature: '°C',
-  pressure: 'psi x 100',
-}
+import { colors, units } from '../units-colors'
 
 const StyledList = styled.ul`
   display: flex;
@@ -16,7 +11,7 @@ const StyledItem = styled.li`
   color: ${(props) => props.color};
 `
 
-export default ({ labels, colors }) => {
+export default ({ labels }) => {
   const res = useMemo(
     () =>
       labels.map((label, i) => (
