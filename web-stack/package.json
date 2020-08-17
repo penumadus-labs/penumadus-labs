@@ -16,7 +16,7 @@
     "start": "node server/server",
     "deploy": "pm2 start server/server.js",
     "restart": "pm2 restart server",
-    "build": "cd client && rm -r build && npm run build",
+    "build": "cd client && npm run build",
     "dev": "run-p dev:client dev:server",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
