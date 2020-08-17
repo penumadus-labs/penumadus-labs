@@ -1,6 +1,8 @@
 # tankmon
 Repository for all code related to tank monitoring 
 
+make sure all development takes place in development branch!!
+
 ### Folders are laid out as follows:
 
 - web-stack: nodejs client and server
