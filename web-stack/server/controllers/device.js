@@ -1,6 +1,9 @@
 const EventEmitter = require('events')
-const controller = require('./sockets')
-const { insertStandardData, insertAccelerationData } = require('./database')
+const channel = require('./channel')
+const {
+  insertStandardData,
+  insertAccelerationData,
+} = require('../database/client')
 const {
   config,
   streams,
@@ -27,7 +30,7 @@ class Device extends EventEmitter {
     socket.on('error', console.error)
     socket.on('close', () => {
       console.info('tcp client closed')
-      delete controller.devices[this.id]
+      delete channel.devices[this.id]
     })
 
     this.socket = socket
@@ -47,7 +50,7 @@ class Device extends EventEmitter {
 
   initialize(id) {
     // await this.getSettings()
-    controller.devices[id] = this
+    channel.devices[id] = this
     this.id = id
     this.initialized = true
   }
@@ -70,7 +73,7 @@ class Device extends EventEmitter {
     this.on(table['standardData'], async (err, data) => {
       try {
         // await insertStandardData(this.id, data)
-        controller.updateUsers('standard')
+        channel.updateUsers('standard')
       } catch (error) {
         console.error(error)
       }
@@ -79,14 +82,14 @@ class Device extends EventEmitter {
     this.on(table['accelerationData'], async (err, data) => {
       try {
         // await insertAccelerationData(this.id, data)
-        controller.updateUsers('acceleration')
+        channel.updateUsers('acceleration')
       } catch (error) {
         console.error(error)
       }
     })
 
     this.on('error', (err) => {
-      console.error(`device controller error: "${err}"`)
+      console.error(`device channel error: "${err}"`)
     })
   }
 

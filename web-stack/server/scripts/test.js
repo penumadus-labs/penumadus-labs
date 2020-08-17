@@ -1,13 +1,22 @@
-const client = require('../controllers/database')
+const client = require('../database/client')
 
-const field = 'standardData.'
-const value = 'pressure'
+const id = 'unit_3'
 
 client.wrap(async () => {
-  const res = await client.devices.aggregate([
-    {$match: {id: 'unit_3'}},
-    { $unwind: '$standardData' },
-  ]).toArray()
-
-  console.log(res)
+  const [{ data }] = await client.devices.findOne(
+    { id },
+    {
+      projection: {
+        data: {
+          $function: {
+            body: function (data) {
+              return data
+            },
+            args: ['$standardData'],
+            lang: 'js',
+          },
+        },
+      },
+    }
+  )
 })

@@ -2,7 +2,6 @@ const { Router } = require('express')
 const authRouter = require('./auth')
 const databaseRouter = require('./database')
 const devicesRouter = require('./devices')
-const { readTest } = require('../controllers/database')
 const { verifyUser, verifyAdmin } = require('../utils/auth')
 
 const api = Router()

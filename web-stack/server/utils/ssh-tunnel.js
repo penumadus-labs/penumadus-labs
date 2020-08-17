@@ -10,7 +10,7 @@ const config = {
 }
 
 const tunnelPromise = (port) => {
-  if (!process.env.DEV) return
+  // if (!process.env.DEV) return
   return new Promise((resolve, reject) => {
     const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
       if (err) reject(err)

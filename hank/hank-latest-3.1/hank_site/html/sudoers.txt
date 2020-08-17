@@ -1,0 +1,11 @@
+MAKE SURE LINES BELOW ARE ON SUDOERS FILE:
+
+# User privilege specification
+root      ALL= (ALL:ALL) ALL
+www-data  ALL= NOPASSWD: /sbin/shutdown
+www-data  ALL= (root) NOPASSWD: /sbin/iwlist scanning
+www-data  ALL= (ALL) NOPASSWD: /sbin/wpa_cli -iwlan0
+www-data  ALL= (ALL) NOPASSWD: /etc/wpa_supplicant
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+www-data ALL=(ALL) NOPASSWD: ALL

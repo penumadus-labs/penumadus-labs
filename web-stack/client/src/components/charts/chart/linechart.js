@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { formatHoursMinutes } from './helpers/datetime'
+import { formatHoursMinutes } from '../datetime'
 
 // const zoomKey = 'altKey'
 
@@ -10,13 +10,14 @@ const marginTop = 5
 
 export default class {
   domains = []
-  constructor({ data, colors }) {
+  constructor({ keys, data, colors }) {
     this.data = data
-    this.entries = Object.entries(data)
+    this.keys = keys
     this.colors = colors
     this.translate = (height = 0) =>
       `translate(${marginLeft} ${marginTop + height})`
-    this.xDomain = d3.extent(data.humidity.map((d) => d.time))
+    // this.xDomain = d3.extent(data.humidity.map((d) => d.time))
+    this.xDomain = d3.extent(data.map((d) => d.time))
     this.previousDomain = this.xDomain
     this.currentDomain = this.xDomain
   }
@@ -50,7 +51,7 @@ export default class {
             this.x.invert(selection[1]),
           ]
         } catch (error) {
-          // suppress weird error if nothing is selected
+          /* suppress weird error if nothing is selected */
         }
       })
 
@@ -100,16 +101,34 @@ export default class {
       .attr('transform', this.translate())
       .attr('clip-path', 'url(#clip)')
 
-    this.lines = this.entries.map(([key, data]) => {
+    // this.lines = this.entries.map(([key, data]) => {
+    //   const line = d3
+    //     .line(data)
+    //     .x((d) => this.x(d.time))
+    //     .y((d) => this.y(d[key]))
+
+    //   const path = this.chart
+    //     .append('path')
+    //     .classed('line', true)
+    //     .datum(data)
+    //     .attr('fill', 'none')
+    //     .attr('stroke', this.colors[key])
+    //     .attr('stroke-width', 1)
+    //     .attr('d', line)
+
+    //   return [line, path]
+    // })
+
+    this.lines = this.keys.map((key) => {
       const line = d3
-        .line(data)
+        .line(this.data)
         .x((d) => this.x(d.time))
         .y((d) => this.y(d[key]))
 
       const path = this.chart
         .append('path')
         .classed('line', true)
-        .datum(data)
+        .datum(this.data)
         .attr('fill', 'none')
         .attr('stroke', this.colors[key])
         .attr('stroke-width', 1)
@@ -167,7 +186,7 @@ export default class {
     try {
       this.tool.select('.brush').call(this.brush.clear)
     } catch (error) {
-      // suppress weird error when nothing is selected
+      /* suppress weird error if nothing is selected */
     }
   }
   reset() {

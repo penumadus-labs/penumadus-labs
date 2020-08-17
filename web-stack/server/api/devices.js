@@ -3,7 +3,7 @@ const { commands, setters } = require('../utils/tcp-protocol')
 const {
   getDeviceSettings,
   sendDeviceCommand,
-} = require('../controllers/sockets')
+} = require('../controllers/channel')
 
 const dummySettings = {
   ip: { ipaddr: '18.222.29.175', ipport: '32159' },

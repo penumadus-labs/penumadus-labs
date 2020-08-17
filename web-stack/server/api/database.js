@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { unparse } = require('papaparse')
-const client = require('../controllers/database')
+const client = require('../database/client')
 const {
   filterData,
   filterStandard,
@@ -10,44 +10,50 @@ const { writeFileSync } = require('fs')
 
 const database = Router()
 
-// database.get('start-time', async ({ query }, res) => {
-//   const startTime = await getStartTime(query.id)
-//   res.send(startTime)
-// })
-
-database.get('/device-list', async (req, res) => {
+const handleAsync = (promise) => async (req, res) => {
   try {
-    const data = await client.getDeviceList()
-    const response = data.map(({ id }) => id)
-
-    res.send(response)
+    await promise(req, res)
   } catch (error) {
+    console.error(error)
     res.sendStatus(500)
   }
-})
+}
 
-database.get('/device-standard-data', async ({ query }, res) => {
+// database.get('/device-list', async (req, res) => {
+//   try {
+//     const data = await client.getDeviceList()
+//     const response = data.map(({ id }) => id)
+
+//     res.send(response)
+//   } catch (error) {
+//     console.error(error)
+//     res.sendStatus(500)
+//   }
+// })
+
+database.get(
+  '/device-list',
+  handleAsync(async (req, res) => {
+    const data = await client.getDeviceList()
+    const response = data.map(({ id }) => id)
+    res.send(response)
+  })
+)
+
+database.get('/standard-data', async ({ query }, res) => {
   try {
-    const standard = await client.getStandardAsLists(query)
-
-    standard.pressure = standard.pressure.map((d) => ({
-      ...d,
-      pressure: Math.floor(d.pressure / 100),
-    }))
-
-    res.send(standard)
+    const standard = await client.getStandardData(query)
+    await res.send(standard)
   } catch (error) {
     console.error(error)
     res.sendStatus(500)
   }
 })
 
-database.get('/device-standard-csv', async ({ query }, res) => {
+database.get('/standard-csv', async ({ query }, res) => {
   try {
     const data = await client.getStandardAsList(query)
-
     const csv = unparse(data)
-
     res.send(csv)
   } catch (error) {
     console.error(error)
@@ -55,10 +61,19 @@ database.get('/device-standard-csv', async ({ query }, res) => {
   }
 })
 
-database.get('/device-acceleration-data', async ({ query }, res) => {
+database.get('/acceleration-events', async ({ query }, res) => {
   try {
-    const acceleration = await client.getAccelerationAsLists(query)
+    const accelerationEvents = await client.getAccelerationEvents(query)
+    res.send(accelerationEvents.reverse())
+  } catch (error) {
+    console.error(error)
+    res.sendStatus(500)
+  }
+})
 
+database.get('/acceleration-data', async ({ query }, res) => {
+  try {
+    const acceleration = await client.getAccelerationData(query)
     res.send(acceleration)
   } catch (error) {
     console.error(error)
@@ -66,12 +81,10 @@ database.get('/device-acceleration-data', async ({ query }, res) => {
   }
 })
 
-database.get('/device-acceleration-csv', async ({ query }, res) => {
+database.get('/acceleration-csv', async ({ query }, res) => {
   try {
     const data = await client.getAccelerationAsList(query).catch(console.error)
-
     const csv = unparse(data)
-
     res.send(csv)
   } catch (error) {
     console.error(error)
