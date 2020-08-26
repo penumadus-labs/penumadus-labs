@@ -23,6 +23,7 @@ extends EventEmitter and creates promise based methods for issuing requests to t
 class Device extends EventEmitter {
   // settings = {}
   initialized = false
+  write = false
 
   constructor(socket) {
     super()
@@ -72,7 +73,7 @@ class Device extends EventEmitter {
   addDataStreams() {
     this.on(table['standardData'], async (err, data) => {
       try {
-        // await insertStandardData(this.id, data)
+        if (this.write) await insertStandardData(this.id, data)
         channel.updateUsers('standard')
       } catch (error) {
         console.error(error)
@@ -81,7 +82,7 @@ class Device extends EventEmitter {
 
     this.on(table['accelerationData'], async (err, data) => {
       try {
-        // await insertAccelerationData(this.id, data)
+        if (this.write) await insertAccelerationData(this.id, data)
         channel.updateUsers('acceleration')
       } catch (error) {
         console.error(error)
