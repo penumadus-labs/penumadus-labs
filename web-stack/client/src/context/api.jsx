@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useApiStore, api } from './api-requests'
-import useActions from './actions'
+import useActions from './api-actions'
 import { Loading } from './statuses'
 
 export { api }

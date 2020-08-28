@@ -31,3 +31,11 @@ const accelerationData = (client) => ({ id, time }) => {
 }
 
 module.exports = accelerationData
+
+const accelerationDataNew = (client) => ({ id, time }) => {
+  return client.devices.aggregate([
+    { $match: { id } },
+    { $unwind: 'accelerationEvents' },
+    { $match: 'accelerationEvents.time' },
+  ])
+}

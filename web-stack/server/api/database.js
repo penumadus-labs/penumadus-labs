@@ -40,56 +40,46 @@ database.get(
   })
 )
 
-database.get('/standard-data', async ({ query }, res) => {
-  try {
+database.get(
+  '/standard-data',
+  handleAsync(async ({ query }, res) => {
     const standard = await client.getStandardData(query)
-    await res.send(standard)
-  } catch (error) {
-    console.error(error)
-    res.sendStatus(500)
-  }
-})
+    res.send(standard)
+  })
+)
 
-database.get('/standard-csv', async ({ query }, res) => {
-  try {
+database.get(
+  '/standard-csv',
+  handleAsync(async ({ query }, res) => {
     const data = await client.getStandardAsList(query)
     const csv = unparse(data)
     res.send(csv)
-  } catch (error) {
-    console.error(error)
-    res.sendStatus(500)
-  }
-})
+  })
+)
 
-database.get('/acceleration-events', async ({ query }, res) => {
-  try {
+database.get(
+  '/acceleration-events',
+  handleAsync(async ({ query }, res) => {
     const accelerationEvents = await client.getAccelerationEvents(query)
     res.send(accelerationEvents.reverse())
-  } catch (error) {
-    console.error(error)
-    res.sendStatus(500)
-  }
-})
+  })
+)
 
-database.get('/acceleration-data', async ({ query }, res) => {
-  try {
+database.get(
+  '/acceleration-data',
+  handleAsync(async ({ query }, res) => {
     const acceleration = await client.getAccelerationData(query)
     res.send(acceleration)
-  } catch (error) {
-    console.error(error)
-    res.sendStatus(500)
-  }
-})
+  })
+)
 
-database.get('/acceleration-csv', async ({ query }, res) => {
-  try {
+database.get(
+  '/acceleration-csv',
+  handleAsync(async ({ query }, res) => {
     const data = await client.getAccelerationAsList(query).catch(console.error)
     const csv = unparse(data)
     res.send(csv)
-  } catch (error) {
-    console.error(error)
-    res.sendStatus(500)
-  }
-})
+  })
+)
 
 module.exports = database

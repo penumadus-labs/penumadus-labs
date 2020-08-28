@@ -10,13 +10,21 @@ import { parseDate } from '../datetime'
 import { colors } from '../units-colors'
 import useMessage from '../../../services/socket'
 
-let timeout
 const defaultTool = 'brush'
 
-export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
+export const useChart = ({
+  keys,
+  data: apiData,
+  useDownload,
+  liveModeSet,
+  liveModeAction,
+}) => {
   const chartRef = useRef()
   const [tool, setTool] = useState(defaultTool)
   const [live, setLive] = useState(false)
+  const [liveData, setLiveData] = useState(null)
+
+  const data = live ? liveData : apiData
 
   const [chart, date] = useMemo(() => {
     if (!data) return []
@@ -34,6 +42,7 @@ export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
   }, [data])
 
   useEffect(() => {
+    let timeout
     const resize = () => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
@@ -53,17 +62,19 @@ export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
   }, [chart])
 
   useMessage(
-    (data) => {
-      if (live) liveModeAction()
+    (ctx) => {
+      if (live) liveModeAction({ setLiveData, ...ctx })
     },
     [live]
   )
 
-  const toggleLive = () => {
+  const toggleLive = async () => {
     if (live) {
       setLive(false)
       changeTool(defaultTool)
     } else {
+      const { data } = await liveModeSet()
+      setLiveData(data)
       setLive(true)
       changeTool(null)
     }

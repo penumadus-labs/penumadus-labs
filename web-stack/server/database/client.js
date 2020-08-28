@@ -1,9 +1,9 @@
 const { MongoClient } = require('mongodb')
 const tunnel = require('../utils/ssh-tunnel')
-const paramsList = require('./queries/get-data-params')
-const standardData = require('./queries/get-standard-data')
-const accelerationEvents = require('./queries/get-acceleration-events')
-const accelerationData = require('./queries/get-acceleration-data')
+const getParamsList = require('./queries/get-data-params')
+const getStandardData = require('./queries/get-standard-data')
+const getAccelerationEvents = require('./queries/get-acceleration-events')
+const getAccelerationData = require('./queries/get-acceleration-data')
 
 const url = process.env.SSH
   ? 'mongodb://localhost'
@@ -48,9 +48,14 @@ const client = {
       .updateOne({ id }, { $push: { standardData: data } })
       .catch(console.error)
   },
-  insertAccelerationData(id, data) {
+  insertAccelerationEvent(id, time, data) {
     client.devices
-      .updateOne({ id }, { $push: { accelerationData: data } })
+      .updateOne(
+        { id },
+        {
+          $push: { accelerationEvents: { time, data } },
+        }
+      )
       .catch(console.error)
   },
   eraseStandardData(id) {
@@ -87,11 +92,18 @@ const client = {
   getAccelerationData(args) {
     return getAccelerationData(args)
   },
+  addMethods(methods) {
+    for (const [methodName, methodWrapper] of Object.entries(methods)) {
+      client[methodName] = methodWrapper(client)
+    }
+  },
 }
 
-const getParamsList = paramsList(client)
-const getStandardData = standardData(client)
-const getAccelerationEvents = accelerationEvents(client)
-const getAccelerationData = accelerationData(client)
+client.addMethods({
+  getParamsList,
+  getStandardData,
+  getAccelerationEvents,
+  getAccelerationData,
+})
 
 module.exports = client

@@ -12,7 +12,11 @@ const reduceExpr = {
   ],
 }
 
-const getStandardData = (client) => async (id, start, end) => {
+const getStandardData = (client) => async ({
+  id,
+  start = -Infinity,
+  end = Infinity,
+}) => {
   const list = {
     $filter: {
       input: `$${field}`,

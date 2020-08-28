@@ -4,7 +4,7 @@ const field = 'accelerationData'
 
 const eventSize = 100
 
-const acclerationEvents = (client) => async (id) => {
+const acclerationEvents = (client) => async ({ id }) => {
   const { data } = await client.devices.findOne(
     { id },
     {
@@ -25,3 +25,7 @@ const acclerationEvents = (client) => async (id) => {
 }
 
 module.exports = acclerationEvents
+
+const data = {
+  data: { $map: { input: 'accelerationEvents', in: '$$this.time' } },
+}

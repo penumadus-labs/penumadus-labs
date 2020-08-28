@@ -3,6 +3,7 @@ const channel = require('./channel')
 const {
   insertStandardData,
   insertAccelerationData,
+  inesertAccelerationEvent,
 } = require('../database/client')
 const {
   config,
@@ -24,6 +25,7 @@ class Device extends EventEmitter {
   // settings = {}
   initialized = false
   write = false
+  timeout = null
 
   constructor(socket) {
     super()
@@ -38,7 +40,7 @@ class Device extends EventEmitter {
     this.createRequestMethods()
     this.addDataStreams()
 
-    const emitResponses = this.emitResponses.bind(this)
+    // const emitResponses = this.emitResponses.bind(this)
 
     this.socket.on('readable', async function () {
       let chunk
@@ -50,6 +52,7 @@ class Device extends EventEmitter {
   }
 
   initialize(id) {
+    // if I wanted to cache the settings
     // await this.getSettings()
     channel.devices[id] = this
     this.id = id
@@ -71,22 +74,29 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], async (err, data) => {
-      try {
-        if (this.write) await insertStandardData(this.id, data)
-        channel.updateUsers('standard')
-      } catch (error) {
-        console.error(error)
-      }
+    this.on(table['standardData'], (err, data) => {
+      if (this.write) insertStandardData(this.id, data)
+      channel.updateUsers('standard', data)
     })
 
-    this.on(table['accelerationData'], async (err, data) => {
-      try {
-        if (this.write) await insertAccelerationData(this.id, data)
-        channel.updateUsers('acceleration')
-      } catch (error) {
-        console.error(error)
-      }
+    this.on(table['accelerationData'], (err, data) => {
+      if (!this.timeout) {
+        this.accelerationEventTime = time
+        this.accelerationEventData = []
+      } else clearTimeout(this.timeout)
+
+      this.accelerationEventData.push(data)
+      channel.updateUsers('acceleration', data)
+
+      this.timeout = setTimeout(() => {
+        this.timeout = null
+        if (this.write)
+          inesertAccelerationEvent(
+            this.id,
+            this.accelerationEventTime,
+            this.accelerationEventData
+          ).catch(console.error)
+      }, 2000)
     })
 
     this.on('error', (err) => {
@@ -134,7 +144,7 @@ class Device extends EventEmitter {
     }
   }
 
-  emitResponses(raw) {
+  emitResponses = (raw) => {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
 
     if (!this.initialized) this.initialize(id)

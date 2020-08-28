@@ -2,6 +2,8 @@ import React from 'react'
 import Chart from '../chart/chart'
 import { formatHoursMinutes, parseDate } from '../datetime'
 
+let timeout
+
 export default ({
   events: [, events],
   data: [status, result],
@@ -14,13 +16,25 @@ export default ({
 
   const [dataStatus, getData, { loading }] = useGetData()
 
-  const handleChange = ({ target }) => {
-    const time = target.value
-    getData({ time }).catch(console.error)
+  const get = (time) => getData({ time }).catch(console.error)
+
+  const handleChange = ({ target }) => get(target.value)
+
+  const liveModeSet = () => get(events.slice(-1)[0])
+
+  const liveModeData = ({ type, data, setLiveData }) => {
+    if (type !== 'acceleration') return
+    // start new array if timeout has finished
+    setLiveData((liveData) => (timeout ? liveData : []).concat([data]))
+
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      timeout = null
+    }, 1000)
   }
 
   return (
-    <Chart {...{ ...result, useDownload }}>
+    <Chart {...{ ...result, useDownload, liveModeSet, liveModeData }}>
       {loading ? (
         dataStatus
       ) : (
