@@ -1,9 +1,8 @@
 const { MongoClient } = require('mongodb')
 const tunnel = require('../utils/ssh-tunnel')
-const getParamsList = require('./queries/get-data-params')
 const getStandardData = require('./queries/get-standard-data')
-const getAccelerationEvents = require('./queries/get-acceleration-events')
-const getAccelerationData = require('./queries/get-acceleration-data')
+const getAccelerationEventTimes = require('./queries/get-acceleration-event-times')
+const getAccelerationEventData = require('./queries/get-acceleration-event-data')
 
 const url = process.env.SSH
   ? 'mongodb://localhost'
@@ -43,67 +42,65 @@ const client = {
       client.close()
     }
   },
+  findUser(username) {
+    return client.users.findOne({ username })
+  },
+  // eraseStandardData(id) {
+  //   client.devices.updateOne({ $set: { standardData: [] } })
+  // },
+  // eraseAccelerationData(id) {
+  //   client.devices.updateOne({ $set: { accelerationData: [] } })
+  // },
+  // insertDevice(data) {
+  //   return client.devices.insertOne(data)
+  // },
+
+  // insertUser(data) {
+  //   return client.users.insertOne(data)
+  // },
   insertStandardData(id, data) {
     return client.devices
       .updateOne({ id }, { $push: { standardData: data } })
       .catch(console.error)
   },
-  insertAccelerationEvent(id, time, data) {
+  insertAccelerationEvent(id, event) {
     client.devices
       .updateOne(
         { id },
         {
-          $push: { accelerationEvents: { time, data } },
+          $push: {
+            events: {
+              $each: [event],
+              $position: 0,
+            },
+          },
         }
       )
       .catch(console.error)
   },
-  eraseStandardData(id) {
-    client.devices.updateOne({ $set: { standardData: [] } })
-  },
-  eraseAccelerationData(id) {
-    client.devices.updateOne({ $set: { accelerationData: [] } })
-  },
-  insertDevice(data) {
-    return client.devices.insertOne(data)
-  },
-  findUser(username) {
-    return client.users.findOne({ username })
-  },
-  insertUser(data) {
-    return client.users.insertOne(data)
-  },
   getDeviceList() {
-    return client.devices
-      .find(
-        {},
-        {
-          projection: { id: 1 },
-        }
-      )
-      .toArray()
+    return client.devices.find({}, { projection: { id: 1 } }).toArray()
   },
-  getStandardData({ id, start = -Infinity, end = Infinity }) {
-    return getStandardData(id, start, end)
+
+  findDevice(id, projection) {
+    projection._id = 0
+    return client.devices.findOne({ id }, { projection })
   },
-  getAccelerationEvents({ id }) {
-    return getAccelerationEvents(id)
-  },
-  getAccelerationData(args) {
-    return getAccelerationData(args)
-  },
-  addMethods(methods) {
-    for (const [methodName, methodWrapper] of Object.entries(methods)) {
-      client[methodName] = methodWrapper(client)
+  async getStandardData({ id, ...params }) {
+    const res = await client.findDevice(id, getStandardData(params))
+    for (const d of res.data) {
+      d.pressure = Math.floor(d.pressure / 100)
     }
+
+    return res
+  },
+  async getAccelerationEventTimes({ id }) {
+    const { data } = await client.findDevice(id, getAccelerationEventTimes())
+    return data
+  },
+  getAccelerationEventData({ id, ...params }) {
+    return client.findDevice(id, getAccelerationEventData(params))
   },
 }
-
-client.addMethods({
-  getParamsList,
-  getStandardData,
-  getAccelerationEvents,
-  getAccelerationData,
-})
 
 module.exports = client

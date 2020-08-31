@@ -19,14 +19,14 @@ export const initializeSocket = (token) => {
   }
 }
 
-const useMessage = (task) => {
+const useMessage = (task, deps) => {
   useEffect(() => {
     tasks.push(task)
     return () => {
       tasks = tasks.filter((t) => t !== task)
     }
     // eslint-disable-next-line
-  }, [])
+  }, deps)
 }
 
 export default useMessage

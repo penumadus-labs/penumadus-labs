@@ -26,8 +26,12 @@ export default ({
 
   return (
     <>
-      <Chart {...result} {...{ useDownload, liveModeAction, liveModeSet }}>
-        <OpenSettings />
+      <Chart
+        {...result}
+        {...{ useDownload, liveModeAction, liveModeSet }}
+        yDomain={[-1, 100]}
+      >
+        {() => <OpenSettings />}
       </Chart>
       <Settings {...{ useGetData, ...bind }} />
     </>

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import Alert, { useAlert } from './async-alert'
 import Input from '../inputs/input'
 
-export default ({ name, message, settings, useSendCommand, getSettings }) => {
+export default ({ name, message, settings, useRequest, getSettings }) => {
   const { register, handleSubmit } = useForm()
   const [open, bind] = useAlert(false)
   const [[summary, args], setSummary] = useState([null, []])
@@ -52,7 +52,7 @@ export default ({ name, message, settings, useSendCommand, getSettings }) => {
         <button className="button">{name}</button>
         {error ? <p className="error">{error}</p> : null}
       </form>
-      <Alert useRequest={useSendCommand} args={[name, args]} {...bind}>
+      <Alert useRequest={useRequest} requestArgs={[name, args]} {...bind}>
         {summary}
       </Alert>
     </>

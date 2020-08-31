@@ -1,31 +1,33 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useApiStore, api } from './api-requests'
-import useActions from './api-actions'
-import { Loading } from './statuses'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react'
+import useApiStore, { initialState } from './use-api-store'
+import createApiMethods from './create-api-methods'
 
-export { api }
-
-const initialStatus = [<Loading />]
-const initialState = {
-  protocol: initialStatus,
-  deviceList: initialStatus,
-  standardData: initialStatus,
-  accelerationEvents: initialStatus,
-  accelerationData: initialStatus,
-  settings: initialStatus,
-}
+export { api } from './api-base'
 
 const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
+  const idState = useState(),
+    [id] = idState
   const [state, requestAndStore] = useApiStore(initialState)
-  const [id, setId] = useState(null)
-  const [actions, hooks, effect] = useActions(id, setId, requestAndStore)
+  const [methods, mount] = useMemo(
+    () => createApiMethods({ requestAndStore, idState }),
+    // eslint-disable-next-line
+    [id]
+  )
 
-  useEffect(effect, [id])
+  useEffect(() => {
+    if (id) mount()
+  }, [id, mount])
 
   return (
-    <ApiContext.Provider value={[state, actions, hooks]}>
+    <ApiContext.Provider value={[state, ...methods]}>
       {children}
     </ApiContext.Provider>
   )

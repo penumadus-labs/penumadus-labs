@@ -72,10 +72,10 @@ export const Loading = () => {
   )
 }
 
-export const InlineError = ({ error }) => <p className="error">{error}</p>
+export const ErrorInline = ({ error }) => <p className="error">{error}</p>
 
-export const Error = ({ error }) => (
+export const ErrorCard = ({ error }) => (
   <div className="card">
-    <InlineError error={error} />
+    <ErrorInline error={error} />
   </div>
 )

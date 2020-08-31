@@ -1,6 +1,4 @@
-const { reduce, getDataKeys } = require('./functions')
-
-const field = 'standardData'
+const getDataKeys = require('./get-data-keys')
 
 const limit = 1000
 
@@ -12,14 +10,32 @@ const reduceExpr = {
   ],
 }
 
-const getStandardData = (client) => async ({
-  id,
-  start = -Infinity,
-  end = Infinity,
-}) => {
-  const list = {
+module.exports = ({ start = -Infinity, end = Infinity }) => {
+  // iterates through the data keeping track of the index
+  // skips over the dataset selecting every nth packet where n is equal to $$step reducing the data set down to the specified limit
+  const reduce = {
+    $let: {
+      vars: {
+        reduced: {
+          $reduce: {
+            input: '$standardData',
+            initialValue: { index: 0, acc: [] },
+            in: {
+              index: { $add: ['$$value.index', 1] },
+              acc: reduceExpr,
+            },
+          },
+        },
+      },
+      in: '$$reduced.acc',
+    },
+  }
+
+  // filters the data by the selected time range
+
+  const sliced = {
     $filter: {
-      input: `$${field}`,
+      input: '$standardData',
       cond: {
         $and: [
           { $gte: [`$$this.time`, +start] },
@@ -29,41 +45,27 @@ const getStandardData = (client) => async ({
     },
   }
 
-  const vars = {
-    step: {
-      $ceil: {
-        $divide: [{ $size: list }, limit],
+  // calculates $$step by dividing the length of the dataset by specified limit
+  // if $$step equals 0 aka the size of the slice of the dataset is zero
+  // return empty array to not divide by zero
+
+  const data = {
+    $let: {
+      vars: {
+        step: {
+          $ceil: {
+            $divide: [{ $size: sliced }, limit],
+          },
+        },
+      },
+      in: {
+        $cond: [{ $eq: ['$$step', 0] }, [], reduce],
       },
     },
   }
 
-  const res = await client.devices.findOne(
-    { id },
-    {
-      projection: {
-        _id: 0,
-        keys: getDataKeys(field),
-        data: {
-          $let: {
-            vars,
-            in: {
-              $cond: [
-                { $eq: ['$$step', 0] },
-                [],
-                reduce(`$${field}`, reduceExpr),
-              ],
-            },
-          },
-        },
-      },
-    }
-  )
-
-  for (const d of res.data) {
-    d.pressure = Math.floor(d.pressure / 100)
+  return {
+    keys: getDataKeys('$standardData'),
+    data,
   }
-
-  return res
 }
-
-module.exports = getStandardData

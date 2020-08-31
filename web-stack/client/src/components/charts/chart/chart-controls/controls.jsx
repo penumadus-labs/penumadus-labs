@@ -20,10 +20,11 @@ export default ({
   toggleLive,
   downloadProps,
   settingsProps,
-  children,
+  children = () => null,
 }) => {
   const [openDownload, bindDownload] = useAlert()
   const [openHelp, bindHelp] = useAlert()
+
 
   return (
     <>
@@ -37,7 +38,7 @@ export default ({
         <button className="button" onClick={toggleLive}>
           {live ? <LiveOff size="20" /> : <Live size="20" />}
         </button>
-        {children}
+        {children(live)}
       </StyledDiv>
       <Alert {...bindDownload} title="download seleted domain">
         <Download {...downloadProps} />

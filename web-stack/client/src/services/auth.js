@@ -4,7 +4,7 @@ import { initializeSocket } from './socket'
 import useApi, { api } from '../context/api'
 
 const useAuth = () => {
-  const [, { initializeApi }] = useApi()
+  const [, { initializeApi, setId }] = useApi()
 
   const [authState, setAuthState] = useState({ verifying: true })
 
@@ -46,6 +46,7 @@ const useAuth = () => {
   const logout = async () => {
     sessionStorage.removeItem('token')
     setAuthState({})
+    setId()
     await navigate('')
   }
 

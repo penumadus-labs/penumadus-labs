@@ -3,7 +3,7 @@ const channel = require('./channel')
 const {
   insertStandardData,
   insertAccelerationData,
-  inesertAccelerationEvent,
+  insertAccelerationEvent,
 } = require('../database/client')
 const {
   config,
@@ -24,8 +24,11 @@ extends EventEmitter and creates promise based methods for issuing requests to t
 class Device extends EventEmitter {
   // settings = {}
   initialized = false
-  write = false
+  writeStandard = true
+  writeAcceleration = true
+  transmit = true
   timeout = null
+  event = {}
 
   constructor(socket) {
     super()
@@ -40,7 +43,7 @@ class Device extends EventEmitter {
     this.createRequestMethods()
     this.addDataStreams()
 
-    // const emitResponses = this.emitResponses.bind(this)
+    const { emitResponses } = this
 
     this.socket.on('readable', async function () {
       let chunk
@@ -54,6 +57,7 @@ class Device extends EventEmitter {
   initialize(id) {
     // if I wanted to cache the settings
     // await this.getSettings()
+
     channel.devices[id] = this
     this.id = id
     this.initialized = true
@@ -75,28 +79,23 @@ class Device extends EventEmitter {
 
   addDataStreams() {
     this.on(table['standardData'], (err, data) => {
-      if (this.write) insertStandardData(this.id, data)
-      channel.updateUsers('standard', data)
+      if (this.writeStandard) insertStandardData(this.id, data)
+      if (this.transmit) channel.updateUsers('standard', data)
     })
 
     this.on(table['accelerationData'], (err, data) => {
-      if (!this.timeout) {
-        this.accelerationEventTime = time
-        this.accelerationEventData = []
-      } else clearTimeout(this.timeout)
+      if (!this.timeout) this.event = []
+      else clearTimeout(this.timeout)
 
-      this.accelerationEventData.push(data)
-      channel.updateUsers('acceleration', data)
+      this.event.push(data)
+      if (this.transmit) channel.updateUsers('acceleration', data)
 
       this.timeout = setTimeout(() => {
         this.timeout = null
-        if (this.write)
-          inesertAccelerationEvent(
-            this.id,
-            this.accelerationEventTime,
-            this.accelerationEventData
-          ).catch(console.error)
-      }, 2000)
+        console.info(`acceleration event: ${this.event.length}`)
+        if (!this.writeAcceleration) return
+        insertAccelerationEvent(this.id, this.event)
+      }, 200)
     })
 
     this.on('error', (err) => {

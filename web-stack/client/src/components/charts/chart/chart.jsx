@@ -18,17 +18,18 @@ export const useChart = ({
   useDownload,
   liveModeSet,
   liveModeAction,
+  yDomain,
 }) => {
   const chartRef = useRef()
   const [tool, setTool] = useState(defaultTool)
   const [live, setLive] = useState(false)
-  const [liveData, setLiveData] = useState(null)
+  const [liveData, setLiveData] = useState(apiData)
 
   const data = live ? liveData : apiData
 
   const [chart, date] = useMemo(() => {
     if (!data) return []
-    const chart = new Chart({ keys, data, colors })
+    const chart = new Chart({ keys, data, colors, yDomain })
 
     const [start, end] = extent(data.map((d) => d.time))
 
@@ -63,7 +64,9 @@ export const useChart = ({
 
   useMessage(
     (ctx) => {
-      if (live) liveModeAction({ setLiveData, ...ctx })
+      if (live) {
+        liveModeAction({ setLiveData, ...ctx })
+      }
     },
     [live]
   )
@@ -151,8 +154,6 @@ export default ({ children, ...props }) => {
     { brushControlsProps, controlsProps },
   ] = useChart(props)
 
-  const { keys } = props
-
   return (
     <div className="card-spaced">
       <Global styles={SvgStyle} />
@@ -162,7 +163,7 @@ export default ({ children, ...props }) => {
         {!live ? <BrushControls {...brushControlsProps} /> : null}
       </ControlBarStyle>
       <StyledSVG ref={chartRef} />
-      <Legend labels={keys} />
+      <Legend labels={props.keys} />
     </div>
   )
 }
