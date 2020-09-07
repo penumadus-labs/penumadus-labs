@@ -1,7 +1,8 @@
 const { Router } = require('express')
+const { compare } = require('bcrypt')
 const { verifyUser, signAdmin, signUser } = require('../utils/auth')
 const { findUser } = require('../database/client')
-const { compare } = require('bcrypt')
+const handleAsync = require('./handle-async')
 
 const auth = Router()
 
@@ -11,26 +12,30 @@ encrypt passwords
 return user
 */
 
-auth.post('/login', async ({ body: { username, password } }, res) => {
-  try {
-    const user = await findUser(username)
+auth.post(
+  '/login',
+  handleAsync(
+    async ({ cookies, signedCookies, body: { username, password } }, res) => {
+      const user = await findUser(username)
 
-    if (!user) {
-      res.statusMessage = 'user not found'
-      return res.sendStatus(400)
+      if (!user) {
+        res.statusMessage = 'user not found'
+        return res.sendStatus(400)
+      }
+
+      if (!(await compare(password, user.password))) {
+        res.statusMessage = 'invalid password'
+        return res.sendStatus(401)
+      }
+
+      const token = user.admin
+        ? signAdmin({ username })
+        : signUser({ username })
+      res.cookie('token', 'hello')
+      res.send({ token, admin: user.admin })
     }
-
-    if (!(await compare(password, user.password))) {
-      res.statusMessage = 'invalid password'
-      return res.sendStatus(401)
-    }
-
-    const token = user.admin ? signAdmin({ username }) : signUser({ username })
-    res.send({ token, admin: user.admin })
-  } catch (error) {
-    console.error(error)
-  }
-})
+  )
+)
 
 auth.post('/verify', verifyUser, (req, res) => {
   res.sendStatus(200)

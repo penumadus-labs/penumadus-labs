@@ -7,6 +7,9 @@ const useAuth = () => {
   const [, { initializeApi, setId }] = useApi()
 
   const [authState, setAuthState] = useState({ verifying: true })
+  console.log(document.cookie)
+
+  // document.cookie = 'token=hello'
 
   const authenticate = async (token) => {
     initializeSocket(token)
