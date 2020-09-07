@@ -23,14 +23,14 @@ database
   .get(
     '/standard-data',
     handleAsync(async ({ query }, res) => {
-      const standard = await client.getStandardData(query)
+      const standard = await client.getStandardDataReduced(query)
       res.send(standard)
     })
   )
   .get(
     '/standard-csv',
     handleAsync(async ({ query }, res) => {
-      const data = await client.getStandardAsList(query)
+      const { data } = await client.getStandardData(query)
       const csv = unparse(data)
       res.send(csv)
     })
@@ -54,7 +54,7 @@ database
   .get(
     '/acceleration-csv',
     handleAsync(async ({ query }, res) => {
-      const data = await client.getAccelerationAsList(query)
+      const { data } = await client.getAccelerationEventData(query)
       const csv = unparse(data)
       res.send(csv)
     })

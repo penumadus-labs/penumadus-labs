@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react'
 import { navigate } from '@reach/router'
-import { initializeSocket } from './socket'
+import { useEffect, useState } from 'react'
 import useApi, { api } from '../context/api'
+import { initializeSocket } from './socket'
 
 const useAuth = () => {
   const [, { initializeApi, setId }] = useApi()
 
   const [authState, setAuthState] = useState({ verifying: true })
-  console.log(document.cookie)
-
-  // document.cookie = 'token=hello'
 
   const authenticate = async (token) => {
     initializeSocket(token)

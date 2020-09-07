@@ -1,4 +1,4 @@
-import { api, setToken, getRequest } from './api-base'
+import { api, getRequest, setToken } from './api-base'
 import createRequestHook from './create-request-hook'
 
 export default ({ requestAndStore, idState: [id, setId] }) => {
@@ -52,14 +52,6 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
       storeError
     )
   )
-  // const useGetAccelerationData = createRequestHook((params, storeError) =>
-  //   requestAndStore(
-  //     'accelerationData',
-  //     'database/acceleration-data',
-  //     { ...params, id },
-  //     storeError
-  //   )
-  // )
 
   // non-stored requests
 
@@ -68,10 +60,10 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
   )
 
   const [useDownloadStandardData] = createRequestHook((start, end) =>
-    getRequest('database/standard-data', { id, start, end })
+    getRequest('database/standard-csv', { id, start, end })
   )
-  const [useDownloadAccelerationData] = createRequestHook((start, end) =>
-    getRequest('database/accleration-data', { id, start, end })
+  const [useDownloadAccelerationData] = createRequestHook((index) =>
+    getRequest('database/acceleration-csv', { id, index })
   )
 
   const [useSendCommand] = createRequestHook((command) =>

@@ -14,27 +14,23 @@ return user
 
 auth.post(
   '/login',
-  handleAsync(
-    async ({ cookies, signedCookies, body: { username, password } }, res) => {
-      const user = await findUser(username)
+  handleAsync(async ({ body: { username, password } }, res) => {
+    const user = await findUser(username)
 
-      if (!user) {
-        res.statusMessage = 'user not found'
-        return res.sendStatus(400)
-      }
-
-      if (!(await compare(password, user.password))) {
-        res.statusMessage = 'invalid password'
-        return res.sendStatus(401)
-      }
-
-      const token = user.admin
-        ? signAdmin({ username })
-        : signUser({ username })
-      res.cookie('token', 'hello')
-      res.send({ token, admin: user.admin })
+    if (!user) {
+      res.statusMessage = 'user not found'
+      return res.sendStatus(400)
     }
-  )
+
+    if (!(await compare(password, user.password))) {
+      res.statusMessage = 'invalid password'
+      return res.sendStatus(401)
+    }
+
+    const token = user.admin ? signAdmin({ username }) : signUser({ username })
+    res.cookie('token', 'hello')
+    res.send({ token, admin: user.admin })
+  })
 )
 
 auth.post('/verify', verifyUser, (req, res) => {

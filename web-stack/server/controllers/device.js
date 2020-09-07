@@ -2,7 +2,6 @@ const EventEmitter = require('events')
 const channel = require('./channel')
 const {
   insertStandardData,
-  insertAccelerationData,
   insertAccelerationEvent,
 } = require('../database/client')
 const {
@@ -123,7 +122,7 @@ class Device extends EventEmitter {
       const args = Object.values(settings)
       if (args.length !== requiredArgs) {
         throw new Error(
-          `expected ${requiredArgs} args. recieved ${args.length} args`
+          `expected ${requiredArgs} args. received ${args.length} args`
         )
       }
 

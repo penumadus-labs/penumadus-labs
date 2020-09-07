@@ -86,13 +86,16 @@ const client = {
     projection._id = 0
     return client.devices.findOne({ id }, { projection })
   },
-  async getStandardData({ id, ...params }) {
-    const res = await client.findDevice(id, getStandardData(params))
+  async getStandardDataReduced({ id, ...params }) {
+    const res = await client.findDevice(id, getStandardData(params, true))
     for (const d of res.data) {
       d.pressure = Math.floor(d.pressure / 100)
     }
 
     return res
+  },
+  async getStandardData({ id, ...params }) {
+    return client.findDevice(id, getStandardData(params))
   },
   async getAccelerationEventTimes({ id }) {
     const { data } = await client.findDevice(id, getAccelerationEventTimes())

@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Chart from '../chart/chart'
 import { formatHoursMinutes, parseDate } from '../datetime'
 
 let timeout
 let indexCache = 0
 
-export default ({ events: [, events], useGetData, useDownload }) => {
+export default ({
+  events: [eventsStatus, events],
+  useGetData,
+  useDownload,
+}) => {
   const [dataStatus, getData, { loading }] = useGetData()
   const [event, setEvent] = useState()
 
@@ -48,11 +52,18 @@ export default ({ events: [, events], useGetData, useDownload }) => {
 
   return (
     <Chart
-      {...{ ...event, useDownload, liveModeSet, liveModeAction }}
+      {...{
+        ...event,
+        useDownload,
+        downloadProps: [indexCache],
+        liveModeSet,
+        liveModeAction,
+      }}
       yDomain={[-10, 10]}
     >
       {(live) => {
         if (live) return null
+        if (!events) return eventsStatus
         return (
           <select
             onChange={handleChange}

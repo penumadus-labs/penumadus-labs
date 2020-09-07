@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
-import { Global, css } from '@emotion/core'
+import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { extent } from 'd3'
-import Chart from './linechart'
-import Legend from './legend'
-import Controls from './chart-controls/controls'
-import BrushControls from './brush-controls'
-import { parseDate } from '../datetime'
-import { colors } from '../units-colors'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import useMessage from '../../../services/socket'
+import { parseDate, parseDomain } from '../datetime'
+import { colors } from '../units-colors'
+import BrushControls from './brush-controls'
+import Controls from './chart-controls/controls'
+import Legend from './legend'
+import Chart from './linechart'
 
 const defaultTool = 'brush'
 
@@ -19,6 +19,7 @@ export const useChart = ({
   liveModeSet,
   liveModeAction,
   yDomain,
+  downloadProps,
 }) => {
   const chartRef = useRef()
   const [tool, setTool] = useState(defaultTool)
@@ -106,8 +107,10 @@ export const useChart = ({
     live,
     toggleLive,
     downloadProps: {
-      getDomain: () => chart.getDomain(),
+      downloadProps: downloadProps ?? chart.getDomain(),
       useDownload,
+      domain: parseDomain(chart.getDomain()),
+      // getDomain: () => chart.getDomain(),
     },
   }
 
