@@ -8,19 +8,17 @@ const useAuth = () => {
 
   const [authState, setAuthState] = useState({ verifying: true })
 
-  const authenticate = async (token) => {
-    initializeSocket(token)
-    await initializeApi(token)
+  const authenticate = async () => {
+    await initializeApi()
+    initializeSocket()
     setAuthState({ loggedIn: true })
   }
 
   useEffect(
     () => {
-      const token = sessionStorage.getItem('token')
-      if (!token) return setAuthState({})
       api
-        .post('auth/verify', {}, { headers: { token } })
-        .then(() => authenticate(token))
+        .post('auth/verify', {}, { timeout: 500 })
+        .then(authenticate)
         .catch((error) => {
           setAuthState({})
           console.error(error)
@@ -30,21 +28,17 @@ const useAuth = () => {
     []
   )
 
-  const login = async (username, password) => {
-    try {
-      const {
-        data: { token },
-      } = await api.post('auth/login', { username, password })
-      sessionStorage.setItem('token', token)
-      await authenticate(token)
-      await navigate('charts')
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const login = (username, password) =>
+    api
+      .post('auth/login', { username, password })
+      .then(() => {
+        navigate('charts')
+        return authenticate()
+      })
+      .catch(console.error)
 
   const logout = async () => {
-    sessionStorage.removeItem('token')
+    await api.post('auth/logout')
     setAuthState({})
     setId()
     await navigate('')

@@ -40,7 +40,7 @@ export default ({
     // start new array if timeout is not set
     setLiveData((liveData) => (timeout ? liveData : []).concat([data]))
 
-    // debouce timeout until all data packets are recieved
+    // debounce timeout until all data packets are received
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
       getEvent(0)

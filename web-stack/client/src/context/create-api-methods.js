@@ -1,19 +1,15 @@
-import { api, getRequest, setToken } from './api-base'
+import { api, getRequest } from './api-base'
 import createRequestHook from './create-request-hook'
 
 export default ({ requestAndStore, idState: [id, setId] }) => {
-  const initializeApi = async (token) => {
-    setToken(token)
-
-    const promises = [
+  const initializeApi = async () => {
+    // calls that only need to be made once
+    const [deviceList = []] = await Promise.all([
       requestAndStore('deviceList', 'database/device-list', {}, true),
       requestAndStore('protocol', 'devices/protocol', {}, true),
-    ]
-    const [deviceList = []] = await Promise.all(promises)
+    ])
 
-    const id = deviceList[0] || null
-
-    setId(id)
+    setId(deviceList[0] || null)
   }
 
   if (!id) return [[{ initializeApi }]]

@@ -1,6 +1,6 @@
 import React from 'react'
-import Setting from '../components/controls/device-setting'
 import Command from '../components/controls/command'
+import Setting from '../components/controls/device-setting'
 import useApi from '../context/api'
 
 export default () => {
@@ -38,7 +38,7 @@ export default () => {
         </>
       ) : (
         <p className="card loading">
-          Trying to connect... if packets are being recieved try refreshing
+          Trying to connect... if packets are being received try refreshing
         </p>
       )}
     </>

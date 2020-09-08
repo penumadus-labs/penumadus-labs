@@ -16,7 +16,6 @@ export default ({ labels }) => {
     <StyledList className="space-children-x">
       {useMemo(
         () =>
-          // console.log('labels') ||
           labels.map((label, i) => (
             <StyledItem x={i * 100} key={i} color={colors[label]}>
               {`${label} (${units[label]})`}

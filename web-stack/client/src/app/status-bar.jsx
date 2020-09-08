@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import React, { useState } from 'react'
 import useMessage from '../services/socket'
 import SelectDevice from './select-device'
 const Menu = styled.div`
@@ -9,8 +9,8 @@ const Menu = styled.div`
 `
 
 const initialStatus = {
-  standard: 'not recieved',
-  acceleration: 'not recieved',
+  standard: 'not received',
+  acceleration: 'not received',
 }
 
 export default ({ loggedIn }) => {

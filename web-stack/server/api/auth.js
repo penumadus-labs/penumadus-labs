@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { compare } = require('bcrypt')
-const { verifyUser, signAdmin, signUser } = require('../utils/auth')
+const { verifyToken, signToken } = require('../utils/auth')
 const { findUser } = require('../database/client')
 const handleAsync = require('./handle-async')
 
@@ -11,6 +11,8 @@ connect database
 encrypt passwords
 return user
 */
+
+const oneDayInMilliseconds = 1000 * 360 * 24
 
 auth.post(
   '/login',
@@ -27,13 +29,22 @@ auth.post(
       return res.sendStatus(401)
     }
 
-    const token = user.admin ? signAdmin({ username }) : signUser({ username })
-    res.cookie('token', 'hello')
-    res.send({ token, admin: user.admin })
+    const token = signToken(user.admin, { username })
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: oneDayInMilliseconds,
+    })
+    res.sendStatus(200)
+    // res.send({ token, admin: user.admin })
   })
 )
 
-auth.post('/verify', verifyUser, (req, res) => {
+auth.post('/logout', verifyToken(false), (req, res) => {
+  res.cookie('token', null)
+  res.sendStatus(200)
+})
+
+auth.post('/verify', verifyToken(false), (req, res) => {
   res.sendStatus(200)
 })
 

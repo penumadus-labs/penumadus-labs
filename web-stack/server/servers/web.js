@@ -3,6 +3,13 @@ const { Server } = require('ws')
 const channel = require('../controllers/channel')
 const { verifyUserSocket } = require('../utils/auth')
 
+const parseCookies = (cookies = '') =>
+  cookies.split(';').reduce((acc, cookie) => {
+    const parts = cookie.split('=')
+    acc[parts.shift().trim()] = decodeURI(parts.join('='))
+    return acc
+  }, {})
+
 const start = async (expressApp, port) => {
   const server = createServer(expressApp)
 
@@ -10,7 +17,8 @@ const start = async (expressApp, port) => {
   channel.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
-    const token = req.headers['sec-websocket-protocol']
+    // const token = req.headers['sec-websocket-protocol']
+    const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
       socket.destroy()
