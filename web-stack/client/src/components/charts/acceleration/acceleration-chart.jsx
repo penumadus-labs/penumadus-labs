@@ -37,10 +37,10 @@ export default ({
 
   const liveModeAction = ({ type, data, setLiveData }) => {
     if (type !== 'acceleration') return
-    // start new array if timeout is not set
+    //* start new array if timeout is not set
     setLiveData((liveData) => (timeout ? liveData : []).concat([data]))
 
-    // debounce timeout until all data packets are received
+    //* debounce timeout until all data packets are received
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
       getEvent(0)

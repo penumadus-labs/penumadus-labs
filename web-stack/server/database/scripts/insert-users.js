@@ -1,5 +1,5 @@
 const { hash } = require('bcrypt')
-const { connect, close, wrap, insertUser } = require('../controllers/database')
+const client = require('./client-ssh')
 
 const admin = {
   username: 'admin',
@@ -13,9 +13,9 @@ const user = {
   admin: false,
 }
 
-wrap(async () => {
+client.wrap(async () => {
   for (const user of [admin, user]) {
     user.password = await hash(user.password, 10)
-    await insertUser(user)
+    // insert user
   }
 })

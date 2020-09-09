@@ -110,7 +110,6 @@ export const useChart = ({
       downloadProps: downloadProps ?? chart.getDomain(),
       useDownload,
       domain: parseDomain(chart.getDomain()),
-      // getDomain: () => chart.getDomain(),
     },
   }
 

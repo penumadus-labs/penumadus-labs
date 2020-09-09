@@ -1,6 +1,5 @@
-// unused
-import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import React, { useState } from 'react'
 import Box from './box'
 
 const Slider = styled.div`

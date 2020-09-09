@@ -1,5 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React from 'react'
 
 const Controls = styled.div`
   display: flex;
@@ -7,6 +7,7 @@ const Controls = styled.div`
 `
 
 export default ({ applyBrush, undo, reset, changeTool, tool }) => {
+  // tool switching
   // const otherTool = tool === 'brush' ? 'zoom' : 'brush'
 
   return (
@@ -19,6 +20,7 @@ export default ({ applyBrush, undo, reset, changeTool, tool }) => {
       <button className="button" onClick={undo}>
         undo
       </button>
+      {/* tool switching */}
       {/* <button className="button" onClick={() => changeTool(otherTool)}>
           switch to {otherTool}
         </button> */}

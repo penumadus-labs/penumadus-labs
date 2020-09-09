@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react'
-import { Loading, ErrorCard } from './api-status-components'
+import React, { useMemo, useState } from 'react'
 import { getRequest, parseError } from './api-base'
+import { ErrorCard, Loading } from './api-status-components'
 
 export const initialState = [
   'protocol',

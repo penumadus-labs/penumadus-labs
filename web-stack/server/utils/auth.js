@@ -18,7 +18,9 @@ const check = (token, secret) => {
 }
 
 const verifyToken = (admin) => (req, res, next) => {
-  const token = req.cookies.token // req.get('token')
+  // sessionStorage auth system
+  // req.get('token')
+  const token = req.cookies.token
 
   if (!token) res.status(401)
 

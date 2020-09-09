@@ -3,7 +3,7 @@ import createRequestHook from './create-request-hook'
 
 export default ({ requestAndStore, idState: [id, setId] }) => {
   const initializeApi = async () => {
-    // calls that only need to be made once
+    //* calls that only need to be made once
     const [deviceList = []] = await Promise.all([
       requestAndStore('deviceList', 'database/device-list', {}, true),
       requestAndStore('protocol', 'devices/protocol', {}, true),
@@ -14,7 +14,7 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
 
   if (!id) return [[{ initializeApi }]]
 
-  // stored requests
+  //* stored requests
 
   const getSettings = (params, storeError) =>
     requestAndStore(
@@ -24,7 +24,7 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
       storeError
     )
 
-  // stored and manually updated requests
+  //* stored and manually updated requests
 
   const [
     useGetStandardData,
@@ -49,7 +49,7 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
     )
   )
 
-  // non-stored requests
+  //* non-stored requests
 
   const [useGetAccelerationData] = createRequestHook((params, storeError) =>
     getRequest('database/acceleration-data', { ...params, id })

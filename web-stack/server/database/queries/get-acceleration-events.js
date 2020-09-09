@@ -1,10 +1,10 @@
-// get the time of the first packet of each event
+//* get the time of the first packet of each event
 
 module.exports = () => {
   return {
     data: {
       $map: {
-        input: '$events',
+        input: '$accelerationEvents',
         in: {
           $let: {
             vars: { first: { $first: '$$this' } },

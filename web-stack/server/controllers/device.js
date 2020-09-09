@@ -127,6 +127,7 @@ class Device extends EventEmitter {
       }
 
       const response = await this.createRequest(command, args)
+      // if I wanted to cache settings
       // this.settings[dataLabel] = settings
       return response
     }
@@ -158,20 +159,6 @@ class Device extends EventEmitter {
       this.emit('error', new Error(`unhandled response ${command}`))
     }
   }
-
-  // async test() {
-  //   await this.getSettings()
-
-  //   await Promise.all([
-  //     this.setIPSettings(this.settings.ip),
-  //     this.setPressureSettings(this.settings.pressure),
-  //     this.setAccelerationSettings(this.settings.acceleration),
-  //     this.setSampleSettings(this.settings.sample),
-  //   ])
-
-  //   await this.reset()
-  //   process.exit(0)
-  // }
 }
 
 module.exports = async (socket) => {

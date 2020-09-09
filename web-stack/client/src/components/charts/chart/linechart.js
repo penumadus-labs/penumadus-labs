@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { formatHoursMinutes } from '../datetime'
 
+// zoom code
 // const zoomKey = 'altKey'
 
 const marginLeft = 30
@@ -42,6 +43,7 @@ export default class {
         [0, 0],
         [this.width, this.height],
       ])
+      // zoom code
       // .filter(() => !d3.event[zoomKey])
       .on('end', () => {
         const { selection } = d3.event

@@ -1,7 +1,7 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import Select from './select'
+import React from 'react'
 import useApi from '../context/api'
+import Select from './select'
 
 const Root = styled.div`
   display: flex;

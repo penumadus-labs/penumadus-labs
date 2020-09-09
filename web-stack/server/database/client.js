@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb')
 const tunnel = require('../utils/ssh-tunnel')
 const getStandardData = require('./queries/get-standard-data')
-const getAccelerationEventTimes = require('./queries/get-acceleration-event-times')
+const getAccelerationEventTimes = require('./queries/get-acceleration-events')
 const getAccelerationEventData = require('./queries/get-acceleration-event-data')
 
 const url = process.env.SSH
@@ -45,19 +45,6 @@ const client = {
   findUser(username) {
     return client.users.findOne({ username })
   },
-  // eraseStandardData(id) {
-  //   client.devices.updateOne({ $set: { standardData: [] } })
-  // },
-  // eraseAccelerationData(id) {
-  //   client.devices.updateOne({ $set: { accelerationData: [] } })
-  // },
-  // insertDevice(data) {
-  //   return client.devices.insertOne(data)
-  // },
-
-  // insertUser(data) {
-  //   return client.users.insertOne(data)
-  // },
   insertStandardData(id, data) {
     return client.devices
       .updateOne({ id }, { $push: { standardData: data } })

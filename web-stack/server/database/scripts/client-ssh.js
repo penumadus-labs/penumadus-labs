@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb')
-const tunnel = require('../utils/ssh-tunnel')
-const queries = require('../utils/queries')
+const tunnel = require('../../utils/ssh-tunnel')
+const queries = require('../../utils/queries')
 
 const url = 'mongodb://localhost'
 

@@ -17,6 +17,7 @@ const start = async (expressApp, port) => {
   channel.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
+    // sessionStorage auth system
     // const token = req.headers['sec-websocket-protocol']
     const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {

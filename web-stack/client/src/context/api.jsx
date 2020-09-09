@@ -1,12 +1,12 @@
 import React, {
   createContext,
   useContext,
-  useState,
   useEffect,
   useMemo,
+  useState,
 } from 'react'
-import useApiStore, { initialState } from './use-api-store'
 import createApiMethods from './create-api-methods'
+import useApiStore, { initialState } from './use-api-store'
 
 export { api } from './api-base'
 

@@ -35,6 +35,7 @@ auth.post(
       maxAge: oneDayInMilliseconds,
     })
     res.sendStatus(200)
+    // sessionStorage auth system
     // res.send({ token, admin: user.admin })
   })
 )

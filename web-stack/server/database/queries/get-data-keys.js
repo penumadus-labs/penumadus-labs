@@ -1,6 +1,6 @@
 const excludedKeys = ['fills', 'time']
 
-// takes the first element of an array of objects, and returns the keys of that object
+//* takes the first element of an array of objects, and returns the keys of that object
 
 const getDataKeys = (array) => {
   const input = {
