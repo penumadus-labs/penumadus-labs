@@ -1,10 +1,10 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React from 'react'
+import Router from '../router/router'
+import useAuth from '../services/auth'
+import Login from './login'
 import NavBar from './nav-bar'
 import StatusBar from './status-bar'
-import Router from '../router/router'
-import Login from './login'
-import useAuth from '../services/auth'
 
 const Root = styled.div`
   display: grid;
@@ -55,11 +55,11 @@ const Root = styled.div`
 `
 
 const Layout = ({ children }) => {
-  const [{ verifying, loggedIn }, { login, logout }] = useAuth()
+  const [{ verifying, loggedIn }, { login, loginStatus, logout }] = useAuth()
 
   const body = verifying ? null : !loggedIn ? (
     <div>
-      <Login handleLogin={login} />
+      <Login handleLogin={login} status={loginStatus} />
     </div>
   ) : (
     <>

@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Loading, ErrorInline } from './api-status-components'
+import React, { useEffect, useState } from 'react'
 import { parseError } from './api-base'
+import { ErrorInline, Loading } from './api-status-components'
 
-export default (method) => [
-  () => {
+export default (method) => {
+  let debounce
+
+  const useRequest = () => {
     const [state, setState] = useState({})
+    useEffect(() => () => debounce && clearTimeout(debounce), [])
 
     const { loading, success, error } = state
 
@@ -23,6 +26,10 @@ export default (method) => [
         setLoading()
         const res = await method(...args)
         setSuccess()
+        debounce = setTimeout(() => {
+          debounce = null
+          setState({})
+        }, 3000)
         return res
       } catch (error) {
         setError(parseError(error))
@@ -38,6 +45,7 @@ export default (method) => [
     ) : null
 
     return [status, request, state, setError]
-  },
-  method,
-]
+  }
+
+  return [useRequest, method]
+}

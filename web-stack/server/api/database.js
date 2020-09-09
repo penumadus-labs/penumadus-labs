@@ -30,7 +30,7 @@ database
   .get(
     '/standard-csv',
     handleAsync(async ({ query }, res) => {
-      const { data } = await client.getStandardData(query)
+      const { data } = await client.getStandardData({ ...query, limit: -1 })
       const csv = unparse(data)
       res.send(csv)
     })

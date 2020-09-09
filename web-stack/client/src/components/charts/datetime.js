@@ -19,6 +19,6 @@ export const formatHoursMinutes = (time) => {
   return `${date.getHours()}:${minutes < 10 ? '0' + minutes : minutes}`
 }
 
-export const getADayAgo = () => {
+export const oneDayAgo = () => {
   return Math.floor((new Date(Date.now()) - 86400000) / 1000)
 }

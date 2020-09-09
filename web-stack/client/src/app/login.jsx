@@ -1,15 +1,14 @@
-import React from 'react'
-import Input from '../components/inputs/input'
-import { useForm } from 'react-hook-form'
-
 import styled from '@emotion/styled'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import Input from '../components/inputs/input'
 
 const StyledForm = styled.form`
   width: 200px;
   margin: var(--sm);
 `
 
-export default ({ handleLogin }) => {
+export default ({ handleLogin, status }) => {
   const { handleSubmit, register } = useForm({
     defaultValues: {
       username: 'admin',
@@ -27,6 +26,7 @@ export default ({ handleLogin }) => {
       <Input name="username" ref={register({})} />
       <Input name="password" ref={register({})} type="password" />
       <button className="button">Login</button>
+      {status}
     </StyledForm>
   )
 }

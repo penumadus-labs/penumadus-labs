@@ -1,7 +1,5 @@
 const getDataKeys = require('./get-data-keys')
 
-const limit = 1000
-
 const reduceExpr = {
   $cond: [
     { $eq: [{ $mod: ['$$value.index', '$$step'] }, 0] },
@@ -10,9 +8,8 @@ const reduceExpr = {
   ],
 }
 
-module.exports = ({ start = -Infinity, end = Infinity }, reduced = false) => {
+module.exports = ({ start = -Infinity, end = Infinity, limit = 1000 }) => {
   // filters the data by the selected time range
-
   const sliced = {
     $filter: {
       input: '$standardData',
@@ -24,7 +21,7 @@ module.exports = ({ start = -Infinity, end = Infinity }, reduced = false) => {
       },
     },
   }
-  if (!reduced) return { data: sliced }
+  if (limit <= 0) return { data: sliced }
 
   // iterates through the data keeping track of the index
   // skips over the dataset selecting every nth packet where n is equal to $$step reducing the data set down to the specified limit

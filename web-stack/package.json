@@ -11,23 +11,16 @@
     "url": "https://github.com/carosaur/tankmon/"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.1.1",
-    "prettier-cli": "^0.1.0"
+    "npm-run-all": "^4.1.5"
   },
   "scripts": {
-    "start": "node server/server",
-    "deploy": "pm2 start server/server.js",
-    "restart": "pm2 restart server",
     "build": "cd client && npm run build",
+    "start": "node server/server",
     "dev": "run-p dev:client dev:server",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "install:client": "cd client && npm i",
     "install:server": "cd server && npm i",
-    "postinstall": "run-p install:client install:server",
-    "uninstall": "sudo rm -r node_modules && sudo rm -r client/node_modules && sudo rm -r server/node_modules",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "commit": "git pull && git add . && git commit -m changes && git push"
+    "postinstall": "run-p install:client install:server"
   }
 }

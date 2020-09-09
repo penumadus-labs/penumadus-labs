@@ -48,7 +48,7 @@ export default ({
     }, 200)
   }
 
-  if (!event) return dataStatus
+  if (!event) return <div className="card">{dataStatus}</div>
 
   return (
     <Chart
