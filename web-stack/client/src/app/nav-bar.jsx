@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaChartLine as Chart } from 'react-icons/fa'
-import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import { FiLogOut as Logout } from 'react-icons/fi'
+import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
 import NavBarLink from './nav-link'
 
 const NavBar = ({ handleLogout }) => (

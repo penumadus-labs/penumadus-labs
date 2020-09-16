@@ -1,5 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React from 'react'
 
 const Ellipsis = styled.div`
   position: relative;
@@ -72,10 +72,10 @@ export const Loading = () => {
   )
 }
 
-export const InlineError = ({ error }) => <p className="error">{error}</p>
+export const ErrorInline = ({ error }) => <p className="error">{error}</p>
 
-export const Error = ({ error }) => (
+export const ErrorCard = ({ error }) => (
   <div className="card">
-    <InlineError error={error} />
+    <ErrorInline error={error} />
   </div>
 )

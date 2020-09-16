@@ -1,7 +1,7 @@
 import React from 'react'
+import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
 import StandardChart from '../components/charts/standard/standard-chart.jsx'
 import useApi from '../context/api'
-import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
 
 export default () => {
   const [

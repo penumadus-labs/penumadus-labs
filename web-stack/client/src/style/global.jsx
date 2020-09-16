@@ -1,10 +1,9 @@
-import React from 'react'
-import { Global, css } from '@emotion/core'
-import { le, gt } from './mediaqueries'
-import * as colors from './colors'
-
+import { css, Global } from '@emotion/core'
 import { ThemeProvider } from 'emotion-theming'
+import React from 'react'
+import * as colors from './colors'
 import * as mediaqueries from './mediaqueries'
+import { gt, le } from './mediaqueries'
 
 /* mixins */
 const grid = css`
@@ -115,8 +114,8 @@ const globalStyle = css`
     --shadow-button: 0 3px 2px -1px rgb(0, 0, 0, 0.4), 0 4px 10px -1px rgb;
 
     /* 0 6px 4px -1px rgb(70, 130, 180, 0.3); */
-    --shadow-card: 2px 4px 3px -1px rgb(0, 0, 0, 0.5),
-      0 4px 3px -1px rgb(29, 41, 81, 0.5);
+    --shadow-card: 2px 3px 3px -1px rgb(0, 0, 0, 0.5),
+      0 2px 3px -1px rgb(29, 41, 81, 0.5);
 
     /* z-index */
     --layer1: 10;

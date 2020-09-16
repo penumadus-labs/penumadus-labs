@@ -1,7 +1,8 @@
 const { Router } = require('express')
-const { verifyUser, signAdmin, signUser } = require('../utils/auth')
-const { findUser } = require('../database/client')
 const { compare } = require('bcrypt')
+const { verifyToken, signToken } = require('../utils/auth')
+const { findUser } = require('../database/client')
+const handleAsync = require('./handle-async')
 
 const auth = Router()
 
@@ -11,8 +12,11 @@ encrypt passwords
 return user
 */
 
-auth.post('/login', async ({ body: { username, password } }, res) => {
-  try {
+const oneDayInMilliseconds = 1000 * 360 * 24
+
+auth.post(
+  '/login',
+  handleAsync(async ({ body: { username, password } }, res) => {
     const user = await findUser(username)
 
     if (!user) {
@@ -25,14 +29,23 @@ auth.post('/login', async ({ body: { username, password } }, res) => {
       return res.sendStatus(401)
     }
 
-    const token = user.admin ? signAdmin({ username }) : signUser({ username })
-    res.send({ token, admin: user.admin })
-  } catch (error) {
-    console.error(error)
-  }
+    const token = signToken(user.admin, { username })
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: oneDayInMilliseconds,
+    })
+    res.sendStatus(200)
+    // sessionStorage auth system
+    // res.send({ token, admin: user.admin })
+  })
+)
+
+auth.post('/logout', verifyToken(false), (req, res) => {
+  res.cookie('token', null)
+  res.sendStatus(200)
 })
 
-auth.post('/verify', verifyUser, (req, res) => {
+auth.post('/verify', verifyToken(false), (req, res) => {
   res.sendStatus(200)
 })
 

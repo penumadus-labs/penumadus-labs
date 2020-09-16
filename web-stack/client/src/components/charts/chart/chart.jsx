@@ -1,26 +1,36 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
-import { Global, css } from '@emotion/core'
+import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { extent } from 'd3'
-import Chart from './linechart'
-import Legend from './legend'
-import Controls from './chart-controls/controls'
-import BrushControls from './brush-controls'
-import { parseDate } from '../datetime'
-import { colors } from '../units-colors'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import useMessage from '../../../services/socket'
+import { parseDate, parseDomain } from '../datetime'
+import { colors } from '../units-colors'
+import BrushControls from './brush-controls'
+import Controls from './chart-controls/controls'
+import Legend from './legend'
+import Chart from './linechart'
 
-let timeout
 const defaultTool = 'brush'
 
-export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
+export const useChart = ({
+  keys,
+  data: apiData,
+  useDownload,
+  liveModeSet,
+  liveModeAction,
+  yDomain,
+  downloadProps,
+}) => {
   const chartRef = useRef()
   const [tool, setTool] = useState(defaultTool)
   const [live, setLive] = useState(false)
+  const [liveData, setLiveData] = useState(apiData)
+
+  const data = live ? liveData : apiData
 
   const [chart, date] = useMemo(() => {
     if (!data) return []
-    const chart = new Chart({ keys, data, colors })
+    const chart = new Chart({ keys, data, colors, yDomain })
 
     const [start, end] = extent(data.map((d) => d.time))
 
@@ -34,6 +44,7 @@ export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
   }, [data])
 
   useEffect(() => {
+    let timeout
     const resize = () => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
@@ -53,17 +64,21 @@ export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
   }, [chart])
 
   useMessage(
-    (data) => {
-      if (live) liveModeAction()
+    (ctx) => {
+      if (live) {
+        liveModeAction({ setLiveData, ...ctx })
+      }
     },
     [live]
   )
 
-  const toggleLive = () => {
+  const toggleLive = async () => {
     if (live) {
       setLive(false)
       changeTool(defaultTool)
     } else {
+      const { data } = await liveModeSet()
+      setLiveData(data)
       setLive(true)
       changeTool(null)
     }
@@ -92,8 +107,9 @@ export const useChart = ({ keys, data, useDownload, liveModeAction }) => {
     live,
     toggleLive,
     downloadProps: {
-      getDomain: () => chart.getDomain(),
+      downloadProps: downloadProps ?? chart.getDomain(),
       useDownload,
+      domain: parseDomain(chart.getDomain()),
     },
   }
 
@@ -140,8 +156,6 @@ export default ({ children, ...props }) => {
     { brushControlsProps, controlsProps },
   ] = useChart(props)
 
-  const { keys } = props
-
   return (
     <div className="card-spaced">
       <Global styles={SvgStyle} />
@@ -151,7 +165,7 @@ export default ({ children, ...props }) => {
         {!live ? <BrushControls {...brushControlsProps} /> : null}
       </ControlBarStyle>
       <StyledSVG ref={chartRef} />
-      <Legend labels={keys} />
+      <Legend labels={props.keys} />
     </div>
   )
 }

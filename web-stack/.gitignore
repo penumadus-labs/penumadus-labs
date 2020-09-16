@@ -5,6 +5,7 @@ scratch
 build
 .env
 .yarn
+**/unused
 
 
 # dependencies

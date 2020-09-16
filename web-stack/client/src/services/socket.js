@@ -1,32 +1,30 @@
 import { useEffect } from 'react'
-import { wsURL } from './url'
 
-let ws
+const url = `ws://${window.location.hostname}:8080/`
+
 let tasks = []
 
 export const initializeSocket = (token) => {
-  ws = new WebSocket(wsURL, token)
+  const ws = new WebSocket(url, token)
 
   ws.onmessage = ({ data }) => {
-    const parsed = JSON.parse(data)
+    const json = JSON.parse(data)
     for (const task of tasks) {
-      task(parsed)
+      task(json)
     }
   }
 
-  return () => {
-    ws.close()
-  }
+  return () => ws.close()
 }
 
-const useMessage = (task) => {
+const useMessage = (task, deps) => {
   useEffect(() => {
     tasks.push(task)
     return () => {
       tasks = tasks.filter((t) => t !== task)
     }
     // eslint-disable-next-line
-  }, [])
+  }, deps)
 }
 
 export default useMessage

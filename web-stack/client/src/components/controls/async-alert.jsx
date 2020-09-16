@@ -1,17 +1,20 @@
 import React from 'react'
 import Alert, { useAlert } from '../alerts/alert'
 
-export default ({ children, useRequest, args, ...bind }) => {
+export default ({ children, useRequest, requestArgs, ...bind }) => {
   if (!bind.isOpen) return null
 
   const [status, request, { loading, success }] = useRequest()
 
-  const button = loading ? null : success ? (
+  const buttons = loading ? null : success ? (
     <button className="button button-red" onClick={bind.close}>
       close
     </button>
   ) : (
-    <button className="button button-green" onClick={() => request(...args)}>
+    <button
+      className="button button-green"
+      onClick={() => request(...requestArgs)}
+    >
       send
     </button>
   )
@@ -21,12 +24,13 @@ export default ({ children, useRequest, args, ...bind }) => {
       {children}
       {status}
       <div className="center-child">
-        <button
+        {buttons}
+        {/* <button
           className="button button-green"
-          onClick={() => request(...args)}
+          onClick={() => request(...requestArgs)}
         >
           send
-        </button>
+        </button> */}
       </div>
     </Alert>
   )

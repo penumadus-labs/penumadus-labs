@@ -1,6 +1,6 @@
 import React from 'react'
-import Setting from '../components/controls/device-setting'
 import Command from '../components/controls/command'
+import Setting from '../components/controls/device-setting'
 import useApi from '../context/api'
 
 export default () => {
@@ -9,6 +9,7 @@ export default () => {
       protocol: [status, protocol],
       settings: [, settings],
     },
+    ,
     { useSendCommand, useSendSetting },
   ] = useApi()
 
@@ -23,7 +24,7 @@ export default () => {
         <>
           <div className="card grid-commands">
             {commands.map((command, i) => (
-              <Command key={i} {...command} useSendCommand={useSendCommand} />
+              <Command key={i} {...command} useRequest={useSendCommand} />
             ))}
           </div>
           {setters.map((setter, i) => (
@@ -31,12 +32,14 @@ export default () => {
               key={i}
               {...setter}
               settings={settings[setter.dataLabel]}
-              useSendCommand={useSendSetting}
+              useRequest={useSendSetting}
             />
           ))}
         </>
       ) : (
-        <p className="card loading">Trying to connect...</p>
+        <p className="card loading">
+          Trying to connect... if packets are being received try refreshing
+        </p>
       )}
     </>
   )

@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const handleAsync = require('./handle-async')
 const { commands, setters } = require('../utils/tcp-protocol')
 const {
   getDeviceSettings,
@@ -27,24 +28,25 @@ const dummySettings = {
 const devices = Router()
 
 devices
-  .get('/protocol', async (req, res) => {
-    res.send({ commands, setters })
-  })
-  .get('/settings', async ({ query }, res) => {
-    try {
+  .get(
+    '/protocol',
+    handleAsync(async (req, res) => {
+      res.send({ commands, setters })
+    })
+  )
+  .get(
+    '/settings',
+    handleAsync(async ({ query }, res) => {
       const settings = await getDeviceSettings(query.id)
       res.send(settings)
-    } catch (error) {}
-  })
-devices.post('/command', async ({ body: { id, command, args } }, res) => {
-  try {
-    await sendDeviceCommand(id, command, args)
-    res.sendStatus(200)
-  } catch (error) {
-    res.statusMessage = "Command didn't make it :("
-    res.sendStatus(400)
-    console.error(error)
-  }
-})
+    })
+  )
+  .post(
+    '/command',
+    handleAsync(async ({ body: { id, command, args } }, res) => {
+      await sendDeviceCommand(id, command, args)
+      res.sendStatus(200)
+    })
+  )
 
 module.exports = devices

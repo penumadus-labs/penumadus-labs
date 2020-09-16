@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from '@reach/router'
 import styled from '@emotion/styled'
+import { Link } from '@reach/router'
+import React from 'react'
 
 const Root = styled(Link)`
   padding: var(--sm);

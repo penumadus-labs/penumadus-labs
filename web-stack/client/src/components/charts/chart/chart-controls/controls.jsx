@@ -1,14 +1,14 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React from 'react'
 import { FaFileDownload as DownloadIcon } from 'react-icons/fa'
 import {
   FiHelpCircle as Help,
   FiVideo as Live,
   FiVideoOff as LiveOff,
 } from 'react-icons/fi'
+import Alert, { useAlert } from '../../../alerts/alert'
 import Download from './chart-download'
 import help from './help'
-import Alert, { useAlert } from '../../../alerts/alert'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ export default ({
   toggleLive,
   downloadProps,
   settingsProps,
-  children,
+  children = () => null,
 }) => {
   const [openDownload, bindDownload] = useAlert()
   const [openHelp, bindHelp] = useAlert()
@@ -37,9 +37,9 @@ export default ({
         <button className="button" onClick={toggleLive}>
           {live ? <LiveOff size="20" /> : <Live size="20" />}
         </button>
-        {children}
+        {children(live)}
       </StyledDiv>
-      <Alert {...bindDownload} title="download seleted domain">
+      <Alert {...bindDownload} title="download selected domain">
         <Download {...downloadProps} />
       </Alert>
       <Alert {...bindHelp}>{help}</Alert>

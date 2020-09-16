@@ -21,8 +21,8 @@ const messages = {
   },
   sample: {
     secondsBetween: null,
-    pressureSampleIntverval: null,
-    accelerationSampleInverval: null,
+    pressureSampleInterval: null,
+    accelerationSampleInterval: null,
   },
 }
 

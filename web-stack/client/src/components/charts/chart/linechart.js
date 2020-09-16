@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { formatHoursMinutes } from '../datetime'
 
+// zoom code
 // const zoomKey = 'altKey'
 
 const marginLeft = 30
@@ -10,16 +11,16 @@ const marginTop = 5
 
 export default class {
   domains = []
-  constructor({ keys, data, colors }) {
+  constructor({ keys, data, colors, yDomain }) {
     this.data = data
     this.keys = keys
     this.colors = colors
     this.translate = (height = 0) =>
       `translate(${marginLeft} ${marginTop + height})`
-    // this.xDomain = d3.extent(data.humidity.map((d) => d.time))
     this.xDomain = d3.extent(data.map((d) => d.time))
     this.previousDomain = this.xDomain
     this.currentDomain = this.xDomain
+    this.yDomain = yDomain
   }
   mount(root = this.rootNode) {
     this.rootNode = root
@@ -34,7 +35,7 @@ export default class {
 
     this.x = d3.scaleLinear().domain(this.xDomain).range(this.xRange)
 
-    this.y = d3.scaleLinear().range([this.height, 0]).domain([-1, 75])
+    this.y = d3.scaleLinear().range([this.height, 0]).domain(this.yDomain)
 
     this.brush = d3
       .brushX()
@@ -42,6 +43,7 @@ export default class {
         [0, 0],
         [this.width, this.height],
       ])
+      // zoom code
       // .filter(() => !d3.event[zoomKey])
       .on('end', () => {
         const { selection } = d3.event

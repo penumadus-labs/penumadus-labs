@@ -1,19 +1,19 @@
-const controller = {
+const channel = {
   users: new Set(),
   devices: {},
   updateUsers(type, data = null) {
-    controller.users.forEach((client) => {
+    channel.users.forEach((client) => {
       client.send(JSON.stringify({ type, data }))
     })
   },
   sendDeviceCommand(id, request, args) {
-    return controller.devices[id][request](args)
+    return channel.devices[id][request](args)
   },
   getDeviceSettings(id) {
-    if (controller.devices[id]) {
-      return controller.devices[id].getSettings()
+    if (channel.devices[id]) {
+      return channel.devices[id].getSettings()
     }
   },
 }
 
-module.exports = controller
+module.exports = channel

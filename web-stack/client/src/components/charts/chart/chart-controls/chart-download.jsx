@@ -1,17 +1,15 @@
 import React from 'react'
-import { parseDomain } from '../../datetime'
 
-export default ({ getDomain, useDownload }) => {
-  const domain = getDomain()
-  const [start, end] = domain
-
+export default ({
+  domain: [startTime, endTime],
+  useDownload,
+  downloadProps,
+}) => {
   const [status, request] = useDownload()
-
-  const [startTime, endTime] = parseDomain(domain)
 
   const handleClick = async () => {
     try {
-      const data = await request(start, end)
+      const data = await request(...downloadProps)
       const file = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data)
 
       const downloadHandle = document.createElement('a')

@@ -2,7 +2,7 @@ const EventEmitter = require('events')
 const channel = require('./channel')
 const {
   insertStandardData,
-  insertAccelerationData,
+  insertAccelerationEvent,
 } = require('../database/client')
 const {
   config,
@@ -23,6 +23,11 @@ extends EventEmitter and creates promise based methods for issuing requests to t
 class Device extends EventEmitter {
   // settings = {}
   initialized = false
+  writeStandard = true
+  writeAcceleration = true
+  transmit = true
+  timeout = null
+  event = {}
 
   constructor(socket) {
     super()
@@ -37,7 +42,7 @@ class Device extends EventEmitter {
     this.createRequestMethods()
     this.addDataStreams()
 
-    const emitResponses = this.emitResponses.bind(this)
+    const { emitResponses } = this
 
     this.socket.on('readable', async function () {
       let chunk
@@ -49,7 +54,9 @@ class Device extends EventEmitter {
   }
 
   initialize(id) {
+    // if I wanted to cache the settings
     // await this.getSettings()
+
     channel.devices[id] = this
     this.id = id
     this.initialized = true
@@ -70,22 +77,24 @@ class Device extends EventEmitter {
   }
 
   addDataStreams() {
-    this.on(table['standardData'], async (err, data) => {
-      try {
-        // await insertStandardData(this.id, data)
-        channel.updateUsers('standard')
-      } catch (error) {
-        console.error(error)
-      }
+    this.on(table['standardData'], (err, data) => {
+      if (this.writeStandard) insertStandardData(this.id, data)
+      if (this.transmit) channel.updateUsers('standard', data)
     })
 
-    this.on(table['accelerationData'], async (err, data) => {
-      try {
-        // await insertAccelerationData(this.id, data)
-        channel.updateUsers('acceleration')
-      } catch (error) {
-        console.error(error)
-      }
+    this.on(table['accelerationData'], (err, data) => {
+      if (!this.timeout) this.event = []
+      else clearTimeout(this.timeout)
+
+      this.event.push(data)
+      if (this.transmit) channel.updateUsers('acceleration', data)
+
+      this.timeout = setTimeout(() => {
+        this.timeout = null
+        console.info(`acceleration event: ${this.event.length}`)
+        if (!this.writeAcceleration) return
+        insertAccelerationEvent(this.id, this.event)
+      }, 200)
     })
 
     this.on('error', (err) => {
@@ -113,11 +122,12 @@ class Device extends EventEmitter {
       const args = Object.values(settings)
       if (args.length !== requiredArgs) {
         throw new Error(
-          `expected ${requiredArgs} args. recieved ${args.length} args`
+          `expected ${requiredArgs} args. received ${args.length} args`
         )
       }
 
       const response = await this.createRequest(command, args)
+      // if I wanted to cache settings
       // this.settings[dataLabel] = settings
       return response
     }
@@ -133,7 +143,7 @@ class Device extends EventEmitter {
     }
   }
 
-  emitResponses(raw) {
+  emitResponses = (raw) => {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
 
     if (!this.initialized) this.initialize(id)
@@ -149,20 +159,6 @@ class Device extends EventEmitter {
       this.emit('error', new Error(`unhandled response ${command}`))
     }
   }
-
-  // async test() {
-  //   await this.getSettings()
-
-  //   await Promise.all([
-  //     this.setIPSettings(this.settings.ip),
-  //     this.setPressureSettings(this.settings.pressure),
-  //     this.setAccelerationSettings(this.settings.acceleration),
-  //     this.setSampleSettings(this.settings.sample),
-  //   ])
-
-  //   await this.reset()
-  //   process.exit(0)
-  // }
 }
 
 module.exports = async (socket) => {
