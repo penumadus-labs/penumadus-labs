@@ -33,7 +33,7 @@ $_POST = json_decode($rest_json, true);
     
    $return = NULL; 
    $file = "/etc/wpa_supplicant/wpa_supplicant-wlan0.conf";	    
-   $wifi_string = 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+   $wifi_string_pass = 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 	    
 		    update_config=1
 		    country=US
@@ -43,14 +43,31 @@ $_POST = json_decode($rest_json, true);
 			psk="' .$wifi_pass .'"
 			key_mgmt=WPA-PSK
 			}';
-	
+   $wifi_string_nopass =  'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+	    
+		    update_config=1
+		    country=US
+
+		    network={
+			ssid="'.$wifi_name .'"
+			key_mgmt=NONE
+			}';
+
+    if($wifi_pass == ""){
+	      $wifi_string = $wifi_string_nopass;
+    }
+    else {
+	    $wifi_string = $wifi_string_pass;
+    }   
     $return = file_put_contents($file, $wifi_string. PHP_EOL);
    //send response
    if($return == FALSE){
-  	echo json_encode(["sent"=>true, "message"=>"error"]);
+   
+  	  echo json_encode(["sent"=>true, "error"=>"Error occurred", "error_val"=>true]);
    }
    else{
-	echo json_encode(["sent"=>true, "message"=>"success"]);
+   
+	    echo json_encode(["sent"=>true, "error"=>"Success", "error_val"=>false]);
    }
    sleep(3);
    exec('sudo wpa_cli -i wlan0 reconfigure');
