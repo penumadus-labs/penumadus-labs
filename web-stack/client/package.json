@@ -35,5 +35,5 @@
     "build": "react-scripts build",
     "dev": "react-scripts start"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://hankthetank.me:8080"
 }
