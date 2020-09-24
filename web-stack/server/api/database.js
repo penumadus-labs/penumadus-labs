@@ -9,9 +9,7 @@ const {
   filterAcceleration,
 } = require('../utils/filter-data')
 
-const database = Router()
-
-database
+module.exports = Router()
   .get(
     '/device-list',
     handleAsync(async (req, res) => {
@@ -59,5 +57,11 @@ database
       res.send(csv)
     })
   )
-
-module.exports = database
+  .delete(
+    '/standard',
+    handleAsync(async () => {})
+  )
+  .delete(
+    '/acceleration',
+    handleAsync(async () => {})
+  )

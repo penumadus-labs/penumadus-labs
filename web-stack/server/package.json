@@ -16,6 +16,7 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
+    "cors": "^2.8.5",
     "tunnel-ssh": "^4.1.4"
   },
   "repository": {

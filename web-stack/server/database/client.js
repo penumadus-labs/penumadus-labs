@@ -91,6 +91,15 @@ const client = {
   getAccelerationEventData({ id, ...params }) {
     return client.findDevice(id, getAccelerationEventData(params))
   },
+  deleteField(id, field) {
+    client.devices.updateOne({ id }, { [field]: [] })
+  },
+  deleteStandardData({ id }) {
+    client.deleteField(id, 'standardData')
+  },
+  deleteAccelerationEvents({ id }) {
+    client.deleteField(id, 'accelerationEvents')
+  },
 }
 
 module.exports = client
