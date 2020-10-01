@@ -11,8 +11,6 @@ const Root = styled.div`
   }
 `
 
-const devices = ['unit_3', 'unit_2', 'unit_1']
-
 export default (props) => {
   const [
     {
@@ -26,7 +24,7 @@ export default (props) => {
   return (
     <Root>
       <p>select device:</p>
-      <Select options={devices} onSelect={setId} />
+      <Select options={list} onSelect={setId} />
     </Root>
   )
 }

@@ -13,11 +13,10 @@ export { api } from './api-base'
 const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
-  const idState = useState(),
-    [id] = idState
+  const [id, setId] = useState()
   const [state, requestAndStore] = useApiStore(initialState)
   const [methods, mount] = useMemo(
-    () => createApiMethods({ requestAndStore, idState }),
+    () => createApiMethods({ requestAndStore, id, setId }),
     // eslint-disable-next-line
     [id]
   )

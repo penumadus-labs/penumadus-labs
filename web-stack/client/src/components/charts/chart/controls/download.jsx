@@ -1,4 +1,7 @@
 import React from 'react'
+import { FaFileDownload as Download } from 'react-icons/fa'
+import downloadFile from '../../../../utils/download-file'
+import Alert from '../../../alert'
 
 export default ({
   domain: [startTime, endTime],
@@ -10,24 +13,20 @@ export default ({
   const handleClick = async () => {
     try {
       const data = await request(...downloadProps)
-      const file = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data)
-
-      const downloadHandle = document.createElement('a')
-      downloadHandle.href = file
-      downloadHandle.download = `${startTime} - ${endTime}.csv`
-      downloadHandle.click()
+      downloadFile(data, `${startTime} - ${endTime}.csv`)
     } catch (error) {
       console.error(error)
     }
   }
+
   return (
-    <>
+    <Alert icon={<Download size="20" />} title="download selected domain">
       <p>{startTime}</p>
       <p>{endTime}</p>
       {status}
       <button className="button" onClick={handleClick}>
         download
       </button>
-    </>
+    </Alert>
   )
 }

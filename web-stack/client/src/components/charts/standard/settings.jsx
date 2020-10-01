@@ -1,124 +1,62 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { GoGear } from 'react-icons/go'
-import Alert, { useAlert } from '../../alerts/alert'
+import Alert from '../../alert'
+import SettingInput from './setting-input'
 
 const StyledForm = styled.form`
   /* max-width: 16rem; */
   margin: auto;
 `
 
-export const useSettings = () => {
-  const intervalState = useState({ start: '', end: '' })
-  const [open, bindAlert] = useAlert()
-
-  const Button = () => (
-    <button className="button" onClick={open}>
-      <GoGear size="20" />
-    </button>
-  )
-
-  const bind = { intervalState, bindAlert }
-
-  return [bind, Button]
+let formDataStore = {
+  start: '',
+  end: '',
 }
 
-export default ({
-  useGetData,
-  bindAlert,
-  intervalState: [interval, setInterval],
-}) => {
-  const { register, handleSubmit, setValue, reset } = useForm({
-    defaultValues: interval,
+export default ({ useGetData }) => {
+  const { handleSubmit, reset, setValue, register } = useForm({
+    defaultValues: { start: 'hi' },
   })
+  const ctx = { setValue, register }
+  for (const [name, value] of Object.entries(formDataStore)) {
+    setValue(name, value)
+  }
 
   const [status, request, , setError] = useGetData()
 
   const onSubmit = handleSubmit(async (data) => {
-    setInterval(data)
+    const start =
+      data.start === '' ? undefined : new Date(data.start).getTime() / 1000
+    const end =
+      data.end === '' ? undefined : new Date(data.end).getTime() / 1000
+
     const now = new Date(Date.now()).getTime() / 1000
-    let start = new Date(data.start).getTime() / 1000
-    let end = new Date(data.end).getTime() / 1000
 
-    if (isNaN(start)) {
-      start = undefined
-    }
+    if (start > now || end > now)
+      return setError('values must not exceed the present')
 
-    if (isNaN(end)) {
-      end = undefined
-    }
-
-    if (start > now || end > now) {
-      setError('values must not exceed the present')
-      return
-    }
-
-    if (start >= end) {
-      setError('end must come after start')
-      return
-    }
+    if (start >= end) return setError('end must come after start')
 
     try {
       await request({ start, end })
-    } catch (error) {
-      console.error(error)
-    }
+      formDataStore = data
+    } catch (error) {}
   })
 
-  const clearStart = (e) => {
-    e.preventDefault()
-    setValue('start', '')
-    setInterval((times) => ({ ...times, start: '' }))
-  }
-  const clearEnd = (e) => {
-    e.preventDefault()
-    setValue('end', '')
-    setInterval((times) => ({ ...times, end: '' }))
-  }
-
-  const resetValues = () => {
-    reset()
-    setInterval({})
-  }
-
   return (
-    <Alert {...bindAlert}>
+    <Alert icon={<GoGear size="20" />}>
       <div className="space-children-y">
-        <p>unselected dates default to min max of the data set</p>
+        <p>unselected dates default to get the min/max of the data set</p>
         <StyledForm onSubmit={onSubmit} className="space-children-y">
-          <div>
-            <label className="label space-children-x-xxs">
-              start:
-              <br />
-              <input
-                className="input"
-                type="date"
-                ref={register}
-                name="start"
-              />
-              <br />
-            </label>
-            <button className="button-text text-blue" onClick={clearStart}>
-              clear
-            </button>
-          </div>
-          <div>
-            <label className="label space-children-x-xxs">
-              end:
-              <br />
-              <input className="input" type="date" ref={register} name="end" />
-              <br />
-            </label>
-            <button className="button-text text-blue" onClick={clearEnd}>
-              clear
-            </button>
-          </div>
+          <SettingInput {...ctx} name="start" />
+          <SettingInput {...ctx} name="end" />
           {status}
           <button className="button">submit</button>
         </StyledForm>
         <div className="space-children-x">
-          <button className="button-text text-blue" onClick={resetValues}>
+          <button className="button-text text-blue" onClick={reset}>
             clear all
           </button>
         </div>

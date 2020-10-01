@@ -23,7 +23,7 @@ if (process.env.DEV)
 
 module.exports = app
   .use(cookieParser())
-  .use('/api', express.json(), apiRouter)
+  .use('/api/', express.json(), apiRouter)
   .use(express.static(clientDir))
   .get('*', (req, res) => {
     if (!req.xhr) res.sendFile('index.html', { root: clientDir })

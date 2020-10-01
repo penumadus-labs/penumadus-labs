@@ -17,12 +17,12 @@ const Root = styled.label`
   }
 `
 
-export default forwardRef(({ before, ...props }, ref) => {
+export default forwardRef(({ before, label, ...props }, ref) => {
   return (
     <Root className="space-children-y-xs">
-      <p>{props.name}</p>
+      <p>{label ?? props.name}</p>
       {before}
-      <input className="input" ref={ref} {...props} />
+      <input className="input" {...props} ref={ref} />
     </Root>
   )
 })

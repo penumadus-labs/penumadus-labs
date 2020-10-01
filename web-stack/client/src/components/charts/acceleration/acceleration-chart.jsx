@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import Chart from '../chart/chart'
-import { formatHoursMinutes, parseDate } from '../datetime'
+import EventSelector from './event-selector'
 
 let timeout
 let indexCache = 0
+let eventCache
 
-export default ({
-  events: [eventsStatus, events],
-  useGetData,
-  useDownload,
-}) => {
+export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
   const [dataStatus, getData, { loading }] = useGetData()
-  const [event, setEvent] = useState()
+  const [event, setEvent] = useState(eventCache)
 
   const getEvent = async (index = indexCache) => {
     try {
-      const event = await getData({ index })
+      eventCache = await getData({ index })
       indexCache = index
-      setEvent(event)
-      return event
+      setEvent(eventCache)
+      return eventCache
     } catch (error) {
       console.error(error)
     }
   }
 
   useEffect(() => {
-    getEvent()
+    if (!eventCache) getEvent()
     // eslint-disable-next-line
   }, [])
 
@@ -54,30 +51,24 @@ export default ({
     <Chart
       {...{
         ...event,
-        useDownload,
         downloadProps: [indexCache],
         liveModeSet,
         liveModeAction,
+        ...props,
       }}
       yDomain={[-10, 10]}
-    >
-      {(live) => {
+      render={(live) => {
         if (live) return null
         if (!events) return eventsStatus
         return (
-          <select
-            onChange={handleChange}
+          <EventSelector
             disabled={loading}
+            onChange={handleChange}
             defaultValue={indexCache}
-          >
-            {events.map((time, i) => (
-              <option key={i} value={i}>
-                {parseDate(time)} - {formatHoursMinutes(time)}
-              </option>
-            ))}
-          </select>
+            events={events}
+          />
         )
       }}
-    </Chart>
+    />
   )
 }
