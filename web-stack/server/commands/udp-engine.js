@@ -9,7 +9,7 @@ const udpEngine = join(__dirname, '..', '..', '..', 'DM', udpProcess)
 const killUdpEngines = async () => {
   try {
     await exec(`killall ${udpProcess}`)
-    console.info('udp engines stoped')
+    console.info('udp engines stopped')
   } catch ({ stderr }) {
     console.error(`udp engine: ${stderr}`)
   }

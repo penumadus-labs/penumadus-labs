@@ -6,6 +6,9 @@
     "datetime",
     "linechart",
     "papaparse",
+    "pengine",
+    "ud",
+    "ud pengine",
     "unparse"
   ],
   "editor.codeActionsOnSave": {

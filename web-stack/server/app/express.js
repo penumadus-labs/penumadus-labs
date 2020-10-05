@@ -4,32 +4,30 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const apiRouter = require('../api/routes')
 
+const dev = process.env.DEV
+
 const clientDir = join(__dirname, '..', '..', 'client', 'build')
 
 const app = (module.exports = express())
 
-const dev = (use, middleware) => (_, _, next) =>
-  process.env.DEV === use ? middleware : next()
+const originList = ['http://localhost:3000', 'http://hankthetank.me:3000']
+
+const corConfig = {
+  origin: dev ? originList : false,
+  credentials: dev,
+  preflightContinue: false,
+}
 
 app
-  .use(
-    dev(
-      true,
-      cors({
-        origin: ['http://localhost:3000', 'http://hankthetank.me:3000'],
-        credentials: true,
-        preflightContinue: false,
-      })
-    )
-  )
+  .use(cors(corConfig))
   .use((req, res, next) => {
     next()
   })
-
-app.use(cookieParser()).use('/api/', express.json(), apiRouter)
-
-if (!process.env.DEV)
-  app.use(express.static(clientDir)).get('*', (req, res) => {
+  .use(cookieParser())
+  .use('/api/', express.json(), apiRouter)
+  .use((_, __, next) => dev && next())
+  .use(express.static(clientDir))
+  .get('*', (req, res) => {
     if (!req.xhr) res.sendFile('index.html', { root: clientDir })
     else return res.sendStatus(404)
   })
