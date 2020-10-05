@@ -11,7 +11,7 @@ const tcpPort = 32100
 
 void (async () => {
   await connect()
-  await startUdpEngines({ tcpPort })
+  // await startUdpEngines({ tcpPort })
   await startServers({ expressApp, webPort, tcpPort })
 })().catch((e) => {
   console.error(e)

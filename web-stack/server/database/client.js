@@ -4,6 +4,7 @@ const getAccelerationEventTimes = require('./queries/get-acceleration-events')
 const getAccelerationEventData = require('./queries/get-acceleration-event-data')
 const createDeviceModel = require('./models/device')
 const tunnel = require('../utils/ssh-tunnel')
+const exec = require('util').promisify(require('child_process').exec)
 
 const defaultUdpPortIndex = 30000
 
@@ -19,6 +20,7 @@ const mongoClient = new MongoClient(url, {
 const client = {
   async connect(ssh = !process.env.amazon) {
     if (ssh) await tunnel(27017)
+    else await exec('sudo service mongod start')
 
     await mongoClient.connect()
 

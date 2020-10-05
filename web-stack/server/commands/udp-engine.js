@@ -1,14 +1,19 @@
-const { promisify } = require('util')
-const exec = promisify(require('child_process').exec)
+const exec = require('util').promisify(require('child_process').exec)
 const { join } = require('path')
 const client = require('../database/client')
 
-const udpEngine = join(__dirname, '..', '..', '..', 'DM', 'UDPEngine')
+const udpProcess = 'UDPengine'
 
-const killUdpEngines = () =>
-  exec('killall udpEngine').catch(
-    ({ stderr }) => void console.error(`udp engine: ${stderr}`)
-  )
+const udpEngine = join(__dirname, '..', '..', '..', 'DM', udpProcess)
+
+const killUdpEngines = async () => {
+  try {
+    await exec(`killall ${udpProcess}`)
+    console.info('udp engines stoped')
+  } catch ({ stderr }) {
+    console.error(`udp engine: ${stderr}`)
+  }
+}
 
 module.exports = async ({ tcpPort }) => {
   if (!process.env.amazon) return console.info('udp engines not started')
@@ -23,8 +28,8 @@ module.exports = async ({ tcpPort }) => {
     )
 
     const s = udpPorts.length === 1 ? '' : 's'
-    console.info(`started udp engine${s} on port${s}: ${udpPorts.join(', ')}`)
+    console.info(`udp engine${s} started on port${s}: ${udpPorts.join(', ')}`)
   } catch (error) {
-    throw error?.stderr ?? error
+    throw error.stderr ?? error
   }
 }
