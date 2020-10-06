@@ -6,23 +6,23 @@ const apiRouter = require('../api/routes')
 
 const dev = process.env.DEV
 
-const clientDir = join(__dirname, '..', '..', 'client', 'build')
-
-const app = (module.exports = express())
-
 const originList = ['http://localhost:3000', 'http://hankthetank.me:3000']
-
-const corConfig = {
+const corsConfig = {
   origin: dev ? originList : false,
   credentials: dev,
   preflightContinue: false,
 }
 
-app
-  .use(cors(corConfig))
-  .use((req, res, next) => {
-    next()
-  })
+const clientDir = join(__dirname, '..', '..', 'client', 'build')
+
+const test = (req, res, next) => {
+  if (!dev) next()
+  next()
+}
+
+module.exports = express()
+  .use(cors(corsConfig))
+  .use(test)
   .use(cookieParser())
   .use('/api/', express.json(), apiRouter)
   .use((_, __, next) => dev && next())
