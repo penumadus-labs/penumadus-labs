@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const apiRouter = require('../api/routes')
 
-const dev = process.env.DEV
+const dev = !!process.env.DEV
 
 const originList = ['http://localhost:3000', 'http://hankthetank.me:3000']
 const corsConfig = {
