@@ -1,18 +1,32 @@
 import { api, getRequest } from './api-base'
 import createRequestHook from './create-request-hook'
 
-export default ({ requestAndStore, idState: [id, setId] }) => {
+//* requests without dependencies
+
+const login = (username, password) =>
+  api.post('auth/login', { username, password }, { timeout: 3000 })
+
+const [useLogin] = createRequestHook(login)
+
+const registerDevice = (data) => api.post('database/register', data)
+
+const [useRegisterDevice] = createRequestHook(registerDevice)
+
+export default ({ requestAndStore, id, setId }) => {
   const initializeApi = async () => {
     //* calls that only need to be made once
-    const [deviceList = []] = await Promise.all([
-      requestAndStore('deviceList', 'database/device-list', {}, true),
-      requestAndStore('protocol', 'devices/protocol', {}, true),
-    ])
+
+    const list = requestAndStore('deviceList', 'database/device-list', {}, true)
+    const protocol = requestAndStore('protocol', 'devices/protocol', {}, true)
+
+    const [deviceList = []] = await Promise.all([list, protocol])
 
     setId(deviceList[0] || null)
   }
 
-  if (!id) return [[{ initializeApi }]]
+  //* returns if unauthorized
+
+  if (!id) return [[{ initializeApi }, { useLogin }]]
 
   //* stored requests
 
@@ -51,7 +65,7 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
 
   //* non-stored requests
 
-  const [useGetAccelerationData] = createRequestHook((params, storeError) =>
+  const [useGetAccelerationData] = createRequestHook((params) =>
     getRequest('database/acceleration-data', { ...params, id })
   )
 
@@ -62,6 +76,14 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
     getRequest('database/acceleration-csv', { id, index })
   )
 
+  const [useDeleteStandardData] = createRequestHook(() => {
+    api.delete('standard', { id })
+  })
+
+  const [useDeleteAccelerationEvents] = createRequestHook(() => {
+    api.delete('acceleration', { id })
+  })
+
   const [useSendCommand] = createRequestHook((command) =>
     api.post('devices/command', { id, command })
   )
@@ -71,18 +93,22 @@ export default ({ requestAndStore, idState: [id, setId] }) => {
   })
 
   const actions = {
+    // initializeApi,
     getStandardData,
     getAccelerationEvents,
     setId,
   }
 
   const hooks = {
-    initializeApi,
+    useLogin,
+    useRegisterDevice,
     useGetStandardData,
     useGetAccelerationEvents,
     useGetAccelerationData,
     useDownloadStandardData,
     useDownloadAccelerationData,
+    useDeleteStandardData,
+    useDeleteAccelerationEvents,
     useSendCommand,
     useSendSetting,
   }

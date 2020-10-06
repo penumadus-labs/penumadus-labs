@@ -1,6 +1,6 @@
-const handleAsync = (promise) => async (req, res) => {
+const handleAsync = (routeHandler) => async (req, res) => {
   try {
-    await promise(req, res)
+    await routeHandler(req, res)
   } catch (error) {
     console.error(error)
     res.sendStatus(500)

@@ -1,15 +1,16 @@
 import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
 import useApi, { api } from '../context/api'
-import createRequestHook from '../context/create-request-hook'
+// import createRequestHook from '../context/create-request-hook'
 import { initializeSocket } from './socket'
 
-const [useLogin] = createRequestHook((username, password) =>
-  api.post('auth/login', { username, password })
-)
+// const login = (username, password) =>
+//   api.post('auth/login', { username, password }, { timeout: 3000 })
+
+// const [useLogin] = createRequestHook(login)
 
 const useAuth = () => {
-  const [, { initializeApi, setId }] = useApi()
+  const [, { initializeApi, setId }, { useLogin }] = useApi()
   const [loginStatus, loginRequest] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
@@ -17,26 +18,26 @@ const useAuth = () => {
   const authenticate = async () => {
     await initializeApi()
     initializeSocket()
-    navigate('charts')
+    if (window.location.pathname === '/') navigate('charts/standard')
     setAuthState({ loggedIn: true })
   }
 
   useEffect(
     () => {
       api
-        .post('auth/verify', {}, { timeout: 500 })
+        .post('auth/verify')
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
-          console.error(error)
         })
     },
     // eslint-disable-next-line
     []
   )
 
-  const login = (username, password) =>
-    loginRequest(username, password).then(authenticate).catch(console.error)
+  const login = (username, password) => {
+    loginRequest(username, password).then(authenticate)
+  }
 
   const logout = async () => {
     await api.post('auth/logout')

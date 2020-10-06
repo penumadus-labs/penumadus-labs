@@ -1,12 +1,16 @@
 const { MongoClient } = require('mongodb')
-const tunnel = require('../utils/ssh-tunnel')
 const getStandardData = require('./queries/get-standard-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration-events')
 const getAccelerationEventData = require('./queries/get-acceleration-event-data')
+const createDeviceModel = require('./models/device')
+const tunnel = require('../utils/ssh-tunnel')
+const exec = require('util').promisify(require('child_process').exec)
 
-const url = process.env.SSH
-  ? 'mongodb://localhost'
-  : 'mongodb://caro:Matthew85!!@localhost/admin'
+const defaultUdpPortIndex = 30000
+
+const url = process.env.amazon
+  ? 'mongodb://caro:Matthew85!!@localhost/admin'
+  : 'mongodb://localhost'
 
 const mongoClient = new MongoClient(url, {
   useNewUrlParser: true,
@@ -14,15 +18,33 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(ssh = process.env.SSH) {
+  async startProcess() {
+    try {
+      await exec('pgrep -x mongod | echo')
+    } catch (e) {
+      await exec('sudo service mongod start')
+      console.info('db process started')
+    }
+  },
+  async connect(ssh = !process.env.amazon) {
     if (ssh) await tunnel(27017)
+    // else await client.startProcess()
 
     await mongoClient.connect()
 
     console.info('database client connected')
 
-    client.devices = await mongoClient.db('app').collection('devices')
-    client.users = await mongoClient.db('app').collection('users')
+    client.app = await mongoClient.db('app')
+
+    client.devices = await client.app.collection('devices')
+    client.users = await client.app.collection('users')
+
+    appData = await client.app.collection('data')
+    const [{ _id }] = await appData.find().toArray()
+
+    client.appData = new Proxy(appData, {
+      get: (obj, prop) => (...args) => obj[prop]({ _id }, ...args),
+    })
   },
   async close() {
     try {
@@ -44,6 +66,29 @@ const client = {
   },
   findUser(username) {
     return client.users.findOne({ username })
+  },
+  appData(op, ...params) {
+    return client.appData[op](client.appDataQuery, ...params)
+  },
+  async getUdpPortIndex() {
+    const { udpPortIndex } = await client.appData.findOne()
+    await client.appData.updateOne({ $inc: { udpPortIndex: 1 } })
+    return udpPortIndex
+  },
+  resetUdpPortIndex() {
+    return client.appData.updateOne({
+      $set: { udpPortIndex: defaultUdpPortIndex },
+    })
+  },
+  async insertDevice({ id }) {
+    const udpPort = await client.getUdpPortIndex()
+    const deviceModel = createDeviceModel({ id, udpPort })
+    client.devices.insertOne(deviceModel)
+    return udpPort
+  },
+  async getUdpPorts() {
+    const devices = await client.devices.find().toArray()
+    return devices.map(({ udpPort }) => udpPort)
   },
   insertStandardData(id, data) {
     return client.devices
@@ -91,6 +136,19 @@ const client = {
   getAccelerationEventData({ id, ...params }) {
     return client.findDevice(id, getAccelerationEventData(params))
   },
+  deleteField(id, field) {
+    client.devices.updateOne({ id }, { $set: { [field]: [] } })
+  },
+  deleteStandardData({ id }) {
+    client.deleteField(id, 'standardData')
+  },
+  deleteAccelerationEvents({ id }) {
+    client.deleteField(id, 'accelerationEvents')
+  },
 }
+
+// client.test = async () => {
+//   await client.resetUdpPortIndex()
+// }
 
 module.exports = client

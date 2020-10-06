@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoMdClose as Close } from 'react-icons/io'
-import useEsc from './use-esc'
 
 /* @keyframes open {
     0% {
@@ -72,10 +71,9 @@ const Body = styled.div`
   }
 `
 
-export default ({ children, isOpen, close, title }) => {
-  if (!isOpen) return null
-
+const Alert = ({ children, render, isOpen, close, title }) => {
   useEsc(close)
+  if (!isOpen) return null
 
   return (
     <>
@@ -87,7 +85,9 @@ export default ({ children, isOpen, close, title }) => {
           </CloseButton>
           {title && <Title className="title">{title}</Title>}
           <Body>
-            <div className="space-children-y">{children}</div>
+            <div className="space-children-y">
+              {children ?? (render && render({ close }))}
+            </div>
           </Body>
         </StyledDiv>
       </Anchor>
@@ -96,16 +96,47 @@ export default ({ children, isOpen, close, title }) => {
   )
 }
 
-export const useAlert = () => {
+export const useEsc = (callback) =>
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 27) callback()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [callback])
+
+const useAlertState = () => {
   const [isOpen, setIsOpen] = useState(false)
-
-  const open = () => {
-    setIsOpen(true)
-  }
-
+  const open = () => setIsOpen(true)
   const close = () => {
-    setIsOpen(false)
+    if (isOpen) setIsOpen(false)
   }
+  return [open, isOpen, close]
+}
 
-  return [open, { isOpen, close }]
+export const useAlert = () => {
+  const [open, isOpen, close] = useAlertState()
+
+  return [
+    ({ children, ...props }) => (
+      <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
+    ),
+    open,
+  ]
+}
+
+export default ({ children, icon, ...props }) => {
+  const [open, isOpen, close] = useAlertState()
+  return (
+    <>
+      <button className="button" onClick={open}>
+        {icon}
+      </button>
+      <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
+    </>
+  )
 }

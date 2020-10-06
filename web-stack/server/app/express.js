@@ -1,25 +1,33 @@
+const { join } = require('path')
 const express = require('express')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const apiRouter = require('../api/routes')
 
-const clientDir = `${__dirname}/../../../client/build/`
-const clientIndex = clientDir + 'index.html'
+const dev = !!process.env.DEV
 
-const app = express()
+const originList = ['http://localhost:3000', 'http://hankthetank.me:3000']
+const corsConfig = {
+  origin: dev ? originList : false,
+  credentials: dev,
+  preflightContinue: false,
+}
 
-app.use(cookieParser())
+const clientDir = join(__dirname, '..', '..', 'client', 'build')
 
-app.use((req, _, next) => {
+const test = (req, res, next) => {
+  if (!dev) next()
   next()
-})
+}
 
-app.use('/api', express.json(), apiRouter)
-
-app.use(express.static(clientDir))
-
-app.get('*', (req, res) => {
-  if (!req.xhr) res.sendFile(clientIndex)
-  else res.sendStatus(404)
-})
-
-module.exports = app
+module.exports = express()
+  .use(cors(corsConfig))
+  .use(test)
+  .use(cookieParser())
+  .use('/api/', express.json(), apiRouter)
+  .use((_, __, next) => dev && next())
+  .use(express.static(clientDir))
+  .get('*', (req, res) => {
+    if (!req.xhr) res.sendFile('index.html', { root: clientDir })
+    else return res.sendStatus(404)
+  })

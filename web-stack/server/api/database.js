@@ -1,17 +1,10 @@
 const { Router } = require('express')
 const { unparse } = require('papaparse')
-const { writeFileSync } = require('fs')
 const handleAsync = require('./handle-async')
 const client = require('../database/client')
-const {
-  filterData,
-  filterStandard,
-  filterAcceleration,
-} = require('../utils/filter-data')
+const createDeviceConfigFile = require('../utils/create-device-config-file')
 
-const database = Router()
-
-database
+module.exports = Router()
   .get(
     '/device-list',
     handleAsync(async (req, res) => {
@@ -59,5 +52,19 @@ database
       res.send(csv)
     })
   )
-
-module.exports = database
+  .delete(
+    '/standard',
+    handleAsync(async () => {})
+  )
+  .delete(
+    '/acceleration',
+    handleAsync(async () => {})
+  )
+  .post(
+    '/register',
+    handleAsync(async ({ body }, res) => {
+      const port = await client.insertDevice(body)
+      const file = createDeviceConfigFile({ ...body, port })
+      res.send(file)
+    })
+  )

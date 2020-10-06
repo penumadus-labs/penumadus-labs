@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '../components/inputs/input'
+import Input from '../components/input'
 
 const StyledForm = styled.form`
   width: 200px;

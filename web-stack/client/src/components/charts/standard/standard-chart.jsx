@@ -1,18 +1,11 @@
 import React from 'react'
 import Chart from '../chart/chart'
 import { oneDayAgo } from '../datetime'
-import Settings, { useSettings } from './settings'
+import Settings from './settings'
 
-export default ({
-  state: [status, result],
-  useDownload,
-  useGetData,
-  getData,
-}) => {
+export default ({ state: [status, result], useGetData, getData, ...props }) => {
   if (status) return <div className="card">{status}</div>
   if (!result) return null
-
-  const [bind, OpenSettings] = useSettings()
 
   const liveModeSet = () => {
     return getData({ start: oneDayAgo() }, true).catch(console.error)
@@ -26,13 +19,11 @@ export default ({
   return (
     <>
       <Chart
-        {...result}
-        {...{ useDownload, liveModeAction, liveModeSet }}
+        {...{ ...props, ...result, liveModeAction, liveModeSet }}
         yDomain={[-1, 100]}
       >
-        {() => <OpenSettings />}
+        <Settings {...{ useGetData }} />
       </Chart>
-      <Settings {...{ useGetData, ...bind }} />
     </>
   )
 }

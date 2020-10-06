@@ -271,6 +271,10 @@ const globalStyle = css`
     color: var(--blue);
   }
 
+  .text-red {
+    color: var(--red);
+  }
+
   .button-green {
     background: var(--green);
   }

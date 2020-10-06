@@ -16,8 +16,13 @@ const Root = styled(Link)`
   }
 `
 
-export default ({ Icon, label, to, onClick }) => (
-  <Root className="center-child clickable-box" to={to} onClick={onClick}>
+export default ({ Icon, label, to, onClick, ...props }) => (
+  <Root
+    className="center-child clickable-box"
+    to={to}
+    onClick={onClick}
+    {...props}
+  >
     <div>
       <Icon size="36" />
       <p>{label}</p>

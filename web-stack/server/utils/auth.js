@@ -22,10 +22,10 @@ const verifyToken = (admin) => (req, res, next) => {
   // req.get('token')
   const token = req.cookies.token
 
-  if (!token) res.status(401)
+  if (!token) return res.sendStatus(401)
 
   if (check(token, adminSecret) || (!admin && check(token, userSecret))) next()
-  else res.status(403)
+  else return res.sendStatus(403)
 }
 
 const verifyUserSocket = (token) =>

@@ -1,21 +1,4 @@
 {
-  // "javascript.implicitProjectConfig.checkJs": true,
-  "stylelint.enable": true,
-  "eslint.enable": true,
-  "prettier.disableLanguages": [],
-  "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.formatOnSave": true
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": true
-  },
-  "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/node_modules/*/**": true,
-    "**/build/*/**": true
-  },
   "cSpell.words": [
     "Ihlmv",
     "XXXS",
@@ -23,6 +6,18 @@
     "datetime",
     "linechart",
     "papaparse",
+    "pengine",
+    "ud",
+    "ud pengine",
     "unparse"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/build/*/**": true,
+    "**/node_modules/*/**": true
+  }
 }

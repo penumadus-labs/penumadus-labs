@@ -1,15 +1,15 @@
 /* this code maps a port from the server to the local machine for development */
 const { readFileSync } = require('fs')
 const tunnel = require('tunnel-ssh')
+const { join } = require('path')
 
-const config = {
-  username: 'ubuntu',
-  host: '52.14.30.58',
-  port: '22',
-  privateKey: readFileSync(__dirname + '/../.ssh/server2.pem'),
-}
-
-const tunnelPromise = (port) => {
+module.exports = (port) => {
+  const config = {
+    username: 'ubuntu',
+    host: process.env.serverIp,
+    port: '22',
+    privateKey: readFileSync(join(__dirname, '..', '.ssh', 'server2.pem')),
+  }
   return new Promise((resolve, reject) => {
     const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
       if (err) reject(err)
@@ -20,5 +20,3 @@ const tunnelPromise = (port) => {
     client.on('error', reject)
   })
 }
-
-module.exports = tunnelPromise

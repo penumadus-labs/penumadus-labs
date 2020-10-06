@@ -1,15 +1,15 @@
 import React from 'react'
-import Alert, { useAlert } from './async-alert'
+import Alert from '../alert'
+import commandBody from './command-body'
 
 export default ({ name, useRequest }) => {
-  const [open, bind] = useAlert()
-
   return (
-    <>
-      <button className="button" onClick={open}>
-        {name}
-      </button>
-      <Alert {...bind} useRequest={useRequest} requestArgs={[name]} />
-    </>
+    // <Alert
+    //   icon={name}
+    //   render={({ close }) => (
+    //     <CommandBody {...{ close, useRequest }} requestArgs={[name]} />
+    //   )}
+    // />
+    <Alert icon={name} render={commandBody(useRequest, [name])} />
   )
 }

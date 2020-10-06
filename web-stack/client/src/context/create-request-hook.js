@@ -33,6 +33,7 @@ export default (method) => {
         return res
       } catch (error) {
         setError(parseError(error))
+        throw error
       }
     }
 
