@@ -20,19 +20,20 @@ const mongoClient = new MongoClient(url, {
 const client = {
   async startProcess() {
     try {
-      await exec('pgrep -x mongod | echo')
+      await exec('pgrep -x mongod')
+      console.info('mongod running')
     } catch (e) {
       await exec('sudo service mongod start')
-      console.info('db process started')
+      console.info('mongod started')
     }
   },
   async connect(ssh = !process.env.amazon) {
     if (ssh) await tunnel(27017)
-    // else await client.startProcess()
+    else await client.startProcess()
 
     await mongoClient.connect()
 
-    console.info('database client connected')
+    console.info('mongo client connected')
 
     client.app = await mongoClient.db('app')
 

@@ -56,7 +56,6 @@ class Device extends EventEmitter {
   initialize(id) {
     // if I wanted to cache the settings
     // await this.getSettings()
-
     channel.devices[id] = this
     this.id = id
     this.initialized = true
