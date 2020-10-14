@@ -1,4 +1,4 @@
-const channel = {
+const channel = (module.exports = {
   users: new Set(),
   devices: {},
   updateUsers(type, data = null) {
@@ -14,6 +14,4 @@ const channel = {
       return channel.devices[id].getSettings()
     }
   },
-}
-
-module.exports = channel
+})

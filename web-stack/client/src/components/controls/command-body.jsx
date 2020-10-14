@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default (useRequest, requestArgs, children = null) => ({ close }) => {
+const CommandBody = ({ useRequest, requestArgs, close, children }) => {
   const [status, request, { loading, success }] = useRequest()
 
   const buttons = loading ? null : success ? (
@@ -24,3 +24,7 @@ export default (useRequest, requestArgs, children = null) => ({ close }) => {
     </>
   )
 }
+
+export default (useRequest, requestArgs, children = null) => ({ close }) => (
+  <CommandBody {...{ useRequest, requestArgs, close }}>{children}</CommandBody>
+)
