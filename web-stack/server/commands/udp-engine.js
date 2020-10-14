@@ -2,13 +2,12 @@ const exec = require('util').promisify(require('child_process').exec)
 const { join } = require('path')
 const client = require('../database/client')
 
-const udpProcess = 'UDPengine'
-
-const udpEngine = join(__dirname, '..', '..', '..', 'DM', udpProcess)
+const udpEngine = 'UDPengine'
+const udpDir = join(__dirname, '..', '..', '..', 'DM')
 
 const killUdpEngines = async () => {
   try {
-    await exec(`killall ${udpProcess}`)
+    await exec(`killall ${udpEngine}`)
     console.info('udp engines stopped')
   } catch ({ stderr }) {
     console.error(`udp engine: ${stderr}`)
@@ -23,7 +22,9 @@ module.exports = async ({ tcpPort }) => {
 
     await Promise.all(
       udpPorts.map((udpPort) =>
-        exec(`${udpEngine} ${udpPort} 127.0.0.1 ${tcpPort}`)
+        exec(
+          `cd ${udpDir} && ./${udpEngine} ${udpPort} 127.0.0.1 ${tcpPort} > start.log`
+        )
       )
     )
 

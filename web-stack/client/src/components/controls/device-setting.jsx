@@ -13,20 +13,21 @@ const compareObjects = (obj1, obj2) => {
 
 export default ({ name, settings, useRequest }) => {
   const settingEntries = Object.entries(settings)
-  const defaultValues = settingEntries.reduce(
-    (a, [name, value]) => ({ ...a, [name]: value }),
-    {}
-  )
+  // const defaultValues = settingEntries.reduce(
+  //   (a, [name, value]) => ({ ...a, [name]: value }),
+  //   {}
+  // )
 
-  const { register, handleSubmit } = useForm({ defaultValues })
+  const { register, handleSubmit } = useForm({})
   const [Alert, open] = useAlert()
   const [[summary, args], setSummary] = useState([null, []])
   const [error, setError] = useState('')
 
   const submit = (values) => {
-    if (compareObjects(values, settings)) return setError('no values entered')
-
     const args = Object.values(values)
+    console.log(args)
+    if (args.every((value) => value === ''))
+      return setError('no values entered')
 
     const summary = settingEntries.reduce(
       (a, [name, currentValue], i) =>
@@ -47,7 +48,15 @@ export default ({ name, settings, useRequest }) => {
 
   const inputs = settingEntries.map(([name, value], i) => (
     <div key={i} className="space-children-y-xs">
-      <Input ref={register()} before={<p>currently: {value}</p>} name={name} />
+      <Input
+        ref={register()}
+        before={<p>currently: {value}</p>}
+        placeholder={value}
+        name={name}
+        onChange={() => {
+          if (error) setError('')
+        }}
+      />
     </div>
   ))
 
@@ -56,7 +65,7 @@ export default ({ name, settings, useRequest }) => {
       <form className="card-spaced" onSubmit={handleSubmit(submit)}>
         <div className="grid-4">{inputs}</div>
         <button className="button">{name}</button>
-        {error ? <p className="error">{error}</p> : null}
+        {error ? <p className="text-red">{error}</p> : null}
       </form>
       <Alert render={commandBody(useRequest, [name, args], summary)} />
     </>

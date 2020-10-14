@@ -12,8 +12,10 @@
     "unparse"
   ],
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false
+    "source.organizeImports": false,
+    "source.fixAll": false
   },
+  "editor.formatOnSave": false,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
