@@ -4,19 +4,9 @@ import { useAlert } from '../alert'
 import Input from '../input'
 import commandBody from './command-body'
 
-const compareObjects = (obj1, obj2) => {
-  for (const [key] of Object.keys(obj1)) {
-    if (obj1[key] !== obj2[key]) return false
-  }
-  return true
-}
-
 export default ({ name, settings, useRequest }) => {
   const settingEntries = Object.entries(settings)
-  // const defaultValues = settingEntries.reduce(
-  //   (a, [name, value]) => ({ ...a, [name]: value }),
-  //   {}
-  // )
+
 
   const { register, handleSubmit } = useForm({})
   const [Alert, open] = useAlert()

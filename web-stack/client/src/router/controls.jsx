@@ -2,7 +2,6 @@ import React from 'react'
 import Command from '../components/controls/command'
 import Setting from '../components/controls/device-setting'
 import useApi from '../context/api'
-import { GrRefresh as Refresh } from 'react-icons/gr'
 
 export default () => {
   const [
@@ -39,9 +38,13 @@ export default () => {
         </>
       ) : (
         <p className="card loading">
-          If packets are being received try  refreshing{' '}
-          <button onClick={getSettings}>
-            <Refresh size="32" />
+          If packets are being received try{' '}
+          <button
+            className="button-text"
+            style={{ cursor: 'pointer' }}
+            onClick={getSettings}
+          >
+            <u>refreshing</u>
           </button>
         </p>
       )}

@@ -106,7 +106,12 @@ const events = {
       dataLabel: 'sample',
     },
   ],
-  errors: [{ name: 'badCommand', command: 'BADCMND' }],
+  errors: [
+    {
+      name: 'badCommand',
+      command: 'BADCMND',
+    },
+  ],
 }
 
 const table = []
@@ -119,3 +124,5 @@ for (const event of Object.values(events)) {
 }
 
 module.exports = { config, ...events, table }
+
+if (require.main === module);
