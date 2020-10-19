@@ -1,5 +1,5 @@
 import React from 'react'
-import { TiDelete as Delete } from 'react-icons/ti'
+import { VscTrash as Delete } from 'react-icons/vsc'
 import Alert from '../../../alert'
 
 export default ({ useDelete }) => {

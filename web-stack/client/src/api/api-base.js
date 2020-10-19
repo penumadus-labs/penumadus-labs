@@ -12,7 +12,7 @@ export const api = axios.create({
   withCredentials,
 })
 
-export const getRequest = async (url, params) => {
+export const getRequest = async (url, params = {}) => {
   const { data } = await api.get(url, { params })
   return data
 }

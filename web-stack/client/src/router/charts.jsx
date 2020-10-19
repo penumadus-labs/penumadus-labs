@@ -2,7 +2,7 @@ import { Router } from '@reach/router'
 import React from 'react'
 import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
 import StandardChart from '../components/charts/standard/standard-chart.jsx'
-import useApi from '../context/api'
+import useApi from '../api/api'
 import NotFound from './404'
 
 export default () => {

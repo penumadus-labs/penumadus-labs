@@ -54,11 +54,17 @@ module.exports = Router()
   )
   .delete(
     '/standard',
-    handleAsync(async () => {})
+    handleAsync(async ({ query }, res) => {
+      await client.deleteStandardData(query)
+      res.sendStatus(200)
+    })
   )
   .delete(
     '/acceleration',
-    handleAsync(async () => {})
+    handleAsync(async ({ query }, res) => {
+      await client.deleteAccelerationEvents(query)
+      res.sendStatus(200)
+    })
   )
   .post(
     '/register',

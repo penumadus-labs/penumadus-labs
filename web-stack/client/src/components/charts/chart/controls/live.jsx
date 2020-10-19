@@ -1,8 +1,8 @@
 import React from 'react'
-import { FiVideo as Live, FiVideoOff as LiveOff } from 'react-icons/fi'
+import { MdPlayArrow as LiveOn, MdPause as LiveOff } from 'react-icons/md'
 
 export default ({ live, toggleLive }) => (
   <button className="button" onClick={toggleLive}>
-    {live ? <LiveOff size="20" /> : <Live size="20" />}
+    {live ? <LiveOff size="20" /> : <LiveOn size="20" />}
   </button>
 )

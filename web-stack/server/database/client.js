@@ -102,7 +102,7 @@ const client = {
         { id },
         {
           $push: {
-            events: {
+            accelerationEvents: {
               $each: [event],
               $position: 0,
             },

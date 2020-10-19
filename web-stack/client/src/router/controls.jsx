@@ -1,13 +1,13 @@
 import React from 'react'
 import Command from '../components/controls/command'
 import Setting from '../components/controls/device-setting'
-import useApi from '../context/api'
+import useApi from '../api/api'
 
 export default () => {
   const [
     {
       protocol: [status, protocol],
-      settings: [, settings],
+      settings: [settingsStatus, settings],
     },
     { getSettings },
     { useSendCommand, useSendSetting },
@@ -40,9 +40,10 @@ export default () => {
         <p className="card loading">
           If packets are being received try{' '}
           <button
+            disabled={!!settingsStatus}
             className="button-text"
             style={{ cursor: 'pointer' }}
-            onClick={getSettings}
+            onClick={() => getSettings({})}
           >
             <u>refreshing</u>
           </button>

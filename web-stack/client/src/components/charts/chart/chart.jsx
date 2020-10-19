@@ -41,7 +41,15 @@ const Header = styled.div`
   justify-content: space-between;
 `
 
-export default ({ children, render, ...props }) => {
+export default ({ children, render, status, ...props }) => {
+  const { keys } = props
+  if (status) return status
+  if (!keys)
+    return (
+      <div className="card">
+        <p>no data has been collected for this unit</p>
+      </div>
+    )
   const [{ ref, date, live }, controlProps, toolProps] = useChart(props)
 
   return (

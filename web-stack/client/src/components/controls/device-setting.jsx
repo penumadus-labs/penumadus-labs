@@ -7,7 +7,6 @@ import commandBody from './command-body'
 export default ({ name, settings, useRequest }) => {
   const settingEntries = Object.entries(settings)
 
-
   const { register, handleSubmit } = useForm({})
   const [Alert, open] = useAlert()
   const [[summary, args], setSummary] = useState([null, []])
@@ -15,7 +14,6 @@ export default ({ name, settings, useRequest }) => {
 
   const submit = (values) => {
     const args = Object.values(values)
-    console.log(args)
     if (args.every((value) => value === ''))
       return setError('no values entered')
 

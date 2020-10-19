@@ -61,7 +61,7 @@ const Ellipsis = styled.div`
   }
 `
 
-export const Loading = () => {
+export const LoadingInline = () => {
   return (
     <Ellipsis>
       <div></div>
@@ -69,6 +69,19 @@ export const Loading = () => {
       <div></div>
       <div></div>
     </Ellipsis>
+  )
+}
+
+export const LoadingCard = () => {
+  return (
+    <div className="card">
+      <Ellipsis>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </Ellipsis>
+    </div>
   )
 }
 

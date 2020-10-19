@@ -1,7 +1,7 @@
 import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import App from './app/layout'
-import { ApiProvider } from './context/api'
+import { ApiProvider } from './api/api'
 import Style from './style/global.jsx'
 
 ReactDOM.render(

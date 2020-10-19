@@ -4,10 +4,10 @@ export const units = {
   humidity: '%',
   temperature: '°C',
   pressure: 'psi x 100',
-  x: '?',
-  y: '?',
-  z: '?',
-  magnitude: '?',
+  x: 'g',
+  y: 'g',
+  z: 'g',
+  magnitude: 'g',
 }
 
 export const colors = {

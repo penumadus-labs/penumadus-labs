@@ -32,7 +32,10 @@ const Dropdown = styled.div`
 
 export default ({ options, onSelect }) => {
   const [toggled, setToggled] = useState(false)
-  const [selected, setSelected] = useState(options[0])
+  const storedId = localStorage.getItem('id')
+  const [selected, setSelected] = useState(
+    (options.includes(storedId) && storedId) || options[0]
+  )
   const ref = useRef()
 
   useEffect(() => {
@@ -51,6 +54,7 @@ export default ({ options, onSelect }) => {
   }
 
   const handleSelect = ({ target: { value } }) => {
+    localStorage.setItem('id', value)
     setSelected(value)
     onSelect(value)
   }

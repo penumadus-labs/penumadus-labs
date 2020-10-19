@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
 export default ({ apiData, liveModeSet, liveModeAction }) => {
-  const [live, setLive] = useState(false)
+  const [live, setLive] = useState(true)
   const [liveData, setLiveData] = useState(apiData)
 
   const toggleLive = async () => {
@@ -14,6 +14,11 @@ export default ({ apiData, liveModeSet, liveModeAction }) => {
       setLive(true)
     }
   }
+
+  useEffect(() => {
+    if (live) liveModeSet()
+    // eslint-disable-next-line
+  }, [])
 
   useMessage(
     (ctx) => {

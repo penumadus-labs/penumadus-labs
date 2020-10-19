@@ -26,7 +26,7 @@ export const ApiProvider = ({ children }) => {
   }, [id, mount])
 
   return (
-    <ApiContext.Provider value={[state, ...methods]}>
+    <ApiContext.Provider value={[{ ...state, id }, ...methods]}>
       {children}
     </ApiContext.Provider>
   )

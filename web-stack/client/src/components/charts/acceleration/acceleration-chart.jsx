@@ -7,7 +7,7 @@ let indexCache = 0
 let eventCache
 
 export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
-  const [dataStatus, getData, { loading }] = useGetData()
+  const [, getData, { loading }] = useGetData()
   const [event, setEvent] = useState(eventCache)
 
   const getEvent = async (index = indexCache) => {
@@ -22,9 +22,9 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
   }
 
   useEffect(() => {
-    if (!eventCache) getEvent()
+    getEvent()
     // eslint-disable-next-line
-  }, [])
+  }, [events])
 
   const handleChange = ({ target }) => {
     getEvent(target.value)
@@ -42,10 +42,8 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
     timeout = setTimeout(() => {
       getEvent(0)
       timeout = null
-    }, 200)
+    }, 1000)
   }
-
-  if (!event) return <div className="card">{dataStatus}</div>
 
   return (
     <Chart
@@ -56,10 +54,10 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
         liveModeAction,
         ...props,
       }}
+      status={eventsStatus}
       yDomain={[-10, 10]}
       render={(live) => {
         if (live) return null
-        if (!events) return eventsStatus
         return (
           <EventSelector
             disabled={loading}

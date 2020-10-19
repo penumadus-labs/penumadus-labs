@@ -1,6 +1,6 @@
 import React from 'react'
 import downloadFile from '../../utils/download-file'
-import useApi from '../../context/api'
+import useApi from '../../api/api'
 
 export default ({ postData }) => ({ close }) => {
   const [, , { useRegisterDevice }] = useApi()

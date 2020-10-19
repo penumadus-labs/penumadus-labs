@@ -93,7 +93,7 @@ class Device extends EventEmitter {
         console.info(`acceleration event: ${this.event.length}`)
         if (!this.writeAcceleration) return
         insertAccelerationEvent(this.id, this.event)
-      }, 200)
+      }, 1000)
     })
 
     this.on('error', (err) => {
@@ -145,8 +145,8 @@ class Device extends EventEmitter {
   emitResponses = (raw) => {
     const { pad, type: command, status, id, ...data } = JSON.parse(raw)
 
-    if (!this.initialized) this.initialize(id)
     if (command === 'HELLO') return
+    if (!this.initialized) this.initialize(id)
     if (this.listenerCount(command)) {
       console.info(`response: ${table[command]}`)
 

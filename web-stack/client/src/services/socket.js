@@ -4,11 +4,12 @@ const url = `ws://${window.location.hostname}:8080/`
 
 let tasks = []
 
-export const initializeSocket = (token) => {
-  const ws = new WebSocket(url, token)
+export const initializeSocket = (onMessage = () => {}) => {
+  const ws = new WebSocket(url)
 
   ws.onmessage = ({ data }) => {
     const json = JSON.parse(data)
+    onMessage()
     for (const task of tasks) {
       task(json)
     }

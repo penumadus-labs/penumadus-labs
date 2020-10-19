@@ -21,10 +21,12 @@ export default ({ requestAndStore, id, setId }) => {
 
     const [deviceList = []] = await Promise.all([list, protocol])
 
-    setId(deviceList[0] || null)
+    const storedId = localStorage.getItem('id')
+
+    setId((deviceList.includes(storedId) && storedId) || deviceList[0] || null)
   }
 
-  //* returns if unauthorized
+  //* returns if not authorized
 
   if (!id) return [[{ initializeApi }, { useLogin }]]
 
@@ -76,13 +78,13 @@ export default ({ requestAndStore, id, setId }) => {
     getRequest('database/acceleration-csv', { id, index })
   )
 
-  const [useDeleteStandardData] = createRequestHook(() => {
-    api.delete('standard', { id })
-  })
+  const [useDeleteStandardData] = createRequestHook(() =>
+    api.delete('database/standard', { params: { id } })
+  )
 
-  const [useDeleteAccelerationEvents] = createRequestHook(() => {
-    api.delete('acceleration', { id })
-  })
+  const [useDeleteAccelerationEvents] = createRequestHook(() =>
+    api.delete('database/acceleration', { params: { id } })
+  )
 
   const [useSendCommand] = createRequestHook((command) =>
     api.post('devices/command', { id, command })
@@ -96,6 +98,7 @@ export default ({ requestAndStore, id, setId }) => {
     // initializeApi,
     getStandardData,
     getAccelerationEvents,
+    getSettings,
     setId,
   }
 

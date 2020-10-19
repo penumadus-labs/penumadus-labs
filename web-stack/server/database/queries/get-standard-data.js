@@ -9,6 +9,7 @@ const reduceExpr = {
 }
 
 module.exports = ({ start = -Infinity, end = Infinity, limit = 1000 }) => {
+  console.log(start)
   //* filters the data by the selected time range
   const sliced = {
     $filter: {
