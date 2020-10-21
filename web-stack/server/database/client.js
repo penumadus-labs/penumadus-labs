@@ -121,9 +121,8 @@ const client = {
   },
   async getStandardDataReduced({ id, ...params }) {
     const res = await client.findDevice(id, getStandardData(params, true))
-    for (const d of res.data) {
-      d.pressure = Math.floor(d.pressure / 100)
-    }
+    if (id === 'bridgetest') return res
+    for (const d of res.data) d.pressure = Math.floor(d.pressure / 100)
 
     return res
   },

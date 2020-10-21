@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import Controls from './controls'
 import useChart from './helpers/use-chart'
+import useLive from './helpers/use-live'
 import Legend from './legend'
 import Navigator from './navigator'
 import Tools from './tools'
@@ -41,16 +42,45 @@ const Header = styled.div`
   justify-content: space-between;
 `
 
-export default ({ children, render, status, ...props }) => {
-  const { keys } = props
+export default ({
+  children,
+  render,
+  status,
+  initializeLive,
+  handleLive,
+  useDownload,
+  useDelete,
+  downloadProps,
+  keys,
+  data: staticData,
+  ...props
+}) => {
   if (status) return status
+  if (!staticData) return null
   if (!keys)
     return (
       <div className="card">
         <p>no data has been collected for this unit</p>
       </div>
     )
-  const [{ ref, date, live }, controlProps, toolProps] = useChart(props)
+  const { data, ...liveProps } = useLive(staticData, initializeLive, handleLive)
+  const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
+    keys,
+    data,
+    ...props,
+  })
+
+  const controlProps = {
+    downloadProps: {
+      downloadProps: downloadProps ?? defaultDownloadProps,
+      domain,
+      useDownload,
+    },
+    deleteProps: {
+      useDelete,
+    },
+    liveProps,
+  }
 
   return (
     <div className="card-spaced">
@@ -63,10 +93,10 @@ export default ({ children, render, status, ...props }) => {
         <Controls {...controlProps} render={render}>
           {children}
         </Controls>
-        {!live ? <Tools {...toolProps} /> : null}
+        {!liveProps.live ? <Tools {...toolProps} /> : null}
       </ControlBarStyle>
       <StyledSVG ref={ref} />
-      <Legend labels={props.keys} />
+      <Legend labels={keys} />
     </div>
   )
 }

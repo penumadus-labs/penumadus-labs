@@ -21,18 +21,15 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
     }
   }
 
-  useEffect(() => {
-    getEvent()
+  useEffect(
+    () => void getEvent(),
     // eslint-disable-next-line
-  }, [events])
+    [events]
+  )
 
-  const handleChange = ({ target }) => {
-    getEvent(target.value)
-  }
+  const initializeLive = () => getEvent(0)
 
-  const liveModeSet = () => getEvent(0)
-
-  const liveModeAction = ({ type, data, setLiveData }) => {
+  const handleLive = ({ type, data, setLiveData }) => {
     if (type !== 'acceleration') return
     //* start new array if timeout is not set
     setLiveData((liveData) => (timeout ? liveData : []).concat([data]))
@@ -45,14 +42,18 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
     }, 1000)
   }
 
+  const handleChange = ({ target }) => {
+    getEvent(target.value)
+  }
+
   return (
     <Chart
       {...{
         ...event,
-        downloadProps: [indexCache],
-        liveModeSet,
-        liveModeAction,
         ...props,
+        initializeLive,
+        handleLive,
+        downloadProps: [indexCache],
       }}
       status={eventsStatus}
       yDomain={[-10, 10]}

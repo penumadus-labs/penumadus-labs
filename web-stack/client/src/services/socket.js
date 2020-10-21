@@ -4,18 +4,22 @@ const url = `ws://${window.location.hostname}:8080/`
 
 let tasks = []
 
-export const initializeSocket = (onMessage = () => {}) => {
-  const ws = new WebSocket(url)
+export const useSocket = (init, onMessage = () => {}) => {
+  useEffect(() => {
+    if (!init) return
+    const ws = new WebSocket(url)
 
-  ws.onmessage = ({ data }) => {
-    const json = JSON.parse(data)
-    onMessage()
-    for (const task of tasks) {
-      task(json)
+    ws.onmessage = ({ data }) => {
+      const json = JSON.parse(data)
+      onMessage()
+      for (const task of tasks) {
+        task(json)
+      }
     }
-  }
 
-  return () => ws.close()
+    return () => ws.close()
+    // eslint-disable-next-line
+  }, [init])
 }
 
 const useMessage = (task, deps) => {

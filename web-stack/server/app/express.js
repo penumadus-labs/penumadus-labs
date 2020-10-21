@@ -16,16 +16,16 @@ const corsConfig = {
 const clientDir = join(__dirname, '..', '..', 'client', 'build')
 
 const test = (req, res, next) => {
-  if (!dev) next()
+  if (!dev) return next()
   next()
 }
 
 module.exports = express()
   .use(cors(corsConfig))
-  .use(test)
   .use(cookieParser())
   .use('/api', express.json(), apiRouter)
   .use((_, res, next) => (dev ? res.sendStatus(404) : next()))
+  .use(test)
   .use(express.static(clientDir))
   .get('*', (req, res) => {
     if (!req.xhr) res.sendFile('index.html', { root: clientDir })

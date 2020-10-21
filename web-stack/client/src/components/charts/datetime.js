@@ -20,9 +20,11 @@ export const formatHoursMinutes = (time) => {
 }
 
 export const oneDayAgo = () => {
-  return Math.floor((new Date(Date.now()) - 86400000) / 1000)
+  return Math.floor((new Date(Date.now()) - 86_400_000) / 1000)
 }
 
 export const oneHourAgo = () => {
-  return Math.floor((new Date(Date.now()) - 600000) / 1000)
+  return (Date.now() - 600_000) / 1000
 }
+
+export const now = () => Date.now() / 1000

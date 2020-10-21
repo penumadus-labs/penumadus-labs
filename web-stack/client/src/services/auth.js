@@ -2,7 +2,7 @@ import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
 import useApi, { api } from '../api/api'
 // import createRequestHook from '../api/create-request-hook'
-import { initializeSocket } from './socket'
+import { useSocket } from './socket'
 
 // const login = (username, password) =>
 //   api.post('auth/login', { username, password }, { timeout: 3000 })
@@ -10,32 +10,12 @@ import { initializeSocket } from './socket'
 // const [useLogin] = createRequestHook(login)
 
 const useAuth = () => {
-  const [
-    {
-      id,
-      settings: [, settings],
-    },
-    { initializeApi, setId, getSettings },
-    { useLogin },
-  ] = useApi()
+  const [{ id }, { initializeApi, setId }, { useLogin }] = useApi()
   const [loginStatus, loginRequest] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
 
-  const authenticate = async () => {
-    await initializeApi()
-    initializeSocket()
-    if (window.location.pathname === '/') navigate('charts/standard')
-    setAuthState({ loggedIn: true })
-  }
-
-  useEffect(() => {
-    if (!id) return
-    return initializeSocket(() => {
-      if (!settings) getSettings()
-    })
-    // eslint-disable-next-line
-  }, [id])
+  useSocket(id)
 
   useEffect(
     () => {
@@ -49,6 +29,12 @@ const useAuth = () => {
     // eslint-disable-next-line
     []
   )
+
+  const authenticate = async () => {
+    await initializeApi()
+    if (window.location.pathname === '/') navigate('charts/standard')
+    setAuthState({ loggedIn: true })
+  }
 
   const login = (username, password) => {
     loginRequest(username, password).then(authenticate)
