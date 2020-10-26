@@ -1,5 +1,5 @@
-import { api, getRequest } from './api-base'
-import createRequestHook from './create-request-hook'
+import { api, getRequest } from './api'
+import createRequestHook from './hooks/create-request-hook'
 
 //* requests without dependencies
 
@@ -53,28 +53,37 @@ export default ({ requestAndStore, id, setId }) => {
       storeError
     )
   )
+
   const [
     useGetAccelerationEvents,
     getAccelerationEvents,
-  ] = createRequestHook((params, storeError) =>
+  ] = createRequestHook((storeError) =>
     requestAndStore(
       'accelerationEvents',
       'database/acceleration-events',
-      { ...params, id },
+      { id },
+      storeError
+    )
+  )
+
+  const [
+    useGetAccelerationEvent,
+    getAccelerationEvent,
+  ] = createRequestHook((index, storeError) =>
+    requestAndStore(
+      'accelerationEvent',
+      'database/acceleration-event',
+      { index, id },
       storeError
     )
   )
 
   //* non-stored requests
 
-  const [useGetAccelerationData] = createRequestHook((params) =>
-    getRequest('database/acceleration-data', { ...params, id })
-  )
-
   const [useDownloadStandardData] = createRequestHook((start, end) =>
     getRequest('database/standard-csv', { id, start, end })
   )
-  const [useDownloadAccelerationData] = createRequestHook((index) =>
+  const [useDownloadAccelerationEvent] = createRequestHook((index) =>
     getRequest('database/acceleration-csv', { id, index })
   )
 
@@ -98,6 +107,7 @@ export default ({ requestAndStore, id, setId }) => {
     // initializeApi,
     getStandardData,
     getAccelerationEvents,
+    getAccelerationEvent,
     getSettings,
     setId,
   }
@@ -107,9 +117,9 @@ export default ({ requestAndStore, id, setId }) => {
     useRegisterDevice,
     useGetStandardData,
     useGetAccelerationEvents,
-    useGetAccelerationData,
+    useGetAccelerationEvent,
     useDownloadStandardData,
-    useDownloadAccelerationData,
+    useDownloadAccelerationEvent,
     useDeleteStandardData,
     useDeleteAccelerationEvents,
     useSendCommand,
@@ -119,7 +129,8 @@ export default ({ requestAndStore, id, setId }) => {
   const mount = () => {
     getSettings({}, true)
     getStandardData({}, true)
-    getAccelerationEvents({}, true)
+    getAccelerationEvents(true)
+    getAccelerationEvent(0, true)
   }
 
   return [[actions, hooks], mount]

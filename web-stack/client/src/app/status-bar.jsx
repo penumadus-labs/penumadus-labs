@@ -33,7 +33,8 @@ export default ({ loggedIn }) => {
         }))
         break
       default:
-        throw new Error('socket sent invalid action type')
+
+      // throw new Error('socket sent invalid action type')
     }
   })
 

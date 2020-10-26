@@ -57,6 +57,7 @@ class Device extends EventEmitter {
     // if I wanted to cache the settings
     // await this.getSettings()
     channel.devices[id] = this
+    channel.updateUsers('settings')
     this.id = id
     this.initialized = true
   }
@@ -126,6 +127,7 @@ class Device extends EventEmitter {
       }
 
       const response = await this.createRequest(command, args)
+      channel.updateUsers('settings')
       // if I wanted to cache settings
       // this.settings[dataLabel] = settings
       return response

@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb')
 const getStandardData = require('./queries/get-standard-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration-events')
-const getAccelerationEventData = require('./queries/get-acceleration-event-data')
+const getAccelerationEvent = require('./queries/get-acceleration-event')
 const createDeviceModel = require('./models/device')
 const tunnel = require('../utils/ssh-tunnel')
 const exec = require('util').promisify(require('child_process').exec)
@@ -129,12 +129,12 @@ const client = {
   async getStandardData({ id, ...params }) {
     return client.findDevice(id, getStandardData(params))
   },
-  async getAccelerationEventTimes({ id }) {
+  async getAccelerationEvents({ id }) {
     const { data } = await client.findDevice(id, getAccelerationEventTimes())
     return data
   },
-  getAccelerationEventData({ id, ...params }) {
-    return client.findDevice(id, getAccelerationEventData(params))
+  getAccelerationEvent({ id, ...params }) {
+    return client.findDevice(id, getAccelerationEvent(params))
   },
   deleteField(id, field) {
     client.devices.updateOne({ id }, { $set: { [field]: [] } })

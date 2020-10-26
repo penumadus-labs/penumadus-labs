@@ -8,12 +8,24 @@ const StyledSelect = styled.select`
   padding: 0 var(--xs);
 `
 
-export default ({ events, ...props }) => (
-  <StyledSelect className="shadow-button clickable-box" {...props}>
-    {events.map((time, i) => (
-      <option key={i} value={i}>
-        {parseDate(time)} - {formatHoursMinutes(time)}
-      </option>
-    ))}
-  </StyledSelect>
-)
+export default ({ events, useGetEvent, ...props }) => {
+  const [, getEvent, { loading }] = useGetEvent()
+
+  const handleChange = ({ target }) => {
+    getEvent(target.value)
+  }
+  return (
+    <StyledSelect
+      className="shadow-button clickable-box"
+      disabled={loading}
+      onChange={handleChange}
+      {...props}
+    >
+      {events.map((time, i) => (
+        <option key={i} value={i}>
+          {parseDate(time)} - {formatHoursMinutes(time)}
+        </option>
+      ))}
+    </StyledSelect>
+  )
+}

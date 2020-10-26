@@ -6,9 +6,9 @@ import React, {
   useState,
 } from 'react'
 import createApiMethods from './create-api-methods'
-import useApiStore, { initialState } from './use-api-store'
+import useApiStore, { initialState } from './hooks/use-api-store'
 
-export { api } from './api-base'
+export { api } from './api'
 
 const ApiContext = createContext()
 

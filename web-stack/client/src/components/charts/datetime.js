@@ -28,3 +28,5 @@ export const oneHourAgo = () => {
 }
 
 export const now = () => Date.now() / 1000
+
+export const oneHourInSeconds = 3600

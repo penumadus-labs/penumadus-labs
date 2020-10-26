@@ -3,11 +3,12 @@ import { useEffect } from 'react'
 const url = `ws://${window.location.hostname}:8080/`
 
 let tasks = []
+let ws = null
 
 export const useSocket = (init, onMessage = () => {}) => {
   useEffect(() => {
-    if (!init) return
-    const ws = new WebSocket(url)
+    if (!init || ws) return
+    ws = new WebSocket(url)
 
     ws.onmessage = ({ data }) => {
       const json = JSON.parse(data)
@@ -17,7 +18,10 @@ export const useSocket = (init, onMessage = () => {}) => {
       }
     }
 
-    return () => ws.close()
+    return () => {
+      ws.close()
+      ws = null
+    }
     // eslint-disable-next-line
   }, [init])
 }

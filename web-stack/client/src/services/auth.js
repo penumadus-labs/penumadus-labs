@@ -1,21 +1,12 @@
 import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
-import useApi, { api } from '../api/api'
-// import createRequestHook from '../api/create-request-hook'
-import { useSocket } from './socket'
-
-// const login = (username, password) =>
-//   api.post('auth/login', { username, password }, { timeout: 3000 })
-
-// const [useLogin] = createRequestHook(login)
+import useApi, { api } from '../api'
 
 const useAuth = () => {
-  const [{ id }, { initializeApi, setId }, { useLogin }] = useApi()
+  const [, { initializeApi, setId }, { useLogin }] = useApi()
   const [loginStatus, loginRequest] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
-
-  useSocket(id)
 
   useEffect(
     () => {

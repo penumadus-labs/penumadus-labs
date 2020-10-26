@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
-import { getRequest, parseError } from './api-base'
-import { ErrorCard, LoadingCard } from './api-status-components'
+import { getRequest, parseError } from '../api'
+import { ErrorCard, LoadingCard } from '../api-status-components'
 
 // sets intial state of each api call to loading
 // to reduce top level updates
@@ -9,6 +9,7 @@ export const initialState = [
   'deviceList',
   'standardData',
   'accelerationEvents',
+  'accelerationEvent',
   'settings',
 ].reduce((acc, key) => ({ ...acc, [key]: [<LoadingCard />] }), {})
 

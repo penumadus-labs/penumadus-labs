@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
-export default (apiData, initialize, hanleEvent) => {
-  const [live, setLive] = useState(false)
+export default (apiData, initialize, handleEvent) => {
+  const [live, setLive] = useState(true)
   const [liveData, setLiveData] = useState(apiData)
 
   const toggleLive = async () => {
-    if (live) {
-      setLive(false)
-    } else {
+    if (!live) {
       const { data } = await initialize()
       setLiveData(data)
-      setLive(true)
     }
+    setLive(!live)
   }
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export default (apiData, initialize, hanleEvent) => {
 
   useMessage(
     (ctx) => {
-      if (live) hanleEvent({ setLiveData, ...ctx })
+      if (live) handleEvent({ setLiveData, ...ctx })
     },
     [live]
   )

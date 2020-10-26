@@ -2,19 +2,19 @@ import { Router } from '@reach/router'
 import React from 'react'
 import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
 import StandardChart from '../components/charts/standard/standard-chart.jsx'
-import useApi from '../api/api'
+import useApi from '../api'
 import NotFound from './404'
 
 export default () => {
   const [
-    { standardData, accelerationEvents },
-    { getStandardData },
+    { standardData, accelerationEvents, accelerationEvent },
+    { getStandardData, getAccelerationEvents, getAccelerationEvent },
     {
       useGetStandardData,
       useDownloadStandardData,
       useDeleteStandardData,
-      useGetAccelerationData,
-      useDownloadAccelerationData,
+      useGetAccelerationEvent,
+      useDownloadAccelerationEvent,
       useDeleteAccelerationEvents,
     },
   ] = useApi()
@@ -25,16 +25,19 @@ export default () => {
         path="standard"
         state={standardData}
         getData={getStandardData}
-        useGetData={useGetStandardData}
+        useGetStandardData={useGetStandardData}
         useDownload={useDownloadStandardData}
         useDelete={useDeleteStandardData}
       />
       <AccelerationChart
         path="acceleration"
         events={accelerationEvents}
-        useGetData={useGetAccelerationData}
-        useDownload={useDownloadAccelerationData}
+        getEvents={getAccelerationEvents}
         useDelete={useDeleteAccelerationEvents}
+        event={accelerationEvent}
+        getEvent={getAccelerationEvent}
+        useGetEvent={useGetAccelerationEvent}
+        useDownload={useDownloadAccelerationEvent}
       />
       <NotFound default />
     </Router>

@@ -1,12 +1,12 @@
 import React from 'react'
 import Chart from '../chart/chart'
-import { oneHourAgo } from '../datetime'
-import Settings from './settings'
+import { oneHourAgo, oneHourInSeconds } from '../datetime'
+import DomainSelector from './DomainSelector'
 
 export default ({
   state: [status, payload],
   getData,
-  useGetData,
+  useGetStandardData,
   ...props
 }) => {
   const initializeLive = () => {
@@ -17,7 +17,10 @@ export default ({
 
   const handleLive = ({ type, data, setLiveData }) => {
     if (type !== 'standard') return
-    setLiveData((liveData) => [...liveData.slice(1), data])
+    setLiveData((liveData) => [
+      ...liveData.slice(+(data.time - liveData[0].time >= oneHourInSeconds)),
+      data,
+    ])
   }
 
   return (
@@ -31,9 +34,10 @@ export default ({
           status,
         }}
         yDomain={[-1, 100]}
-      >
-        <Settings {...{ useGetData }} />
-      </Chart>
+        render={(live) =>
+          live ? null : <DomainSelector useGetData={useGetStandardData} />
+        }
+      ></Chart>
     </>
   )
 }

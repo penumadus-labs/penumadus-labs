@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import Chart from '../chart/chart'
 import EventSelector from './event-selector'
 
 let timeout
-let indexCache = 0
-let eventCache
 
-export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
-  const [, getData, { loading }] = useGetData()
-  const [event, setEvent] = useState(eventCache)
-
-  const getEvent = async (index = indexCache) => {
-    try {
-      eventCache = await getData({ index })
-      indexCache = index
-      setEvent(eventCache)
-      return eventCache
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(
-    () => void getEvent(),
-    // eslint-disable-next-line
-    [events]
-  )
+export default ({
+  event: [eventStatus, event],
+  events: [, events],
+  getEvent,
+  getEvents,
+  useGetEvent,
+  ...props
+}) => {
+  const index = useMemo(() => {
+    if (!event?.data || !events) return null
+    return events.indexOf(event.data[0].time)
+  }, [event, events])
 
   const initializeLive = () => getEvent(0)
 
@@ -37,13 +27,10 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
     //* debounce timeout until all data packets are received
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
+      getEvents()
       getEvent(0)
       timeout = null
     }, 1000)
-  }
-
-  const handleChange = ({ target }) => {
-    getEvent(target.value)
   }
 
   return (
@@ -53,21 +40,16 @@ export default ({ events: [eventsStatus, events], useGetData, ...props }) => {
         ...props,
         initializeLive,
         handleLive,
-        downloadProps: [indexCache],
+        downloadProps: [index],
       }}
-      status={eventsStatus}
+      status={eventStatus}
       yDomain={[-10, 10]}
-      render={(live) => {
-        if (live) return null
-        return (
-          <EventSelector
-            disabled={loading}
-            onChange={handleChange}
-            defaultValue={indexCache}
-            events={events}
-          />
+      render={(live) =>
+        !live &&
+        !!events && (
+          <EventSelector {...{ events, useGetEvent }} defaultValue={index} />
         )
-      }}
+      }
     />
   )
 }

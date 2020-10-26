@@ -56,7 +56,6 @@ export default ({
   ...props
 }) => {
   if (status) return status
-  if (!staticData) return null
   if (!keys)
     return (
       <div className="card">

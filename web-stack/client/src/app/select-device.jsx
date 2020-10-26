@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import useApi from '../api/api'
+import useApi from '../api'
 import Select from './select'
 
 const Root = styled.div`

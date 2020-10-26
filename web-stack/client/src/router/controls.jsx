@@ -1,7 +1,7 @@
 import React from 'react'
 import Command from '../components/controls/command'
 import Setting from '../components/controls/device-setting'
-import useApi from '../api/api'
+import useApi from '../api'
 
 export default () => {
   const [

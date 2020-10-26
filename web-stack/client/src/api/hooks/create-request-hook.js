@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { parseError } from './api-base'
-import { ErrorInline, LoadingInline } from './api-status-components'
+import { parseError } from '../api'
+import { ErrorInline, LoadingInline } from '../api-status-components'
 
 export default (method) => {
   let timeout

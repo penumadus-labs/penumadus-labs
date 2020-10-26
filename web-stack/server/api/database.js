@@ -16,8 +16,7 @@ module.exports = Router()
   .get(
     '/standard-data',
     handleAsync(async ({ query }, res) => {
-      const standard = await client.getStandardDataReduced(query)
-      res.send(standard)
+      res.send(await client.getStandardDataReduced(query))
     })
   )
   .get(
@@ -31,17 +30,13 @@ module.exports = Router()
   .get(
     '/acceleration-events',
     handleAsync(async ({ query }, res) => {
-      const accelerationEventTimes = await client.getAccelerationEventTimes(
-        query
-      )
-      res.send(accelerationEventTimes)
+      res.send(await client.getAccelerationEvents(query))
     })
   )
   .get(
-    '/acceleration-data',
+    '/acceleration-event',
     handleAsync(async ({ query }, res) => {
-      const acceleration = await client.getAccelerationEventData(query)
-      res.send(acceleration)
+      res.send(await client.getAccelerationEvent(query))
     })
   )
   .get(
