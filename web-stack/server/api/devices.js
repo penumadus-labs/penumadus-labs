@@ -7,23 +7,19 @@ const {
 } = require('../controllers/channel')
 
 module.exports = Router()
-  .get(
-    '/protocol',
-    handleAsync(async (req, res) => {
-      res.send({ commands, setters })
-    })
-  )
+  .get('/protocol', (_, res) => {
+    res.send({ commands, setters })
+  })
   .get(
     '/settings',
     handleAsync(async ({ query }, res) => {
-      const settings = await getDeviceSettings(query.id)
-      res.send(settings)
+      res.send(await getDeviceSettings(query.id))
     })
   )
   .post(
     '/command',
-    handleAsync(async ({ body: { id, command, args } }, res) => {
-      await sendDeviceCommand(id, command, args)
+    handleAsync(async ({ body }, res) => {
+      await sendDeviceCommand(body)
       res.sendStatus(200)
     })
   )
