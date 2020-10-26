@@ -27,5 +27,5 @@ export default (apiData, initialize, handleEvent) => {
 
   const data = live ? liveData : apiData
 
-  return { data, live, toggleLive }
+  return [data, { live, toggleLive }]
 }

@@ -11,7 +11,7 @@ export default (props) => {
       chart,
       date: chart.date(),
       domain: chart.getDomainParsed(),
-      defaultDonwloadProps: chart.getDomain(),
+      defaultDownloadProps: chart.getDomain(),
       toolProps: chart.getToolProps(),
     }
 

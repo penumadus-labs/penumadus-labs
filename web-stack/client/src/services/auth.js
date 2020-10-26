@@ -23,7 +23,7 @@ const useAuth = () => {
 
   const authenticate = async () => {
     await initializeApi()
-    if (window.location.pathname === '/') navigate('charts/standard')
+    if (window.location.pathname === '/') navigate('standard')
     setAuthState({ loggedIn: true })
   }
 

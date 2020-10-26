@@ -11,13 +11,13 @@ const NavBar = ({ handleLogout }) => (
       style={{ fontSize: '12px' }}
       Icon={Standard}
       label="Standard"
-      to="/charts/standard"
+      to="/standard"
     />
     <NavBarLink
       style={{ fontSize: '10px' }}
       Icon={Acceleration}
       label="Acceleration"
-      to="/charts/acceleration"
+      to="/acceleration"
     />
     <NavBarLink Icon={Dash} label="Controls" to="controls" />
     <NavBarLink Icon={Devices} label="Register" to="register" />

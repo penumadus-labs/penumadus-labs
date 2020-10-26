@@ -10,7 +10,7 @@ const routes = ['standard', 'acceleration']
 
 export default () => {
   const links = routes.reduce((acc, route) => {
-    const path = `/charts/${route}`
+    const path = `/${route}`
     if (path !== window.location.pathname)
       acc.push(
         <StyledLink className="button-text" key={route} to={path}>

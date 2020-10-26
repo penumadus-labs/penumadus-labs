@@ -45,14 +45,12 @@ const Header = styled.div`
 export default ({
   children,
   render,
-  status,
-  initializeLive,
-  handleLive,
+  data: [status, { keys, data: storedData } = {}],
   useDownload,
   useDelete,
   downloadProps,
-  keys,
-  data: staticData,
+  initializeLive,
+  handleLive,
   ...props
 }) => {
   if (status) return status
@@ -62,7 +60,7 @@ export default ({
         <p>no data has been collected for this unit</p>
       </div>
     )
-  const { data, ...liveProps } = useLive(staticData, initializeLive, handleLive)
+  const [data, liveProps] = useLive(storedData, initializeLive, handleLive)
   const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
     keys,
     data,

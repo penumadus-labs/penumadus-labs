@@ -3,8 +3,8 @@ import { formatHoursMinutes, parseDate, parseDomain } from '../../datetime'
 import { colors } from '../../units-colors'
 
 const marginLeft = 30
-const marginRight = 0
 const marginBottom = 50
+const marginRight = 0
 const marginTop = 5
 
 export default class {
@@ -232,9 +232,7 @@ export default class {
   timeAxis() {
     return d3
       .axisBottom(this.x)
-      .tickFormat((d) => {
-        return formatHoursMinutes(d)
-      })
+      .tickFormat((d) => formatHoursMinutes(d))
       .tickSizeOuter(0)
   }
   date() {
@@ -242,6 +240,11 @@ export default class {
 
     if (!start || !end) return 'no data within range'
 
-    return `${parseDate(start)} - ${parseDate(end)}`
+    const parsedStart = parseDate(start),
+      parsedEnd = parseDate(end)
+
+    return parsedStart === parsedEnd
+      ? parsedStart
+      : `${parsedStart} - ${parsedEnd}`
   }
 }

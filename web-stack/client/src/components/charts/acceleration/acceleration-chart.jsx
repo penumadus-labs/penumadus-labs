@@ -1,23 +1,29 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import Chart from '../chart/chart'
 import EventSelector from './event-selector'
+import useApi from '../../../api'
 
 let timeout
 
-export default ({
-  event: [eventStatus, event],
-  events: [, events],
-  getEvent,
-  getEvents,
-  useGetEvent,
-  ...props
-}) => {
-  const index = useMemo(() => {
-    if (!event?.data || !events) return null
-    return events.indexOf(event.data[0].time)
-  }, [event, events])
+export default () => {
+  const [
+    {
+      accelerationEvents: [, events],
+      accelerationEvent,
+    },
+    { getAccelerationEvents, getAccelerationEvent },
+    {
+      useGetAccelerationEvent,
+      useDownloadAccelerationEvent,
+      useDeleteAccelerationEvents,
+    },
+  ] = useApi()
 
-  const initializeLive = () => getEvent(0)
+  const event = accelerationEvent[1]
+  const index =
+    !event?.data || !events ? null : events.indexOf(event.data[0].time)
+
+  const initializeLive = () => getAccelerationEvent(0)
 
   const handleLive = ({ type, data, setLiveData }) => {
     if (type !== 'acceleration') return
@@ -27,8 +33,8 @@ export default ({
     //* debounce timeout until all data packets are received
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
-      getEvents()
-      getEvent(0)
+      getAccelerationEvents()
+      getAccelerationEvent(0)
       timeout = null
     }, 1000)
   }
@@ -36,18 +42,21 @@ export default ({
   return (
     <Chart
       {...{
-        ...event,
-        ...props,
+        downloadProps: [index],
         initializeLive,
         handleLive,
-        downloadProps: [index],
       }}
-      status={eventStatus}
+      data={accelerationEvent}
+      useDownload={useDownloadAccelerationEvent}
+      useDelete={useDeleteAccelerationEvents}
       yDomain={[-10, 10]}
       render={(live) =>
         !live &&
         !!events && (
-          <EventSelector {...{ events, useGetEvent }} defaultValue={index} />
+          <EventSelector
+            {...{ events, useGetAccelerationEvent }}
+            defaultValue={index}
+          />
         )
       }
     />

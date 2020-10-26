@@ -8,8 +8,8 @@ const StyledSelect = styled.select`
   padding: 0 var(--xs);
 `
 
-export default ({ events, useGetEvent, ...props }) => {
-  const [, getEvent, { loading }] = useGetEvent()
+export default ({ events, useGetAccelerationEvent, ...props }) => {
+  const [, getEvent, { loading }] = useGetAccelerationEvent()
 
   const handleChange = ({ target }) => {
     getEvent(target.value)

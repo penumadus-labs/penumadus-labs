@@ -38,15 +38,17 @@ export default ({ loggedIn }) => {
     }
   })
 
-  return loggedIn ? (
-    <Menu className="card">
-      <div>
-        <SelectDevice />
-      </div>
-      <div>
-        <p>last data packet: {standard}</p>
-        <p>last acceleration event: {acceleration}</p>
-      </div>
-    </Menu>
-  ) : null
+  return (
+    !!loggedIn && (
+      <Menu className="card">
+        <div>
+          <SelectDevice />
+        </div>
+        <div>
+          <p>last data packet: {standard}</p>
+          <p>last acceleration event: {acceleration}</p>
+        </div>
+      </Menu>
+    )
+  )
 }
