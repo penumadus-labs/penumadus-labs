@@ -1,7 +1,7 @@
 import React from 'react'
 
-const CommandBody = ({ useRequest, requestArgs, close, children }) => {
-  const [status, request, { loading, success }] = useRequest()
+const CommandBody = ({ useCommand, commandArgs, close, children }) => {
+  const [status, request, { loading, success }] = useCommand()
 
   const buttons = loading ? null : success ? (
     <button className="button button-red" onClick={close}>
@@ -10,7 +10,7 @@ const CommandBody = ({ useRequest, requestArgs, close, children }) => {
   ) : (
     <button
       className="button button-green"
-      onClick={() => request(...requestArgs)}
+      onClick={() => request(...commandArgs)}
     >
       send
     </button>
@@ -25,6 +25,6 @@ const CommandBody = ({ useRequest, requestArgs, close, children }) => {
   )
 }
 
-export default (useRequest, requestArgs, children = null) => ({ close }) => (
-  <CommandBody {...{ useRequest, requestArgs, close }}>{children}</CommandBody>
+export default (useCommand, commandArgs, children = null) => ({ close }) => (
+  <CommandBody {...{ useCommand, commandArgs, close }}>{children}</CommandBody>
 )

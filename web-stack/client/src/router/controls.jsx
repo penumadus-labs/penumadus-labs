@@ -10,7 +10,7 @@ export default () => {
       settings: [settingsStatus, settings],
     },
     { getSettings },
-    { useSendCommand, useSendSetting },
+    { useCommand },
   ] = useApi()
 
   if (status) return status
@@ -24,7 +24,7 @@ export default () => {
         <>
           <div className="card grid-commands">
             {commands.map((command, i) => (
-              <Command key={i} {...command} useRequest={useSendCommand} />
+              <Command key={i} {...command} useCommand={useCommand} />
             ))}
           </div>
           {setters.map((setter, i) => (
@@ -32,7 +32,7 @@ export default () => {
               key={i}
               {...setter}
               settings={settings[setter.dataLabel]}
-              useRequest={useSendSetting}
+              useCommand={useCommand}
             />
           ))}
         </>

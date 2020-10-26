@@ -3,7 +3,8 @@
 OTHERINCLUDE=../hank/hank-latest-3.1/include
 INCLUDE+=-I. -I$(OTHERINCLUDE)
 LFLAGS+=-g $(STATICFLAG) -pthread -lm
-CFLAGS+=-g $(STATICFLAG) $(INCLUDE) -pthread -DSIMULATOR
+#CFLAGS+=-g $(STATICFLAG) $(INCLUDE) -pthread -DSIMULATOR
+CFLAGS+=-g $(STATICFLAG) $(INCLUDE) -pthread 
 HEAD=bool.h servercomms.h $(OTHERINCLUDE)/netcomms.h $(OTHERINCLUDE)/protocol.h parse.h
 SENSEDM=UDPengine 
 

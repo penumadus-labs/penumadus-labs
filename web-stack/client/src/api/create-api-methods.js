@@ -95,13 +95,12 @@ export default ({ requestAndStore, id, setId }) => {
     api.delete('database/acceleration', { params: { id } })
   )
 
-  const [useSendCommand] = createRequestHook((command) =>
-    api.post('devices/command', { id, command })
+  // const [useCommand] = createRequestHook((command) =>
+  //   api.post('devices/command', { id, command })
+  // )
+  const [useCommand] = createRequestHook(async (command, args) =>
+    api.post('devices/command', { id, command, args })
   )
-  const [useSendSetting] = createRequestHook(async (command, args) => {
-    await api.post('devices/command', { id, command, args })
-    await getSettings()
-  })
 
   const actions = {
     // initializeApi,
@@ -122,8 +121,7 @@ export default ({ requestAndStore, id, setId }) => {
     useDownloadAccelerationEvent,
     useDeleteStandardData,
     useDeleteAccelerationEvents,
-    useSendCommand,
-    useSendSetting,
+    useCommand,
   }
 
   const mount = () => {

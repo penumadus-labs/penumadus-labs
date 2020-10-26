@@ -6,8 +6,8 @@ const channel = (module.exports = {
       client.send(JSON.stringify({ type, data }))
     })
   },
-  sendDeviceCommand({ id, request, args }) {
-    return channel.devices[id][request](args)
+  sendDeviceCommand({ id, command, args }) {
+    return channel.devices[id][command](args)
   },
   getDeviceSettings(id) {
     if (channel.devices[id]) {

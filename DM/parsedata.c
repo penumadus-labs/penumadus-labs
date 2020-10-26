@@ -146,7 +146,6 @@ parsedata(char *incoming, char *outgoing, int size)
 			pressure=simpress;
 			}
 #endif
-			//end PONDSCUM
 			microsecs=(secs*1000*1000)+(usecs);
 			memset(outgoing,PADCHAR,size);
 			if((n=snprintf(outgoing,size,
@@ -160,12 +159,63 @@ parsedata(char *incoming, char *outgoing, int size)
 				  "\"pad\":\"",
 				MAINDATA,
 				deviceID,
-				pressure,
+				pressure*2.0,
 				fills,
 				temp,
 				hum,
 				secs,
 				usecs
+			)) >= size)
+				g_err(NOEXIT,NOPERROR,"OUTPUT TRUNCATION! %d",n);
+			else
+				outgoing[n]=PADCHAR;//get rid of null term in json
+			
+			outgoing[size-2]='"';
+			outgoing[size-1]='}';
+			outgoingDBtraffic=true;
+			}
+			break;
+
+
+		case BRIDGEDATA:
+			{
+			
+			float t0, t1, t2, t3, t4, t5, t6, t7;
+			float temp;
+			int hum;
+			int count;
+
+			sscanf(incoming,"%s %s %f %f %f %f %f %f %f %f %f %d %d %lx %lx %x",
+				ptype,
+				deviceID,
+				&t0, &t1, &t2, &t3, &t4, &t5, &t6, &t7,
+				&temp,
+				&hum,
+				&count,
+				&secs,
+				&usecs,
+				&msgnum
+			);
+			
+			microsecs=(secs*1000*1000)+(usecs);
+			memset(outgoing,PADCHAR,size);
+			if((n=snprintf(outgoing,size,
+                                "{ \"type\":\"%c\","
+                                  "\"id\":\"%s\","
+                                  "\"censors\":[ %.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f],"
+                                  "\"temperature\":%.1f,"
+                                  "\"humidity\":%d,"
+                                  "\"count\":%d,"
+                                  "\"time\":%lu.%06lu,"
+                                  "\"pad\":\"",
+                                BRIDGEDATA,
+                                deviceID,
+                                t0, t1, t2, t3, t4, t5, t6, t7,
+                                temp,
+                                hum,
+                                count,
+                                secs,
+                                usecs
 			)) >= size)
 				g_err(NOEXIT,NOPERROR,"OUTPUT TRUNCATION! %d",n);
 			else

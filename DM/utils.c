@@ -22,6 +22,7 @@
 
 
 int errfd=0;
+int logfileseed=0;
 
 /* routine to display errors */
 void
@@ -45,11 +46,13 @@ int n;
 		//basename may modify buf so don't pass it program_path()
 		tptr=basename(buf);
 		//allocate a buffer for the path plus an extra / and a \0 and an E_
-		logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16);
+		logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16 + 5);
 		strcpy(logfile,LOGPATH);
 		strcat(logfile,"/e_");
 		strcat(logfile,tptr);
 		strcat(logfile,".log");
+		sprintf(obuf,"%05d",logfileseed);
+		strcat(logfile,obuf);
 		printf("logfile is %s\n",logfile);
 		//so stdout becomes the logfile as well
 		//so printfs work when not using console.
@@ -68,6 +71,8 @@ int n;
 
 	/* errfd=0,  need to open the logfile */
 	if(errfd==0){
+		/* getrid of old logfile */
+		unlink(logfile);
 		if((errfd=open(logfile,(O_SYNC|O_WRONLY|O_APPEND|O_CREAT),
 		    (S_IRWXU|S_IRWXG|S_IRWXO)) )<0){
 			fprintf(stderr,"%05d %s COULD NOT OPEN FILE %s\n", 

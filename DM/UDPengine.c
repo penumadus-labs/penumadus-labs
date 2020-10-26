@@ -19,6 +19,7 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 #include <string.h>     /* for memset() */
+#include <signal.h>     
 #include <unistd.h>     /* for close() */
 #include <sys/select.h>
 #include <bool.h>
@@ -98,6 +99,7 @@ main(int argc, char *argv[])
     
     /* local port on which to listen for hank */
     sscanf(argv[1],"%hd",&hankPort); 
+    logfileseed=hankPort;
     /* localhost port to talk to control/dbase program */
     sscanf(argv[3],"%hd",&dbPort);
     
@@ -105,6 +107,9 @@ main(int argc, char *argv[])
 	    "Starting UDP DM:  listen on %d,  write to %s:%d\n",
 	    hankPort,argv[2],dbPort);
     
+    /* keep going on hangups/logouts */
+    signal(SIGHUP,SIG_IGN);
+
     if((hanksock=setuphankcomms( hankPort ))<0){
 	fprintf(stderr,"FATAL: can't open hank port\n");
 	g_err(EXIT,NOPERROR,"FATAL: can't open hank port\n");

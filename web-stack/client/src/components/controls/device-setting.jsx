@@ -4,10 +4,12 @@ import { useAlert } from '../alert'
 import Input from '../input'
 import commandBody from './command-body'
 
-export default ({ name, settings, useRequest }) => {
+export default ({ name, settings, useCommand }) => {
   const settingEntries = Object.entries(settings)
 
-  const { register, handleSubmit } = useForm({})
+  const { register, handleSubmit, watch } = useForm({})
+  const watchAllFields = watch()
+  console.log(watchAllFields)
   const [Alert, open] = useAlert()
   const [[summary, args], setSummary] = useState([null, []])
   const [error, setError] = useState('')
@@ -55,7 +57,7 @@ export default ({ name, settings, useRequest }) => {
         <button className="button">{name}</button>
         {error ? <p className="text-red">{error}</p> : null}
       </form>
-      <Alert render={commandBody(useRequest, [name, args], summary)} />
+      <Alert render={commandBody(useCommand, [name, args], summary)} />
     </>
   )
 }

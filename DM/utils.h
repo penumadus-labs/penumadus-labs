@@ -1,4 +1,4 @@
-#define LOGPATH "../logs"
+#define LOGPATH "/home/ubuntu/logs"
 
 #define ERRBUFSZ 1024
 
@@ -23,3 +23,4 @@ char *program_path();
 unsigned char * stamp(void);
 pid_t startproc(char *command, int num,...);
 volatile unsigned char *init_devmem(long mymaplen, long myoffset);
+extern int logfileseed;
