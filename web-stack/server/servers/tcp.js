@@ -2,7 +2,7 @@ const net = require('net')
 const createDevice = require('../controllers/device')
 
 const handleConnection = async (socket) => {
-  console.info('tcp client connected')
+  console.info('udp engine connected')
 
   try {
     const device = await createDevice(socket)

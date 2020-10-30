@@ -4,7 +4,7 @@ const getAccelerationEventTimes = require('./queries/get-acceleration-events')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
 const createDeviceModel = require('./models/device')
 const tunnel = require('../utils/ssh-tunnel')
-const exec = require('util').promisify(require('child_process').exec)
+const startProcess = require('../commands/start-mongod')
 
 const defaultUdpPortIndex = 30000
 
@@ -18,18 +18,9 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async startProcess() {
-    try {
-      await exec('pgrep -x mongod')
-      console.info('mongod running')
-    } catch (e) {
-      await exec('sudo service mongod start')
-      console.info('mongod started')
-    }
-  },
   async connect(ssh = !process.env.amazon) {
     if (ssh) await tunnel(27017)
-    else await client.startProcess()
+    else await startProcess()
 
     await mongoClient.connect()
 

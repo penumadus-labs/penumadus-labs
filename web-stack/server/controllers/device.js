@@ -34,7 +34,7 @@ class Device extends EventEmitter {
     socket.setEncoding('ascii')
     socket.on('error', console.error)
     socket.on('close', () => {
-      console.info('tcp client closed')
+      console.info('udp engine disconnected')
       delete channel.devices[this.id]
     })
 
