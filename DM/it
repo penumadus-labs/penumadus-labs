@@ -1,1 +1,0 @@
-    LocalIP.sin_port = htons(hankport);      /* Local port */
