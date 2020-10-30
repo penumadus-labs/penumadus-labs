@@ -56,6 +56,10 @@ const clickable = css`
   :focus {
     outline: none;
   }
+  :disabled {
+    filter: brightness(65%);
+    cursor: default;
+  }
 `
 
 const clickableBox = css`

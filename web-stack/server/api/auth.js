@@ -15,7 +15,8 @@ const oneDayInMilliseconds = 1000 * 360 * 24
 module.exports = Router()
   .post(
     '/login',
-    handleAsync(async ({ body: { username, password } }, res) => {
+    handleAsync(async ({ body: { username, password }, query }, res) => {
+      if (!username) return res.sendStatus(404)
       const user = await findUser(username)
 
       if (!user) {

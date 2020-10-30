@@ -20,7 +20,7 @@ export default ({
   }
 
   return (
-    <Alert icon={<Download size="20" />} title="download selected domain">
+    <Alert buttonText={<Download size="20" />} title="download selected domain">
       <p>{startTime}</p>
       <p>{endTime}</p>
       {status}

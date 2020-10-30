@@ -57,7 +57,10 @@ const Root = styled.div`
 `
 
 const Layout = ({ children }) => {
-  const [{ verifying, loggedIn }, { login, loginStatus, logout }] = useAuth()
+  const [
+    { verifying, loggedIn },
+    { handleLogin, loginStatus, handleLogout },
+  ] = useAuth()
   const [, { getSettings }] = useApi()
   useSocket(loggedIn)
   useMessage(({ type }) => {
@@ -66,14 +69,14 @@ const Layout = ({ children }) => {
 
   const body = verifying ? null : !loggedIn ? (
     <div>
-      <Login handleLogin={login} status={loginStatus} />
+      <Login handleLogin={handleLogin} status={loginStatus} />
     </div>
   ) : (
     <>
       <main>
         <Router />
       </main>
-      <NavBar handleLogout={logout} />
+      <NavBar handleLogout={handleLogout} />
     </>
   )
 

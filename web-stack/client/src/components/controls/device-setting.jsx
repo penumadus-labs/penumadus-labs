@@ -1,52 +1,56 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAlert } from '../alert'
+import Alert from '../alert'
 import Input from '../input'
 import commandBody from './command-body'
 
 export default ({ name, settings, useCommand }) => {
   const settingEntries = Object.entries(settings)
 
-  const { register, handleSubmit, watch } = useForm({})
-  const watchAllFields = watch()
-  console.log(watchAllFields)
-  const [Alert, open] = useAlert()
-  const [[summary, args], setSummary] = useState([null, []])
-  const [error, setError] = useState('')
+  const { register, handleSubmit, watch } = useForm()
+  const [summary, setSummary] = useState()
+  const [args, setArgs] = useState()
+  const disabled = Object.values(watch()).every((value) => value === '')
 
-  const submit = (values) => {
-    const args = Object.values(values)
-    if (args.every((value) => value === ''))
-      return setError('no values entered')
+  const submit = (formValues) => {
+    const values = Object.values(formValues)
 
-    const summary = settingEntries.reduce(
-      (a, [name, currentValue], i) =>
-        currentValue === args[i]
-          ? a
-          : [
-              ...a,
-              <p key={i}>
-                {name}: {currentValue} to {args[i]}
-              </p>,
-            ],
-      []
+    // const args = []
+    // const summary = []
+
+    // for (let i = 0; i < values.length; i++) {
+    //   const [name, currentValue] = settingEntries[i]
+    //   const testValue = values[i]
+
+    //   args.push(testValue || currentValue)
+
+    //   if (args[i] === currentValue) continue
+
+    //   summary.push(
+    //     <p key={i}>
+    //       {name}: {currentValue} to {testValue}
+    //     </p>
+    //   )
+    // }
+
+    const args = values.map((value, i) => value || settingEntries[i][1])
+
+    const summary = settingEntries.map(
+      ([name, value], i) =>
+        args[i] !== value && (
+          <p key={i}>
+            {name}: {value} to {args[i]}
+          </p>
+        )
     )
 
-    setSummary([summary, args])
-    open()
+    setSummary(summary)
+    setArgs(args)
   }
 
   const inputs = settingEntries.map(([name, value], i) => (
     <div key={i} className="space-children-y-xs">
-      <Input
-        ref={register()}
-        before={<p>currently: {value}</p>}
-        placeholder={value}
-        name={name}
-        onChange={() => {
-          if (error) setError('')
-        }}
-      />
+      <Input className="input" ref={register} placeholder={value} name={name} />
     </div>
   ))
 
@@ -54,10 +58,12 @@ export default ({ name, settings, useCommand }) => {
     <>
       <form className="card-spaced" onSubmit={handleSubmit(submit)}>
         <div className="grid-4">{inputs}</div>
-        <button className="button">{name}</button>
-        {error ? <p className="text-red">{error}</p> : null}
+        <Alert
+          buttonText={name}
+          disabled={disabled}
+          render={commandBody(useCommand, [name, args], summary)}
+        />
       </form>
-      <Alert render={commandBody(useCommand, [name, args], summary)} />
     </>
   )
 }

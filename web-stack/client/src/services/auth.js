@@ -1,17 +1,16 @@
 import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
-import useApi, { api } from '../api'
+import useApi from '../api'
 
 const useAuth = () => {
-  const [, { initializeApi, setId }, { useLogin }] = useApi()
-  const [loginStatus, loginRequest] = useLogin()
+  const [, { initializeApi, verify, logout }, { useLogin }] = useApi()
+  const [loginStatus, login] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
 
   useEffect(
     () => {
-      api
-        .post('auth/verify')
+      verify()
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
@@ -27,18 +26,17 @@ const useAuth = () => {
     setAuthState({ loggedIn: true })
   }
 
-  const login = (username, password) => {
-    loginRequest(username, password).then(authenticate)
+  const handleLogin = (username, password) => {
+    login(username, password).then(authenticate).catch(console.error)
   }
 
-  const logout = async () => {
-    await api.post('auth/logout')
+  const handleLogout = async () => {
+    await logout()
     setAuthState({})
-    setId(null)
     await navigate('')
   }
 
-  return [authState, { login, loginStatus, logout }]
+  return [authState, { handleLogin, loginStatus, handleLogout }]
 }
 
 export default useAuth

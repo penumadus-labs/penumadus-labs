@@ -16,7 +16,7 @@ export default ({ useDelete }) => {
   }
 
   return (
-    <Alert icon={<Delete size="20" />} title="clear database">
+    <Alert buttonText={<Delete size="20" />} title="clear database">
       {status}
       <button className="button" onClick={handleClick}>
         delete

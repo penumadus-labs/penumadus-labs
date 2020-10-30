@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { getRequest, parseError } from '../api'
+import { request, parseError } from '../api'
 import { ErrorCard, LoadingCard } from '../api-status-components'
 
 // sets intial state of each api call to loading
@@ -27,7 +27,7 @@ export default (initialState) => {
 
     return async (key, url, params, storeError = false) => {
       try {
-        const data = await getRequest(url, params)
+        const data = await request(url, params)
         store(key, [null, data])
         return data
       } catch (error) {

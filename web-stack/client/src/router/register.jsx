@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAlert } from '../components/alert'
-import registerBody from '../components/register/register-body'
-import RegisterInput from '../components/register/register-input'
+import Alert from '../components/alert'
+import RegisterBody from '../components/register/register-body'
+import Input from '../components/input'
 
 export default () => {
-  const { handleSubmit, ...inputCtx } = useForm()
-  const [Alert, open] = useAlert()
+  const {
+    handleSubmit,
+    register,
+    formState: { isValid },
+  } = useForm({
+    mode: 'onChange',
+  })
   const [postData, setPostData] = useState({})
 
   const onSubmit = (data) => {
-    open()
     setPostData(data)
   }
 
@@ -20,11 +24,18 @@ export default () => {
         className="card space-children-y-xs"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <RegisterInput name="id" {...inputCtx} />
-        {/* <RegisterInput name="name" {...inputCtx} /> */}
-        <button className="button">submit</button>
+        <Input
+          ref={register({ required: `device id is required` })}
+          name="id"
+          label="device id"
+        />
+        <Alert
+          disabled={!isValid}
+          buttonText="submit"
+          title="registration summary"
+          render={({ close }) => <RegisterBody {...{ close, postData }} />}
+        />
       </form>
-      <Alert title="registration summary" render={registerBody({ postData })} />
     </>
   )
 }

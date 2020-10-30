@@ -10,48 +10,58 @@ const StyledForm = styled.form`
   margin: auto;
 `
 
-let formDataStore = {
-  start: '',
-  end: '',
-}
+const validateTime = (time) =>
+  time === '' ||
+  new Date(time).getTime() <= Date.now() ||
+  'date must not exceed preset'
 
 export default ({ useGetData }) => {
-  const { handleSubmit, reset, setValue, register } = useForm({
-    defaultValues: { start: 'hi' },
-  })
-  const ctx = { setValue, register }
-  for (const [name, value] of Object.entries(formDataStore)) {
-    setValue(name, value)
-  }
+  const {
+    handleSubmit,
+    reset,
+    getValues,
+    setValue,
+    register,
+    clearErrors,
+    errors,
+  } = useForm()
+  const inputCtx = { setValue, errors, clearErrors }
 
-  const [status, request, , setError] = useGetData()
-
-  const onSubmit = handleSubmit(async (data) => {
-    const start =
-      data.start === '' ? undefined : new Date(data.start).getTime() / 1000
-    const end =
-      data.end === '' ? undefined : new Date(data.end).getTime() / 1000
-
-    const now = new Date(Date.now()).getTime() / 1000
-
-    if (start > now || end > now)
-      return setError('values must not exceed the present')
-
-    if (start >= end) return setError('end must come after start')
-
-    try {
-      await request({ start, end })
-      formDataStore = data
-    } catch (error) {}
-  })
+  const [status, request] = useGetData()
 
   return (
-    <Alert icon={<GoGear size="20" />}>
+    <Alert buttonText={<GoGear size="20" />}>
       <div className="space-children-y">
         <p>unselected dates default to get the min/max of the data set</p>
-        <StyledForm onSubmit={onSubmit} className="space-children-y">
-          <SettingInput {...ctx} name="start" />
-          <SettingInput {...ctx} name="end" />
+        <StyledForm
+          onSubmit={handleSubmit(request)}
+          className="space-children-y"
+        >
+          <SettingInput
+            ref={register({
+              validate(start) {
+                const { end } = getValues()
+                if (
+                  end !== '' &&
+                  new Date(end).getTime() < new Date(start).getTime()
+                )
+                  return 'start time must not be greater than end time'
+
+                return validateTime(start)
+              },
+            })}
+            name="start"
+            label="start time"
+            {...inputCtx}
+          />
+          <SettingInput
+            ref={register({
+              validate: validateTime,
+            })}
+            name="end"
+            label="end time"
+            {...inputCtx}
+          />
           {status}
           <button className="button">submit</button>
         </StyledForm>

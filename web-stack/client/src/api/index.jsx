@@ -8,7 +8,7 @@ import React, {
 import createApiMethods from './create-api-methods'
 import useApiStore, { initialState } from './hooks/use-api-store'
 
-export { api } from './api'
+// export { api } from './api'
 
 const ApiContext = createContext()
 

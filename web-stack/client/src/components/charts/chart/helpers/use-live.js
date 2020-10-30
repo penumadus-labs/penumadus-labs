@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
 export default (apiData, initialize, handleEvent) => {
-  const [live, setLive] = useState(true)
+  const [live, setLive] = useState(false)
   const [liveData, setLiveData] = useState(apiData)
 
   const toggleLive = async () => {

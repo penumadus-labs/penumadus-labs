@@ -27,7 +27,7 @@ const start = async (expressApp, port) => {
 
     wsServer.handleUpgrade(req, socket, head, (ws) => {
       wsServer.emit('connection', ws, req)
-      console.info('socket connected')
+      console.info('websocket connected')
     })
   })
 

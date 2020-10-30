@@ -1,17 +1,16 @@
 import { ErrorMessage } from '@hookform/error-message'
-import React from 'react'
-import Input from '../input'
+import React, { forwardRef } from 'react'
+import Input from './input'
 
-export default ({ name, register, errors, clearErrors }) => {
+export default forwardRef(({ name, errors, clearErrors, ...props }, ref) => {
   return (
     <>
       <Input
-        ref={register({ required: `device ${name} is required` })}
-        className="input-inline"
+        ref={ref}
         type="text"
-        label={`device ${name}`}
         name={name}
         onChange={() => clearErrors(name)}
+        {...props}
       />
       <ErrorMessage
         errors={errors}
@@ -20,4 +19,4 @@ export default ({ name, register, errors, clearErrors }) => {
       />
     </>
   )
-}
+})

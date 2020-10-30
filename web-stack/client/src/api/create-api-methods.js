@@ -1,16 +1,17 @@
-import { api, getRequest } from './api'
+import { request, update } from './api'
 import createRequestHook from './hooks/create-request-hook'
 
 //* requests without dependencies
 
-const login = (username, password) =>
-  api.post('auth/login', { username, password }, { timeout: 3000 })
+const verify = () => update('auth/verify')
 
-const [useLogin] = createRequestHook(login)
+const [useLogin] = createRequestHook((username, password) =>
+  update('auth/login', { username, password })
+)
 
-const registerDevice = (data) => api.post('database/register', data)
-
-const [useRegisterDevice] = createRequestHook(registerDevice)
+const [useRegisterDevice] = createRequestHook((data) =>
+  update('database/register', data)
+)
 
 export default ({ requestAndStore, id, setId }) => {
   const initializeApi = async () => {
@@ -28,7 +29,7 @@ export default ({ requestAndStore, id, setId }) => {
 
   //* returns if not authorized
 
-  if (!id) return [[{ initializeApi }, { useLogin }]]
+  if (!id) return [[{ initializeApi, verify }, { useLogin }]]
 
   //* stored requests
 
@@ -81,26 +82,29 @@ export default ({ requestAndStore, id, setId }) => {
   //* non-stored requests
 
   const [useDownloadStandardData] = createRequestHook((start, end) =>
-    getRequest('database/standard-csv', { id, start, end })
+    request('database/standard-csv', { id, start, end })
   )
   const [useDownloadAccelerationEvent] = createRequestHook((index) =>
-    getRequest('database/acceleration-csv', { id, index })
+    request('database/acceleration-csv', { id, index })
   )
 
   const [useDeleteStandardData] = createRequestHook(() =>
-    api.delete('database/standard', { params: { id } })
+    request('database/standard', { id }, 'delete')
   )
 
   const [useDeleteAccelerationEvents] = createRequestHook(() =>
-    api.delete('database/acceleration', { params: { id } })
+    request('database/acceleration', { id }, 'delete')
   )
 
-  // const [useCommand] = createRequestHook((command) =>
-  //   api.post('devices/command', { id, command })
-  // )
   const [useCommand] = createRequestHook(async (command, args) =>
-    api.post('devices/command', { id, command, args })
+    update('devices/command', { id, command, args })
   )
+
+  //* static requests
+  const logout = async () => {
+    await update('auth/logout')
+    setId(null)
+  }
 
   const actions = {
     // initializeApi,
@@ -109,6 +113,7 @@ export default ({ requestAndStore, id, setId }) => {
     getAccelerationEvent,
     getSettings,
     setId,
+    logout,
   }
 
   const hooks = {

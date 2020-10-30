@@ -8,19 +8,20 @@ const reduceExpr = {
   ],
 }
 
-module.exports = ({ start = -Infinity, end = Infinity, limit = 1000 }) => {
+module.exports = ({ start, end, limit = 1000 }) => {
   //* filters the data by the selected time range
   const sliced = {
     $filter: {
       input: '$standardData',
       cond: {
         $and: [
-          { $gte: [`$$this.time`, +start] },
-          { $lte: [`$$this.time`, +end] },
+          { $gte: [`$$this.time`, start ? +start : -Infinity] },
+          { $lte: [`$$this.time`, end ? +end : Infinity] },
         ],
       },
     },
   }
+
   if (limit <= 0) return { data: sliced }
 
   //* iterates through the data keeping track of the index
