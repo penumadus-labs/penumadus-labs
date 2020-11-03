@@ -52,27 +52,31 @@ periodic(void *arg)
 	int fd;
 	int msgnum=0;
 	struct timeval now;
+	int numentries;
 
 	struct tempdata temps[] = {		//the temp sensor array with defaults set
-		"28-0306977992b2", 20.0,
-		NULL, 21.0,
-		NULL, 22.0,
-		NULL, 23.0,
-		NULL, 24.0,
-		NULL, 25.0,
-		NULL, 26.0,
-		NULL, 27.0,
-		NULL, 28.0,
-		NULL, 50.0
+		"28-012018C0083B", 1.0,	//T1
+		"28-0120191D70C6", 2.0,	//T2
+		"28-0120191EB0C0", 3.0,	//T3
+		"28-012019180437", 4.0,	//T4
+		"28-01201902D316", 5.0,	//T5
+		"28-0120191F5827", 6.0,	//T6
+		"28-01201910ECDB", 7.0,	//T7
+		"28-012019266FA5", 8.0,	//T8
+		"28-0306977992b2", 0.0,  	//AMB
+		"28-0306977992b2", 0.0,  	//HUMIDITY
 	} ;
 
 	
+	numentries=sizeof(temps)/sizeof(struct tempdata);
 
 	/* do forever */
 	while(true){
 
 		/* fill the temps array with sensor data */
-		for(i=0;(temps[i].serno != NULL); i++){
+//PONDSCUM
+		//for(i=0;i<numentries; i++){
+		for(i=8;i<numentries; i++){
 			sprintf(filebuf,"/sys/bus/w1/devices/%s/temperature",temps[i].serno);
 			if((fd=open(filebuf,O_RDONLY))<0){
 				g_err(NOEXIT,PERROR,"%s: Could not open [%s]\n",

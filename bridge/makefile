@@ -1,10 +1,10 @@
 
 USER = -DUTK
-HEADEP = netcomms.h trans.h xbee.h xbeeintfc.h bool.h
+HEADEP = netcomms.h trans.h xbee.h xbeeintfc.h bool.h aqueues.h
 HEAD += -I. -I../include
 CFLAGS += $(USER) -g $(HEAD) -pthread -DLOC_DEBUG
 #CFLAGS += -DFULL_DEBUG 
-LDFLAGS+= -g -pthread
+LDFLAGS+= -g -pthread -lm
 
 all: trans
 
@@ -17,8 +17,10 @@ apiframes.o: $(HEADEP) apiframes.c
 xbee.o: $(HEADEP) xbee.c
 sync.o: $(HEADEP) sync.c 
 wifi.o: $(HEADEP) wifi.c 
+accel.o: $(HEADEP) accel.c 
 
-trans: trans.o utils.o  portsetup.o apiframes.o xbee.o sync.o rem.o periodic.o wifi.o
+
+trans: trans.o utils.o  portsetup.o apiframes.o xbee.o sync.o rem.o periodic.o wifi.o accel.o
 
 clean:
 	rm -f trans *.o 

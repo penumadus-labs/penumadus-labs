@@ -52,6 +52,7 @@ void
 	int remSock;
 	struct sockaddr_in RemoteIP; /* IP address struct for incoming message */
 	int len;
+//PONDSCUM decare an accel queueu for this remote
 
 	locport=(unsigned short)((intptr_t)arg);
 
@@ -70,7 +71,8 @@ void
 		printf("Recv From Remote %s:%d [%s]\n",
 			 inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
-		//call accell processing and send data with sendData A packets
+		//PONDSCUM
+		//call handle data accell processing and send data with sendData A packets
 		//call magnetometer processing and update carcount
 	}
 }

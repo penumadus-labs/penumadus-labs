@@ -128,6 +128,7 @@ main(int argc, char *argv[])
 	retry=0;
 	while(true)
 	{
+		g_err(NOEXIT,NOPERROR,"%d %d\n",(int)wifi_avail,(int)cell_avail);
 		if(retry > MAXRETRY){
 			g_err(NOEXIT,NOPERROR,"Max Retries Exceeded: [%.*s]\n",n,tmpbuf);
 			retry=0;
