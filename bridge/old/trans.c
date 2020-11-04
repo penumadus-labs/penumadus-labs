@@ -74,7 +74,7 @@ main(int argc, char *argv[])
 	}
 
 	else{
-		sscanf(argv[3],"%hu",&port);
+		sscanf(argv[3],"%d",port);
 		sscanf(argv[2],"%s",destaddr);
 		sscanf(argv[1],"%s",serport);
 	}
@@ -107,7 +107,7 @@ main(int argc, char *argv[])
 	g_err(NOEXIT,NOPERROR,"xbee setup success, Socket is %d\n",xbeesocket);
 
 	/* setup a local socketpair as a FIFO for thread to sender communications */
-	if(socketpair(AF_LOCAL,SOCK_SEQPACKET,0,commsock) < 0){
+	if(socketpair(AF_LOCAL,SOCK_STREAM,0,commsock) < 0){
 		g_err(EXIT,PERROR,"%s Could not setup comm socket pair\n",__FUNCTION__);
 	}
 	else{
@@ -128,7 +128,6 @@ main(int argc, char *argv[])
 	retry=0;
 	while(true)
 	{
-		g_err(NOEXIT,NOPERROR,"%d %d\n",(int)wifi_avail,(int)cell_avail);
 		if(retry > MAXRETRY){
 			g_err(NOEXIT,NOPERROR,"Max Retries Exceeded: [%.*s]\n",n,tmpbuf);
 			retry=0;

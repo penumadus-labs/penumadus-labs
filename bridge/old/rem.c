@@ -14,14 +14,12 @@
 #include <unistd.h>     /* for close() */
 #include <sys/select.h>
 #include <sys/signal.h>
-#include <sys/time.h>
 #include <utils.h>
 #include <bool.h>
 #include <netcomms.h>
 #include <xbee.h>
 #include <xbeeintfc.h>
 #include <trans.h>
-#include <aqueues.h>
 
 void *processrem(void *arg);
 int setupListener(unsigned short port);
@@ -31,16 +29,19 @@ void
 setupRemotes(void)
 {
 	pthread_t remthread;
+	unsigned int port;
 
 	/* start rem0 read thread */
 	g_err(NOEXIT,NOPERROR,"Start 0");
-	if(pthread_create(&remthread,NULL,&processrem,(void *)(REM0PORT)) != 0)
-		g_err(EXIT,PERROR,"Could not create reader thread %d\n",REM0PORT);
+	port=REM0PORT;
+	if(pthread_create(&remthread,NULL,&processrem,(void *)(port)) != 0)
+		g_err(EXIT,PERROR,"Could not create reader thread %d\n",port);
 
 	g_err(NOEXIT,NOPERROR,"Start 1");
 	/* start rem1 read thread */
-	if(pthread_create(&remthread,NULL,&processrem,(void *)(REM1PORT)) != 0)
-		g_err(EXIT,PERROR,"Could not create reader thread %d\n",REM1PORT);
+	port=REM1PORT;
+	if(pthread_create(&remthread,NULL,&processrem,(void *)(port)) != 0)
+		g_err(EXIT,PERROR,"Could not create reader thread %d\n",port);
 }
 
 
@@ -54,19 +55,8 @@ void
 	int remSock;
 	struct sockaddr_in RemoteIP; /* IP address struct for incoming message */
 	int len;
-	AccelerationPacketQueue remQueue;;
-	struct remdata pack;
-	struct timeval synctime;
-	unsigned long basemillis=0;
-	unsigned long millis,lastmillis;
-	bool timesynced=false;
-	unsigned long secs, usecs;
 
-	locport=(unsigned short)((intptr_t)arg);
-
-	//so id becomes morganbridge:0 for rem0 and :1 for rem1 etc 
-	sprintf(remQueue.id,"%s:%d",BRIDGEID,locport-REM0PORT);
-
+	locport=(unsigned int)arg;
 	/* possible race here so sleep 2 sec between thread starts above */
 	remSock=setupListener(locport);
 	g_err(NOEXIT,NOPERROR,"Remote listener started on port %d\n",locport);
@@ -79,46 +69,10 @@ void
                 }
 
 	        tmpbuf[recvMsgSize]='\0';
-		fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
+		printf("Recv From Remote %s:%d [%s]\n",
 			 inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
-		sscanf(tmpbuf,"%lu %f %f %f %f %f %f %f %f %f",
-				&millis,
-				&pack.accel.x,
-				&pack.accel.y,
-				&pack.accel.z,
-				&pack.mag.x,
-				&pack.mag.y,
-				&pack.mag.z,
-				&pack.gyro.x,
-				&pack.gyro.y,
-				&pack.gyro.z
-		);
-	
-
-		//the remotes have no sense of clock time so have to interpolate here
-		if(!timesynced || (millis <= lastmillis)){
-			basemillis=millis;
-			gettimeofday(&synctime,NULL);
-			timesynced=true;
-		}
-		lastmillis=millis;
-		
-		//get millis passed since time recorded
-		millis-=basemillis;
-
-		//adjust seconds and microsecs by number of millis since basemillis
-		secs=synctime.tv_sec+(millis/1000);
-
-		usecs=synctime.tv_usec+((millis%1000)*1000);
-		if(usecs >= 1000000){
-			usecs-= 1000000;
-			secs++;
-		}
-		
-		//call handle data accell processing and send data with sendData A packets
-		fprintf(stderr,"TIME:  %lx %lx\n",secs,usecs);
-		handleData(&remQueue, pack.accel.x, pack.accel.y, pack.accel.z, secs, usecs);
+		//call accell processing and send data with sendData A packets
 		//call magnetometer processing and update carcount
 	}
 }

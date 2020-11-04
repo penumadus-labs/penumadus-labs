@@ -2,8 +2,6 @@
 #define JOURNALFILE "/home/pi/logs/journal"
 extern int s_fd;  //the serial port file descriptor
 
-#define BRIDGEID "morganbridge"
-
 #define TICKS 15
 
 #define MAXRETRY 3
@@ -31,11 +29,3 @@ struct tempdata {
 #define HUMIDITY 9
 
 bool sendData(unsigned char *data);
-
-typedef struct { float x; float y; float z; } vect;
-struct remdata {
-	unsigned long millis;
-	vect accel;
-	vect mag;
-	vect gyro;
-};
