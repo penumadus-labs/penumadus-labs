@@ -56,7 +56,7 @@ long messagecnt = 0;	//count of incoming messages
 /* global so everyone always gets the latest copy after any */
 /* data/command that touches deviceID */
 /* this is the unique identifier for each hank */
-char deviceID[64]="UnInitialized";
+char deviceID[128]="UnInitialized";
 
 extern int dbsock;		/* holds the network socket for dbase */
 int hanksock;   	     /* holds the network for hank */
@@ -158,8 +158,7 @@ main(int argc, char *argv[])
 		FD_SET(dbsock,&rfds);
 		rnum = (hanksock>dbsock) ? hanksock : dbsock;
 	}
-g_err(NOEXIT,NOPERROR,"dbsock: %d  hanksock: %d rnum: %d",
-			dbsock,hanksock,rnum);
+
 	/* Setting timeout as defensive measure 
 	   timeout and bring us back from blocking on data wait 
 	   have to init timeout every time cause select modifies */
@@ -197,7 +196,8 @@ g_err(NOEXIT,NOPERROR,"dbsock: %d  hanksock: %d rnum: %d",
 
 		    incomingBuf[recvMsgSize]='\0';
     
-		    g_err(NOEXIT,NOPERROR,"hank->UDP:%d: [ %s ]",
+		    g_err(NOEXIT,NOPERROR,"hank@%s->UDP:%d: [ %s ]",
+					inet_ntoa(RemoteIP.sin_addr),
 					recvMsgSize, incomingBuf);
 
 		    messagecnt++;
