@@ -7,7 +7,7 @@ const marginBottom = 50
 const marginRight = 0
 const marginTop = 5
 
-export default class {
+export default class Linechart {
   domains = []
   constructor({ keys, data, yDomain }) {
     this.data = data

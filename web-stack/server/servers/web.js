@@ -10,7 +10,7 @@ const parseCookies = (cookies = '') =>
     return acc
   }, {})
 
-const start = async (expressApp, port) => {
+module.exports = (expressApp, port) => {
   const server = createServer(expressApp)
 
   const wsServer = new Server({ noServer: true })
@@ -18,7 +18,6 @@ const start = async (expressApp, port) => {
 
   server.on('upgrade', (req, socket, head) => {
     // sessionStorage auth system
-    // const token = req.headers['sec-websocket-protocol']
     const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
@@ -38,6 +37,4 @@ const start = async (expressApp, port) => {
       })
       .on('error', reject)
   })
-}
-
-module.exports = start
+} // start web server
