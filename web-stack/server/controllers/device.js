@@ -63,14 +63,21 @@ class Device extends EventEmitter {
   }
 
   async getSettings() {
+    // await Promise.all(
+    //   getters.map(({ command, dataLabel }) =>
+    //     this.createRequest(command).then(
+    //       ({ time, ...data }) => (settings[dataLabel] = data)
+    //     )
+    //   )
+    // )
+
     const settings = {}
 
     await Promise.all(
-      getters.map(({ command, dataLabel }) =>
-        this.createRequest(command).then(
-          ({ time, ...data }) => (settings[dataLabel] = data)
-        )
-      )
+      getters.map(async ({ command, dataLabel }) => {
+        const { time, ...data } = await this.createRequest(command)
+        settings[dataLabel] = data
+      })
     )
 
     return settings
