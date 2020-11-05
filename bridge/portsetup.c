@@ -54,7 +54,6 @@ else{
 	termioptr.c_cc[VMIN]=128; //read up to 128 but can ret on single char
 	termioptr.c_cc[VTIME]=1;  //return after .1 sec intercharacter delay
 }
-
 /* set new attributes and return */
 if(cfsetspeed(&termioptr,B115200) < 0){ 
 	g_err(NOEXIT,PERROR,"Could not set speeds on serial port %s",serialport);
@@ -66,8 +65,9 @@ else if(tcsetattr(fd,TCSAFLUSH,&termioptr)<0){
 	return(-1);
 }
 
-else
+else{
 	return(fd);
+}
 
 }
 

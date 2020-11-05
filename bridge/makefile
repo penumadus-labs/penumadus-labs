@@ -6,7 +6,7 @@ CFLAGS += $(USER) -g $(HEAD) -pthread -DLOC_DEBUG
 #CFLAGS += -DFULL_DEBUG 
 LDFLAGS+= -g -pthread -lm
 
-all: trans simulate
+all: trans simulate defsim
 
 trans.o: trans.h $(HEADEP) trans.c 
 rem.o: trans.h $(HEADEP) rem.c 
@@ -21,6 +21,9 @@ accel.o: $(HEADEP) accel.c
 
 simulate.o: $(HEADEP) simulate.c 
 simulate: simulate.o 
+
+defsim.o: $(HEADEP) defsim.c 
+defsim: defsim.o 
 
 trans: trans.o utils.o  portsetup.o apiframes.o xbee.o sync.o rem.o periodic.o wifi.o accel.o
 

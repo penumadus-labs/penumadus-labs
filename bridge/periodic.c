@@ -25,6 +25,7 @@
 void *periodic(void *arg);
 
 unsigned long carcount;
+int msgnum=0;
 
 /* periodic is the main worker thread that wakes up every TICKS counts */
 /* it reads temps, count, and stuffs into queue to be sent to UDPengine */
@@ -50,7 +51,6 @@ periodic(void *arg)
 	int i;
 	int itemp;
 	int fd;
-	int msgnum=0;
 	struct timeval now;
 	int numentries;
 

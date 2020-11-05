@@ -862,7 +862,7 @@ sendUDP(unsigned char socket,
         pthread_mutex_lock(&udplock);
 #endif
 
-	printf("SendUDP: packetlen %d: [ %.*s ]\n",
+	g_err(NOEXIT,NOPERROR,"CATM1 HANK->UDP SendUDP: packetlen %d: [ %.*s ]\n",
 		packetlen,
 		packetlen,
 		packetdata);

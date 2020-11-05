@@ -10,3 +10,4 @@ int sendUDP(unsigned char socket,
 extern bool cell_avail;
 extern int cell_DB;
 extern int cell_AI;
+void atcmnd(char *cmnd, int nargs, ...);

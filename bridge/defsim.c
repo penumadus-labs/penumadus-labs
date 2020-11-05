@@ -10,21 +10,6 @@
 
 #define ECHOMAX 255     /* Longest string to echo */
 
-float globx,globy,globz;
-
-
-/* Interrupt_handler so that CTRL +C can be used to exit the program */
-void 
-interrupt_handler (int signum) {
-	if(signum==SIGUSR1){
-		globx=globy=globz=4.0;
-		fprintf(stderr,"accel is 4\n");
-	}
-	else{
-		globx=globy=globz=1.0;
-		fprintf(stderr,"accel is 1\n");
-	}
-}
 
 int main(int argc, char *argv[])
 {
@@ -43,10 +28,7 @@ int main(int argc, char *argv[])
 
     servIP = "127.0.0.1";           /* First arg: server IP address (dotted quad) */
 
-        echoServPort = REM1PORT;  /* Use given port, if any */
-
-signal (SIGUSR1, interrupt_handler);
-signal (SIGUSR2, interrupt_handler);
+        echoServPort = REM2PORT;  /* Use given port, if any */
 
     /* Create a datagram/UDP socket */
     if ((sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0){
@@ -60,13 +42,8 @@ signal (SIGUSR2, interrupt_handler);
     echoServAddr.sin_addr.s_addr = inet_addr(servIP);  /* Server IP address */
     echoServAddr.sin_port   = htons(echoServPort);     /* Server port */
 
-	globx=1.0;
-	globx=1.0;
-	globx=1.0;
 while(true){
-	echoStringLen=sprintf(echoString,
-		"%lu %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f\n",
-		millis, globx,globy,globz,4.0,5.0,6.0,7.0,8.0,9.0);
+	echoStringLen=sprintf(echoString,"%lu %.4f \n", millis, 40.0);
 
     /* Send the string to the server */
     if (sendto(sock, echoString, echoStringLen, 0, (struct sockaddr *)

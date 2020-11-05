@@ -15,6 +15,7 @@
 #include <sys/select.h>
 #include <sys/signal.h>
 #include <sys/time.h>
+#include <math.h>
 #include <utils.h>
 #include <bool.h>
 #include <netcomms.h>
@@ -24,6 +25,7 @@
 #include <aqueues.h>
 
 void *processrem(void *arg);
+void *processdef(void *arg);
 int setupListener(unsigned short port);
 
 /* read UDP packets from the two remotes and call processing */
@@ -41,6 +43,12 @@ setupRemotes(void)
 	/* start rem1 read thread */
 	if(pthread_create(&remthread,NULL,&processrem,(void *)(REM1PORT)) != 0)
 		g_err(EXIT,PERROR,"Could not create reader thread %d\n",REM1PORT);
+
+	g_err(NOEXIT,NOPERROR,"Start 2");
+	/* start rem2 read thread */
+	if(pthread_create(&remthread,NULL,&processdef,(void *)(REM2PORT)) != 0)
+		g_err(EXIT,PERROR,"Could not create reader thread %d\n",REM2PORT);
+
 }
 
 
@@ -79,8 +87,8 @@ void
                 }
 
 	        tmpbuf[recvMsgSize]='\0';
-		fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
-			 inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
+		//fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
+			 //inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
 		sscanf(tmpbuf,"%lu %f %f %f %f %f %f %f %f %f",
 				&millis,
@@ -117,9 +125,91 @@ void
 		}
 		
 		//call handle data accell processing and send data with sendData A packets
-		fprintf(stderr,"TIME:  %lx %lx\n",secs,usecs);
+		//fprintf(stderr,"TIME:  %lx %lx\n",secs,usecs);
 		handleData(&remQueue, pack.accel.x, pack.accel.y, pack.accel.z, secs, usecs);
 		//call magnetometer processing and update carcount
+	}
+}
+
+
+/* worker for deflection */
+void 
+*processdef(void *arg)
+{
+	char tmpbuf[BIGBUF];
+	int recvMsgSize;
+	unsigned short locport;
+	int remSock;
+	struct sockaddr_in RemoteIP; /* IP address struct for incoming message */
+	int len;
+	struct timeval synctime;
+	unsigned long basemillis=0;
+	unsigned long millis,lastmillis;
+	bool timesynced=false;
+	unsigned long secs, usecs;
+	float ldef;
+	float deflection=0;
+	time_t lastsend=0;
+
+	locport=(unsigned short)((intptr_t)arg);
+
+	/* possible race here so sleep 2 sec between thread starts above */
+	remSock=setupListener(locport);
+	g_err(NOEXIT,NOPERROR,"Remote listener started on port %d\n",locport);
+
+
+	while(true){
+		if ((recvMsgSize = recvfrom(remSock, tmpbuf, BIGBUF,
+                        0, (struct sockaddr *) &RemoteIP, &len)) < 0){
+                            g_err(EXIT,PERROR,"**ERR:recvfrom() on %d failed",locport);
+                }
+
+	        tmpbuf[recvMsgSize]='\0';
+		fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
+			 inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
+
+		sscanf(tmpbuf,"%lu %f", &millis, &ldef);
+
+		//the remotes have no sense of clock time so have to interpolate here
+		if(!timesynced || (millis <= lastmillis)){
+			basemillis=millis;
+			gettimeofday(&synctime,NULL);
+			timesynced=true;
+		}
+		lastmillis=millis;
+		
+		//get millis passed since time recorded
+		millis-=basemillis;
+
+		//adjust seconds and microsecs by number of millis since basemillis
+		secs=synctime.tv_sec+(millis/1000);
+
+		usecs=synctime.tv_usec+((millis%1000)*1000);
+		if(usecs >= 1000000){
+			usecs-= 1000000;
+			secs++;
+		}
+		
+		/* more than a 100 micron diff, or too long since send, send a deflection packet */
+		if( (fabsf(ldef-deflection) > .1) || ((time(NULL)-lastsend) > DEFLTDEFLECTSEND) ){
+
+			deflection=ldef;
+			lastsend=time(NULL);
+
+			/* construct and send packet to server */
+			/* ID gets a .D to indcate deflection masquerading as a bridgedata packet */
+			sprintf(tmpbuf,"%s %s %.2f %lx %lx %x",
+			"b",
+			BRIDGEID,
+			deflection,
+			(long)secs,
+			(long)usecs,
+			msgnum++
+			);
+
+			sendData(tmpbuf);
+		}
+
 	}
 }
 
@@ -157,4 +247,3 @@ setupListener(unsigned short port)
 
     return(sock);
 }
-

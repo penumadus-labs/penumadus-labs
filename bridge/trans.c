@@ -198,9 +198,15 @@ main(int argc, char *argv[])
 /* Interrupt_handler so that CTRL +C can be used to exit the program */
 void 
 interrupt_handler (int signum) {
-	close(s_fd);
-	close(journal_fd);
-        g_err(EXIT,NOPERROR,"\nSIGNAL!!,  Cleanup Done\n");
+        g_err(NOEXIT,NOPERROR,"\nShutting Down!!\n");
+	//shutdown modem
+	atcmnd("SD",1,0);
+	while(cell_avail){
+		fprintf(stdout,".");
+		fflush(stdout);
+		sleep(1);
+	}
+        g_err(EXIT,NOPERROR,"Cleanup Done\n");
 }
 
 

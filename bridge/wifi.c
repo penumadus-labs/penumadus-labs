@@ -72,7 +72,7 @@ sendtoamazon(unsigned char *msg, int len)
     int n;
 
     /* Send the string to the server */
-    g_err(NOEXIT,NOPERROR,"HANK->UDPengine [%.*s]",len,msg);
+    g_err(NOEXIT,NOPERROR,"WIFI: HANK->UDPengine [%.*s]",len,msg);
     if ((n=sendto(wifisock, msg, len, 0, (struct sockaddr *)
                &amazonhank, sizeof(amazonhank))) != len){
 		g_err(NOEXIT,PERROR,"%s: sent diff num bytes than expected %d/%d [%s]\n",

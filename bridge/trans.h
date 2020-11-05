@@ -5,11 +5,13 @@ extern int s_fd;  //the serial port file descriptor
 #define BRIDGEID "morganbridge"
 
 #define TICKS 15
+#define DEFLTDEFLECTSEND 2
 
 #define MAXRETRY 3
 
 #define REM0PORT 3333
 #define REM1PORT 3334
+#define REM2PORT 3335
 #define BIGBUF 2048
 
 extern int transmitSocket;
@@ -39,3 +41,5 @@ struct remdata {
 	vect mag;
 	vect gyro;
 };
+
+extern int msgnum;
