@@ -6,7 +6,7 @@ const { join } = require('path')
 module.exports = (port) => {
   const config = {
     username: 'ubuntu',
-    host: process.env.serverIp,
+    host: process.env.SERVER_IP,
     port: '22',
     privateKey: readFileSync(join(__dirname, '..', '.ssh', 'server2.pem')),
   }

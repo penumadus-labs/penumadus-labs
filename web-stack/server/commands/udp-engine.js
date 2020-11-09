@@ -15,8 +15,7 @@ const killUdpEngines = async () => {
 }
 
 module.exports = async ({ tcpPort }) => {
-  if (!process.env.amazon) return console.info('udp engines not started')
-  // await killUdpEngines()
+  if (!process.env.AWS_SERVER) return console.info('udp engines not started')
   try {
     const udpPorts = (await client.getUdpPorts()).slice(0, 1)
 

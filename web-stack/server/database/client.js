@@ -2,13 +2,13 @@ const { MongoClient } = require('mongodb')
 const getStandardData = require('./queries/get-standard-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration-events')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
-const createDeviceModel = require('./models/device')
+const createDeviceSchema = require('./schemas')
 const tunnel = require('../utils/ssh-tunnel')
 const startProcess = require('../commands/start-mongod')
 
 const defaultUdpPortIndex = 30000
 
-const url = process.env.amazon
+const url = process.env.AWS_SERVER
   ? 'mongodb://caro:Matthew85!!@localhost/admin'
   : 'mongodb://localhost'
 
@@ -18,7 +18,7 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(ssh = !process.env.amazon) {
+  async connect(ssh = !process.env.AWS_SERVER) {
     if (ssh) await tunnel(27017)
     else await startProcess()
 
@@ -72,9 +72,9 @@ const client = {
       $set: { udpPortIndex: defaultUdpPortIndex },
     })
   },
-  async insertDevice({ id }) {
+  async insertDevice({ deviceType, id }) {
     const udpPort = await client.getUdpPortIndex()
-    const deviceModel = createDeviceModel({ id, udpPort })
+    const deviceModel = createDeviceModel({ deviceType, id, udpPort })
     client.devices.insertOne(deviceModel)
     return udpPort
   },

@@ -15,7 +15,9 @@ module.exports = Router()
     '/settings',
     handleAsync(async ({ query }, res) => {
       res.send(
-        process.env.amazon ? await getDeviceSettings(query.id) : dummySettings
+        process.env.AWS_SERVER
+          ? await getDeviceSettings(query.id)
+          : dummySettings
       )
     })
   )

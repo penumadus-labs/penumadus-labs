@@ -1,6 +1,6 @@
 module.exports = ({ id, port = 32159 }) =>
   `[server info]
-server_ip = ${process.env.serverIp}
+server_ip = ${process.env.SERVER_IP}
 server_port = ${port}			
 ​
 [filled def]
