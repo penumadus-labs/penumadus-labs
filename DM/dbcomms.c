@@ -347,7 +347,7 @@ sendHello(void){
 	buf[DBPACKETSIZE-1]='}';
 	buf[DBPACKETSIZE-2]='\"';
 
-	g_err(NOEXIT,NOPERROR,"UDP->DB:%d: [ %.*s ]",DBPACKETSIZE,DBPACKETSIZE,buf);
+	//g_err(NOEXIT,NOPERROR,"UDP->DB:%d: [ %.*s ]",DBPACKETSIZE,DBPACKETSIZE,buf);
 	len=send(dbsock,buf,DBPACKETSIZE,MSG_DONTWAIT|MSG_NOSIGNAL); 
 
 	if(len==DBPACKETSIZE){

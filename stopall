@@ -1,3 +1,2 @@
-killall UDPengine
-killall tail
-echo DONE
+#!/bin/bash
+killall -SIGINT UDPengine
