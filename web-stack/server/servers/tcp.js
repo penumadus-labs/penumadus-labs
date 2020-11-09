@@ -1,21 +1,14 @@
 const net = require('net')
-const createDevice = require('../controllers/device')
-
-const handleConnection = async (socket) => {
-  console.info('udp engine connected')
-
-  try {
-    const device = await createDevice(socket)
-  } catch (error) {
-    console.error(error)
-  }
-}
+const Device = require('../controllers/device')
 
 const tcpServer = net.createServer()
 
-tcpServer.on('connection', handleConnection)
+tcpServer.on('connection', (socket) => {
+  console.info('udp engine connected')
+  new Device(socket)
+})
 
-const start = (port) => {
+module.exports = (port) => {
   return new Promise((_, reject) => {
     tcpServer
       .listen(port, () => {
@@ -23,6 +16,4 @@ const start = (port) => {
       })
       .on('error', reject)
   })
-}
-
-module.exports = start
+} // start tcp server

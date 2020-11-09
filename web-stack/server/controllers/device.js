@@ -20,7 +20,7 @@ updates all settings whenever a setter is resolved
 extends EventEmitter and creates promise based methods for issuing requests to the device
 */
 
-class Device extends EventEmitter {
+module.exports = class Device extends EventEmitter {
   // settings = {}
   initialized = false
   writeStandard = true
@@ -63,14 +63,21 @@ class Device extends EventEmitter {
   }
 
   async getSettings() {
+    // await Promise.all(
+    //   getters.map(({ command, dataLabel }) =>
+    //     this.createRequest(command).then(
+    //       ({ time, ...data }) => (settings[dataLabel] = data)
+    //     )
+    //   )
+    // )
+
     const settings = {}
 
     await Promise.all(
-      getters.map(({ command, dataLabel }) =>
-        this.createRequest(command).then(
-          ({ time, ...data }) => (settings[dataLabel] = data)
-        )
-      )
+      getters.map(async ({ command, dataLabel }) => {
+        const { time, ...data } = await this.createRequest(command)
+        settings[dataLabel] = data
+      })
     )
 
     return settings
@@ -149,6 +156,7 @@ class Device extends EventEmitter {
 
     if (command === 'HELLO') return
     if (!this.initialized) this.initialize(id)
+    if (command === 'TIME') return
     if (this.listenerCount(command)) {
       console.info(`response: ${table[command]}`)
 
@@ -162,8 +170,8 @@ class Device extends EventEmitter {
   }
 }
 
-module.exports = async (socket) => {
-  const device = new Device(socket)
-  // await device.initialize()
-  return device
-}
+// module.exports = async (socket) => {
+//   const device = new Device(socket)
+//   // await device.initialize()
+//   return device
+// }
