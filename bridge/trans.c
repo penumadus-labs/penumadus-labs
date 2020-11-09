@@ -51,11 +51,11 @@ main(int argc, char *argv[])
 	//defaults
 	unsigned char serport[128]="/dev/ttyS0";	   
 	unsigned char destaddr[16]="52.14.30.58";	   
-	unsigned short port=32159;
+	unsigned short port=40000;
 
 
 	/* for debug only */
-	errfd=1;
+	//errfd=1;
 
 	g_err(NOEXIT,NOPERROR,"Initializing...\n");
 

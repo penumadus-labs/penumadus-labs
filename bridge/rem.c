@@ -147,9 +147,10 @@ void
 	unsigned long millis,lastmillis;
 	bool timesynced=false;
 	unsigned long secs, usecs;
-	float ldef;
+	float ldef,vdef;
 	float deflection=0;
 	time_t lastsend=0;
+	unsigned int hexdef;
 
 	locport=(unsigned short)((intptr_t)arg);
 
@@ -165,10 +166,20 @@ void
                 }
 
 	        tmpbuf[recvMsgSize]='\0';
-		fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
-			 inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
+		//fprintf(stderr,"%s: Recv From Remote %s:%d [%s]\n",__FUNCTION__,
+			 //inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
-		sscanf(tmpbuf,"%lu %f", &millis, &ldef);
+		sscanf(tmpbuf,"%lu, %x", &millis, &hexdef);
+		//a to d converter
+		vdef= 4.096   * ((float)(hexdef)/32767.0);
+		//resistor scaling
+		vdef*= 3.0/2.0;
+		if (vdef < .5)  
+			vdef=0.5;
+		else if (vdef > 4.5)
+			vdef=4.5;
+
+		ldef= (((10.0/8.0)*(vdef/5.0)) - 1.0/8.0) * 45;
 
 		//the remotes have no sense of clock time so have to interpolate here
 		if(!timesynced || (millis <= lastmillis)){
@@ -191,7 +202,7 @@ void
 		}
 		
 		/* more than a 100 micron diff, or too long since send, send a deflection packet */
-		if( (fabsf(ldef-deflection) > .1) || ((time(NULL)-lastsend) > DEFLTDEFLECTSEND) ){
+		if( (fabsf(ldef-deflection) >= .1) || ((time(NULL)-lastsend) > DEFLTDEFLECTSEND) ){
 
 			deflection=ldef;
 			lastsend=time(NULL);
@@ -206,6 +217,9 @@ void
 			(long)usecs,
 			msgnum++
 			);
+
+			fprintf(stderr,"secs=%ld.%ld millis=%ld vdef=%f ldef=%f hexdef=%x \n",
+				secs,usecs,millis,vdef,ldef,hexdef);
 
 			sendData(tmpbuf);
 		}
