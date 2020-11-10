@@ -6,7 +6,7 @@ const StyledLink = styled(Link)`
   padding-left: var(--md);
 `
 
-const routes = ['standard', 'acceleration']
+const routes = ['environment', 'acceleration']
 
 export default () => {
   const links = routes.reduce((acc, route) => {

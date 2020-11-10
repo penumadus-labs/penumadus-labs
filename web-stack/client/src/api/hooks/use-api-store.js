@@ -7,8 +7,8 @@ import { ErrorCard, LoadingCard } from '../api-status-components'
 export const initialState = [
   'protocol',
   'deviceList',
-  'standardData',
-  'accelerationEvents',
+  'environment',
+  'acceleration',
   'accelerationEvent',
   'settings',
 ].reduce((acc, key) => ({ ...acc, [key]: [<LoadingCard />] }), {})

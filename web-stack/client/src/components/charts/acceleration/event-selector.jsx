@@ -8,7 +8,7 @@ const StyledSelect = styled.select`
   padding: 0 var(--xs);
 `
 
-export default ({ events, useGetAccelerationEvent, ...props }) => {
+export default ({ eventList, useGetAccelerationEvent, ...props }) => {
   const [, getEvent, { loading }] = useGetAccelerationEvent()
 
   const handleChange = ({ target }) => {
@@ -21,7 +21,7 @@ export default ({ events, useGetAccelerationEvent, ...props }) => {
       onChange={handleChange}
       {...props}
     >
-      {events.map((time, i) => (
+      {eventList.map((time, i) => (
         <option key={i} value={i}>
           {parseDate(time)} - {formatHoursMinutes(time)}
         </option>

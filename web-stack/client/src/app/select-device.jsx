@@ -14,17 +14,34 @@ const Root = styled.div`
 export default () => {
   const [
     {
-      deviceList: [, list],
+      device,
+      devices: [, devices],
     },
-    { setId },
+    { setDevice },
   ] = useApi()
 
-  if (!list) return null
+  const handleSelect = (value) => {
+    localStorage.setItem('id', value)
+    setDevice(devices[value])
+  }
+
+  if (!devices) return null
+
+  // if (!devices.length)
+  //   return (
+  //     <Root>
+  //       <p>no devices registered</p>
+  //     </Root>
+  //   )
 
   return (
     <Root>
       <p>select device:</p>
-      <Select options={list} onSelect={setId} />
+      <Select
+        selected={device.id}
+        options={Object.keys(devices)}
+        onSelect={handleSelect}
+      />
     </Root>
   )
 }

@@ -1,25 +1,25 @@
 import { Router } from '@reach/router'
 import React from 'react'
 import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
-import StandardChart from '../components/charts/standard/standard-chart.jsx'
+import EnvironmentChart from '../components/charts/environment/environment-chart.jsx'
 import NotFound from './404'
 
 export default () => {
   return (
     <Router>
-      <StandardChart
-        path="standard"
-        // state={standardData}
-        // getData={getStandardData}
-        // useGetStandardData={useGetStandardData}
-        // useDownload={useDownloadStandardData}
-        // useDelete={useDeleteStandardData}
+      <EnvironmentChart
+        path="environment"
+        // state={environment}
+        // getData={getEnvironment}
+        // useGetEnvironment={useGetEnvironment}
+        // useDownload={useDownloadEnvironment}
+        // useDelete={useDeleteEnvironment}
       />
       <AccelerationChart
         path="acceleration"
-        // events={accelerationEvents}
-        // getEvents={getAccelerationEvents}
-        // useDelete={useDeleteAccelerationEvents}
+        // events={acceleration}
+        // getEvents={getAcceleration}
+        // useDelete={useDeleteAcceleration}
         // event={accelerationEvent}
         // getEvent={getAccelerationEvent}
         // useGetEvent={useGetAccelerationEvent}

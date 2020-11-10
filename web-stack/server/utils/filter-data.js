@@ -50,7 +50,7 @@
 
 // module.exports = douglasPeucker
 
-const filterStandard0 = (data) => {
+const filterEnvironment0 = (data) => {
   const test = (val, limit) => val < limit - range || limit + range < val
 
   const humdityLimit = 45
@@ -82,7 +82,7 @@ const filterAcceleration0 = (data) => {
   }, [])
 }
 
-const filterAccelerationEvents0 = (data) => {
+const filterAcceleration0 = (data) => {
   let prev = { time: 0 }
 
   return data
@@ -94,14 +94,14 @@ const filterAccelerationEvents0 = (data) => {
     .map((point) => ({ time: point.time, y: 0.5 }))
 }
 
-const filterStandard = (data) => {
-  const standardRange = 0.5
+const filterEnvironment = (data) => {
+  const environmentRange = 0.5
   let latestH = -1
   let latestP = -1
   let latestT = -1
 
   const test = (val, limit) =>
-    val < limit - standardRange || limit + standardRange <= val
+    val < limit - environmentRange || limit + environmentRange <= val
 
   const last = data.pop()
 
@@ -191,7 +191,7 @@ const filterData = (label, data, range = 0.9) => {
 }
 
 module.exports = {
-  filterStandard,
+  filterEnvironment,
   filterAcceleration,
   filterData,
 }

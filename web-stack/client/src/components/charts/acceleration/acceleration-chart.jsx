@@ -8,20 +8,20 @@ let timeout
 export default () => {
   const [
     {
-      accelerationEvents: [, events],
+      acceleration: [, eventList],
       accelerationEvent,
     },
-    { getAccelerationEvents, getAccelerationEvent },
+    { getAcceleration, getAccelerationEvent },
     {
       useGetAccelerationEvent,
       useDownloadAccelerationEvent,
-      useDeleteAccelerationEvents,
+      useDeleteAcceleration,
     },
   ] = useApi()
 
-  const event = accelerationEvent[1]
+  const [, event] = accelerationEvent
   const index =
-    !event?.data || !events ? null : events.indexOf(event.data[0].time)
+    !event?.data || !eventList ? null : eventList.indexOf(event.data[0].time)
 
   const initializeLive = () => getAccelerationEvent(0)
 
@@ -33,7 +33,7 @@ export default () => {
     //* debounce timeout until all data packets are received
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
-      getAccelerationEvents()
+      getAcceleration()
       getAccelerationEvent(0)
       timeout = null
     }, 1000)
@@ -48,13 +48,13 @@ export default () => {
       }}
       data={accelerationEvent}
       useDownload={useDownloadAccelerationEvent}
-      useDelete={useDeleteAccelerationEvents}
+      useDelete={useDeleteAcceleration}
       yDomain={[-10, 10]}
       render={(live) =>
         !live &&
-        !!events && (
+        !!eventList && (
           <EventSelector
-            {...{ events, useGetAccelerationEvent }}
+            {...{ eventList, useGetAccelerationEvent }}
             defaultValue={index}
           />
         )

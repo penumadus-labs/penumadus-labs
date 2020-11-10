@@ -15,6 +15,8 @@ const validateTime = (time) =>
   new Date(time).getTime() <= Date.now() ||
   'date must not exceed preset'
 
+const formatData = (time) => time && new Date(time).getTime() / 1000
+
 export default ({ useGetData }) => {
   const {
     handleSubmit,
@@ -29,12 +31,19 @@ export default ({ useGetData }) => {
 
   const [status, request] = useGetData()
 
+  const onSubmit = (data) => {
+    request({
+      start: formatData(data.start),
+      end: formatData(data.end),
+    })
+  }
+
   return (
     <Alert buttonText={<GoGear size="20" />}>
       <div className="space-children-y">
         <p>unselected dates default to get the min/max of the data set</p>
         <StyledForm
-          onSubmit={handleSubmit(request)}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-children-y"
         >
           <SettingInput

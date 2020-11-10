@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaChartLine as Standard } from 'react-icons/fa'
+import { FaChartLine as Environment } from 'react-icons/fa'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
 import { FiLogOut as Logout } from 'react-icons/fi'
 import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
@@ -9,9 +9,9 @@ const NavBar = ({ handleLogout }) => (
   <nav className="shadow-card raised">
     <NavBarLink
       style={{ fontSize: '12px' }}
-      Icon={Standard}
-      label="Standard"
-      to="/standard"
+      Icon={Environment}
+      label="Environment"
+      to="/environment"
     />
     <NavBarLink
       style={{ fontSize: '10px' }}

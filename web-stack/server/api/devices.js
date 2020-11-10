@@ -1,15 +1,18 @@
 const { Router } = require('express')
 const handleAsync = require('./handle-async')
-const { commands, setters, dummySettings } = require('../utils/tcp-protocol')
+const testSettings = require('../protocols/test-settings-tank')
+const deviceProtocols = require('../protocols')
 
 const {
   getDeviceSettings,
   sendDeviceCommand,
-} = require('../controllers/channel')
+} = require('../controllers/broadcaster')
+const { commands } = require('../protocols/tank')
 
 module.exports = Router()
-  .get('/protocol', (_, res) => {
-    res.send({ commands, setters })
+  .get('/protocol', ({ query: { deviceType } }, res) => {
+    const { commands, setters, streams } = deviceProtocols[deviceType]
+    res.send({ commands, setters, streams })
   })
   .get(
     '/settings',
@@ -17,7 +20,7 @@ module.exports = Router()
       res.send(
         process.env.AWS_SERVER
           ? await getDeviceSettings(query.id)
-          : dummySettings
+          : testSettings
       )
     })
   )

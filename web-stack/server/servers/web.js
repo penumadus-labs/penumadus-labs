@@ -1,6 +1,6 @@
 const { createServer } = require('http')
 const { Server } = require('ws')
-const channel = require('../controllers/channel')
+const broadcaster = require('../controllers/broadcaster')
 const { verifyUserSocket } = require('../utils/auth')
 
 const parseCookies = (cookies = '') =>
@@ -14,7 +14,7 @@ module.exports = (expressApp, port) => {
   const server = createServer(expressApp)
 
   const wsServer = new Server({ noServer: true })
-  channel.users = wsServer.clients
+  broadcaster.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
     // sessionStorage auth system

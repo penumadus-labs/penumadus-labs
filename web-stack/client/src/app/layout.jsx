@@ -1,9 +1,8 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import useApi from '../api'
 import Router from '../router/router'
 import useAuth from '../services/auth'
-import useMessage, { useSocket } from '../services/socket'
+import { useSocket } from '../services/socket'
 import Login from './login'
 import NavBar from './nav-bar'
 import StatusBar from './status-bar'
@@ -61,11 +60,7 @@ const Layout = ({ children }) => {
     { verifying, loggedIn },
     { handleLogin, loginStatus, handleLogout },
   ] = useAuth()
-  const [, { getSettings }] = useApi()
   useSocket(loggedIn)
-  useMessage(({ type }) => {
-    if (type === 'settings') getSettings()
-  })
 
   const body = verifying ? null : !loggedIn ? (
     <div>

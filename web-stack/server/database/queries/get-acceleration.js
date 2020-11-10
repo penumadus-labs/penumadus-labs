@@ -4,7 +4,7 @@ module.exports = () => {
   return {
     data: {
       $map: {
-        input: '$accelerationEvents',
+        input: '$acceleration',
         in: {
           $let: {
             vars: { first: { $first: '$$this' } },

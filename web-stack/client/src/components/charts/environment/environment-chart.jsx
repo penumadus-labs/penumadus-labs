@@ -8,25 +8,25 @@ export default () =>
   //   {
   //   state: [status, payload],
   //   getData,
-  //   useGetStandardData,
+  //   useGetEnvironment,
   //   ...props
   // }
   {
     const [
-      { standardData },
-      { getStandardData },
-      { useGetStandardData, useDownloadStandardData, useDeleteStandardData },
+      { environment },
+      { getEnvironment },
+      { useGetEnvironment, useDownloadEnvironment, useDeleteEnvironment },
     ] = useApi()
 
     const initializeLive = () => {
-      return getStandardData(
+      return getEnvironment(
         { start: oneHourAgo(), end: Date.now() / 1000 },
         true
       ).catch(console.error)
     }
 
     const handleLive = ({ type, data, setLiveData }) => {
-      if (type !== 'standard') return
+      if (type !== 'environment') return
       setLiveData((liveData) => [
         ...liveData.slice(+(data.time - liveData[0].time >= oneHourInSeconds)),
         data,
@@ -37,12 +37,12 @@ export default () =>
       <>
         <Chart
           {...{ initializeLive, handleLive }}
-          data={standardData}
-          useDownload={useDownloadStandardData}
-          useDelete={useDeleteStandardData}
+          data={environment}
+          useDownload={useDownloadEnvironment}
+          useDelete={useDeleteEnvironment}
           yDomain={[-1, 100]}
           render={(live) =>
-            live || <DomainSelector useGetData={useGetStandardData} />
+            live || <DomainSelector useGetData={useGetEnvironment} />
           }
         ></Chart>
       </>

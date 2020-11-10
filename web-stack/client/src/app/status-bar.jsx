@@ -9,21 +9,21 @@ const Menu = styled.div`
 `
 
 const initialStatus = {
-  standard: 'not received',
+  environment: 'not received',
   acceleration: 'not received',
 }
 
 export default ({ loggedIn }) => {
-  const [{ standard, acceleration }, setStatus] = useState(initialStatus)
+  const [{ environment, acceleration }, setStatus] = useState(initialStatus)
 
   useMessage(({ type }) => {
     const date = new Date(Date.now())
 
     switch (type) {
-      case 'standard':
+      case 'environment':
         setStatus((status) => ({
           ...status,
-          standard: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+          environment: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
         }))
         break
       case 'acceleration':
@@ -45,7 +45,7 @@ export default ({ loggedIn }) => {
           <SelectDevice />
         </div>
         <div>
-          <p>last data packet: {standard}</p>
+          <p>last data packet: {environment}</p>
           <p>last acceleration event: {acceleration}</p>
         </div>
       </Menu>

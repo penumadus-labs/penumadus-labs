@@ -1,26 +1,3 @@
-const dummySettings = {
-  ip: { ipaddr: '18.222.29.175', ipport: '32159' },
-  pressure: {
-    psiPreFill: '30',
-    psiPostFill: '40',
-    fills: '0',
-    fillMax: '20',
-    fullscale: '100.00',
-    excitation: '5.00',
-    calFactor: '3.00',
-  },
-  acceleration: { accelmagthresh: '3.500000' },
-  sample: {
-    secBetween: '10',
-    sampleinterval: '50',
-    accelsampint: '5',
-  },
-}
-
-const config = {
-  packetSize: 200,
-}
-
 const messages = {
   ip: {
     address: null,
@@ -45,11 +22,11 @@ const messages = {
   },
 }
 
-const events = {
+const events = (module.exports = {
   streams: [
-    { name: 'standardData', command: 'D' },
-    { name: 'accelerationData', command: 'A' },
-    { name: 'logData', command: 'L' },
+    { name: 'environment', command: 'environment' },
+    { name: 'deflection', command: 'deflection' },
+    { name: 'acceleration', command: 'acceleration' },
   ],
   commands: [
     { name: 'setTime', command: 'TIME' },
@@ -59,21 +36,29 @@ const events = {
     { name: 'shutdown', command: 'SHUTDOWN' },
   ],
   getters: [
-    { name: 'getIPSettings', command: 'GETIP', dataLabel: 'ip' },
+    {
+      name: 'getIPSettings',
+      command: 'GETIP',
+      message: messages.ip,
+      label: 'ip',
+    },
     {
       name: 'getPressureSettings',
       command: 'GETPRESS',
-      dataLabel: 'pressure',
+      message: messages.pressure,
+      label: 'pressure',
     },
     {
       name: 'getAccelerationSettings',
       command: 'GETACCELPARAMS',
-      dataLabel: 'acceleration',
+      message: messages.acceleration,
+      label: 'acceleration',
     },
     {
       name: 'getSampleSettings',
       command: 'GETSAMPLEPARAMS',
-      dataLabel: 'sample',
+      message: messages.sample,
+      label: 'sample',
     },
   ],
   setters: [
@@ -82,47 +67,34 @@ const events = {
       command: 'SETIP',
       args: 2,
       message: messages.ip,
-      dataLabel: 'ip',
+      label: 'ip',
     },
     {
       name: 'setPressureSettings',
       command: 'SETPRESS',
       args: 7,
       message: messages.pressure,
-      dataLabel: 'pressure',
+      label: 'pressure',
     },
     {
       name: 'setAccelerationSettings',
       command: 'SETACCELPARAMS',
       args: 1,
       message: messages.acceleration,
-      dataLabel: 'acceleration',
+      label: 'acceleration',
     },
     {
       name: 'setSampleSettings',
       command: 'SETSAMPLEPARAMS',
       args: 3,
       message: messages.sample,
-      dataLabel: 'sample',
+      label: 'sample',
     },
   ],
-  errors: [
-    {
-      name: 'badCommand',
-      command: 'BADCMND',
-    },
-  ],
-}
-
-const table = []
-
-for (const event of Object.values(events)) {
-  for (const { name, command } of event) {
-    table[command] = name
-    table[name] = command
-  }
-}
-
-module.exports = { config, ...events, table, dummySettings }
-
-if (require.main === module);
+  // errors: [
+  //   {
+  //     name: 'badCommand',
+  //     command: 'BADCMND',
+  //   },
+  // ],
+})

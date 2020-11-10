@@ -1,4 +1,4 @@
 module.exports = {
-  dataField: 'standardData',
-  eventsField: 'accelerationEvents',
+  dataField: 'environment',
+  eventsField: 'acceleration',
 }

@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb')
-const getStandardData = require('./queries/get-standard-data')
-const getAccelerationEventTimes = require('./queries/get-acceleration-events')
+const getEnvironment = require('./queries/get-environment')
+const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
 const createDeviceSchema = require('./schemas')
 const tunnel = require('../utils/ssh-tunnel')
@@ -82,45 +82,48 @@ const client = {
     const devices = await client.devices.find().toArray()
     return devices.map(({ udpPort }) => udpPort)
   },
-  insertStandardData(id, data) {
+  pushData(id, data, field) {
     return client.devices
-      .updateOne({ id }, { $push: { standardData: data } })
+      .updateOne({ id }, { $push: { [field]: data } })
       .catch(console.error)
+  },
+  insertEnvironment(id, data) {
+    return client.pushData(id, data, 'environment')
+  },
+  insertEnvironment(id, data) {
+    return client.pushData(id, data, 'deflection')
   },
   insertAccelerationEvent(id, event) {
-    client.devices
-      .updateOne(
-        { id },
-        {
-          $push: {
-            accelerationEvents: {
-              $each: [event],
-              $position: 0,
-            },
-          },
-        }
-      )
-      .catch(console.error)
+    return client.pushData(
+      id,
+      {
+        $each: [event],
+        $position: 0,
+      },
+      'acceleration'
+    )
   },
   getDeviceList() {
-    return client.devices.find({}, { projection: { id: 1 } }).toArray()
+    return client.devices
+      .find({}, { projection: { _id: 0, id: 1, deviceType: 1 } })
+      .toArray()
   },
 
   findDevice(id, projection) {
     projection._id = 0
     return client.devices.findOne({ id }, { projection })
   },
-  async getStandardDataReduced({ id, ...params }) {
-    const res = await client.findDevice(id, getStandardData(params, true))
+  async getEnvironmentReduced({ id, ...params }) {
+    const res = await client.findDevice(id, getEnvironment(params, true))
     if (id === 'bridgetest') return res
     for (const d of res.data) d.pressure = Math.floor(d.pressure / 100)
 
     return res
   },
-  async getStandardData({ id, ...params }) {
-    return client.findDevice(id, getStandardData(params))
+  async getEnvironment({ id, ...params }) {
+    return client.findDevice(id, getEnvironment(params))
   },
-  async getAccelerationEvents({ id }) {
+  async getAcceleration({ id }) {
     const { data } = await client.findDevice(id, getAccelerationEventTimes())
     return data
   },
@@ -130,11 +133,11 @@ const client = {
   deleteField(id, field) {
     client.devices.updateOne({ id }, { $set: { [field]: [] } })
   },
-  deleteStandardData({ id }) {
-    client.deleteField(id, 'standardData')
+  deleteEnvironment({ id }) {
+    client.deleteField(id, 'environment')
   },
-  deleteAccelerationEvents({ id }) {
-    client.deleteField(id, 'accelerationEvents')
+  deleteAcceleration({ id }) {
+    client.deleteField(id, 'acceleration')
   },
 }
 

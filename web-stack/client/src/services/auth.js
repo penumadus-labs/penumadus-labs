@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react'
 import useApi from '../api'
 
 const useAuth = () => {
-  const [, { initializeApi, verify, logout }, { useLogin }] = useApi()
+  const [
+    ,
+    { initializeApi, verify, logout, setDevice },
+    { useLogin },
+  ] = useApi()
   const [loginStatus, login] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
@@ -22,7 +26,7 @@ const useAuth = () => {
 
   const authenticate = async () => {
     await initializeApi()
-    if (window.location.pathname === '/') navigate('standard')
+    if (window.location.pathname === '/') navigate('environment')
     setAuthState({ loggedIn: true })
   }
 
@@ -33,6 +37,8 @@ const useAuth = () => {
   const handleLogout = async () => {
     await logout()
     setAuthState({})
+    setDevice(null)
+    localStorage.clear()
     await navigate('')
   }
 

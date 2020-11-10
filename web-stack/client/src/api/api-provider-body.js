@@ -4,6 +4,7 @@ import createRequestHook from './hooks/create-request-hook'
 //* requests without dependencies
 
 const verify = () => update('auth/verify')
+const logout = () => update('auth/logout')
 
 const [useLogin] = createRequestHook((username, password) =>
   update('auth/login', { username, password })
@@ -13,58 +14,65 @@ const [useRegisterDevice] = createRequestHook((data) =>
   update('database/register', data)
 )
 
-export default ({ requestAndStore, id, setId }) => {
+export default ({ requestAndStore, device, setDevice }) => {
   const initializeApi = async () => {
     //* calls that only need to be made once
 
-    const list = requestAndStore('deviceList', 'database/device-list', {}, true)
-    const protocol = requestAndStore('protocol', 'devices/protocol', {}, true)
-
-    const [deviceList = []] = await Promise.all([list, protocol])
+    const devices = await requestAndStore(
+      'devices',
+      'database/devices',
+      {},
+      true
+    )
 
     const storedId = localStorage.getItem('id')
 
-    setId((deviceList.includes(storedId) && storedId) || deviceList[0] || null)
+    const device =
+      (storedId && devices[storedId]) ||
+      devices[Object.keys(devices)[0]] ||
+      null
+
+    setDevice(device)
   }
 
   //* returns if not authorized
 
-  if (!id) return [[{ initializeApi, verify }, { useLogin }]]
+  if (!device) return [[{ initializeApi, verify }, { useLogin }]]
+
+  const { id, deviceType } = device
 
   //* stored requests
 
-  const getSettings = (params, storeError) =>
+  const getProtocol = (params) =>
     requestAndStore(
-      'settings',
-      'devices/settings',
-      { ...params, id },
-      storeError
+      'protocol',
+      'devices/protocol',
+      { ...params, id, deviceType },
+      true
     )
+
+  const getSettings = (params) =>
+    requestAndStore('settings', 'devices/settings', { ...params, id }, true)
 
   //* stored and manually updated requests
 
   const [
-    useGetStandardData,
-    getStandardData,
+    useGetEnvironment,
+    getEnvironment,
   ] = createRequestHook((params, storeError) =>
     requestAndStore(
-      'standardData',
-      'database/standard-data',
+      'environment',
+      'database/environment',
       { ...params, id },
       storeError
     )
   )
 
   const [
-    useGetAccelerationEvents,
-    getAccelerationEvents,
+    useGetAcceleration,
+    getAcceleration,
   ] = createRequestHook((storeError) =>
-    requestAndStore(
-      'accelerationEvents',
-      'database/acceleration-events',
-      { id },
-      storeError
-    )
+    requestAndStore('acceleration', 'database/acceleration', { id }, storeError)
   )
 
   const [
@@ -81,18 +89,18 @@ export default ({ requestAndStore, id, setId }) => {
 
   //* non-stored requests
 
-  const [useDownloadStandardData] = createRequestHook((start, end) =>
-    request('database/standard-csv', { id, start, end })
+  const [useDownloadEnvironment] = createRequestHook((start, end) =>
+    request('database/environment-csv', { id, start, end })
   )
   const [useDownloadAccelerationEvent] = createRequestHook((index) =>
-    request('database/acceleration-csv', { id, index })
+    request('database/acceleration-event-csv', { id, index })
   )
 
-  const [useDeleteStandardData] = createRequestHook(() =>
-    request('database/standard', { id }, 'delete')
+  const [useDeleteEnvironment] = createRequestHook(() =>
+    request('database/environment', { id }, 'delete')
   )
 
-  const [useDeleteAccelerationEvents] = createRequestHook(() =>
+  const [useDeleteAcceleration] = createRequestHook(() =>
     request('database/acceleration', { id }, 'delete')
   )
 
@@ -101,38 +109,35 @@ export default ({ requestAndStore, id, setId }) => {
   )
 
   //* static requests
-  const logout = async () => {
-    await update('auth/logout')
-    setId(null)
-  }
 
   const actions = {
     // initializeApi,
-    getStandardData,
-    getAccelerationEvents,
+    getEnvironment,
+    getAcceleration,
     getAccelerationEvent,
     getSettings,
-    setId,
+    setDevice,
     logout,
   }
 
   const hooks = {
     useLogin,
     useRegisterDevice,
-    useGetStandardData,
-    useGetAccelerationEvents,
+    useGetEnvironment,
+    useGetAcceleration,
     useGetAccelerationEvent,
-    useDownloadStandardData,
+    useDownloadEnvironment,
     useDownloadAccelerationEvent,
-    useDeleteStandardData,
-    useDeleteAccelerationEvents,
+    useDeleteEnvironment,
+    useDeleteAcceleration,
     useCommand,
   }
 
   const mount = () => {
-    getSettings({}, true)
-    getStandardData({}, true)
-    getAccelerationEvents(true)
+    getProtocol()
+    getSettings()
+    getEnvironment({}, true)
+    getAcceleration(true)
     getAccelerationEvent(0, true)
   }
 

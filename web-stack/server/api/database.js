@@ -6,31 +6,30 @@ const createDeviceConfigFile = require('../utils/create-device-config-file')
 
 module.exports = Router()
   .get(
-    '/device-list',
+    '/devices',
     handleAsync(async (req, res) => {
-      const data = await client.getDeviceList()
-      const response = data.map(({ id }) => id)
-      res.send(response)
+      const list = await client.getDeviceList()
+      res.send(list.reduce((a, device) => ({ ...a, [device.id]: device }), {}))
     })
   )
   .get(
-    '/standard-data',
+    '/environment',
     handleAsync(async ({ query }, res) => {
-      res.send(await client.getStandardDataReduced(query))
+      res.send(await client.getEnvironmentReduced(query))
     })
   )
   .get(
-    '/standard-csv',
+    '/environment-csv',
     handleAsync(async ({ query }, res) => {
-      const { data } = await client.getStandardData({ ...query, limit: -1 })
+      const { data } = await client.getEnvironment({ ...query, limit: -1 })
       const csv = unparse(data)
       res.send(csv)
     })
   )
   .get(
-    '/acceleration-events',
+    '/acceleration',
     handleAsync(async ({ query }, res) => {
-      res.send(await client.getAccelerationEvents(query))
+      res.send(await client.getAcceleration(query))
     })
   )
   .get(
@@ -40,7 +39,7 @@ module.exports = Router()
     })
   )
   .get(
-    '/acceleration-csv',
+    '/acceleration-event-csv',
     handleAsync(async ({ query }, res) => {
       const { data } = await client.getAccelerationEventData(query)
       const csv = unparse(data)
@@ -48,16 +47,16 @@ module.exports = Router()
     })
   )
   .delete(
-    '/standard',
+    '/environment',
     handleAsync(async ({ query }, res) => {
-      await client.deleteStandardData(query)
+      await client.deleteEnvironment(query)
       res.sendStatus(200)
     })
   )
   .delete(
     '/acceleration',
     handleAsync(async ({ query }, res) => {
-      await client.deleteAccelerationEvents(query)
+      await client.deleteAcceleration(query)
       res.sendStatus(200)
     })
   )

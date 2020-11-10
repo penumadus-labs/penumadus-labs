@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import createApiMethods from './create-api-methods'
+import createApiMethods from './api-provider-body'
 import useApiStore, { initialState } from './hooks/use-api-store'
 
 // export { api } from './api'
@@ -13,10 +13,11 @@ import useApiStore, { initialState } from './hooks/use-api-store'
 const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
-  const [id, setId] = useState()
+  const [device, setDevice] = useState()
+  const id = device?.id ?? null
   const [state, requestAndStore] = useApiStore(initialState)
   const [methods, mount] = useMemo(
-    () => createApiMethods({ requestAndStore, id, setId }),
+    () => createApiMethods({ requestAndStore, device, setDevice }),
     // eslint-disable-next-line
     [id]
   )
@@ -26,7 +27,7 @@ export const ApiProvider = ({ children }) => {
   }, [id, mount])
 
   return (
-    <ApiContext.Provider value={[{ ...state, id }, ...methods]}>
+    <ApiContext.Provider value={[{ ...state, device }, ...methods]}>
       {children}
     </ApiContext.Provider>
   )

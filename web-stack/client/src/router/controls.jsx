@@ -16,7 +16,16 @@ export default () => {
   if (status) return status
   if (!protocol) return null
 
-  const { commands, setters } = protocol
+  const { commands = [], setters = [] } = protocol
+
+  console.log(settings)
+
+  if (!commands.length && !setters.length)
+    return (
+      <div className="card">
+        <p>this unit does not have settings to modify</p>
+      </div>
+    )
 
   return (
     <>
@@ -31,7 +40,7 @@ export default () => {
             <Setting
               key={i}
               {...setter}
-              settings={settings[setter.dataLabel]}
+              settings={settings[setter.label]}
               useCommand={useCommand}
             />
           ))}
