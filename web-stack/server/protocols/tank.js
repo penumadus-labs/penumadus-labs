@@ -24,7 +24,7 @@ const messages = {
 
 const events = (module.exports = {
   streams: [
-    { name: 'environment', command: 'environment' },
+    { name: 'environmental', command: 'environmental' },
     { name: 'deflection', command: 'deflection' },
     { name: 'acceleration', command: 'acceleration' },
   ],

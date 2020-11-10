@@ -90,7 +90,7 @@ const client = {
   insertEnvironment(id, data) {
     return client.pushData(id, data, 'environment')
   },
-  insertEnvironment(id, data) {
+  insertDeflection(id, data) {
     return client.pushData(id, data, 'deflection')
   },
   insertAccelerationEvent(id, event) {

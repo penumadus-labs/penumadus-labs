@@ -18,8 +18,6 @@ export default () => {
 
   const { commands = [], setters = [] } = protocol
 
-  console.log(settings)
-
   if (!commands.length && !setters.length)
     return (
       <div className="card">

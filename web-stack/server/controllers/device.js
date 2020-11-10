@@ -2,6 +2,7 @@ const EventEmitter = require('events')
 const broadcaster = require('./broadcaster')
 const {
   insertEnvironment,
+  insertDeflection,
   insertAccelerationEvent,
 } = require('../database/client')
 const tankProtocol = require('../protocols/tank')
@@ -34,10 +35,12 @@ module.exports = class Device extends EventEmitter {
 
     this.socket = socket
 
+    const { emitResponses } = this
+
     this.socket.on('readable', async function () {
       let chunk
       while ((chunk = this.read(200))) {
-        this.emitResponses(chunk)
+        emitResponses(chunk)
         // prevent heavy synchronous operation
         await new Promise((res) => setImmediate(res))
       }
@@ -52,8 +55,12 @@ module.exports = class Device extends EventEmitter {
     if (!this.initialized) this.initialize(id)
     if (command === 'TIME') return console.info('request: TIME')
 
-    if (this.listenerCount(command)) this.emit(command, status === 'NACK', data)
-    else this.emit('error', new Error(`unhandled response ${command}`))
+    if (this.listenerCount(command)) {
+      console.info(`response: ${command}`)
+      this.emit(command, status === 'NACK', data)
+    } else {
+      this.emit('error', new Error(`unhandled response ${command}`))
+    }
   }
 
   initialize(id) {
@@ -90,7 +97,7 @@ module.exports = class Device extends EventEmitter {
   }
   timeout = null
   handlers = {
-    environment: (err, data) => {
+    environmental: (err, data) => {
       if (this.recordData) insertEnvironment(this.id, data)
       if (this.broadcastData)
         broadcaster.updateUsers(this.id, 'environment', data)

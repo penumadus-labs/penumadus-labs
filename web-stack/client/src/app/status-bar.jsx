@@ -10,32 +10,21 @@ const Menu = styled.div`
 
 const initialStatus = {
   environment: 'not received',
+  deflection: 'not recieved',
   acceleration: 'not received',
 }
 
 export default ({ loggedIn }) => {
-  const [{ environment, acceleration }, setStatus] = useState(initialStatus)
+  const [{ environment, deflection, acceleration }, setStatus] = useState(
+    initialStatus
+  )
 
   useMessage(({ type }) => {
     const date = new Date(Date.now())
-
-    switch (type) {
-      case 'environment':
-        setStatus((status) => ({
-          ...status,
-          environment: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-        }))
-        break
-      case 'acceleration':
-        setStatus((status) => ({
-          ...status,
-          acceleration: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-        }))
-        break
-      default:
-
-      // throw new Error('socket sent invalid action type')
-    }
+    setStatus((status) => ({
+      ...status,
+      [type]: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+    }))
   })
 
   return (
@@ -45,8 +34,9 @@ export default ({ loggedIn }) => {
           <SelectDevice />
         </div>
         <div>
-          <p>last data packet: {environment}</p>
-          <p>last acceleration event: {acceleration}</p>
+          <p className="text-sm">last environmental reading: {environment}</p>
+          <p className="text-sm">last deflection reading: {deflection}</p>
+          <p className="text-sm">last acceleration event: {acceleration}</p>
         </div>
       </Menu>
     )

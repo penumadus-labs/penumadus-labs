@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "cors": "^2.8.5",
+    "nodemon": "^2.0.6",
     "tunnel-ssh": "^4.1.4"
   },
   "repository": {

@@ -265,6 +265,10 @@ const globalStyle = css`
     background: var(--button-background);
   }
 
+  .text-sm {
+    font-size: var(--sm);
+  }
+
   .button-text {
     ${clickableText}
     background: none;

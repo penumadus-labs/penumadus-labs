@@ -10,6 +10,7 @@ export default () => {
   return (
     <Router className="space-children-y">
       <EnvironmentChart path="environment" />
+      <p path="deflection">not implemented</p>
       <AccelerationChart path="acceleration" />
       <Controls path="controls" />
       <Register path="register" />
