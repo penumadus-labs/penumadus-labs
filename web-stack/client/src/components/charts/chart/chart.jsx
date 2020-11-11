@@ -5,7 +5,6 @@ import Controls from './controls'
 import useChart from './helpers/use-chart'
 import useLive from './helpers/use-live'
 import Legend from './legend'
-import Navigator from './navigator'
 import Tools from './tools'
 
 const SvgStyle = css`
@@ -84,7 +83,6 @@ export default ({
       <Global styles={SvgStyle} />
       <Header>
         <p>{date}</p>
-        <Navigator />
       </Header>
       <ControlBarStyle>
         <Controls {...controlProps} render={render}>

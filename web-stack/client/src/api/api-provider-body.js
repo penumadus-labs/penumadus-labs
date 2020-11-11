@@ -21,23 +21,20 @@ export default ({ requestAndStore, device, setDevice }) => {
     const devices = await requestAndStore(
       'devices',
       'database/devices',
-      {},
+      { deviceType: 'bridge' },
       true
     )
 
     const storedId = localStorage.getItem('id')
 
-    const device =
-      (storedId && devices[storedId]) ||
-      devices[Object.keys(devices)[0]] ||
-      null
+    const device = (storedId && devices[storedId]) || devices.list[0] || null
 
     setDevice(device)
   }
 
   //* returns if not authorized
 
-  if (!device) return [[{ initializeApi, verify }, { useLogin }]]
+  if (!device) return [{ initializeApi, verify }, { useLogin }]
 
   const { id, deviceType } = device
 
@@ -56,23 +53,22 @@ export default ({ requestAndStore, device, setDevice }) => {
 
   //* stored and manually updated requests
 
-  const [
-    useGetEnvironment,
-    getEnvironment,
-  ] = createRequestHook((params, storeError) =>
+  const [useGetEnvironment, getEnvironment] = createRequestHook((storeError) =>
     requestAndStore(
       'environment',
-      'database/environment',
-      { ...params, id },
+      'database/linear-data',
+      { id, field: '$environment' },
       storeError
     )
   )
 
-  const [
-    useGetAcceleration,
-    getAcceleration,
-  ] = createRequestHook((storeError) =>
-    requestAndStore('acceleration', 'database/acceleration', { id }, storeError)
+  const [useGetDeflection, getDeflection] = createRequestHook((storeError) =>
+    requestAndStore(
+      'deflection',
+      'database/linear-data',
+      { id, field: '$deflection' },
+      storeError
+    )
   )
 
   const [
@@ -87,21 +83,31 @@ export default ({ requestAndStore, device, setDevice }) => {
     )
   )
 
+  const getAcceleration = () => {
+    requestAndStore('acceleration', 'database/acceleration', { id }, true)
+    getAccelerationEvent(0, true)
+  }
+
   //* non-stored requests
 
   const [useDownloadEnvironment] = createRequestHook((start, end) =>
-    request('database/environment-csv', { id, start, end })
+    request('database/linear-data-csv', { id, start, end })
+  )
+  const [useDownloadDeflection] = createRequestHook((start, end) =>
+    request('database/linear-data-csv', { id, start, end })
   )
   const [useDownloadAccelerationEvent] = createRequestHook((index) =>
     request('database/acceleration-event-csv', { id, index })
   )
 
   const [useDeleteEnvironment] = createRequestHook(() =>
-    request('database/environment', { id }, 'delete')
+    request('database/data', { id, field: '$environment' }, 'delete')
   )
-
+  const [useDeleteDeflection] = createRequestHook(() =>
+    request('database/data', { id, field: '$deflection' }, 'delete')
+  )
   const [useDeleteAcceleration] = createRequestHook(() =>
-    request('database/acceleration', { id }, 'delete')
+    request('database/data', { id, field: '$acceleration' }, 'delete')
   )
 
   const [useCommand] = createRequestHook(async (command, args) =>
@@ -112,7 +118,9 @@ export default ({ requestAndStore, device, setDevice }) => {
 
   const actions = {
     // initializeApi,
+    getProtocol,
     getEnvironment,
+    getDeflection,
     getAcceleration,
     getAccelerationEvent,
     getSettings,
@@ -124,22 +132,16 @@ export default ({ requestAndStore, device, setDevice }) => {
     useLogin,
     useRegisterDevice,
     useGetEnvironment,
-    useGetAcceleration,
+    useGetDeflection,
     useGetAccelerationEvent,
     useDownloadEnvironment,
+    useDownloadDeflection,
     useDownloadAccelerationEvent,
     useDeleteEnvironment,
+    useDeleteDeflection,
     useDeleteAcceleration,
     useCommand,
   }
 
-  const mount = () => {
-    getProtocol()
-    getSettings()
-    getEnvironment({}, true)
-    getAcceleration(true)
-    getAccelerationEvent(0, true)
-  }
-
-  return [[actions, hooks], mount]
+  return [actions, hooks]
 }

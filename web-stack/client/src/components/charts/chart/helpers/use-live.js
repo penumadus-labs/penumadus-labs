@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
 export default (apiData, initialize, handleEvent) => {
-  const [live, setLive] = useState(false)
+  const [live, setLive] = useState(!localStorage.getItem('live'))
   const [liveData, setLiveData] = useState(apiData)
 
   const toggleLive = async () => {
@@ -10,6 +10,8 @@ export default (apiData, initialize, handleEvent) => {
       const { data } = await initialize()
       setLiveData(data)
     }
+    if (live) localStorage.setItem('live', 'live')
+    else localStorage.removeItem('live')
     setLive(!live)
   }
 

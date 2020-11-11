@@ -26,7 +26,7 @@ const useAuth = () => {
 
   const authenticate = async () => {
     await initializeApi()
-    if (window.location.pathname === '/') navigate('environment')
+    // if (window.location.pathname === '/') navigate('environment')
     setAuthState({ loggedIn: true })
   }
 

@@ -1,12 +1,7 @@
 const EventEmitter = require('events')
 const broadcaster = require('./broadcaster')
-const {
-  insertEnvironment,
-  insertDeflection,
-  insertAccelerationEvent,
-} = require('../database/client')
-const tankProtocol = require('../protocols/tank')
-const bridgeProtocol = require('../protocols/tank')
+const database = require('../database/client')
+const protocols = require('../protocols')
 
 const packetSize = 200
 
@@ -17,9 +12,17 @@ updates all settings whenever a setter is resolved
 extends EventEmitter and creates promise based methods for issuing requests to the device
 */
 
+/*
+*** not implemented yet
+cache settings
+fetch on connect, store in object
+on successful set, write settings into local state
+broadcast "settings" to users
+*/
+
+// should deprecate name param on createRequest. Only used for printing info to the console
+
 module.exports = class Device extends EventEmitter {
-  // settings = {}
-  // event = {}
   initialized = false
   recordData = true
   broadcastData = true
@@ -64,20 +67,26 @@ module.exports = class Device extends EventEmitter {
   }
 
   initialize(id) {
-    this.attachEvents(true ? bridgeProtocol : tankProtocol)
+    const { deviceType } = database.schemas[id]
+    this.attachEvents(protocols[deviceType])
 
     broadcaster.devices[id] = this
-    broadcaster.updateUsers(this.id, 'settings')
 
     this.id = id
     this.initialized = true
 
-    // if I wanted to cache the settings
     // await this.getSettings()
   }
 
-  attachEvents({ commands = [], getters = [], setters = [], streams = [] }) {
+  attachEvents({
+    configureable = false,
+    commands = [],
+    getters = [],
+    setters = [],
+    streams = [],
+  }) {
     this.getters = getters
+    if (configureable) this.broadcast('settings')
 
     for (const { name, command } of commands) {
       this[name] = () => this.createRequest({ command, name })
@@ -98,33 +107,35 @@ module.exports = class Device extends EventEmitter {
   timeout = null
   handlers = {
     environmental: (err, data) => {
-      if (this.recordData) insertEnvironment(this.id, data)
-      if (this.broadcastData)
-        broadcaster.updateUsers(this.id, 'environment', data)
+      if (this.recordData) database.insertEnvironment(this.id, data)
+      if (this.broadcastData) this.broadcast('environment', data)
     },
     deflection: (err, data) => {
-      if (this.recordData) insertDeflection(this.id, data)
-      if (this.broadcastData)
-        broadcaster.updateUsers(this.id, 'deflection', data)
+      if (this.recordData) database.insertDeflection(this.id, data)
+      if (this.broadcastData) this.broadcast('deflection', data)
     },
     acceleration: (err, data) => {
       if (!this.timeout) this.event = []
       else clearTimeout(this.timeout)
 
       this.event.push(data)
-      if (this.broadcastData)
-        broadcaster.updateUsers(this.id, 'acceleration', data)
+      if (this.broadcastData) this.broadcast('acceleration', data)
 
       this.timeout = setTimeout(() => {
         this.timeout = null
         console.info(`acceleration event: ${this.event.length}`)
-        if (!this.recordData) return
-        insertAccelerationEvent(this.id, this.event)
+        if (this.recordData)
+          database.insertAccelerationEvent(this.id, this.event)
       }, 1000)
     },
   }
 
+  broadcast(type, data) {
+    broadcaster.updateUsers(this.id, type, data)
+  }
+
   createRequest({ command, name = command, args = [] }) {
+    // in case the above code doesn't work
     // name ??= command
     console.info(`request: ${name}`)
 
@@ -154,15 +165,14 @@ module.exports = class Device extends EventEmitter {
       }
 
       const response = await this.createRequest({ command, name, args })
-      broadcaster.updateUsers(this.id, 'settings')
-      // if I wanted to cache settings
       // this.settings[label] = settings
+      this.broadcaster('settings')
       return response
     }
   }
 
   async getSettings() {
-    // need to error test
+    // need to error test this method before deleting old code
 
     // await Promise.all(
     //   getters.map(({ command, label }) =>
@@ -172,6 +182,7 @@ module.exports = class Device extends EventEmitter {
     //   )
     // )
 
+    // this.settings = {}
     const settings = {}
 
     await Promise.all(
@@ -185,12 +196,7 @@ module.exports = class Device extends EventEmitter {
       })
     )
 
+    // return this.settings
     return settings
   }
 }
-
-// module.exports = async (socket) => {
-//   const device = new Device(socket)
-//   // await device.initialize()
-//   return device
-// }

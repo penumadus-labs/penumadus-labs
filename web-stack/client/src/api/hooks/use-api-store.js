@@ -6,8 +6,9 @@ import { ErrorCard, LoadingCard } from '../api-status-components'
 // to reduce top level updates
 export const initialState = [
   'protocol',
-  'deviceList',
+  'devices',
   'environment',
+  'deflection',
   'acceleration',
   'accelerationEvent',
   'settings',

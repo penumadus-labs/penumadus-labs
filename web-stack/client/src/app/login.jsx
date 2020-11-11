@@ -22,22 +22,24 @@ export default ({ handleLogin, status }) => {
   })
 
   return (
-    <StyledForm
-      className="card-spaced inline center"
-      onSubmit={handleSubmit(({ username, password }) =>
-        handleLogin(username, password)
-      )}
-    >
-      <Input name="username" ref={register({ required: true })} />
-      <Input
-        name="password"
-        ref={register({ required: true })}
-        type="password"
-      />
-      <button className="button" disabled={!isValid}>
-        Login
-      </button>
-      {status}
-    </StyledForm>
+    <div>
+      <StyledForm
+        className="card-spaced inline center"
+        onSubmit={handleSubmit(({ username, password }) =>
+          handleLogin(username, password)
+        )}
+      >
+        <Input name="username" ref={register({ required: true })} />
+        <Input
+          name="password"
+          ref={register({ required: true })}
+          type="password"
+        />
+        <button className="button" disabled={!isValid}>
+          Login
+        </button>
+        {status}
+      </StyledForm>
+    </div>
   )
 }

@@ -4,6 +4,8 @@ import Chart from './d3-linechart'
 export default (props) => {
   const ref = useRef()
 
+  console.log(props.data)
+
   const { chart, ...ctx } = useMemo(() => {
     const chart = new Chart(props)
 

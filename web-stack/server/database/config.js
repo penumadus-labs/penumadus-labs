@@ -1,4 +1,4 @@
-module.exports = {
-  dataField: 'environment',
-  eventsField: 'acceleration',
-}
+// module.exports = {
+//   dataField: 'environment',
+//   eventsField: 'acceleration',
+// }

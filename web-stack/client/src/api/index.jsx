@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 import createApiMethods from './api-provider-body'
 import useApiStore, { initialState } from './hooks/use-api-store'
 
@@ -14,17 +8,12 @@ const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
   const [device, setDevice] = useState()
-  const id = device?.id ?? null
   const [state, requestAndStore] = useApiStore(initialState)
-  const [methods, mount] = useMemo(
+  const methods = useMemo(
     () => createApiMethods({ requestAndStore, device, setDevice }),
     // eslint-disable-next-line
-    [id]
+    [device?.id]
   )
-
-  useEffect(() => {
-    if (id) mount()
-  }, [id, mount])
 
   return (
     <ApiContext.Provider value={[{ ...state, device }, ...methods]}>

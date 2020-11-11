@@ -1,3 +1,5 @@
 import React from 'react'
 
-export default () => <p className="main card">404: invalid route</p>
+export default ({ message = '404: invalid route' }) => (
+  <p className="main card">{message}</p>
+)

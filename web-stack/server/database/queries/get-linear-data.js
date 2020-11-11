@@ -8,11 +8,11 @@ const reduceExpr = {
   ],
 }
 
-module.exports = ({ start, end, limit = 1000 }) => {
+module.exports = ({ field, start, end, limit = 1000 }) => {
   //* filters the data by the selected time range
   const sliced = {
     $filter: {
-      input: '$environment',
+      input: field,
       cond: {
         $and: [
           { $gte: [`$$this.time`, start ? +start : -Infinity] },
@@ -31,7 +31,7 @@ module.exports = ({ start, end, limit = 1000 }) => {
       vars: {
         reduced: {
           $reduce: {
-            input: '$environment',
+            input: field,
             initialValue: { index: 0, acc: [] },
             in: {
               index: { $add: ['$$value.index', 1] },
@@ -64,7 +64,7 @@ module.exports = ({ start, end, limit = 1000 }) => {
   }
 
   return {
-    keys: getDataKeys('$environment'),
+    keys: getDataKeys(field),
     data,
   }
 }

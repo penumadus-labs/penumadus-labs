@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import useApi from '../api'
 import useMessage from '../services/socket'
 import SelectDevice from './select-device'
 const Menu = styled.div`
@@ -8,16 +9,20 @@ const Menu = styled.div`
   justify-content: space-between;
 `
 
-const initialStatus = {
-  environment: 'not received',
-  deflection: 'not recieved',
-  acceleration: 'not received',
-}
+const reduceFields = (fields) =>
+  fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
 
-export default ({ loggedIn }) => {
-  const [{ environment, deflection, acceleration }, setStatus] = useState(
-    initialStatus
-  )
+export default () => {
+  const [
+    {
+      device: { id, dataFields },
+    },
+  ] = useApi()
+  const [status, setStatus] = useState(reduceFields(dataFields))
+
+  useEffect(() => {
+    setStatus(reduceFields(dataFields))
+  }, [id, dataFields])
 
   useMessage(({ type }) => {
     const date = new Date(Date.now())
@@ -28,17 +33,17 @@ export default ({ loggedIn }) => {
   })
 
   return (
-    !!loggedIn && (
-      <Menu className="card">
-        <div>
-          <SelectDevice />
-        </div>
-        <div>
-          <p className="text-sm">last environmental reading: {environment}</p>
-          <p className="text-sm">last deflection reading: {deflection}</p>
-          <p className="text-sm">last acceleration event: {acceleration}</p>
-        </div>
-      </Menu>
-    )
+    <Menu className="card">
+      <div>
+        <SelectDevice />
+      </div>
+      <div>
+        {Object.entries(status).map(([field, value]) => (
+          <p key={field} className="text-sm">
+            last {field} reading: {value}
+          </p>
+        ))}
+      </div>
+    </Menu>
   )
 }

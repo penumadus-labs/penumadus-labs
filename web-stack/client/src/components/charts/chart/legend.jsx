@@ -21,8 +21,7 @@ export default ({ labels }) => {
               {`${label} (${units[label]})`}
             </StyledItem>
           )),
-        // eslint-disable-next-line
-        []
+        [labels]
       )}
     </StyledList>
   )

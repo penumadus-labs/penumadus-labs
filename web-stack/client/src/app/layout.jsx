@@ -1,10 +1,9 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import Router from '../router/router'
 import useAuth from '../services/auth'
 import { useSocket } from '../services/socket'
 import Login from './login'
-import NavBar from './nav-bar'
+import Routes from '../router/routes'
 import StatusBar from './status-bar'
 
 const Root = styled.div`
@@ -62,26 +61,19 @@ const Layout = ({ children }) => {
   ] = useAuth()
   useSocket(loggedIn)
 
-  const body = verifying ? null : !loggedIn ? (
-    <div>
-      <Login handleLogin={handleLogin} status={loginStatus} />
-    </div>
+  const main = verifying ? null : !loggedIn ? (
+    <Login handleLogin={handleLogin} status={loginStatus} />
   ) : (
-    <>
-      <main>
-        <Router />
-      </main>
-      <NavBar handleLogout={handleLogout} />
-    </>
+    <Routes handleLogout={handleLogout} />
   )
 
   return (
     <Root>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
-        <StatusBar loggedIn={loggedIn} />
+        {loggedIn && <StatusBar />}
       </header>
-      {body}
+      {main}
     </Root>
   )
 }

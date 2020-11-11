@@ -8,20 +8,25 @@ module.exports = Router()
   .get(
     '/devices',
     handleAsync(async (req, res) => {
-      const list = await client.getDeviceList()
-      res.send(list.reduce((a, device) => ({ ...a, [device.id]: device }), {}))
+      const list = await client.getDeviceSchemas()
+      res.send(
+        list.reduce((o, device) => ({ ...o, [device.id]: device }), { list })
+      )
     })
   )
   .get(
-    '/environment',
+    '/linear-data',
     handleAsync(async ({ query }, res) => {
-      res.send(await client.getEnvironmentReduced(query))
+      res.send(await client.getLinearData(query))
     })
   )
   .get(
-    '/environment-csv',
+    '/linear-data-csv',
     handleAsync(async ({ query }, res) => {
-      const { data } = await client.getEnvironment({ ...query, limit: -1 })
+      const { data } = await client.getLinearData({
+        ...query,
+        limit: -1,
+      })
       const csv = unparse(data)
       res.send(csv)
     })
@@ -47,16 +52,9 @@ module.exports = Router()
     })
   )
   .delete(
-    '/environment',
-    handleAsync(async ({ query }, res) => {
-      await client.deleteEnvironment(query)
-      res.sendStatus(200)
-    })
-  )
-  .delete(
-    '/acceleration',
-    handleAsync(async ({ query }, res) => {
-      await client.deleteAcceleration(query)
+    '/data',
+    handleAsync(async ({ req }, res) => {
+      await client.deleteField(query)
       res.sendStatus(200)
     })
   )

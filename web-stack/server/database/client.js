@@ -1,8 +1,8 @@
 const { MongoClient } = require('mongodb')
-const getEnvironment = require('./queries/get-environment')
+const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
-const createDeviceSchema = require('./schemas')
+const { createDeviceSchema, schemas } = require('./schemas')
 const tunnel = require('../utils/ssh-tunnel')
 const startProcess = require('../commands/start-mongod')
 
@@ -29,6 +29,7 @@ const client = {
     client.app = await mongoClient.db('app')
 
     client.devices = await client.app.collection('devices')
+    await client.getDeviceSchemas(true)
     client.users = await client.app.collection('users')
 
     appData = await client.app.collection('data')
@@ -59,13 +60,37 @@ const client = {
   findUser(username) {
     return client.users.findOne({ username })
   },
-  appData(op, ...params) {
-    return client.appData[op](client.appDataQuery, ...params)
-  },
+  // appData(op, ...params) {
+  //   return client.appData[op](client.appDataQuery, ...params)
+  // },
   async getUdpPortIndex() {
     const { udpPortIndex } = await client.appData.findOne()
     await client.appData.updateOne({ $inc: { udpPortIndex: 1 } })
     return udpPortIndex
+  },
+  async getDeviceSchemas(store = false) {
+    const schemas = await client.devices
+      .find(
+        {},
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            deviceType: 1,
+            dataFields: 1,
+            configurable: 1,
+          },
+        }
+      )
+      .toArray()
+
+    if (store)
+      client.schemas = schemas.reduce(
+        (o, schema) => ({ ...o, [schema.id]: schema }),
+        {}
+      )
+
+    return schemas
   },
   resetUdpPortIndex() {
     return client.appData.updateOne({
@@ -103,25 +128,23 @@ const client = {
       'acceleration'
     )
   },
-  getDeviceList() {
-    return client.devices
-      .find({}, { projection: { _id: 0, id: 1, deviceType: 1 } })
-      .toArray()
-  },
 
   findDevice(id, projection) {
     projection._id = 0
     return client.devices.findOne({ id }, { projection })
   },
-  async getEnvironmentReduced({ id, ...params }) {
-    const res = await client.findDevice(id, getEnvironment(params, true))
-    if (id === 'bridgetest') return res
-    for (const d of res.data) d.pressure = Math.floor(d.pressure / 100)
+  // async getEnvironmentReduced({ id, ...params }) {
+  //   const res = await client.findDevice(id, getEnvironment(params, true))
+  //   if (id === 'bridgetest') return res
+  //   for (const d of res.data) d.pressure = Math.floor(d.pressure / 100)
 
-    return res
-  },
-  async getEnvironment({ id, ...params }) {
-    return client.findDevice(id, getEnvironment(params))
+  //   return res
+  // },
+  // async getEnvironment({ id, ...params }) {
+  //   return client.findDevice(id, getEnvironment({ ...params }))
+  // },
+  getLinearData({ id, ...params }) {
+    return client.findDevice(id, getLinearData({ ...params }))
   },
   async getAcceleration({ id }) {
     const { data } = await client.findDevice(id, getAccelerationEventTimes())

@@ -11,6 +11,8 @@ const Root = styled.div`
   }
 `
 
+// const formatDevice = ({ id, deviceType }) => `${id} (${deviceType})`
+
 export default () => {
   const [
     {
@@ -39,7 +41,7 @@ export default () => {
       <p>select device:</p>
       <Select
         selected={device.id}
-        options={Object.keys(devices)}
+        options={devices.list.map(({ id }) => id)}
         onSelect={handleSelect}
       />
     </Root>
