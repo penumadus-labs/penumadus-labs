@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "author": "Abram Bradley",
   "license": "ISC",
   "dependencies": {
@@ -25,6 +25,6 @@
     "url": "https://github.com/carosaur/tankmon"
   },
   "scripts": {
-    "dev": "DEV=true nodemon server"
+    "dev": "DEV=true nodemon ."
   }
 }

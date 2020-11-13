@@ -153,14 +153,8 @@ const client = {
   getAccelerationEvent({ id, ...params }) {
     return client.findDevice(id, getAccelerationEvent(params))
   },
-  deleteField(id, field) {
-    client.devices.updateOne({ id }, { $set: { [field]: [] } })
-  },
-  deleteEnvironment({ id }) {
-    client.deleteField(id, 'environment')
-  },
-  deleteAcceleration({ id }) {
-    client.deleteField(id, 'acceleration')
+  deleteField({ id, field }) {
+    return client.devices.updateOne({ id }, { $set: { [field]: [] } })
   },
 }
 

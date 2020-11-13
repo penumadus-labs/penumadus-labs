@@ -101,13 +101,13 @@ export default ({ requestAndStore, device, setDevice }) => {
   )
 
   const [useDeleteEnvironment] = createRequestHook(() =>
-    request('database/data', { id, field: '$environment' }, 'delete')
+    request('database/data', { id, field: 'environment' }, 'delete')
   )
   const [useDeleteDeflection] = createRequestHook(() =>
-    request('database/data', { id, field: '$deflection' }, 'delete')
+    request('database/data', { id, field: 'deflection' }, 'delete')
   )
   const [useDeleteAcceleration] = createRequestHook(() =>
-    request('database/data', { id, field: '$acceleration' }, 'delete')
+    request('database/data', { id, field: 'acceleration' }, 'delete')
   )
 
   const [useCommand] = createRequestHook(async (command, args) =>

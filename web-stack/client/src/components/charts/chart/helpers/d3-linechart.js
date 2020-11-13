@@ -1,6 +1,10 @@
 import * as d3 from 'd3'
-import { formatHoursMinutes, parseDate, parseDomain } from '../../datetime'
-import { colors } from '../../units-colors'
+import {
+  formatHoursMinutes,
+  parseDate,
+  parseDomain,
+} from '../../utils/datetime'
+import { colors } from '../../utils/units-colors'
 
 const marginLeft = 30
 const marginBottom = 50

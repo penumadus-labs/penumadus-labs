@@ -4,7 +4,7 @@
     "XXXS",
     "bridgetest",
     "caro",
-    "datetime",
+    "utils/datetime",
     "linechart",
     "papaparse",
     "pengine",

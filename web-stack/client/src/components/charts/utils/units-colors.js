@@ -1,4 +1,4 @@
-import * as c from '../../style/colors'
+import * as c from '../../../style/colors'
 
 export const units = {
   humidity: '%',
@@ -15,7 +15,7 @@ export const colors = {
   humidity: c.blue,
   temperature: c.red,
   pressure: c.green,
-  deflection: c.burntOrange,
+  deflection: c.jade,
   x: c.blue,
   y: c.red,
   z: c.yellow,

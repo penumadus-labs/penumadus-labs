@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { formatHoursMinutes, parseDate } from '../datetime'
+import { formatHoursMinutes, parseDate } from '../utils/datetime'
 
 const StyledSelect = styled.select`
   height: 32px;

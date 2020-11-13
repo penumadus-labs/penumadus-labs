@@ -53,7 +53,7 @@ module.exports = Router()
   )
   .delete(
     '/data',
-    handleAsync(async ({ req }, res) => {
+    handleAsync(async ({ query }, res) => {
       await client.deleteField(query)
       res.sendStatus(200)
     })

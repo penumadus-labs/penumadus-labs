@@ -1,0 +1,26 @@
+** todo
+
+implement chart for bridge environmental data
+
+add deviceType parameter to getDevices to filters types from the database
+
+switch live mode to resolution/fixed number of packets (could maybe get user's device width)
+
+store more settings in local_storage, maybe figure out how to encrypt local_storage
+
+configure app with environment variables such as build mode etc
+
+modify how app receives device dataField configurations
+
+
+** bugs
+
+figure out why staying on the environment tab but changes devices doesn't switch graphs
+
+prevent page change on refresh
+
+data fetch on live mode still not seeming to work properly
+
+** test
+
+all changes to tcp client are working properly

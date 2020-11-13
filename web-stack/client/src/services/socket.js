@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import useApi from '../api'
 
-const url = `ws://${window.location.hostname}:8080/`
+const url =
+  process.env.NODE_ENV === 'development'
+    ? `ws://${window.location.hostname}:8080/`
+    : `wss://${window.location.hostname}/`
 
 let tasks = []
 let ws = null

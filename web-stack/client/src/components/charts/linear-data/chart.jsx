@@ -1,6 +1,6 @@
 import React from 'react'
 import Chart from '../chart/chart'
-import { oneHourAgo, oneHourInSeconds } from '../datetime'
+import { oneHourAgo, oneHourInSeconds } from '../utils/datetime'
 import DomainSelector from './domain-selector'
 
 export default ({
@@ -10,6 +10,7 @@ export default ({
   useGetData,
   useDownloadData,
   useDeleteData,
+  yDomain = [-1, 100],
 }) => {
   const initializeLive = () => {
     return getData({ start: oneHourAgo(), end: Date.now() / 1000 }, true).catch(
@@ -32,7 +33,7 @@ export default ({
         data={data}
         useDownload={useDownloadData}
         useDelete={useDeleteData}
-        yDomain={[-1, 100]}
+        yDomain={yDomain}
         render={(live) => live || <DomainSelector useGetData={useGetData} />}
       ></Chart>
     </>

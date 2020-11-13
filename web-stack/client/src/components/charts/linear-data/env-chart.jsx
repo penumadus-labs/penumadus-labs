@@ -1,7 +1,7 @@
 import React from 'react'
 import useApi from '../../../api'
 import Chart from '../chart/chart'
-import { oneHourAgo, oneHourInSeconds } from '../datetime'
+import { oneHourAgo, oneHourInSeconds } from '../utils/datetime'
 import DomainSelector from './domain-selector'
 
 export default () =>

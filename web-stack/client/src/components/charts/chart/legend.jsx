@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React, { useMemo } from 'react'
-import { colors, units } from '../units-colors'
+import { colors, units } from '../utils/units-colors'
 
 const StyledList = styled.ul`
   display: flex;

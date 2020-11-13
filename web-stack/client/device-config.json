@@ -1,0 +1,4 @@
+{
+  "tank": ["environment", "deflection", "acceleration"],
+  "bridge": ["environment", "acceleration", "configurable"]
+}
