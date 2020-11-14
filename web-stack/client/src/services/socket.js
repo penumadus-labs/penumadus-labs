@@ -1,10 +1,13 @@
 import { useEffect } from 'react'
 import useApi from '../api'
 
-const url =
-  process.env.NODE_ENV === 'development'
-    ? `ws://${window.location.hostname}:8080/`
-    : `wss://${window.location.hostname}/`
+const { NODE_ENV, REACT_APP_DEVELOPMENT_PORT } = process.env
+const dev = NODE_ENV === 'development'
+
+const port = dev ? `:${REACT_APP_DEVELOPMENT_PORT}` : ''
+const protocol = dev ? '' : 's'
+
+const url = `ws${protocol}://${window.location.hostname}${port}/`
 
 let tasks = []
 let ws = null

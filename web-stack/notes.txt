@@ -12,6 +12,8 @@ configure app with environment variables such as build mode etc
 
 modify how app receives device dataField configurations
 
+change device dropdown to select element
+
 
 ** bugs
 
@@ -20,6 +22,8 @@ figure out why staying on the environment tab but changes devices doesn't switch
 prevent page change on refresh
 
 data fetch on live mode still not seeming to work properly
+
+try to fix iphone layout bug
 
 ** test
 

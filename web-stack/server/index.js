@@ -8,7 +8,16 @@ const startUdpEngines = require('./commands/udp-engine')
 const app = require('./app')
 const startServers = require('./servers')
 
-const webPort = 8080
+const {
+  NODE_ENV,
+  REACT_APP_DEVELOPMENT_PORT,
+  REACT_APP_PRODUCTION_PORT,
+} = process.env
+
+const webPort =
+  NODE_ENV === 'development'
+    ? REACT_APP_DEVELOPMENT_PORT
+    : REACT_APP_PRODUCTION_PORT
 const tcpPort = 32100
 
 void (async () => {
