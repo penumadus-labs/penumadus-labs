@@ -23,13 +23,28 @@
 #include <trans.h>
 
 void *periodic(void *arg);
+void *webpage(void *arg);
 
-unsigned long carcount;
+extern float deflection;
+unsigned long carcount=0;
 int msgnum=0;
 
 /* periodic is the main worker thread that wakes up every TICKS counts */
 /* it reads temps, count, and stuffs into queue to be sent to UDPengine */
 /* acceleration packets mimic old hank packets so don't go through here */
+
+struct tempdata temps[] = {		//the temp sensor array with defaults set
+	"28-012018c0083b", 1.0,	//T1
+	"28-0120191d70c6", 2.0,	//T2
+	"28-0120191eb0c0", 3.0,	//T3
+	"28-012019180437", 4.0,	//T4
+	"28-01201902d31c", 5.0,	//T5
+	"28-0120191f5827", 6.0,	//T6
+	"28-01201910ecdb", 7.0,	//T7
+	"28-012019266fa5", 8.0,	//T8
+	"wifi filled", 0.0,  	//AMB
+	"wifi filled", 0.0  	//HUMIDITY
+} ;
 
 void
 setupPeriodic(void)
@@ -40,7 +55,12 @@ setupPeriodic(void)
 	/* start periodic thread */
 	if(pthread_create(&periodicthread,NULL,&periodic,(void *)(NULL)) != 0)
 		g_err(EXIT,PERROR,"Could not create periodic thread \n");
+
+	/* start periodic web page update  thread */
+	if(pthread_create(&periodicthread,NULL,&webpage,(void *)(NULL)) != 0)
+		g_err(EXIT,PERROR,"Could not create periodic webpage thread \n");
 }
+
 
 /* gather temp data every TICKS seconds and send to server */
 void *
@@ -54,18 +74,6 @@ periodic(void *arg)
 	struct timeval now;
 	int numentries;
 
-	struct tempdata temps[] = {		//the temp sensor array with defaults set
-		"28-012018C0083B", 1.0,	//T1
-		"28-0120191D70C6", 2.0,	//T2
-		"28-0120191EB0C0", 3.0,	//T3
-		"28-012019180437", 4.0,	//T4
-		"28-01201902D316", 5.0,	//T5
-		"28-0120191F5827", 6.0,	//T6
-		"28-01201910ECDB", 7.0,	//T7
-		"28-012019266FA5", 8.0,	//T8
-		"28-0306977992b2", 0.0,  	//AMB
-		"28-0306977992b2", 0.0,  	//HUMIDITY
-	} ;
 
 	
 	numentries=sizeof(temps)/sizeof(struct tempdata);
@@ -74,9 +82,8 @@ periodic(void *arg)
 	while(true){
 
 		/* fill the temps array with sensor data */
-//PONDSCUM REMOVE
-		//for(i=0;i<numentries; i++){
-		for(i=8;i<numentries; i++){
+		//ambient humid and temp are now filled in by remote sensor over wireless
+		for(i=0;i<numentries-2; i++){
 			sprintf(filebuf,"/sys/bus/w1/devices/%s/temperature",temps[i].serno);
 			if((fd=open(filebuf,O_RDONLY))<0){
 				g_err(NOEXIT,PERROR,"%s: Could not open [%s]\n",
@@ -116,5 +123,63 @@ periodic(void *arg)
 		);
 		sendData(buf);
 		sleep(TICKS);
+	}
+}
+
+
+void *
+webpage (void *arg)
+{
+
+	FILE *fopen(), *fp,*ct;
+	int cputemp;
+	unsigned char buf[FRAMESIZE];
+	int count=9;
+
+	/* do forever */
+	while(true){
+		
+		if( (fp=fopen(WEBDATAFILE,"w")) == NULL){
+			g_err(NOEXIT,PERROR,"Could not open webdata file\n");
+		}
+
+		fprintf(fp,"<div>cell_avail: ");
+		if(cell_avail)
+			fprintf(fp,"true");
+		else
+			fprintf(fp,"false");
+
+		fprintf(fp,"</div><div>wifi_avail: ");
+		if(wifi_avail)
+			fprintf(fp,"true");
+		else
+			fprintf(fp,"false");
+		fprintf(fp,"</div><div>modem temp: %d",cell_TP);
+
+		if( (ct=fopen("/sys/class/thermal/thermal_zone0/temp","r")) == NULL){
+			g_err(NOEXIT,PERROR,"Could not open cputempfile  file\n");
+		}
+		fscanf(ct,"%d",&cputemp);
+		fprintf(fp,"</div><div>cpu temp: %.3f",( ((float)cputemp)/1000.0));
+		fprintf(fp,"</div><div>cell signal: %d",cell_DB);
+		fprintf(fp,"</div><div>deflection: %.3f",deflection);
+		fprintf(fp,"</div><div>car count: %ld</div>",carcount);
+		fclose(fp);
+		fclose(ct);
+			
+		/* send logging data to amazon */
+		if(count++ > 9){
+			snprintf(buf,FRAMESIZE,
+				"%s %s cputemp: %.3f celltemp: %d cellsig: %d",
+				"L",
+				BRIDGEID,
+				(((float)cputemp)/1000.0),
+				cell_TP,
+				cell_DB
+			);
+			count=0;
+			sendData(buf);
+		}
+		sleep(WEBTICKS);
 	}
 }

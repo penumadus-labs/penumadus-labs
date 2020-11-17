@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     echoServAddr.sin_port   = htons(echoServPort);     /* Server port */
 
 while(true){
-	echoStringLen=sprintf(echoString,"%lu %.4f \n", millis, 40.0);
+	echoStringLen=sprintf(echoString,"%lu, 4321, 7000, 22.5, 42.1\n", millis);
 
     /* Send the string to the server */
     if (sendto(sock, echoString, echoStringLen, 0, (struct sockaddr *)
@@ -53,7 +53,7 @@ while(true){
     }
 
 	usleep(200000);
-	millis+=20;
+	millis+=200;
 
 }
 

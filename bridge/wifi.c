@@ -120,7 +120,9 @@ udp_readthreadproc(void *arg){
                 incomingAddrLen = sizeof(incomingAddr);
                 if ((recvMsgSize = recvfrom(wifisock, incomingBuf, BIGBUF, 0,
                     (struct sockaddr *) &incomingAddr, &incomingAddrLen)) < 0){
-                        g_err(EXIT,PERROR,"Could Recv From Socket");
+                        g_err(NOEXIT,PERROR,"Could Recv From Socket");
+			sleep(2);
+			continue;
                 }
 
                 incomingBuf[recvMsgSize]='\0';

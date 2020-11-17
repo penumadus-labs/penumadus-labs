@@ -83,7 +83,9 @@ void
 	while(true){
 		if ((recvMsgSize = recvfrom(remSock, tmpbuf, BIGBUF,
                         0, (struct sockaddr *) &RemoteIP, &len)) < 0){
-                            g_err(EXIT,PERROR,"**ERR:recvfrom() on %d failed",locport);
+                            g_err(NOEXIT,PERROR,"**ERR:recvfrom() on %d failed",locport);
+			sleep(5);
+			continue;
                 }
 
 	        tmpbuf[recvMsgSize]='\0';
@@ -132,6 +134,7 @@ void
 }
 
 
+float deflection=0;
 /* worker for deflection */
 void 
 *processdef(void *arg)
@@ -147,10 +150,11 @@ void
 	unsigned long millis,lastmillis;
 	bool timesynced=false;
 	unsigned long secs, usecs;
-	float ldef,vdef;
-	float deflection=0;
+	float ldef,vdef,adef,odef;
 	time_t lastsend=0;
 	unsigned int hexdef;
+	unsigned int hexsupply;
+	float ambtemp,ambhumid;
 
 	locport=(unsigned short)((intptr_t)arg);
 
@@ -162,19 +166,43 @@ void
 	while(true){
 		if ((recvMsgSize = recvfrom(remSock, tmpbuf, BIGBUF,
                         0, (struct sockaddr *) &RemoteIP, &len)) < 0){
-                            g_err(EXIT,PERROR,"**ERR:recvfrom() on %d failed",locport);
+                            g_err(NOEXIT,PERROR,"**ERR:recvfrom() on %d failed",locport);
+			sleep(5);
+			continue;
                 }
 
 	        tmpbuf[recvMsgSize]='\0';
-		//fprintf(stderr,"%s: Recv From Remote %s:%d [%s]\n",__FUNCTION__,
-			 //inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
+		if(locdebug)
+			fprintf(stderr,"%s: Recv From Remote %s:%d [%s]\n",__FUNCTION__,
+				inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
-		sscanf(tmpbuf,"%lu, %x", &millis, &hexdef);
+		sscanf(tmpbuf,"%lu, %x, %x, %f, %f", 
+			&millis, &hexdef, &hexsupply, &ambtemp, &ambhumid);
+
+		/* so we ignore zero values on humid */
+		if(ambhumid > 0.1)
+			temps[HUMIDITY].temp_humid=ambhumid;
+			
+		temps[AMB].temp_humid = ambtemp;
+
 		//a to d converter
 		vdef= 4.096   * ((float)(hexdef)/32767.0);
+
 		//resistor scaling
 		vdef*= 3.0/2.0;
-		if (vdef < .5)  
+
+		odef=vdef;	//for printing later only
+
+		//scale the result by the supply voltage to normalize at 5.0
+		//to make the math simple
+		adef= 4.096   * ((float)(hexsupply)/32767.0);
+		//resistor scaling
+		adef*=2.0;
+
+		//scale vdef to 5.0 volts
+		vdef *= 5.0/adef;
+
+		if (vdef  < .5)  
 			vdef=0.5;
 		else if (vdef > 4.5)
 			vdef=4.5;
@@ -212,14 +240,15 @@ void
 			sprintf(tmpbuf,"%s %s %.2f %lx %lx %x",
 			"b",
 			BRIDGEID,
-			deflection,
+			DEFLECTION_OFFSET-deflection,
 			(long)secs,
 			(long)usecs,
 			msgnum++
 			);
 
-			fprintf(stderr,"secs=%ld.%ld millis=%ld vdef=%f ldef=%f hexdef=%x \n",
-				secs,usecs,millis,vdef,ldef,hexdef);
+			if(locdebug)
+				fprintf(stderr,"secs=%ld.%06ld millis=%ld odef=%f vdef=%f adef=%f ldef=%f hexdef=%x \n",
+					secs,usecs,millis,odef,vdef,adef,ldef,hexdef);
 
 			sendData(tmpbuf);
 		}
