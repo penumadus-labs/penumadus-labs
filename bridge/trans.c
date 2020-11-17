@@ -23,6 +23,8 @@
 extern int errfd;	//used in utils.c to determine error output
 int journal_fd;		//journal file to log all messages 
 
+bool locdebug=false;
+
 //sockets to use as fifo queues between threads
 int receiveSocket;
 int transmitSocket;
@@ -82,7 +84,9 @@ main(int argc, char *argv[])
 
 	/* catch signals and cntr-C so can clean up nicely */
         signal (SIGINT, interrupt_handler);
+        signal (SIGUSR1, interrupt_handler);
         signal (SIGPIPE, interrupt_handler);
+        signal (SIGTERM, interrupt_handler);
 
 	/* start the journal */
 	if((journal_fd=open(JOURNALFILE,O_RDWR|O_APPEND|O_CREAT,0644)) < 0){
@@ -138,15 +142,21 @@ main(int argc, char *argv[])
 			sleep(1);
 		}
 		else {
-			if((n=read(receiveSocket,tmpbuf,sizeof(tmpbuf))) < 0)
+			/* read incoming traffic up to size tmpbuf -1 so
+			 *leave one slot for \0 and \n if huge message
+			 */
+			if((n=read(receiveSocket,tmpbuf,sizeof(tmpbuf)-1)) < 0)
 				g_err(EXIT,PERROR,"%s: Error on Socket Read\n",__FUNCTION__);
 
+			/* this is just so journal has a \n in it */
 			tmpbuf[n++]='\n';
-			tmpbuf[n]='\0';
-
 			if( write(journal_fd,tmpbuf,n) != n){
 				g_err(EXIT,PERROR,"Could Not write to journal %s\n",JOURNALFILE);
 			}
+
+			//now strip \n back off
+			n--;
+			tmpbuf[n]='\0';
 			
 		}
 
@@ -178,6 +188,11 @@ main(int argc, char *argv[])
 					g_err(NOEXIT,NOPERROR,"Net Down\n");
 					retry++;
 					break;
+				case 256:
+					g_err(NOEXIT,NOPERROR,"Timeout on Net Send \n");
+					retry++;
+					break;
+					
 				default:
 					g_err(NOEXIT,NOPERROR,"%s:SendUDP: Error Code 0x%02x\n",
 						__FUNCTION__,ret);
@@ -198,15 +213,36 @@ main(int argc, char *argv[])
 /* Interrupt_handler so that CTRL +C can be used to exit the program */
 void 
 interrupt_handler (int signum) {
-        g_err(NOEXIT,NOPERROR,"\nShutting Down!!\n");
-	//shutdown modem
-	atcmnd("SD",1,0);
-	while(cell_avail){
-		fprintf(stdout,".");
-		fflush(stdout);
-		sleep(1);
+
+	if(signum == SIGUSR1){
+		if(locdebug){
+			locdebug=false;
+			fprintf(stderr,"Debug Off\n");
+		}
+		else{
+			locdebug=true;
+			fprintf(stderr,"Debug On\n");
+		}
+		return;
 	}
-        g_err(EXIT,NOPERROR,"Cleanup Done\n");
+
+	else{
+		g_err(NOEXIT,NOPERROR,"\nShutting Down!!\n");
+		locdebug=true;
+		//shutdown modem
+		atcmnd("D5",1,4);
+		sleep(2);
+		g_err(NOEXIT,NOPERROR,"led off");
+		atcmnd("SD",1,0);
+		sleep(2);
+		g_err(NOEXIT,NOPERROR,"modem off");
+		//while(cell_avail){
+			//fprintf(stdout,".");
+			//fflush(stdout);
+			//sleep(1);
+		//}
+		g_err(EXIT,NOPERROR,"Cleanup Done\n");
+	}
 }
 
 

@@ -43,6 +43,7 @@ int s_fd;  //file descriptor for serial port
 bool cell_avail=false;
 int cell_DB=0;
 int cell_AI=0;
+int cell_TP=0;
 bool statDBwait=false;
 
 /* routine to get into command mode */
@@ -562,6 +563,9 @@ checkReceivedFrames(unsigned char *frameptr)
 				printf("Cell Strength: %ddBm\n",cell_DB);
 				statDBwait=false;
 			}
+			else if(strncmp(frameptr+5,"TP",2)==0){
+				cell_TP=frameptr[9];
+			}
 			/* AI command */
 			else if(strncmp(frameptr+5,"AI",2)==0){
 			    switch(frameptr[8]){
@@ -823,6 +827,7 @@ getstatusthread(void *arg)
 {
 		char initbuf[32];
 		char frame[MAXFRAMEBUF];
+		int counter=5;
 		while(true){
 			atcmnd("AI",0);
 			if(cell_avail){
@@ -830,6 +835,10 @@ getstatusthread(void *arg)
 					atcmnd("DB",0);
 					statDBwait=true;
 				}
+			}
+			if(counter++ > 5){
+				atcmnd("TP",0);
+				counter=0;
 			}
 			sleep(RECOVERYINTERVAL);
 		}
@@ -905,7 +914,7 @@ sendUDP(unsigned char socket,
 	sendApiFrame(frame,s_fd);
 
 	if(sleep_on_status(&sendUDP_cond,5000) != 0){
-		g_err(EXIT,PERROR, "%s: error timeout on sleep\n",__FUNCTION__);
+		g_err(NOEXIT,PERROR, "%s: error timeout on sleep\n",__FUNCTION__);
 		retcode= 256;
 	}
 	else if(sendUDP_cond.statcode !=0 ){

@@ -1,11 +1,16 @@
 
 #define JOURNALFILE "/home/pi/logs/journal"
 extern int s_fd;  //the serial port file descriptor
+extern bool locdebug;  //the serial port file descriptor
 
 #define BRIDGEID "morganbridge"
 
+#define WEBDATAFILE "/var/www/html/webdata.html"
+#define WEBTICKS 10
+
 #define TICKS 15
-#define DEFLTDEFLECTSEND 2
+#define DEFLTDEFLECTSEND 5
+#define DEFLECTION_OFFSET 35.0   //offset in mm from zero for deflection mounting
 
 #define MAXRETRY 3
 
@@ -15,6 +20,7 @@ extern int s_fd;  //the serial port file descriptor
 #define BIGBUF 2048
 
 extern int transmitSocket;
+extern bool wifi_avail;
 
 struct tempdata {
 	char *serno; 
@@ -31,6 +37,7 @@ struct tempdata {
 #define T7 7
 #define AMB 8
 #define HUMIDITY 9
+extern struct tempdata temps[];
 
 bool sendData(unsigned char *data);
 

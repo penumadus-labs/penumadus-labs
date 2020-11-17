@@ -82,7 +82,7 @@ sleep_on_status(struct sleeper *convar, unsigned long millisecs)
 	/* make sure status hasn't changed before we sleep */
 	if(convar->flag == false){
 		/* unlock mutex (automatic) and wait on cond var */
-		fprintf(stderr,"Sleeping...\n");
+		//fprintf(stderr,"Sleeping...\n");
 		ret=pthread_cond_timedwait(&(convar->data_avail),
 			&(convar->data_mutex), &timeout);
 	}
@@ -95,10 +95,10 @@ sleep_on_status(struct sleeper *convar, unsigned long millisecs)
 	}
 
 	if(ret==0){
-		fprintf(stderr,"normal exit from sleep\n");
+		//fprintf(stderr,"normal exit from sleep\n");
 	}
 	else if(ret==ETIMEDOUT){
-		fprintf(stderr,"utils: Timeout on sleep\n");
+		g_err(NOEXIT,NOPERROR,"utils: Timeout on sleep\n");
 	}
 	else if(ret == EINTR){
 		g_err(NOEXIT,PERROR,"cond timedwait error EINTR %d\n",ret);
