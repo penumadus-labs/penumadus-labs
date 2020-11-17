@@ -44,7 +44,8 @@ const Header = styled.div`
 export default ({
   children,
   render,
-  data: [status, { keys, data: storedData } = {}],
+  data: [status, { keys, noDataCollected, data: collectedData } = {}],
+  getData,
   useDownload,
   useDelete,
   downloadProps,
@@ -53,18 +54,22 @@ export default ({
   ...props
 }) => {
   if (status) return status
-  if (!keys)
+
+  const [data, liveProps] = useLive(collectedData, initializeLive, handleLive)
+
+  const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
+    keys,
+    data,
+    noDataCollected,
+    ...props,
+  })
+
+  if (noDataCollected)
     return (
       <div className="card">
         <p>no data has been collected for this unit</p>
       </div>
     )
-  const [data, liveProps] = useLive(storedData, initializeLive, handleLive)
-  const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
-    keys,
-    data,
-    ...props,
-  })
 
   const controlProps = {
     downloadProps: {
@@ -74,6 +79,7 @@ export default ({
     },
     deleteProps: {
       useDelete,
+      getData,
     },
     liveProps,
   }

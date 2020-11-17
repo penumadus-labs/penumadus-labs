@@ -1,11 +1,8 @@
 import axios from 'axios'
+import url from '../utils/url'
 
-const dev = process.env.NODE_ENV === 'development'
-
-const baseURL = dev
-  ? `http://${window.location.hostname}:8080/api/`
-  : `https://${window.location.hostname}/api/`
-const withCredentials = dev
+const baseURL = 'http' + url + 'api/'
+const withCredentials = process.env.NODE_ENV === 'development'
 
 const headers = {
   'X-Requested-With': 'XMLHttpRequest',

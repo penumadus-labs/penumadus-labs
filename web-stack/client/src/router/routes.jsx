@@ -36,22 +36,44 @@ export default ({ handleLogout }) => {
     {
       device: { id, dataFields, configurable },
     },
-    { getProtocol, getSettings, ...actions },
+    {
+      getProtocol,
+      getSettings,
+      getEnvironment,
+      getDeflection,
+      getAcceleration,
+    },
   ] = useApi()
+
+  const apiRequests = {
+    environment: () => getEnvironment({ recent: true }, true),
+    deflection: () => getDeflection({ recent: true }, true),
+    acceleration: () => getAcceleration(true),
+  }
 
   // changes data when device is toggled
 
   useEffect(() => {
-    getProtocol()
-    if (configurable) getSettings()
+    if (configurable) {
+      getProtocol()
+      getSettings()
+    }
 
     // fetches the data for each field
     // navigates to first field once it's resolved
 
+    const currentDevice = localStorage.getItem('id')
+
     dataFields.forEach(async (field, index) => {
-      const request = `get${field.charAt(0).toUpperCase() + field.slice(1)}`
-      await actions[request](true)
-      if (index === 0) await navigate(`/${field}`)
+      await apiRequests[field]()
+      // redirect to first request if id has changed or path = home
+      if (
+        index === 0 &&
+        (currentDevice !== id || window.location.pathname === '/')
+      ) {
+        localStorage.setItem('id', id)
+        await navigate(`/${field}`)
+      }
     })
     // eslint-disable-next-line
   }, [id])

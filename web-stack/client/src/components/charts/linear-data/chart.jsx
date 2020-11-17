@@ -1,7 +1,7 @@
 import React from 'react'
 import Chart from '../chart/chart'
-import { oneHourAgo, oneHourInSeconds } from '../utils/datetime'
 import DomainSelector from './domain-selector'
+import { resolution } from '../../../utils/live-data-config'
 
 export default ({
   dataType,
@@ -13,15 +13,14 @@ export default ({
   yDomain = [-1, 100],
 }) => {
   const initializeLive = () => {
-    return getData({ start: oneHourAgo(), end: Date.now() / 1000 }, true).catch(
-      console.error
-    )
+    return getData({ recent: true }, true).catch(console.error)
   }
 
   const handleLive = ({ type, data, setLiveData }) => {
     if (type !== dataType) return
     setLiveData((liveData) => [
-      ...liveData.slice(+(data.time - liveData[0].time >= oneHourInSeconds)),
+      // ...liveData.slice(+(data.time - liveData[0].time >= oneHourInSeconds)),
+      ...liveData.slice(liveData >= resolution),
       data,
     ])
   }
@@ -31,6 +30,7 @@ export default ({
       <Chart
         {...{ initializeLive, handleLive }}
         data={data}
+        getData={getData}
         useDownload={useDownloadData}
         useDelete={useDeleteData}
         yDomain={yDomain}

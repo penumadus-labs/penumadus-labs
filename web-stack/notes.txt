@@ -2,29 +2,34 @@
 
 implement chart for bridge environmental data
 
-add deviceType parameter to getDevices to filters types from the database
+add fills count indicator
 
-switch live mode to resolution/fixed number of packets (could maybe get user's device width)
+app compile mode bridge/tank
 
-store more settings in local_storage, maybe figure out how to encrypt local_storage
-
-configure app with environment variables such as build mode etc
-
-modify how app receives device dataField configurations
-
-change device dropdown to select element
 
 
 ** bugs
 
-figure out why staying on the environment tab but changes devices doesn't switch graphs
+try to fix mobile layout bug
 
-prevent page change on refresh
+change device dropdown to select element
 
-data fetch on live mode still not seeming to work properly
-
-try to fix iphone layout bug
 
 ** test
 
 all changes to tcp client are working properly
+
+live mode when no data
+
+deleting data
+
+
+** review
+
+find better charting library?
+
+store more settings in local_storage, maybe figure out how to encrypt local_storage
+
+finalize where device dataFields, and dataKeys come from
+
+make it so brushing select is cancelable with click out or esc

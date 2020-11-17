@@ -23,7 +23,6 @@ export default () => {
   ] = useApi()
 
   const handleSelect = (value) => {
-    localStorage.setItem('id', value)
     setDevice(devices[value])
   }
 

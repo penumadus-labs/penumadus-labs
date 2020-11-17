@@ -38,7 +38,8 @@ module.exports = (app, port) => {
 
     wsServer.handleUpgrade(req, socket, head, (ws) => {
       // wsServer.emit('connection', ws, req)
-      console.info('websocket connected')
+      if (process.env.NODE_ENV !== 'development')
+        console.info('websocket connected')
     })
   })
 

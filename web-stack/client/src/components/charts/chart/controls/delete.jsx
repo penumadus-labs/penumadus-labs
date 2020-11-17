@@ -2,7 +2,7 @@ import React from 'react'
 import { VscTrash as Delete } from 'react-icons/vsc'
 import Alert from '../../../alert'
 
-export default ({ useDelete }) => {
+export default ({ useDelete, getData }) => {
   const [status, request] = useDelete()
 
   const handleClick = async () => {
@@ -13,6 +13,7 @@ export default ({ useDelete }) => {
     )
       return
     await request()
+    await getData()
   }
 
   return (

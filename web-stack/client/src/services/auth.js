@@ -18,6 +18,7 @@ const useAuth = () => {
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
+          navigate('/')
         })
     },
     // eslint-disable-next-line

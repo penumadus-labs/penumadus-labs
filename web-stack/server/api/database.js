@@ -8,10 +8,7 @@ module.exports = Router()
   .get(
     '/devices',
     handleAsync(async (req, res) => {
-      const list = await client.getDeviceSchemas()
-      res.send(
-        list.reduce((o, device) => ({ ...o, [device.id]: device }), { list })
-      )
+      res.send(await client.getDeviceSchemas())
     })
   )
   .get(
@@ -25,7 +22,7 @@ module.exports = Router()
     handleAsync(async ({ query }, res) => {
       const { data } = await client.getLinearData({
         ...query,
-        limit: -1,
+        limit: null,
       })
       const csv = unparse(data)
       res.send(csv)

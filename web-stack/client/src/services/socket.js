@@ -1,13 +1,8 @@
 import { useEffect } from 'react'
 import useApi from '../api'
+import urlPostfix from '../utils/url'
 
-const { NODE_ENV, REACT_APP_DEVELOPMENT_PORT } = process.env
-const dev = NODE_ENV === 'development'
-
-const port = dev ? `:${REACT_APP_DEVELOPMENT_PORT}` : ''
-const protocol = dev ? '' : 's'
-
-const url = `ws${protocol}://${window.location.hostname}${port}/`
+const url = 'ws' + urlPostfix
 
 let tasks = []
 let ws = null

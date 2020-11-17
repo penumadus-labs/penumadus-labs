@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const apiRouter = require('./api/routes')
 
-const dev = !!process.env.DEV
+const dev = process.env.NODE_ENV === 'development'
 
 const originList = ['http://localhost:3000', 'http://hankthetank.me:3000']
 const corsConfig = {
@@ -21,7 +21,7 @@ const test = (req, res, next) => {
 }
 
 module.exports = express()
-  // .use(test)
+  .use(test)
   .use(cors(corsConfig))
   .use(cookieParser())
   .use('/api', express.json(), apiRouter)

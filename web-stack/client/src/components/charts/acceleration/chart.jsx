@@ -21,7 +21,9 @@ export default () => {
 
   const [, event] = accelerationEvent
   const index =
-    !event?.data || !eventList ? null : eventList.indexOf(event.data[0].time)
+    !event?.data.length || !eventList
+      ? null
+      : eventList.indexOf(event.data[0].time)
 
   const initializeLive = () => getAccelerationEvent(0)
 
@@ -47,6 +49,7 @@ export default () => {
         handleLive,
       }}
       data={accelerationEvent}
+      getData={getAcceleration}
       useDownload={useDownloadAccelerationEvent}
       useDelete={useDeleteAcceleration}
       yDomain={[-10, 10]}

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
-export default (apiData, initialize, handleEvent) => {
+export default (collectedData, initialize, handleEvent) => {
   const [live, setLive] = useState(!localStorage.getItem('live'))
-  const [liveData, setLiveData] = useState(apiData)
+  const [liveData, setLiveData] = useState(collectedData)
 
   const toggleLive = async () => {
     if (!live) {
@@ -14,6 +14,10 @@ export default (apiData, initialize, handleEvent) => {
     else localStorage.removeItem('live')
     setLive(!live)
   }
+
+  useEffect(() => {
+    if (live) setLiveData(collectedData)
+  }, [live, collectedData])
 
   useEffect(() => {
     if (live) initialize()
@@ -27,7 +31,7 @@ export default (apiData, initialize, handleEvent) => {
     [live]
   )
 
-  const data = live ? liveData : apiData
+  const data = live ? liveData : collectedData
 
   return [data, { live, toggleLive }]
 }

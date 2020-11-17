@@ -2,9 +2,10 @@ const { MongoClient } = require('mongodb')
 const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
-const { createDeviceSchema, schemas } = require('./schemas')
+const { createDeviceSchema, addDeviceContext } = require('./schemas')
 const tunnel = require('../utils/ssh-tunnel')
 const startProcess = require('../commands/start-mongod')
+const { getDataKeys } = require('./queries/helpers')
 
 const defaultUdpPortIndex = 30000
 
@@ -39,6 +40,10 @@ const client = {
       get: (obj, prop) => (...args) => obj[prop]({ _id }, ...args),
     })
   },
+  // ^^ if I change my mind about the proxy
+  // appData(op, ...params) {
+  //   return client.appData[op](client.appDataQuery, ...params)
+  // },
   async close() {
     try {
       await mongoClient.close()
@@ -60,16 +65,15 @@ const client = {
   findUser(username) {
     return client.users.findOne({ username })
   },
-  // appData(op, ...params) {
-  //   return client.appData[op](client.appDataQuery, ...params)
-  // },
+
   async getUdpPortIndex() {
     const { udpPortIndex } = await client.appData.findOne()
     await client.appData.updateOne({ $inc: { udpPortIndex: 1 } })
     return udpPortIndex
   },
   async getDeviceSchemas(store = false) {
-    const schemas = await client.devices
+    const schemas = {}
+    await client.devices
       .find(
         {},
         {
@@ -77,18 +81,20 @@ const client = {
             _id: 0,
             id: 1,
             deviceType: 1,
-            dataFields: 1,
-            configurable: 1,
+            // dataFields: 1,
+            // configurable: 1,
           },
         }
       )
-      .toArray()
+      .forEach(({ id, deviceType }) => {
+        schemas[id] = {
+          id,
+          deviceType,
+          ...addDeviceContext(deviceType),
+        }
+      })
 
-    if (store)
-      client.schemas = schemas.reduce(
-        (o, schema) => ({ ...o, [schema.id]: schema }),
-        {}
-      )
+    if (store) client.schemas = schemas
 
     return schemas
   },
@@ -129,29 +135,19 @@ const client = {
     )
   },
 
-  findDevice(id, projection) {
+  getDeviceData(id, projection) {
     projection._id = 0
     return client.devices.findOne({ id }, { projection })
   },
-  // async getEnvironmentReduced({ id, ...params }) {
-  //   const res = await client.findDevice(id, getEnvironment(params, true))
-  //   if (id === 'bridgetest') return res
-  //   for (const d of res.data) d.pressure = Math.floor(d.pressure / 100)
-
-  //   return res
-  // },
-  // async getEnvironment({ id, ...params }) {
-  //   return client.findDevice(id, getEnvironment({ ...params }))
-  // },
   getLinearData({ id, ...params }) {
-    return client.findDevice(id, getLinearData({ ...params }))
+    return client.getDeviceData(id, getLinearData(params))
   },
   async getAcceleration({ id }) {
-    const { data } = await client.findDevice(id, getAccelerationEventTimes())
+    const { data } = await client.getDeviceData(id, getAccelerationEventTimes())
     return data
   },
   getAccelerationEvent({ id, ...params }) {
-    return client.findDevice(id, getAccelerationEvent(params))
+    return client.getDeviceData(id, getAccelerationEvent(params))
   },
   deleteField({ id, field }) {
     return client.devices.updateOne({ id }, { $set: { [field]: [] } })

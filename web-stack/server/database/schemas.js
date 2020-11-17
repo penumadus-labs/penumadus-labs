@@ -1,15 +1,34 @@
-const device = {
-  dataFields: ['environment', 'acceleration'],
-}
+// const device = {
+//   dataFields: ['environment', 'acceleration'],
+// }
+
+// const bridge = {
+//   configurable: false,
+//   dataFields: [...device.dataFields, 'deflection'],
+// }
+
+// const tank = {
+//   configurable: true,
+//   dataFields: [...device.dataFields],
+// }
+
+const acceleration = ['magnitude', 'x', 'y', 'z']
 
 const bridge = {
   configurable: false,
-  dataFields: [...device.dataFields, 'deflection'],
+  dataFields: {
+    environment: ['temperature', 'humidity', 'sensors'], // count
+    deflection: ['deflection'],
+    acceleration,
+  },
 }
 
 const tank = {
   configurable: true,
-  dataFields: [...device.dataFields],
+  dataFields: {
+    environment: ['temperature', 'humidity', 'pressure'], // fills
+    acceleration,
+  },
 }
 
 const schemas = {
@@ -18,13 +37,24 @@ const schemas = {
 }
 
 const createDeviceSchema = (props) => {
-  const schema = schemas[props.deviceType]
   const fields = {}
 
-  for (const field of schema.dataFields) {
+  const { dataFields } = schemas[props.deviceType]
+
+  // this code would store the keys in the database
+  // for (const [field, keys] of list) {
+  //   dataFields.push(field)
+  //   fields[field] = {
+  //     keys,
+  //     data: [],
+  //   }
+  // }
+
+  for (const field of Object.keys(dataFields)) {
     fields[field] = []
   }
 
+  // props info
   // props {
   //  id
   //  updPort
@@ -33,12 +63,21 @@ const createDeviceSchema = (props) => {
 
   return {
     ...props,
-    ...schema,
     ...fields,
   }
 }
 
-module.exports = {
-  createDeviceSchema,
-  schemas,
+const getDataKeys = ({ deviceType, field }) => ({
+  keys: schemas[deviceType].dataFields[field],
+})
+
+const addDeviceContext = (deviceType) => {
+  const { dataFields, configurable } = schemas[deviceType]
+
+  return {
+    configurable,
+    dataFields: Object.keys(dataFields),
+  }
 }
+
+module.exports = { createDeviceSchema, addDeviceContext, getDataKeys }

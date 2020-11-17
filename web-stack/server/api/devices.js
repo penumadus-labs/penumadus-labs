@@ -16,11 +16,9 @@ module.exports = Router()
   })
   .get(
     '/settings',
-    handleAsync(async ({ query }, res) => {
+    handleAsync(async ({ query: { id } }, res) => {
       res.send(
-        process.env.AWS_SERVER
-          ? await getDeviceSettings(query.id)
-          : testSettings
+        process.env.AWS_SERVER ? await getDeviceSettings(id) : testSettings
       )
     })
   )

@@ -1,5 +1,6 @@
 import { request, update } from './api'
 import createRequestHook from './hooks/create-request-hook'
+import { resolution } from '../utils/live-data-config'
 
 //* requests without dependencies
 
@@ -16,7 +17,7 @@ const [useRegisterDevice] = createRequestHook((data) =>
 
 export default ({ requestAndStore, device, setDevice }) => {
   const initializeApi = async () => {
-    //* calls that only need to be made once
+    //* top level calls that only need to be made once
 
     const devices = await requestAndStore(
       'devices',
@@ -24,6 +25,8 @@ export default ({ requestAndStore, device, setDevice }) => {
       { deviceType: 'bridge' },
       true
     )
+
+    devices.list = Object.values(devices)
 
     const storedId = localStorage.getItem('id')
 
@@ -38,7 +41,7 @@ export default ({ requestAndStore, device, setDevice }) => {
 
   const { id, deviceType } = device
 
-  //* stored requests
+  //* top level requests
 
   const getProtocol = (params) =>
     requestAndStore(
@@ -48,27 +51,41 @@ export default ({ requestAndStore, device, setDevice }) => {
       true
     )
 
-  const getSettings = (params) =>
-    requestAndStore('settings', 'devices/settings', { ...params, id }, true)
+  const getSettings = () =>
+    requestAndStore('settings', 'devices/settings', { id }, true)
 
-  //* stored and manually updated requests
+  //* top level and manually updated requests
 
-  const [useGetEnvironment, getEnvironment] = createRequestHook((storeError) =>
-    requestAndStore(
-      'environment',
-      'database/linear-data',
-      { id, field: '$environment' },
-      storeError
-    )
+  const [useGetEnvironment, getEnvironment] = createRequestHook(
+    (params, storeError) =>
+      requestAndStore(
+        'environment',
+        'database/linear-data',
+        {
+          ...params,
+          id,
+          deviceType,
+          field: 'environment',
+          resolution,
+        },
+        storeError
+      )
   )
 
-  const [useGetDeflection, getDeflection] = createRequestHook((storeError) =>
-    requestAndStore(
-      'deflection',
-      'database/linear-data',
-      { id, field: '$deflection' },
-      storeError
-    )
+  const [useGetDeflection, getDeflection] = createRequestHook(
+    (params, storeError) =>
+      requestAndStore(
+        'deflection',
+        'database/linear-data',
+        {
+          ...params,
+          id,
+          deviceType,
+          field: 'deflection',
+          resolution,
+        },
+        storeError
+      )
   )
 
   const [
@@ -78,7 +95,7 @@ export default ({ requestAndStore, device, setDevice }) => {
     requestAndStore(
       'accelerationEvent',
       'database/acceleration-event',
-      { index, id },
+      { index, id, deviceType },
       storeError
     )
   )
@@ -88,7 +105,7 @@ export default ({ requestAndStore, device, setDevice }) => {
     getAccelerationEvent(0, true)
   }
 
-  //* non-stored requests
+  //* local requests requests
 
   const [useDownloadEnvironment] = createRequestHook((start, end) =>
     request('database/linear-data-csv', { id, start, end })
@@ -114,10 +131,7 @@ export default ({ requestAndStore, device, setDevice }) => {
     update('devices/command', { id, command, args })
   )
 
-  //* static requests
-
   const actions = {
-    // initializeApi,
     getProtocol,
     getEnvironment,
     getDeflection,
