@@ -165,7 +165,7 @@ parsedata(char *incoming, char *outgoing, int size)
 				  "\"pad\":\"",
 				MAINDATA,
 				deviceID,
-				pressure*2.0,
+				pressure,
 				fills,
 				temp,
 				hum,

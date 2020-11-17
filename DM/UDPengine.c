@@ -172,7 +172,7 @@ main(int argc, char *argv[])
 		break;
 	    case 0:
 		g_err(NOEXIT,NOPERROR,
-			"\nWARNING: Timeout #%d on select\n",
+			"WARNING: Timeout #%d on select",
 			timeouts++);
 		break;
 
