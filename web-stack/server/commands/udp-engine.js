@@ -14,13 +14,14 @@ const killUdpEngines = async () => {
   }
 }
 
-const excludedPorts = [32159]
+const excludedUdpPorts = [] //32159]
 
 module.exports = async ({ tcpPort }) => {
   if (!process.env.AWS_SERVER) return console.info('udp engines not started')
   try {
+    await killUdpEngines()
     const udpPorts = (await client.getUdpPorts()).filter(
-      (port) => !excludedPorts.includes(port)
+      (port) => !excludedUdpPorts.includes(port)
     )
 
     for (const udpPort of udpPorts)

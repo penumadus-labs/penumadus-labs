@@ -24,6 +24,7 @@ export default () => {
 
   const handleSelect = (value) => {
     setDevice(devices[value])
+    localStorage.setItem('device', value)
   }
 
   if (!devices) return null

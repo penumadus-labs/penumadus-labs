@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { Router, navigate } from '@reach/router'
 
 import { FaChartLine as Environment } from 'react-icons/fa'
 import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
 import { FiLogOut as Logout } from 'react-icons/fi'
-import { MdDashboard as Dash, MdDevices as Devices } from 'react-icons/md'
+import { MdDashboard as Dashboard, MdDevices as Devices } from 'react-icons/md'
 
 import useApi from '../api'
 import Link from './link'
@@ -16,19 +16,25 @@ import DeflectionChart from '../components/charts/deflection-chart'
 
 import Controls from './controls'
 import Register from './register'
-import NotFound from './404'
+
+const staticRoutes = ['register']
 
 const icons = {
   environment: Environment,
   deflection: Deflection,
   acceleration: Acceleration,
+  controls: Dashboard,
+  register: Devices,
 }
 
-const routeComponents = {
+const Components = {
   environment: EnvironmentChart,
   deflection: DeflectionChart,
   acceleration: AccelerationChart,
+  controls: Controls,
+  register: Register,
 }
+
 // creates routes, links, and data fetches based on device's data fields
 // configurable device includes control panel for configuring device remotely
 export default ({ handleLogout }) => {
@@ -45,50 +51,59 @@ export default ({ handleLogout }) => {
     },
   ] = useApi()
 
-  const apiRequests = {
-    environment: () => getEnvironment({ recent: true }, true),
-    deflection: () => getDeflection({ recent: true }, true),
-    acceleration: () => getAcceleration(true),
-  }
+  const { requests, paths, apiRequests } = useMemo(() => {
+    console.log('memo')
+    const requests = [...dataFields, ...(configurable ? ['controls'] : [])]
+
+    const paths = [...requests, ...staticRoutes]
+
+    const apiRequests = {
+      environment: () => getEnvironment({ recent: true }, true),
+      deflection: () => getDeflection({ recent: true }, true),
+      acceleration: () => getAcceleration(true),
+      controls: () => {
+        getProtocol()
+        getSettings()
+      },
+    }
+
+    return { requests, paths, apiRequests }
+  }, [
+    dataFields,
+    configurable,
+    getProtocol,
+    getSettings,
+    getEnvironment,
+    getDeflection,
+    getAcceleration,
+  ])
 
   // changes data when device is toggled
 
   useEffect(() => {
-    if (configurable) {
-      getProtocol()
-      getSettings()
-    }
-
+    console.log('effect')
     // fetches the data for each field
     // navigates to first field once it's resolved
 
-    const currentDevice = localStorage.getItem('id')
-
-    dataFields.forEach(async (field, index) => {
+    requests.forEach(async (field, index) => {
       await apiRequests[field]()
-      // redirect to first request if id has changed or path = home
-      if (
-        index === 0 &&
-        (currentDevice !== id || window.location.pathname === '/')
-      ) {
-        localStorage.setItem('id', id)
-        await navigate(`/${field}`)
-      }
-    })
-    // eslint-disable-next-line
-  }, [id])
 
-  const routes = dataFields.map((field) => {
-    const Route = routeComponents[field]
+      // navigate to valid route on page load or device change
+      if (index === 0 && !paths.includes(window.location.pathname.slice(1)))
+        navigate(field)
+    })
+  }, [id, apiRequests, paths, requests])
+
+  const routes = paths.map((field) => {
+    const Route = Components[field]
     return <Route key={field} path={field} />
   })
 
-  const links = dataFields.map((field) => (
+  const links = paths.map((field) => (
     <Link
       key={field}
-      style={{ fontSize: '10px' }}
       Icon={icons[field]}
-      label={field}
+      label={`${field[0].toUpperCase()}${field.slice(1)}`}
       to={`${field}`}
     />
   ))
@@ -96,18 +111,16 @@ export default ({ handleLogout }) => {
   return (
     <>
       <main>
-        <Router className="space-children-y">
-          {routes}
-          {configurable && <Controls path="controls" />}
-          <Register path="register" />
-          <NotFound default />
-        </Router>
+        <Router className="space-children-y">{routes}</Router>
       </main>
       <nav className="shadow-card raised">
         {links}
-        {configurable && <Link Icon={Dash} label="Controls" to="controls" />}
-        <Link Icon={Devices} label="Register" to="register" />
-        <Link Icon={Logout} label="Logout" to="/" onClick={handleLogout} />
+        <Link
+          Icon={Logout}
+          label="Logout"
+          to={window.location.pathname}
+          onClick={handleLogout}
+        />
       </nav>
     </>
   )

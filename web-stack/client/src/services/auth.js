@@ -40,7 +40,7 @@ const useAuth = () => {
     setAuthState({})
     setDevice(null)
     localStorage.clear()
-    await navigate('')
+    await navigate('/')
   }
 
   return [authState, { handleLogin, loginStatus, handleLogout }]

@@ -9,6 +9,19 @@ const Menu = styled.div`
   justify-content: space-between;
 `
 
+const formatZeros = (value) => {
+  return value < 10 ? `0${value}` : value
+}
+
+const getTimeInHoursMinutesSeconds = () => {
+  const date = new Date(Date.now())
+  const hours = date.getHours()
+  const minutes = formatZeros(date.getMinutes())
+  const seconds = formatZeros(date.getSeconds())
+
+  return `${hours}:${minutes}:${seconds}`
+}
+
 const reduceFields = (fields) =>
   fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
 
@@ -25,10 +38,9 @@ export default () => {
   }, [id, dataFields])
 
   useMessage(({ type }) => {
-    const date = new Date(Date.now())
     setStatus((status) => ({
       ...status,
-      [type]: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+      [type]: getTimeInHoursMinutesSeconds(),
     }))
   })
 

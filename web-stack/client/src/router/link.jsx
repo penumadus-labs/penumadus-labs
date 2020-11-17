@@ -12,6 +12,7 @@ const Root = styled(Link)`
   }
 
   p {
+    font-size: 10px;
     text-align: center;
   }
 `

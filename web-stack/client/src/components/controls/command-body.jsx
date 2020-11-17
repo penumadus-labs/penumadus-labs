@@ -1,17 +1,26 @@
 import React from 'react'
 
-const CommandBody = ({ useCommand, commandArgs, close, children }) => {
+export default ({
+  useCommand,
+  name,
+  data,
+  close,
+  children,
+  callback = () => {},
+}) => {
   const [status, request, { loading, success }] = useCommand()
+
+  const handleSubmit = async () => {
+    await request(name, data)
+    await callback()
+  }
 
   const buttons = loading ? null : success ? (
     <button className="button button-red" onClick={close}>
       close
     </button>
   ) : (
-    <button
-      className="button button-green"
-      onClick={() => request(...commandArgs)}
-    >
+    <button className="button button-green" onClick={handleSubmit}>
       send
     </button>
   )
@@ -25,6 +34,6 @@ const CommandBody = ({ useCommand, commandArgs, close, children }) => {
   )
 }
 
-export default (useCommand, commandArgs, children = null) => ({ close }) => (
-  <CommandBody {...{ useCommand, commandArgs, close }}>{children}</CommandBody>
-)
+// export default (useCommand, commandArgs, children = null) => ({ close }) => (
+//   <CommandBody {...{ useCommand, commandArgs, close }}>{children}</CommandBody>
+// )

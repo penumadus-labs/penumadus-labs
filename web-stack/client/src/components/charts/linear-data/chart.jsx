@@ -13,14 +13,14 @@ export default ({
   yDomain = [-1, 100],
 }) => {
   const initializeLive = () => {
-    return getData({ recent: true }, true).catch(console.error)
+    return getData({ recent: true }, true)
   }
 
   const handleLive = ({ type, data, setLiveData }) => {
     if (type !== dataType) return
     setLiveData((liveData) => [
       // ...liveData.slice(+(data.time - liveData[0].time >= oneHourInSeconds)),
-      ...liveData.slice(liveData >= resolution),
+      ...liveData.slice(+(liveData.length >= resolution)),
       data,
     ])
   }

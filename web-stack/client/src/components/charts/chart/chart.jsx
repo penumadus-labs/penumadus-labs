@@ -55,16 +55,22 @@ export default ({
 }) => {
   if (status) return status
 
-  const [data, liveProps] = useLive(collectedData, initializeLive, handleLive)
+  const [data, liveProps, { clearLiveData }] = useLive(
+    collectedData,
+    initializeLive,
+    handleLive
+  )
+
+  const noData = noDataCollected && data.length === 0
 
   const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
     keys,
     data,
-    noDataCollected,
+    noData,
     ...props,
   })
 
-  if (noDataCollected)
+  if (noData)
     return (
       <div className="card">
         <p>no data has been collected for this unit</p>
@@ -80,6 +86,7 @@ export default ({
     deleteProps: {
       useDelete,
       getData,
+      clearLiveData,
     },
     liveProps,
   }

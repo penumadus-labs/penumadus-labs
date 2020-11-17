@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react'
 import Chart from './d3-linechart'
 
-export default ({ noDataCollected, ...props }) => {
+export default ({ noData, ...props }) => {
   const ref = useRef()
 
   const { chart, ...ctx } = useMemo(() => {
-    if (noDataCollected) return {}
+    if (noData) return {}
     const chart = new Chart(props)
 
     return {
@@ -17,7 +17,7 @@ export default ({ noDataCollected, ...props }) => {
     }
 
     // eslint-disable-next-line
-  }, [props.data?.length, props.keys])
+  }, [props.data, props.keys])
 
   useEffect(
     () => {

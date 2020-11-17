@@ -67,26 +67,25 @@ module.exports = class Device extends EventEmitter {
   }
 
   initialize(id) {
+    this.id = id
     const { deviceType } = database.schemas[id]
     this.attachEvents(protocols[deviceType])
 
     broadcaster.devices[id] = this
 
-    this.id = id
     this.initialized = true
-
-    // await this.getSettings()
   }
 
   attachEvents({
-    configureable = false,
+    configurable = false,
     commands = [],
     getters = [],
     setters = [],
     streams = [],
   }) {
     this.getters = getters
-    if (configureable) this.broadcast('settings')
+    // testing feature cached settings
+    if (configurable) this.getSettings()
 
     for (const { name, command } of commands) {
       this[name] = () => this.createRequest({ command, name })
@@ -96,8 +95,8 @@ module.exports = class Device extends EventEmitter {
       this[name] = this.createSetter({ command, args, name, label })
     }
 
-    for (const { command } of streams) {
-      this.on(command, this.handlers[command])
+    for (const { name, command } of streams) {
+      this.on(command, this.handlers[name])
     }
 
     this.on('error', (err) => {
@@ -155,9 +154,9 @@ module.exports = class Device extends EventEmitter {
     })
   }
 
-  createSetter({ command, requiredArgs, name, label }) {
-    return async (settings) => {
-      const args = Object.values(settings)
+  createSetter({ command, args: requiredArgs, name, label }) {
+    return async (data) => {
+      const args = Object.values(data)
       if (args.length !== requiredArgs) {
         throw new Error(
           `expected ${requiredArgs} args. received ${args.length} args`
@@ -165,25 +164,17 @@ module.exports = class Device extends EventEmitter {
       }
 
       const response = await this.createRequest({ command, name, args })
-      // this.settings[label] = settings
-      this.broadcaster('settings')
+      // testing feature cached settings
+      this.settings[label] = data
+      this.broadcast('settings')
       return response
     }
   }
 
   async getSettings() {
-    // need to error test this method before deleting old code
-
-    // await Promise.all(
-    //   getters.map(({ command, label }) =>
-    //     this.createRequest(command).then(
-    //       ({ time, ...data }) => (settings[label] = data)
-    //     )
-    //   )
-    // )
-
-    // this.settings = {}
-    const settings = {}
+    // testing feature cached settings
+    if (this.settings) return this.settings
+    this.settings = {}
 
     await Promise.all(
       this.getters.map(async ({ command, name, label }) => {
@@ -192,11 +183,11 @@ module.exports = class Device extends EventEmitter {
           name,
           label,
         })
-        settings[label] = data
+        this.settings[label] = data
       })
     )
 
-    // return this.settings
-    return settings
+    // testing feature cached settings
+    this.broadcast('settings')
   }
 }

@@ -11,7 +11,7 @@ export default () => {
 
   return (
     <LinearDataChart
-      dataType="environemnt"
+      dataType="environment"
       data={environment}
       getData={getEnvironment}
       useGetData={useGetEnvironment}

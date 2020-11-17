@@ -6,8 +6,8 @@ const broadcaster = (module.exports = {
       client.send(JSON.stringify({ id, type, data }))
     })
   },
-  sendDeviceCommand({ id, command, args }) {
-    return broadcaster.devices[id][command](args)
+  sendDeviceCommand({ id, command, data }) {
+    return broadcaster.devices[id][command](data)
   },
   getDeviceSettings(id) {
     if (broadcaster.devices[id]) {

@@ -127,8 +127,8 @@ export default ({ requestAndStore, device, setDevice }) => {
     request('database/data', { id, field: 'acceleration' }, 'delete')
   )
 
-  const [useCommand] = createRequestHook(async (command, args) =>
-    update('devices/command', { id, command, args })
+  const [useCommand] = createRequestHook(async (command, data) =>
+    update('devices/command', { id, command, data })
   )
 
   const actions = {

@@ -4,6 +4,7 @@ import useMessage from '../../../../services/socket'
 export default (collectedData, initialize, handleEvent) => {
   const [live, setLive] = useState(!localStorage.getItem('live'))
   const [liveData, setLiveData] = useState(collectedData)
+  const clearLiveData = () => setLiveData([])
 
   const toggleLive = async () => {
     if (!live) {
@@ -33,5 +34,5 @@ export default (collectedData, initialize, handleEvent) => {
 
   const data = live ? liveData : collectedData
 
-  return [data, { live, toggleLive }]
+  return [data, { live, toggleLive }, { clearLiveData }]
 }
