@@ -7,7 +7,6 @@ add fills count indicator
 app compile mode bridge/tank
 
 
-
 ** bugs
 
 try to fix mobile layout bug
@@ -17,7 +16,7 @@ change device dropdown to select element
 
 ** test
 
-all changes to tcp client are working properly
+tcp device client settings cache is working properly
 
 live mode when no data
 
@@ -33,3 +32,5 @@ store more settings in local_storage, maybe figure out how to encrypt local_stor
 finalize where device dataFields, and dataKeys come from
 
 make it so brushing select is cancelable with click out or esc
+
+create abstraction for chart alert controls

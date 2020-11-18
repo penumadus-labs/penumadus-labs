@@ -1,5 +1,4 @@
 const { createServer } = require('http')
-const { createServer: createSecureServer } = require('https')
 const { Server } = require('ws')
 const broadcaster = require('../controllers/broadcaster')
 const { verifyUserSocket } = require('../utils/auth')
