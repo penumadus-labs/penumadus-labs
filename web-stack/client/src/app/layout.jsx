@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import useAuth from '../services/auth'
 import { useSocket } from '../services/socket'
 import Login from './login'
@@ -8,7 +8,7 @@ import StatusBar from './status-bar'
 
 const Root = styled.div`
   display: grid;
-  height: 100vh;
+  height: ${window.innerHeight}px;
 
   ${({ theme }) => theme.gt.layout} {
     grid-template-rows: auto minmax(0, 1fr);
@@ -54,12 +54,30 @@ const Root = styled.div`
   }
 `
 
-const Layout = ({ children }) => {
+let timeout
+
+const Layout = () => {
+  // console.log(window.innerHeight)
   const [
     { verifying, loggedIn },
     { handleLogin, loginStatus, handleLogout },
   ] = useAuth()
   useSocket(loggedIn)
+
+  const ref = useRef()
+
+  useEffect(() => {
+    const resizeEvent = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        ref.current.style.height = `${window.innerHeight}px`
+      }, 200)
+    }
+    window.addEventListener('resize', resizeEvent)
+    return () => {
+      window.removeEventListener('resize', resizeEvent)
+    }
+  }, [])
 
   const main = verifying ? null : !loggedIn ? (
     <Login handleLogin={handleLogin} status={loginStatus} />
@@ -68,7 +86,7 @@ const Layout = ({ children }) => {
   )
 
   return (
-    <Root>
+    <Root ref={ref}>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
         {loggedIn && <StatusBar />}

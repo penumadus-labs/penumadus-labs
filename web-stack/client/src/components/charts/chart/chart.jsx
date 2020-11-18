@@ -76,8 +76,6 @@ export default ({
     ...props,
   })
 
-  console.log(data)
-
   if (noData)
     return (
       <div className="card">

@@ -31,5 +31,3 @@ export const colors = {
 for (let index = 1; index < 9; index++) {
   colors[`sensor${index}`] = colors.sensors
 }
-
-console.log(colors)
