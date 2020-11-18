@@ -73,8 +73,8 @@ const Body = styled.div`
 
 export const useEsc = (callback) =>
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.keyCode === 27) callback()
+    const handleKeyDown = ({ keyCode }) => {
+      if (keyCode === 27) callback()
     }
 
     window.addEventListener('keydown', handleKeyDown)

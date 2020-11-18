@@ -30,8 +30,8 @@ export default () => {
       {settings ? (
         <>
           <div className="card grid-commands">
-            {commands.map((command, i) => (
-              <Command key={i} {...command} useCommand={useCommand} />
+            {commands.map(({ name }, i) => (
+              <Command key={i} name={name} useCommand={useCommand} />
             ))}
           </div>
           {setters.map((setter, i) => (

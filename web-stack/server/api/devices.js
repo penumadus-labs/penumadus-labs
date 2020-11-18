@@ -25,7 +25,7 @@ module.exports = Router()
   .post(
     '/command',
     handleAsync(async ({ body }, res) => {
-      await sendDeviceCommand(body)
+      if (process.env.AWS_SERVER) await sendDeviceCommand(body)
       res.sendStatus(200)
     })
   )

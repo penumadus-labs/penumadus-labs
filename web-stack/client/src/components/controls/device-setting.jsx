@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Alert from '../alert'
 import Input from '../input'
-import CommandBody from './command-body'
+import Command from './command'
 
 export default ({ name, settings, useCommand }) => {
   const { register, handleSubmit, watch } = useForm()
@@ -34,19 +33,13 @@ export default ({ name, settings, useCommand }) => {
     <>
       <form className="card-spaced" onSubmit={handleSubmit(submit)}>
         <div className="grid-4">{inputs}</div>
-        <Alert
-          buttonText={name}
-          disabled={disabled}
-          render={({ close }) => (
-            <CommandBody {...{ close, useCommand, name, data, callback }}>
-              {Object.entries(changes).map(([name, value]) => (
-                <p key={name}>
-                  {name}: {settings[name]} to {value}
-                </p>
-              ))}
-            </CommandBody>
-          )}
-        />
+        <Command {...{ disabled, name, data, useCommand, callback }}>
+          {Object.entries(changes).map(([name, value]) => (
+            <p key={name}>
+              {name}: {settings[name]} to {value}
+            </p>
+          ))}
+        </Command>
       </form>
     </>
   )

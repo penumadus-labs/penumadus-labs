@@ -44,7 +44,7 @@ const Header = styled.div`
 export default ({
   children,
   render,
-  data: [status, { keys, noDataCollected, data: collectedData } = {}],
+  data: [status, { noDataCollected, data: collectedData } = {}],
   getData,
   useDownload,
   useDelete,
@@ -63,12 +63,20 @@ export default ({
 
   const noData = noDataCollected && data.length === 0
 
-  const { ref, date, domain, defaultDownloadProps, toolProps } = useChart({
-    keys,
+  const {
+    ref,
+    date,
+    domain,
+    defaultDownloadProps,
+    toolProps,
+    labels,
+  } = useChart({
     data,
     noData,
     ...props,
   })
+
+  console.log(data)
 
   if (noData)
     return (
@@ -104,7 +112,7 @@ export default ({
         {!liveProps.live ? <Tools {...toolProps} /> : null}
       </ControlBarStyle>
       <StyledSVG ref={ref} />
-      <Legend labels={keys} />
+      <Legend labels={labels} />
     </div>
   )
 }

@@ -52,7 +52,7 @@ export default () => {
       <div>
         {Object.entries(status).map(([field, value]) => (
           <p key={field} className="text-sm">
-            last {field} reading: {value}
+            {field}: {value}
           </p>
         ))}
       </div>

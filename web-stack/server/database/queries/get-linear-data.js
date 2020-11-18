@@ -13,6 +13,13 @@ module.exports = ({
 }) => {
   const input = `$${field}`
 
+  // if download request
+  if (limit === null) {
+    return {
+      data: getSlicedLinearData({ input, limit }),
+    }
+  }
+
   return {
     ...getNoDataCollected({ input }),
     ...getDataKeys({ deviceType, field }),

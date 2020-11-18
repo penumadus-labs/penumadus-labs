@@ -1,7 +1,10 @@
 import React, { useMemo, useEffect } from 'react'
 import { Router, navigate } from '@reach/router'
 
-import { FaChartLine as Environment } from 'react-icons/fa'
+import {
+  // FaChartLine as Environment,
+  FaThermometerHalf as Environment,
+} from 'react-icons/fa'
 import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
 import { FiLogOut as Logout } from 'react-icons/fi'
@@ -52,7 +55,6 @@ export default ({ handleLogout }) => {
   ] = useApi()
 
   const { requests, paths, apiRequests } = useMemo(() => {
-    console.log('memo')
     const requests = [...dataFields, ...(configurable ? ['controls'] : [])]
 
     const paths = [...requests, ...staticRoutes]
@@ -81,9 +83,11 @@ export default ({ handleLogout }) => {
   // changes data when device is toggled
 
   useEffect(() => {
-    console.log('effect')
     // fetches the data for each field
     // navigates to first field once it's resolved
+
+    // could do this, if clear data from top level to reinstate loading
+    // if (!paths.includes(window.location.pathname.slice(1))) navigate(paths[0])
 
     requests.forEach(async (field, index) => {
       await apiRequests[field]()

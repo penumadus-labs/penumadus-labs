@@ -2,12 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { parseError } from '../api'
 import { ErrorInline, LoadingInline } from '../api-status-components'
 
+// const useTimeout = (ms, callback) => {
+//   const [ref, setRef] = useState(null)
+//   // eslint-disable-next-line
+//   useEffect(() => () => clearTimeout(ref), [])
+//   const setTimer = () => {
+//     setRef(
+//       setTimeout(() => {
+//         setRef(null)
+//         callback()
+//       }, ms)
+//     )
+//   }
+//   return setTimer
+// }
+
 export default (method) => {
   let timeout
 
-  const useRequest = () => {
+  const useRequest = ({ clearStatus = true } = {}) => {
     const [state, setState] = useState({})
-    useEffect(() => () => timeout && clearTimeout(timeout), [])
+    useEffect(() => () => setTimeout(timeout), [])
 
     const { loading, success, error } = state
 
@@ -26,10 +41,11 @@ export default (method) => {
         setLoading()
         const res = await method(...args)
         setSuccess()
-        timeout = setTimeout(() => {
-          timeout = null
-          setState({})
-        }, 3000)
+        if (clearStatus)
+          timeout = setTimeout(() => {
+            timeout = null
+            setState({})
+          }, 3000)
         return res
       } catch (error) {
         setError(parseError(error))

@@ -14,14 +14,15 @@ export default ({ noData, ...props }) => {
       domain: chart.getDomainParsed(),
       defaultDownloadProps: chart.getDomain(),
       toolProps: chart.getToolProps(),
+      labels: chart.getLabels(),
     }
 
     // eslint-disable-next-line
-  }, [props.data, props.keys])
+  }, [props.data])
 
   useEffect(
     () => {
-      if (chart) chart.mount(ref.current)
+      if (chart) return chart.mount(ref.current)
     },
     // eslint-disable-next-line
     [chart]
