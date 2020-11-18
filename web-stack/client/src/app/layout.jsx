@@ -9,7 +9,6 @@ import StatusBar from './status-bar'
 const Root = styled.div`
   display: grid;
   height: ${window.innerHeight}px;
-  overflow-y: hidden;
 
   ${({ theme }) => theme.gt.layout} {
     grid-template-rows: auto minmax(0, 1fr);

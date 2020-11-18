@@ -157,6 +157,11 @@ const globalStyle = css`
     }
   }
 
+  body,
+  .root {
+    overflow-y: hidden;
+  }
+
   button,
   input {
     color: inherit;
