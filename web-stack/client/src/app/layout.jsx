@@ -57,7 +57,6 @@ const Root = styled.div`
 let timeout
 
 const Layout = () => {
-  // console.log(window.innerHeight)
   const [
     { verifying, loggedIn },
     { handleLogin, loginStatus, handleLogout },
@@ -70,7 +69,9 @@ const Layout = () => {
     const resizeEvent = () => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
-        ref.current.style.height = `${window.innerHeight}px`
+        const height = `${window.innerHeight}px`
+        ref.current.style.height = height
+        document.body.style.height = height
       }, 200)
     }
     window.addEventListener('resize', resizeEvent)
