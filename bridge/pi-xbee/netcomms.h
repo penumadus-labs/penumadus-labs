@@ -1,5 +1,5 @@
 //Memory Allocation
-#define FRAMESIZE 80		//fixed sized frame to send via udp
+#define FRAMESIZE 256		//max frame to send via udp
 #define MAXFRAMEBUF 2*FRAMESIZE  //frame size for xbee protocol which is udp + overhead so dbl it
 #define CHARBURST 5	//# of chars to wait on if no work, or 100mS timer
 

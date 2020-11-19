@@ -2,7 +2,7 @@ bool initcomms(char *serialport, unsigned short udpport, bool reset);	//initiali
 bool modemreset(bool hold);
 int xbeeBind(unsigned char socket,unsigned short port);
 int xbeeSocket(void);
-int sendUDP(unsigned char socket,
+int sendUDP(
 	char *addr,
 	short port, 
 	const char *packetdata,

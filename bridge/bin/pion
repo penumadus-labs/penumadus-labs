@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo Processes running...
+ps -aef | grep trans | grep -v grep
+
+if [ $? -eq 0 ]
+then
+	echo kill old procs
+	sudo killall -SIGTERM trans
+	sleep 5
+else
+	echo No old processes
+fi
+
+
+sudo rm /home/pi/logs/e_trans.log
+
+sudo /home/pi/pi-xbee/trans &
+echo started
+sleep 1
+echo New Process...
+ps -aef | grep trans | grep -v grep

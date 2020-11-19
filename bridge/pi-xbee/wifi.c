@@ -75,7 +75,7 @@ sendtoamazon(unsigned char *msg, int len)
     g_err(NOEXIT,NOPERROR,"WIFI: HANK->UDPengine [%.*s]",len,msg);
     if ((n=sendto(wifisock, msg, len, 0, (struct sockaddr *)
                &amazonhank, sizeof(amazonhank))) != len){
-		g_err(NOEXIT,PERROR,"%s: sent diff num bytes than expected %d/%d [%s]\n",
+		g_err(NOEXIT,PERROR,"%s: Failed req len:%d actual len: %d [%s]",
 			__FUNCTION__,n,len,msg);
 		return(false);
     }
@@ -94,7 +94,7 @@ udp_holdConnection(void *arg){
 			//g_err(NOEXIT,NOPERROR,"WIFIPI->UDP success sent link hold");
 		}
 		else{
-			g_err(NOEXIT,NOPERROR,"Wifi Down failed ");
+			g_err(NOEXIT,NOPERROR,"%s: Wifi Down",__FUNCTION__);
 			wifi_avail=false;
                 }
                 sleep(LINKCHECKINTERVAL);
@@ -134,28 +134,15 @@ udp_readthreadproc(void *arg){
                             WIFIQUERYRESP,
                             sizeof(WIFIQUERYRESP)-1)==0) {
 
-                        g_err(NOEXIT,NOPERROR,"WIFI and UDP server AVAIL");
+                        g_err(NOEXIT,NOPERROR,"WIFI/UDPserver AVAIL");
 			wifi_avail=true;
                 }
 
-                /* this command can come from admin interface, UDPengine, or on a 
-                 * looparound from hank via 127.0.0.1 
-                 * normally a shutdown would be sent to hank who would send a shutdown 
-                 * back up to wifipi to get here */
-                else if(strncmp(incomingBuf,
-                            SHUTDOWNLOOP,
-                            sizeof(SHUTDOWNLOOP)-1)==0) {
 
-                        startproc("/sbin/shutdown",2,"-h","now");
-                        g_err(NOEXIT,NOPERROR,"SHUTDOWN COMMAND RECEIVED");
-                        sleep(5);
-                        exit(0);
-                }
-
-                //not for wifipi,  just send message on to hank
+                //unknown message
                 else {
                         g_err(NOEXIT,NOPERROR,
-                            "UDP->HANK:%d: Unknown command [ %s ]",recvMsgSize,incomingBuf);
+                            "UDP->HANK:%d: Unknown command [ %.*s ]",recvMsgSize,recvMsgSize,incomingBuf);
                 }//end if for hank
         }//end while true
 }//end udpreadthread

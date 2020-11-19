@@ -8,11 +8,6 @@ void makeApiFrame(char frameType,
 int portsetup(unsigned char *);
 void printApiFrame(unsigned char *);
 
-//Memory Allocation
-#define FRAMESIZE 80		//fixed sized frame to send via udp
-#define MAXFRAMEBUF 2*FRAMESIZE  //frame size for xbee protocol which is udp + overhead so dbl it
-
-
 //Protocol TIMERS and TIMEOUTS
 #define SENDUDP_TIMEOUT 6000   	//time to wait on UDP packet frame clearance  
 				// if it is sent asynchronously, expect checkrecvframe

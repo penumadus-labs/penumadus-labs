@@ -77,6 +77,13 @@ int n;
 			getpid(),stamp(),logfile);
 			exit(1);
 	    	}
+		if(errfd != 1){
+			fprintf(stderr,"wrong fd for stdout %d\n",errfd); 
+			exit(1);
+		}
+		/* make stderr same as stdout */
+		close(2);
+		dup(1);
 
 		/* so printfs show up in file where they belong */
 		/* need to chang line buffer mode */

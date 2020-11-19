@@ -44,7 +44,6 @@ main(int argc, char *argv[])
 {
 	char tmpbuf[BIGBUF]; //random buffer
 	int ret;		//used for return codes from sys calls
-	int xbeesocket=0xFF;	//socket to talk to cell
 	int commsock[2];	//sockets returned to use as fifo queues
 	int n;
 	int retry;		//if a message doesn't go,  
@@ -99,16 +98,6 @@ main(int argc, char *argv[])
 	/* setup wifi comms  */
 	wifisetup(destaddr,port);
 
-	/* get a socket for cell modem */
-	if( (xbeesocket=xbeeSocket()) < 0){
-		g_err(EXIT,NOPERROR,
-		    "Error on socket create\n");
-	}
-	/* bind to port and address */
-	if (xbeeBind((unsigned char)(xbeesocket),port) < 0){
-		g_err(EXIT,NOPERROR,"Error on bind\n");
-	}
-	g_err(NOEXIT,NOPERROR,"xbee setup success, Socket is %d\n",xbeesocket);
 
 	/* setup a local socketpair as a FIFO for thread to sender communications */
 	if(socketpair(AF_LOCAL,SOCK_SEQPACKET,0,commsock) < 0){
@@ -174,7 +163,7 @@ main(int argc, char *argv[])
 
 		/* no wifi so try sending on xbee */
 		else if(cell_avail){
-			ret=sendUDP(xbeesocket, destaddr, port,tmpbuf,n);
+			ret=sendUDP(destaddr, port,tmpbuf,n);
 			switch(ret){
 				case 0:
 					g_err(NOEXIT,NOPERROR,"Trans Success On Xmit");

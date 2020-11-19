@@ -1,0 +1,51 @@
+
+
+html {
+}
+
+body 
+{
+	background-color:black;
+}
+
+.menudiv{
+	width:100%;
+	border:none;
+	color:silver;
+	background-color:black;
+	padding-top:10px;
+	display:flex;
+	flex-direction:column;
+	text-align:center;
+}
+
+.mainmenubutton
+{
+	width:300px;
+	type:button;
+	border:outset;
+	font-size:40;
+	text-align:center;
+	background-color:goldenrod;
+	color:blue;
+	margin-bottom:10px;
+	border-radius:10px;
+	padding:0;
+}
+
+
+.webdata
+{
+	display:flex;
+	flex-direction:row;
+	flex-wrap:wrap;
+	justify-content:space-around;
+	color:white;
+	font-size:x-large;
+	background:blue;
+	border:solid;
+	border-color:white;
+}
+.webdata > div {
+	margin-right:5%;
+}

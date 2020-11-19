@@ -82,7 +82,7 @@ atcmnd(char *cmnd, int nargs, ...){
 	va_start(ap, nargs);
 
 	size=0;
-	locbuf[size++]=0x70;
+	locbuf[size++]=CELLSTATID;
 	while(*cmnd != '\0')
 		locbuf[size++]=*cmnd++;
 	
@@ -111,8 +111,6 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 	char frame[MAXFRAMEBUF];
 	char initbuf[MAXFRAMEBUF];
 
-	newCondVar(&createsocket_cond);
-	newCondVar(&bindsocket_cond);
 	newCondVar(&sendUDP_cond);
 	newMutex(&udplock);
 	newMutex(&apilock);
@@ -135,7 +133,7 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 
 	cmndmode();
 
-	/* start xbee read thread */
+	/* start xbee read thread for protocol traffic */
 	{
 		pthread_t readthread;
 		if(pthread_create(&readthread,NULL,&processUpBound,NULL) != 0){
@@ -143,7 +141,7 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 		}
 	}
 
-	/* start xbee status thread */
+	/* start xbee status thread to poll cell status */
 	{
 		pthread_t getstatus;
 		if(pthread_create(&getstatus,NULL,&getstatusthread,NULL) != 0){
@@ -151,12 +149,27 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 		}
 	}
 
+
+	/* NOTE use automatic socket (API mode with implicit sockets) 
+	 * controlled by C0 since only using one destination
+	 * and this will cut down on serial traffic as xbee handles socket open/close/bind
+         * and timeout errors.  also makes code more compatible to single threaded arduino
+	 * environment.
+         */
+
 	/* set default listen port */
-	g_err(NOEXIT,NOPERROR,"set default listen port as port+1 %d",udpport);
-	//PONDSCUM
-	sprintf(initbuf,"C0%d",udpport+1);
-	//PONDSCUM  the df would be de if using defaults
-	atcmnd("C0",2,0x7d,0xdf);
+	g_err(NOEXIT,NOPERROR,"set default listen port as port %d = 0x%lx 0x%lx",
+		udpport,
+		(unsigned char)((udpport>>8)&0xFF),
+		(unsigned char)(udpport&0xFF) );
+
+	atcmnd("C0",2,
+		(unsigned char)((udpport>>8)&0xFF),
+		(unsigned char)(udpport&0xFF) );
+
+	/* automatic socket timeout */
+	g_err(NOEXIT,NOPERROR,"set timeout to 5 minutes ");
+	atcmnd("TM",2, 0x0B, 0xB8);
 
 	/* set UDP mode */
 	g_err(NOEXIT,NOPERROR,"set to UDP mode");
@@ -242,70 +255,6 @@ readUntilCR(void)
 	write(errfd,"\r\n",2);
 	return(buf);
 }
-
-
-int
-xbeeSocket(void){
-
-	unsigned char frame[MAXFRAMEBUF];
-	unsigned char buf[4];
-	int ret;
-
-	buf[0]=SETUPID;
-	buf[1]=0;
-
-	//make udp frame into api frame
-	makeApiFrame(SOCKCREATE,buf,2,frame);
-
-	//send udp encapsulated in api frame
-	sendApiFrame(frame,s_fd);
-
-	if(sleep_on_status(&createsocket_cond,5000) != 0){
-		g_err(NOEXIT,PERROR,"%s: error on sleep, timeout\n",
-			__FUNCTION__);
-		return(-256);
-	}
-	else if(createsocket_cond.statcode !=0){
-		g_err(NOEXIT,NOPERROR,"Socket creation error");
-		ret= -1*createsocket_cond.statcode;
-	}
-	else
-		return(createsocket_cond.data);
-}
-
-int
-xbeeBind(unsigned char socket,unsigned short port){
-
-	unsigned char frame[MAXFRAMEBUF];
-	unsigned char buf[8];
-	int ret;
-
-	printf("port %d\n",port);
-	buf[0]=SETUPID;
-	buf[1]=socket;
-	buf[2]=((port&0xFF00)>>8);	//dest port
-	buf[3]=((port&0x00FF));		//dest port
-
-	//make udp frame into api frame
-	makeApiFrame(SOCKBIND,buf,4,frame);
-
-	//send encapsulated in api frame
-	sendApiFrame(frame,s_fd);
-
-	if(sleep_on_status(&bindsocket_cond,5000) != 0){
-		g_err(NOEXIT,PERROR,"%s: error on sleep, timeout\n",
-			__FUNCTION__);
-		return(-256);
-	}
-	else if(bindsocket_cond.statcode !=0){
-		g_err(NOEXIT,NOPERROR,"Bind error");
-		ret= -1*bindsocket_cond.statcode;
-	}
-	else
-		return(0);
-}
-
-	
 
 
 /*********************incoming thread for xbee to pi ************/
@@ -642,60 +591,6 @@ checkReceivedFrames(unsigned char *frameptr)
 				}
 			break;
 
-		case SOCKCREATERESP:
-			printf("SOCKET CREATE  Status\n");
-			createsocket_cond.data=0xFF;
-			switch(frameptr[6]){
-				case 0:
-					printf("Success Socket Create \n");
-					createsocket_cond.data=frameptr[5];
-					break;
-				case 0x22:
-					printf("Not registered\n");
-					cell_avail=false;
-					break;
-				case 0x31:
-					printf("Internal Error\n");
-					break;
-				case 0x32:
-					printf("Resource Error\n");
-					break;
-				case 0x7B:
-					printf("Invalid Protocol\n");break;
-				case 0x7E:
-					printf("Modem Update\n");break;
-				default:
-					printf("Invalid Status\n");
-				}
-			createsocket_cond.statcode=frameptr[6];
-			kickstatus(&createsocket_cond);
-			break;
-
-		case SOCKBINDRESP:
-			printf("SOCKET bind  Status\n");
-			bindsocket_cond.data=0xFF;
-			switch(frameptr[6]){
-				case 0:
-					printf("Bind Success\n");
-					bindsocket_cond.data=frameptr[5];
-					break;
-				case 0x01:
-					printf("Invalid Port\n");
-					break;
-				case 0x02:
-					printf("Internal Error\n");
-					break;
-				case 0x03:
-					printf("Already Listening\n");
-					break;
-				case 0x20:
-					printf("Invalid SOcket\n");break;
-				default:
-					printf("Invalid Status\n");
-				}
-			bindsocket_cond.statcode=frameptr[6];
-			kickstatus(&bindsocket_cond);
-			break;
 
 		case APITXREQRESP:
 			fprintf(stderr,"TX response\n");
@@ -806,12 +701,9 @@ checkReceivedFrames(unsigned char *frameptr)
                         which means check the first character for an
                         an instruction code  and do it*/
 
-		case SOCKRECVFROM:
-			processframe(frameptr);
-			break;
-			
 		case RECVDATA:
 			g_err(NOEXIT,NOPERROR,"Incoming off socket msg\n");
+			processframe(frameptr);
 			break;
 
 		default:
@@ -851,8 +743,8 @@ getstatusthread(void *arg)
 /* formerly used fixed FRAMESIZE udp frames for simplicity on both ends */
 /* now can be up to FRAMESIZE */
 int
-sendUDP(unsigned char socket, 
-	char *addr,short port, 
+sendUDP( char *addr,	
+	short port, 
 	const char *packetdata, 
 	int packetlen)
 {
@@ -886,22 +778,24 @@ sendUDP(unsigned char socket,
 	packetpending=udpPacket[0]=framid+FRAMEDATAID;
 
 	sscanf(addr,"%d.%d.%d.%d",&ip[0],&ip[1],&ip[2],&ip[3]);
-	udpPacket[1]=socket;		//socket to use
-	udpPacket[2]=ip[0];		//ip addr
-	udpPacket[3]=ip[1];		//ip addr
-	udpPacket[4]=ip[2];		//ip addr
-	udpPacket[5]=ip[3];		//ip addr
-	udpPacket[6]=((port&0xFF00)>>8);	//dest port
-	udpPacket[7]=((port&0x00FF));		//dest port
-	udpPacket[8]=0;		//options
+	udpPacket[1]=ip[0];		//ip addr
+	udpPacket[2]=ip[1];		//ip addr
+	udpPacket[3]=ip[2];		//ip addr
+	udpPacket[4]=ip[3];		//ip addr
+	udpPacket[5]=((port&0xFF00)>>8);	//dest port
+	udpPacket[6]=((port&0x00FF));		//dest port
+	udpPacket[7]=0;		//source port
+	udpPacket[8]=0;		//source port
+	udpPacket[9]=0;		//protocol
+	udpPacket[10]=0;		//transmit options
 	/* payload */
-	for(i=9;i<packetlen+9;i++){
+	for(i=11;i<packetlen+11;i++){
 		udpPacket[i] = *packetdata++;
 	}
-	udpPacket[i] = '\0';
+	udpPacket[i++] = '\0';
 
 	//make udp frame into socket send xbee api frame
-	makeApiFrame(SOCKSENDTO,udpPacket,i,frame);
+	makeApiFrame(APITXREQ,udpPacket,i,frame);
 
 
 	//set flag to false before creating situation to set it true
@@ -914,7 +808,8 @@ sendUDP(unsigned char socket,
 	sendApiFrame(frame,s_fd);
 
 	if(sleep_on_status(&sendUDP_cond,5000) != 0){
-		g_err(NOEXIT,PERROR, "%s: error timeout on sleep\n",__FUNCTION__);
+		g_err(NOEXIT,PERROR, "%s: error timeout on sleep socket=%d",__FUNCTION__,socket);
+		printApiFrame(frame);
 		retcode= 256;
 	}
 	else if(sendUDP_cond.statcode !=0 ){
@@ -933,6 +828,7 @@ sendUDP(unsigned char socket,
 }
 
 /* send a UDP frame to server but don't wait on it and sequence it */
+//PONDSCUM cleanse this to work with sockets
 void
 sendUDPSneaky(char *addr,short port, const char *packetdata, int packetlen)
 {
