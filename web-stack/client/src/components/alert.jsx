@@ -71,35 +71,10 @@ const Body = styled.div`
   }
 `
 
-const Alert = ({ children, render, isOpen, close, title }) => {
-  useEsc(close)
-  if (!isOpen) return null
-
-  return (
-    <>
-      <Anchor className="center-child fixed">
-        <ClickOut className="fixed" onClick={close} />
-        <StyledDiv className="card">
-          <CloseButton className="button-text" onClick={close}>
-            <Close size="20" />
-          </CloseButton>
-          {title && <Title className="title">{title}</Title>}
-          <Body>
-            <div className="space-children-y">
-              {children ?? (render && render({ close }))}
-            </div>
-          </Body>
-        </StyledDiv>
-      </Anchor>
-      <OpaqueCover className="fixed" />
-    </>
-  )
-}
-
 export const useEsc = (callback) =>
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.keyCode === 27) callback()
+    const handleKeyDown = ({ keyCode }) => {
+      if (keyCode === 27) callback()
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -109,34 +84,70 @@ export const useEsc = (callback) =>
     }
   }, [callback])
 
-const useAlertState = () => {
+export default ({ children, buttonText, disabled, render, title }) => {
   const [isOpen, setIsOpen] = useState(false)
   const open = () => setIsOpen(true)
   const close = () => {
     if (isOpen) setIsOpen(false)
   }
-  return [open, isOpen, close]
-}
+  useEsc(close)
 
-export const useAlert = () => {
-  const [open, isOpen, close] = useAlertState()
-
-  return [
-    ({ children, ...props }) => (
-      <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
-    ),
-    open,
-  ]
-}
-
-export default ({ children, icon, ...props }) => {
-  const [open, isOpen, close] = useAlertState()
   return (
     <>
-      <button className="button" onClick={open}>
-        {icon}
+      {isOpen && (
+        <>
+          <Anchor className="center-child fixed">
+            <ClickOut className="fixed" onClick={close} />
+            <StyledDiv className="card">
+              <CloseButton className="button-text" onClick={close}>
+                <Close size="20" />
+              </CloseButton>
+              {title && <Title className="title">{title}</Title>}
+              <Body>
+                <div className="space-children-y">
+                  {children ?? (render && render({ close }))}
+                </div>
+              </Body>
+            </StyledDiv>
+          </Anchor>
+          <OpaqueCover className="fixed" />
+        </>
+      )}
+      <button className="button" disabled={disabled} onClick={open}>
+        {buttonText}
       </button>
-      <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
     </>
   )
 }
+
+// const useAlert = () => {
+//   const [isOpen, setIsOpen] = useState(false)
+//   const open = () => setIsOpen(true)
+//   const close = () => {
+//     if (isOpen) setIsOpen(false)
+//   }
+//   return [open, isOpen, close]
+// }
+
+// export const useAlertManual = () => {
+//   const [open, isOpen, close] = useAlert()
+
+//   return [
+//     ({ children, ...props }) => (
+//       <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
+//     ),
+//     open,
+//   ]
+// }
+
+// export default ({ children, buttonText, disabled = false, ...props }) => {
+//   const [open, isOpen, close] = useAlert()
+//   return (
+//     <>
+//       <button className="button" disabled={disabled} onClick={open}>
+//         {buttonText}
+//       </button>
+//       <Alert {...{ isOpen, close, ...props }}>{children}</Alert>
+//     </>
+//   )
+// }

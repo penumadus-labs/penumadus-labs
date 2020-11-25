@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo killall -SIGTERM trans
+sleep 5
+sudo shutdown -r now

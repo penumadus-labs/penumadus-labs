@@ -1,62 +1,31 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAlert } from '../alert'
 import Input from '../input'
-import commandBody from './command-body'
+import Command from './command'
 
-const compareObjects = (obj1, obj2) => {
-  for (const [key] of Object.keys(obj1)) {
-    if (obj1[key] !== obj2[key]) return false
-  }
-  return true
-}
+export default ({ name, settings, useCommand }) => {
+  const { register, handleSubmit, watch } = useForm()
+  const [changes, setChanges] = useState({})
+  const [data, setData] = useState()
+  const disabled = Object.values(watch()).every((value) => value === '')
 
-export default ({ name, settings, useRequest }) => {
-  const settingEntries = Object.entries(settings)
-  // const defaultValues = settingEntries.reduce(
-  //   (a, [name, value]) => ({ ...a, [name]: value }),
-  //   {}
-  // )
+  const callback = () => setChanges({})
 
-  const { register, handleSubmit } = useForm({})
-  const [Alert, open] = useAlert()
-  const [[summary, args], setSummary] = useState([null, []])
-  const [error, setError] = useState('')
+  const submit = (data) => {
+    const changes = {}
 
-  const submit = (values) => {
-    const args = Object.values(values)
-    console.log(args)
-    if (args.every((value) => value === ''))
-      return setError('no values entered')
+    for (const [name, value] of Object.entries(data)) {
+      if (value === '') data[name] = settings[name]
+      else changes[name] = value
+    }
 
-    const summary = settingEntries.reduce(
-      (a, [name, currentValue], i) =>
-        currentValue === args[i]
-          ? a
-          : [
-              ...a,
-              <p key={i}>
-                {name}: {currentValue} to {args[i]}
-              </p>,
-            ],
-      []
-    )
-
-    setSummary([summary, args])
-    open()
+    setChanges(changes)
+    setData(data)
   }
 
-  const inputs = settingEntries.map(([name, value], i) => (
+  const inputs = Object.entries(settings).map(([name, value], i) => (
     <div key={i} className="space-children-y-xs">
-      <Input
-        ref={register()}
-        before={<p>currently: {value}</p>}
-        placeholder={value}
-        name={name}
-        onChange={() => {
-          if (error) setError('')
-        }}
-      />
+      <Input className="input" ref={register} placeholder={value} name={name} />
     </div>
   ))
 
@@ -64,10 +33,14 @@ export default ({ name, settings, useRequest }) => {
     <>
       <form className="card-spaced" onSubmit={handleSubmit(submit)}>
         <div className="grid-4">{inputs}</div>
-        <button className="button">{name}</button>
-        {error ? <p className="text-red">{error}</p> : null}
+        <Command {...{ disabled, name, data, useCommand, callback }}>
+          {Object.entries(changes).map(([name, value]) => (
+            <p key={name}>
+              {name}: {settings[name]} to {value}
+            </p>
+          ))}
+        </Command>
       </form>
-      <Alert render={commandBody(useRequest, [name, args], summary)} />
     </>
   )
 }

@@ -86,6 +86,8 @@
 #define ACCELDATA 'A'	//this is accelerometer data
 #define MAINDATA  'D'	//this is pres/temp/humid etc data
 #define LOG       'L'	//this is a log request  string
+#define BRIDGEDATA 'B'  //this is bridge data
+#define BRIDGEDEFLECT  'b'  //this is bridge deflection data
 
 //protocol prototypes
 //MAIN DATA

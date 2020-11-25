@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import useApi from '../api'
 import useMessage from '../services/socket'
 import SelectDevice from './select-device'
 const Menu = styled.div`
@@ -8,44 +9,53 @@ const Menu = styled.div`
   justify-content: space-between;
 `
 
-const initialStatus = {
-  standard: 'not received',
-  acceleration: 'not received',
+const formatZeros = (value) => {
+  return value < 10 ? `0${value}` : value
 }
 
-export default ({ loggedIn }) => {
-  const [{ standard, acceleration }, setStatus] = useState(initialStatus)
+const getTimeInHoursMinutesSeconds = () => {
+  const date = new Date(Date.now())
+  const hours = date.getHours()
+  const minutes = formatZeros(date.getMinutes())
+  const seconds = formatZeros(date.getSeconds())
+
+  return `${hours}:${minutes}:${seconds}`
+}
+
+const reduceFields = (fields) =>
+  fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
+
+export default () => {
+  const [
+    {
+      device: { id, dataFields },
+    },
+  ] = useApi()
+  const [status, setStatus] = useState(reduceFields(dataFields))
+
+  useEffect(() => {
+    setStatus(reduceFields(dataFields))
+  }, [id, dataFields])
 
   useMessage(({ type }) => {
-    const date = new Date(Date.now())
-
-    switch (type) {
-      case 'standard':
-        setStatus((status) => ({
-          ...status,
-          standard: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-        }))
-        break
-      case 'acceleration':
-        setStatus((status) => ({
-          ...status,
-          acceleration: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-        }))
-        break
-      default:
-        throw new Error('socket sent invalid action type')
-    }
+    setStatus((status) => ({
+      ...status,
+      [type]: getTimeInHoursMinutesSeconds(),
+    }))
   })
 
-  return loggedIn ? (
+  return (
     <Menu className="card">
       <div>
         <SelectDevice />
       </div>
       <div>
-        <p>last data packet: {standard}</p>
-        <p>last acceleration event: {acceleration}</p>
+        {Object.entries(status).map(([field, value]) => (
+          <p key={field} className="text-sm">
+            {field}: {value}
+          </p>
+        ))}
       </div>
     </Menu>
-  ) : null
+  )
 }

@@ -1,7 +1,17 @@
 const { createServer } = require('http')
 const { Server } = require('ws')
-const channel = require('../controllers/channel')
+const broadcaster = require('../controllers/broadcaster')
 const { verifyUserSocket } = require('../utils/auth')
+const { readFileSync } = require('fs')
+const { join } = require('path')
+
+const certsDir = join(__dirname, '..', 'certs') + '/'
+
+// const ssl = {
+//   key: readFileSync(certsDir + 'privkey.pem'),
+//   cert: readFileSync(certsDir + 'fullchain.pem'),
+//   ca: readFileSync(certsDir + 'chain.pem'),
+// }
 
 const parseCookies = (cookies = '') =>
   cookies.split(';').reduce((acc, cookie) => {
@@ -10,23 +20,25 @@ const parseCookies = (cookies = '') =>
     return acc
   }, {})
 
-const start = async (expressApp, port) => {
-  const server = createServer(expressApp)
+module.exports = (app, port) => {
+  const server = createServer(app)
 
   const wsServer = new Server({ noServer: true })
-  channel.users = wsServer.clients
+  broadcaster.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
     // sessionStorage auth system
-    // const token = req.headers['sec-websocket-protocol']
     const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
       socket.destroy()
+      return
     }
 
     wsServer.handleUpgrade(req, socket, head, (ws) => {
-      wsServer.emit('connection', ws, req)
+      // wsServer.emit('connection', ws, req)
+      if (process.env.NODE_ENV !== 'development')
+        console.info('websocket connected')
     })
   })
 
@@ -36,7 +48,6 @@ const start = async (expressApp, port) => {
         console.info(`web server listening on port ${port}`)
       })
       .on('error', reject)
+    // createSecureServer(app, ssl).listen(8443).on('error', reject)
   })
-}
-
-module.exports = start
+} // start web server

@@ -1,38 +1,32 @@
-import useLive from './use-live'
-import useMountChart from './use-mount-chart'
+import { useEffect, useMemo, useRef } from 'react'
+import Chart from './d3-linechart'
 
-export default ({
-  keys,
-  data: apiData,
-  useDownload,
-  useDelete,
-  liveModeSet,
-  liveModeAction,
-  yDomain,
-  downloadProps,
-}) => {
-  const [data, liveProps] = useLive({ liveModeSet, liveModeAction, apiData })
+export default ({ noData, ...props }) => {
+  const ref = useRef()
 
-  const { chart, ...res } = useMountChart({ keys, data, yDomain })
+  const { chart, ...ctx } = useMemo(() => {
+    if (noData) return {}
+    const chart = new Chart(props)
 
-  const chartProps = {
-    live: liveProps.live,
-    ...res,
-  }
-
-  const controlProps = {
-    downloadProps: {
-      downloadProps: downloadProps ?? chart.getDomain(),
+    return {
+      chart,
+      date: chart.date(),
       domain: chart.getDomainParsed(),
-      useDownload,
-    },
-    deleteProps: {
-      useDelete,
-    },
-    liveProps,
-  }
+      defaultDownloadProps: chart.getDomain(),
+      toolProps: chart.getToolProps(),
+      labels: chart.getLabels(),
+    }
 
-  const toolProps = chart.getToolProps()
+    // eslint-disable-next-line
+  }, [props.data])
 
-  return [chartProps, controlProps, toolProps]
+  useEffect(
+    () => {
+      if (chart) return chart.mount(ref.current)
+    },
+    // eslint-disable-next-line
+    [chart]
+  )
+
+  return { ...ctx, ref }
 }

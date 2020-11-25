@@ -19,6 +19,7 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 #include <string.h>     /* for memset() */
+#include <signal.h>     
 #include <unistd.h>     /* for close() */
 #include <sys/select.h>
 #include <bool.h>
@@ -27,6 +28,7 @@
 #include <protocol.h>
 #include <servercomms.h>
 
+void interrupt_handler (int signum);
 int setuphankcomms(unsigned short hankport);
 void setupDBcomms( 
 	unsigned char *ipaddr,	//address to connect to
@@ -38,8 +40,11 @@ bool sendToDB(char *message);
 bool doconnect(void);
 bool sendHello(void);
 extern bool connected;
+extern int back_fd;
 
 extern int errfd;
+void lockfiles( unsigned short hankPort);
+bool unlockfiles( unsigned short hankPort);
 
 //error routine in utils.c
 // routine to output binary in outputbin.c
@@ -51,12 +56,14 @@ long messagecnt = 0;	//count of incoming messages
 /* global so everyone always gets the latest copy after any */
 /* data/command that touches deviceID */
 /* this is the unique identifier for each hank */
-char deviceID[64]="UnInitialized";
+char deviceID[128]="UnInitialized";
 
 extern int dbsock;		/* holds the network socket for dbase */
-struct sockaddr_in controlDBIp; /* IP address struct for talking to dbase */
 int hanksock;   	     /* holds the network for hank */
+unsigned short hankPort;     /* Port to listen device must be 
+				global cause referenced in interrupt routine */
 struct sockaddr_in RemoteIP; /* IP address struct for talking to hank */
+struct sockaddr_in controlDBIp; /* IP address struct for talking to dbase */
 
 
 int 
@@ -69,7 +76,6 @@ main(int argc, char *argv[])
 					   use prints on this buf
 					   never use sizeof, only
 					   DBPACKETSIZE for sizing */
-    unsigned short hankPort;     /* Port to listen device */
     unsigned short dbPort;       /* Port to forward messages to DB*/
     int recvMsgSize;             /* Size of received message */
     char *cptr,*dptr; 		 /* misc char ptrs to parse messages */
@@ -98,6 +104,11 @@ main(int argc, char *argv[])
     
     /* local port on which to listen for hank */
     sscanf(argv[1],"%hd",&hankPort); 
+    logfileseed=hankPort;
+
+    /* create a lockfile to block multiple copies of UDPengine on same port */
+    lockfiles(hankPort);
+
     /* localhost port to talk to control/dbase program */
     sscanf(argv[3],"%hd",&dbPort);
     
@@ -105,6 +116,18 @@ main(int argc, char *argv[])
 	    "Starting UDP DM:  listen on %d,  write to %s:%d\n",
 	    hankPort,argv[2],dbPort);
     
+    /* keep going on hangups/logouts */
+    signal(SIGHUP,SIG_IGN);
+    /* catch signals and cntr-C so can clean up nicely */
+    signal (SIGINT, interrupt_handler);
+    signal (SIGQUIT, interrupt_handler);
+    signal (SIGPIPE, interrupt_handler);
+    signal (SIGTERM, interrupt_handler);
+    signal (SIGUSR1, interrupt_handler);
+
+
+
+
     if((hanksock=setuphankcomms( hankPort ))<0){
 	fprintf(stderr,"FATAL: can't open hank port\n");
 	g_err(EXIT,NOPERROR,"FATAL: can't open hank port\n");
@@ -135,8 +158,7 @@ main(int argc, char *argv[])
 		FD_SET(dbsock,&rfds);
 		rnum = (hanksock>dbsock) ? hanksock : dbsock;
 	}
-g_err(NOEXIT,NOPERROR,"dbsock: %d  hanksock: %d rnum: %d",
-			dbsock,hanksock,rnum);
+
 	/* Setting timeout as defensive measure 
 	   timeout and bring us back from blocking on data wait 
 	   have to init timeout every time cause select modifies */
@@ -150,7 +172,7 @@ g_err(NOEXIT,NOPERROR,"dbsock: %d  hanksock: %d rnum: %d",
 		break;
 	    case 0:
 		g_err(NOEXIT,NOPERROR,
-			"\nWARNING: Timeout #%d on select\n",
+			"WARNING: Timeout #%d on select",
 			timeouts++);
 		break;
 
@@ -174,7 +196,8 @@ g_err(NOEXIT,NOPERROR,"dbsock: %d  hanksock: %d rnum: %d",
 
 		    incomingBuf[recvMsgSize]='\0';
     
-		    g_err(NOEXIT,NOPERROR,"hank->UDP:%d: [ %s ]",
+		    g_err(NOEXIT,NOPERROR,"hank@%s->UDP:%d: [ %s ]",
+					inet_ntoa(RemoteIP.sin_addr),
 					recvMsgSize, incomingBuf);
 
 		    messagecnt++;
@@ -295,3 +318,23 @@ hankCommand(unsigned char *command,
     else
 	return(true);
 }
+
+
+/* Interrupt_handler so that CTRL +C can be used to exit the program */
+void 
+interrupt_handler (int signum) {
+	close(dbsock);
+	close(back_fd);
+	close(hanksock);
+	unlockfiles(hankPort);
+
+	if(signum == SIGUSR1){
+		g_err(EXIT,NOPERROR,
+		"UDPengine Process %d on port %d\nExit request by new engine\nGoodbye\n",
+			getpid(),
+			hankPort);
+	}
+	else
+		g_err(EXIT,NOPERROR,"\nSIGNAL %d!!\nCleanup Done\nGoodbye\n",signum);
+}
+

@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <stdio.h>      /* for printf() and fprintf() */
 #include <stdlib.h>     /* for atoi() and exit() */
+#include <libgen.h>     /* for atoi() and exit() */
 #include <errno.h>
 #include <sys/fcntl.h>
 #include <pthread.h>
@@ -35,6 +36,7 @@ bool respPressParams(char *,char *,int);
 bool respSampParams(char *,char *,int);
 bool respAccelParams(char *,char *,int);
 
+bool unitToSubunit(unsigned char *devid, unsigned char *locIDstring);
 
 //storage for device ID to insert if not avail in or updated by a message
 extern char deviceID[];
@@ -52,13 +54,17 @@ parsedata(char *incoming, char *outgoing, int size)
 	unsigned long secs;
 	unsigned long usecs;
 	unsigned long long microsecs;
-	bool outgoingDBtraffic=false;
-	bool outgoingHank=false;
+	bool outgoingDBtraffic;
+	bool outgoingHank;
 	unsigned int msgnum;
 	int outgoingsize;
 	struct timeval tv;
 	int n;
 
+	static int logfd=-1;
+
+	outgoingDBtraffic=false;
+	outgoingHank=false;
 
 
 	switch(incoming[0]){
@@ -69,6 +75,9 @@ parsedata(char *incoming, char *outgoing, int size)
 			float arrx;
 			float arry;
 			float arrz;
+			char locIDstring[128];;
+
+
 			sscanf(incoming,"%s %s %f %f %f %lx %lx %x",
 				ptype,
 				deviceID,
@@ -79,11 +88,14 @@ parsedata(char *incoming, char *outgoing, int size)
 				&usecs,
 				&msgnum
 			);
+
+			unitToSubunit(deviceID,locIDstring);
+
 			microsecs=(secs*1000*1000)+(usecs);
 			mag=sqrtf(powf(arrx,2)+powf(arry,2)+powf(arrz,2));
 			memset(outgoing,PADCHAR,size);
 			if((n=snprintf(outgoing,size,
-				"{ \"type\":\"%c\","
+				"{ \"type\":\acceleration\","
 				  "\"id\":\"%s\","
 				  "\"magnitude\":%.2f,"
 				  "\"x\":%.2f,"
@@ -91,8 +103,7 @@ parsedata(char *incoming, char *outgoing, int size)
 				  "\"z\":%.2f,"
 				  "\"time\":%lu.%06lu,"
 				 "\"pad\":\"",
-				  ACCELDATA,	//start of args
-				deviceID,
+				locIDstring,
 				mag,
 				arrx,
 				arry,
@@ -146,7 +157,6 @@ parsedata(char *incoming, char *outgoing, int size)
 			pressure=simpress;
 			}
 #endif
-			//end PONDSCUM
 			microsecs=(secs*1000*1000)+(usecs);
 			memset(outgoing,PADCHAR,size);
 			if((n=snprintf(outgoing,size,
@@ -177,26 +187,127 @@ parsedata(char *incoming, char *outgoing, int size)
 			}
 			break;
 
-		/* log data coming in */
-		case LOG:
-			g_err(NOEXIT,NOPERROR,"LOG DATA: %s\n",incoming);
 
-			if((n=snprintf(outgoing,size,
-				"{ \"type\":\"%c\",\"id\":\"%s\",\"log\":\"%s\",\"time\":%ld.%06ld,"
-				  "\"pad\":\"",
-				LOG,
+		case BRIDGEDATA:
+			{
+			
+			float t0, t1, t2, t3, t4, t5, t6, t7;
+			float temp;
+			int hum;
+			int count;
+
+			sscanf(incoming,"%s %s %f %f %f %f %f %f %f %f %f %d %d %lx %lx %x",
+				ptype,
 				deviceID,
-				incoming,
-				time(NULL),
-				(long)0
-			))>=size)
+				&t0, &t1, &t2, &t3, &t4, &t5, &t6, &t7,
+				&temp,
+				&hum,
+				&count,
+				&secs,
+				&usecs,
+				&msgnum
+			);
+			
+			microsecs=(secs*1000*1000)+(usecs);
+			memset(outgoing,PADCHAR,size);
+			if((n=snprintf(outgoing,size,
+                                "{ \"type\":\"environmental\","
+                                  "\"id\":\"%s\","
+                                  "\"sensors\":[ %.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f],"
+                                  "\"temperature\":%.1f,"
+                                  "\"humidity\":%d,"
+                                  "\"count\":%d,"
+                                  "\"time\":%lu.%06lu,"
+                                  "\"pad\":\"",
+                                deviceID,
+                                t0, t1, t2, t3, t4, t5, t6, t7,
+                                temp,
+                                hum,
+                                count,
+                                secs,
+                                usecs
+			)) >= size)
 				g_err(NOEXIT,NOPERROR,"OUTPUT TRUNCATION! %d",n);
-			else{
+			else
 				outgoing[n]=PADCHAR;//get rid of null term in json
-			}
+			
 			outgoing[size-2]='"';
 			outgoing[size-1]='}';
 			outgoingDBtraffic=true;
+			}
+			break;
+
+		case BRIDGEDEFLECT:
+			{
+			float deflection;
+			sscanf(incoming,"%s %s %f %lx %lx %x",
+				ptype,
+				deviceID,
+				&deflection,
+				&secs,
+				&usecs,
+				&msgnum
+			);
+			
+			microsecs=(secs*1000*1000)+(usecs);
+			memset(outgoing,PADCHAR,size);
+			if((n=snprintf(outgoing,size,
+                                "{ \"type\":\"deflection\","
+                                  "\"id\":\"%s\","
+                                  "\"deflection\":%.1f,"
+                                  "\"time\":%lu.%06lu,"
+                                  "\"pad\":\"",
+                                deviceID,
+                                deflection,
+                                secs,
+                                usecs
+			)) >= size)
+				g_err(NOEXIT,NOPERROR,"OUTPUT TRUNCATION! %d",n);
+			else
+				outgoing[n]=PADCHAR;//get rid of null term in json
+			
+			outgoing[size-2]='"';
+			outgoing[size-1]='}';
+			outgoingDBtraffic=true;
+			}
+			break;
+
+		/* log data coming in */
+		case LOG:
+			{
+			char buf[2048];
+			char *tptr;
+			time_t a;
+			if(logfd<0){
+			    char obuf[2048];
+			    char *logfile;
+			    strcpy(buf,program_path());
+			    //basename may modify buf so don't pass it program_path()
+			    tptr=basename(buf);
+			    //allocate a buffer for the path plus an extra / and a \0 and an E_
+			    logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16 + 5);
+			    strcpy(logfile,LOGPATH);
+			    strcat(logfile,"/MSGLOG");
+			    strcat(logfile,".log");
+			    sprintf(obuf,"%05d",logfileseed);
+			    strcat(logfile,obuf);
+			    printf("log message file is %s\n",logfile);
+			    if((logfd=open(logfile,(O_SYNC|O_WRONLY|O_APPEND|O_CREAT),
+			        (S_IRWXU|S_IRWXG|S_IRWXO)) )<0){
+				    g_err(NOEXIT,PERROR,"%05d %s COULD NOT OPEN LOG MESSAGE FILE %s\n", 
+				    getpid(),stamp(),logfile);
+			    }
+			    free(logfile);
+			}
+
+			g_err(NOEXIT,NOPERROR,"LOG DATA: %s\n",incoming);
+			a=time(NULL);
+			tptr=ctime(&a);
+			tptr[strlen(tptr)-1]='\0';
+			n=snprintf(outgoing,size, "[ %s ] %s\n", tptr, incoming+2);
+			if(logfd>0)
+				write(logfd,outgoing,n);
+			}
 			break;
 
 		/* command coming in */
@@ -289,11 +400,11 @@ parsedata(char *incoming, char *outgoing, int size)
 				infoptr=littlebuf;
 				break;
 		}
-		g_err(NOEXIT,NOPERROR,
+		/*g_err(NOEXIT,NOPERROR,
 			"hank->hank:PATH %s, msg num: %d,  Jitter: %.4f mS",
 			infoptr,
 			msgnum&0x0FFF,
-			jitter);
+			jitter); */
 
 		return(size);
 	}
@@ -344,3 +455,22 @@ parseresponse(unsigned char *response,
 
 }
 
+
+
+bool
+unitToSubunit(unsigned char *devid, unsigned char *locIDstring)
+{
+	int subunit;
+	/* convert unit:subunit to unit and subunit */
+	for(devid=deviceID;*devid!='\0';devid++){
+		*locIDstring=*devid;
+		if(*devid==':'){
+			*devid='\0';
+			sscanf(devid+1,"%d",&subunit);
+			sprintf(locIDstring,"\",\"sub\":\"%d",subunit);
+			return(true);
+		}
+		locIDstring++;
+	}
+	return(false);
+}

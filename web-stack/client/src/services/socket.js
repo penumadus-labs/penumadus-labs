@@ -1,20 +1,33 @@
 import { useEffect } from 'react'
+import useApi from '../api'
+import urlPostfix from '../utils/url'
 
-const url = `ws://${window.location.hostname}:8080/`
+const url = 'ws' + urlPostfix
 
 let tasks = []
+let ws = null
 
-export const initializeSocket = (token) => {
-  const ws = new WebSocket(url, token)
+export const useSocket = (init) => {
+  const [{ device }, { getSettings }] = useApi()
+  useEffect(() => {
+    if (!init || ws) return
+    ws = new WebSocket(url)
 
-  ws.onmessage = ({ data }) => {
-    const json = JSON.parse(data)
-    for (const task of tasks) {
-      task(json)
+    ws.onmessage = ({ data }) => {
+      const { id, ...event } = JSON.parse(data)
+      if (id !== device.id) return
+      if (event.type === 'settings') return getSettings()
+      for (const task of tasks) {
+        task(event)
+      }
     }
-  }
 
-  return () => ws.close()
+    return () => {
+      ws.close()
+      ws = null
+    }
+    // eslint-disable-next-line
+  }, [init])
 }
 
 const useMessage = (task, deps) => {

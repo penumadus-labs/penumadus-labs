@@ -1,0 +1,35 @@
+** todo
+
+make charts nicer
+
+app compile mode bridge/tank
+
+change device dropdown to select element
+
+
+** bugs
+
+try to fix mobile layout bug
+
+
+** test
+
+tcp device client settings cache is working properly
+
+live mode when no data
+
+deleting data
+
+
+** review
+
+stop sending keys from database
+
+find better charting library?
+
+cache chart domain in local storage?
+
+finalize where device dataFields, and dataKeys come from
+
+add fills count indicator
+

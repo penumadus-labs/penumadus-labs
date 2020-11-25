@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import useApi from '../context/api'
+import useApi from '../api'
 import Select from './select'
 
 const Root = styled.div`
@@ -11,20 +11,39 @@ const Root = styled.div`
   }
 `
 
+// const formatDevice = ({ id, deviceType }) => `${id} (${deviceType})`
+
 export default () => {
   const [
     {
-      deviceList: [, list],
+      device,
+      devices: [, devices],
     },
-    { setId },
+    { setDevice },
   ] = useApi()
 
-  if (!list) return null
+  const handleSelect = (value) => {
+    setDevice(devices[value])
+    localStorage.setItem('id', value)
+  }
+
+  if (!devices) return null
+
+  // if (!devices.length)
+  //   return (
+  //     <Root>
+  //       <p>no devices registered</p>
+  //     </Root>
+  //   )
 
   return (
     <Root>
       <p>select device:</p>
-      <Select options={list} onSelect={setId} />
+      <Select
+        selected={device.id}
+        options={devices.list.map(({ id }) => id)}
+        onSelect={handleSelect}
+      />
     </Root>
   )
 }

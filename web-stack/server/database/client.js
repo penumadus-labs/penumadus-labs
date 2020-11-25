@@ -1,14 +1,15 @@
 const { MongoClient } = require('mongodb')
-const getStandardData = require('./queries/get-standard-data')
-const getAccelerationEventTimes = require('./queries/get-acceleration-events')
-const getAccelerationEventData = require('./queries/get-acceleration-event-data')
-const createDeviceModel = require('./models/device')
+const getLinearData = require('./queries/get-linear-data')
+const getAccelerationEventTimes = require('./queries/get-acceleration')
+const getAccelerationEvent = require('./queries/get-acceleration-event')
+const { createDeviceSchema, addDeviceContext } = require('./schemas')
 const tunnel = require('../utils/ssh-tunnel')
-const exec = require('util').promisify(require('child_process').exec)
+const startProcess = require('../commands/start-mongod')
+const { getDataKeys } = require('./queries/helpers')
 
 const defaultUdpPortIndex = 30000
 
-const url = process.env.amazon
+const url = process.env.AWS_SERVER
   ? 'mongodb://caro:Matthew85!!@localhost/admin'
   : 'mongodb://localhost'
 
@@ -18,18 +19,9 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async startProcess() {
-    try {
-      await exec('pgrep -x mongod')
-      console.info('mongod running')
-    } catch (e) {
-      await exec('sudo service mongod start')
-      console.info('mongod started')
-    }
-  },
-  async connect(ssh = !process.env.amazon) {
+  async connect(ssh = !process.env.AWS_SERVER) {
     if (ssh) await tunnel(27017)
-    else await client.startProcess()
+    else await startProcess()
 
     await mongoClient.connect()
 
@@ -38,6 +30,7 @@ const client = {
     client.app = await mongoClient.db('app')
 
     client.devices = await client.app.collection('devices')
+    await client.getDeviceSchemas(true)
     client.users = await client.app.collection('users')
 
     appData = await client.app.collection('data')
@@ -47,6 +40,10 @@ const client = {
       get: (obj, prop) => (...args) => obj[prop]({ _id }, ...args),
     })
   },
+  // ^^ if I change my mind about the proxy
+  // appData(op, ...params) {
+  //   return client.appData[op](client.appDataQuery, ...params)
+  // },
   async close() {
     try {
       await mongoClient.close()
@@ -68,22 +65,47 @@ const client = {
   findUser(username) {
     return client.users.findOne({ username })
   },
-  appData(op, ...params) {
-    return client.appData[op](client.appDataQuery, ...params)
-  },
+
   async getUdpPortIndex() {
     const { udpPortIndex } = await client.appData.findOne()
     await client.appData.updateOne({ $inc: { udpPortIndex: 1 } })
     return udpPortIndex
+  },
+  async getDeviceSchemas(store = false) {
+    const schemas = {}
+    await client.devices
+      .find(
+        {},
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            deviceType: 1,
+            // dataFields: 1,
+            // configurable: 1,
+          },
+        }
+      )
+      .forEach(({ id, deviceType }) => {
+        schemas[id] = {
+          id,
+          deviceType,
+          ...addDeviceContext(deviceType),
+        }
+      })
+
+    if (store) client.schemas = schemas
+
+    return schemas
   },
   resetUdpPortIndex() {
     return client.appData.updateOne({
       $set: { udpPortIndex: defaultUdpPortIndex },
     })
   },
-  async insertDevice({ id }) {
+  async insertDevice({ deviceType, id }) {
     const udpPort = await client.getUdpPortIndex()
-    const deviceModel = createDeviceModel({ id, udpPort })
+    const deviceModel = createDeviceModel({ deviceType, id, udpPort })
     client.devices.insertOne(deviceModel)
     return udpPort
   },
@@ -91,60 +113,44 @@ const client = {
     const devices = await client.devices.find().toArray()
     return devices.map(({ udpPort }) => udpPort)
   },
-  insertStandardData(id, data) {
+  pushData(id, data, field) {
     return client.devices
-      .updateOne({ id }, { $push: { standardData: data } })
+      .updateOne({ id }, { $push: { [field]: data } })
       .catch(console.error)
+  },
+  insertEnvironment(id, data) {
+    return client.pushData(id, data, 'environment')
+  },
+  insertDeflection(id, data) {
+    return client.pushData(id, data, 'deflection')
   },
   insertAccelerationEvent(id, event) {
-    client.devices
-      .updateOne(
-        { id },
-        {
-          $push: {
-            events: {
-              $each: [event],
-              $position: 0,
-            },
-          },
-        }
-      )
-      .catch(console.error)
-  },
-  getDeviceList() {
-    return client.devices.find({}, { projection: { id: 1 } }).toArray()
+    return client.pushData(
+      id,
+      {
+        $each: [event],
+        $position: 0,
+      },
+      'acceleration'
+    )
   },
 
-  findDevice(id, projection) {
+  getDeviceData(id, projection) {
     projection._id = 0
     return client.devices.findOne({ id }, { projection })
   },
-  async getStandardDataReduced({ id, ...params }) {
-    const res = await client.findDevice(id, getStandardData(params, true))
-    for (const d of res.data) {
-      d.pressure = Math.floor(d.pressure / 100)
-    }
-
-    return res
+  getLinearData({ id, ...params }) {
+    return client.getDeviceData(id, getLinearData(params))
   },
-  async getStandardData({ id, ...params }) {
-    return client.findDevice(id, getStandardData(params))
-  },
-  async getAccelerationEventTimes({ id }) {
-    const { data } = await client.findDevice(id, getAccelerationEventTimes())
+  async getAcceleration({ id }) {
+    const { data } = await client.getDeviceData(id, getAccelerationEventTimes())
     return data
   },
-  getAccelerationEventData({ id, ...params }) {
-    return client.findDevice(id, getAccelerationEventData(params))
+  getAccelerationEvent({ id, ...params }) {
+    return client.getDeviceData(id, getAccelerationEvent(params))
   },
-  deleteField(id, field) {
-    client.devices.updateOne({ id }, { $set: { [field]: [] } })
-  },
-  deleteStandardData({ id }) {
-    client.deleteField(id, 'standardData')
-  },
-  deleteAccelerationEvents({ id }) {
-    client.deleteField(id, 'accelerationEvents')
+  deleteField({ id, field }) {
+    return client.devices.updateOne({ id }, { $set: { [field]: [] } })
   },
 }
 

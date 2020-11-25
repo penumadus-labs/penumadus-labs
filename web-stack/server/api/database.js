@@ -6,46 +6,42 @@ const createDeviceConfigFile = require('../utils/create-device-config-file')
 
 module.exports = Router()
   .get(
-    '/device-list',
+    '/devices',
     handleAsync(async (req, res) => {
-      const data = await client.getDeviceList()
-      const response = data.map(({ id }) => id)
-      res.send(response)
+      res.send(await client.getDeviceSchemas())
     })
   )
   .get(
-    '/standard-data',
+    '/linear-data',
     handleAsync(async ({ query }, res) => {
-      const standard = await client.getStandardDataReduced(query)
-      res.send(standard)
+      res.send(await client.getLinearData(query))
     })
   )
   .get(
-    '/standard-csv',
+    '/linear-data-csv',
     handleAsync(async ({ query }, res) => {
-      const { data } = await client.getStandardData({ ...query, limit: -1 })
+      const { data } = await client.getLinearData({
+        ...query,
+        limit: null,
+      })
       const csv = unparse(data)
       res.send(csv)
     })
   )
   .get(
-    '/acceleration-events',
+    '/acceleration',
     handleAsync(async ({ query }, res) => {
-      const accelerationEventTimes = await client.getAccelerationEventTimes(
-        query
-      )
-      res.send(accelerationEventTimes)
+      res.send(await client.getAcceleration(query))
     })
   )
   .get(
-    '/acceleration-data',
+    '/acceleration-event',
     handleAsync(async ({ query }, res) => {
-      const acceleration = await client.getAccelerationEventData(query)
-      res.send(acceleration)
+      res.send(await client.getAccelerationEvent(query))
     })
   )
   .get(
-    '/acceleration-csv',
+    '/acceleration-event-csv',
     handleAsync(async ({ query }, res) => {
       const { data } = await client.getAccelerationEventData(query)
       const csv = unparse(data)
@@ -53,12 +49,11 @@ module.exports = Router()
     })
   )
   .delete(
-    '/standard',
-    handleAsync(async () => {})
-  )
-  .delete(
-    '/acceleration',
-    handleAsync(async () => {})
+    '/data',
+    handleAsync(async ({ query }, res) => {
+      await client.deleteField(query)
+      res.sendStatus(200)
+    })
   )
   .post(
     '/register',

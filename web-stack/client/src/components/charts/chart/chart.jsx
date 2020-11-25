@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import React from 'react'
 import Controls from './controls'
 import useChart from './helpers/use-chart'
+import useLive from './helpers/use-live'
 import Legend from './legend'
-import Navigator from './navigator'
 import Tools from './tools'
 
 const SvgStyle = css`
@@ -41,24 +41,76 @@ const Header = styled.div`
   justify-content: space-between;
 `
 
-export default ({ children, render, ...props }) => {
-  const [{ ref, date, live }, controlProps, toolProps] = useChart(props)
+export default ({
+  children,
+  render,
+  data: [status, { noDataCollected, data: collectedData } = {}],
+  getData,
+  useDownload,
+  useDelete,
+  downloadProps,
+  initializeLive,
+  handleLive,
+  ...props
+}) => {
+  if (status) return status
+
+  const [data, liveProps, { clearLiveData }] = useLive(
+    collectedData,
+    initializeLive,
+    handleLive
+  )
+
+  const noData = noDataCollected && data.length === 0
+
+  const {
+    ref,
+    date,
+    domain,
+    defaultDownloadProps,
+    toolProps,
+    labels,
+  } = useChart({
+    data,
+    noData,
+    ...props,
+  })
+
+  if (noData)
+    return (
+      <div className="card">
+        <p>no data has been collected for this unit</p>
+      </div>
+    )
+
+  const controlProps = {
+    downloadProps: {
+      downloadProps: downloadProps ?? defaultDownloadProps,
+      domain,
+      useDownload,
+    },
+    deleteProps: {
+      useDelete,
+      getData,
+      clearLiveData,
+    },
+    liveProps,
+  }
 
   return (
     <div className="card-spaced">
       <Global styles={SvgStyle} />
       <Header>
         <p>{date}</p>
-        <Navigator />
       </Header>
       <ControlBarStyle>
         <Controls {...controlProps} render={render}>
           {children}
         </Controls>
-        {!live ? <Tools {...toolProps} /> : null}
+        {!liveProps.live ? <Tools {...toolProps} /> : null}
       </ControlBarStyle>
       <StyledSVG ref={ref} />
-      <Legend labels={props.keys} />
+      <Legend labels={labels} />
     </div>
   )
 }

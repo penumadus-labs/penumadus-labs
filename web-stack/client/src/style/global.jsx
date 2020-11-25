@@ -56,6 +56,10 @@ const clickable = css`
   :focus {
     outline: none;
   }
+  :disabled {
+    filter: brightness(65%);
+    cursor: default;
+  }
 `
 
 const clickableBox = css`
@@ -151,6 +155,12 @@ const globalStyle = css`
       margin: 0;
       padding: 0;
     }
+  }
+
+  /* body, */
+  body {
+    height: ${window.innerHeight}px;
+    overflow: hidden;
   }
 
   button,
@@ -259,6 +269,10 @@ const globalStyle = css`
     ${clickableBox}
     padding: var(--xs) var(--sm);
     background: var(--button-background);
+  }
+
+  .text-sm {
+    font-size: var(--sm);
   }
 
   .button-text {

@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
-import React from 'react'
-import Router from '../router/router'
+import React, { useRef, useEffect } from 'react'
 import useAuth from '../services/auth'
+import { useSocket } from '../services/socket'
 import Login from './login'
-import NavBar from './nav-bar'
+import Routes from '../router/routes'
 import StatusBar from './status-bar'
 
 const Root = styled.div`
   display: grid;
-  height: 100vh;
+  height: ${window.innerHeight}px;
 
   ${({ theme }) => theme.gt.layout} {
     grid-template-rows: auto minmax(0, 1fr);
@@ -54,29 +54,45 @@ const Root = styled.div`
   }
 `
 
-const Layout = ({ children }) => {
-  const [{ verifying, loggedIn }, { login, loginStatus, logout }] = useAuth()
+let timeout
 
-  const body = verifying ? null : !loggedIn ? (
-    <div>
-      <Login handleLogin={login} status={loginStatus} />
-    </div>
+const Layout = () => {
+  const [
+    { verifying, loggedIn },
+    { handleLogin, loginStatus, handleLogout },
+  ] = useAuth()
+  useSocket(loggedIn)
+
+  const ref = useRef()
+
+  useEffect(() => {
+    const resizeEvent = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        const height = `${window.innerHeight}px`
+        ref.current.style.height = height
+        document.body.style.height = height
+      }, 200)
+    }
+    window.addEventListener('resize', resizeEvent)
+    return () => {
+      window.removeEventListener('resize', resizeEvent)
+    }
+  }, [])
+
+  const main = verifying ? null : !loggedIn ? (
+    <Login handleLogin={handleLogin} status={loginStatus} />
   ) : (
-    <>
-      <main>
-        <Router />
-      </main>
-      <NavBar handleLogout={logout} />
-    </>
+    <Routes handleLogout={handleLogout} />
   )
 
   return (
-    <Root>
+    <Root ref={ref}>
       <header className="shadow-card">
         <p>HankMon Dashboard</p>
-        <StatusBar loggedIn={loggedIn} />
+        {loggedIn && <StatusBar />}
       </header>
-      {body}
+      {main}
     </Root>
   )
 }

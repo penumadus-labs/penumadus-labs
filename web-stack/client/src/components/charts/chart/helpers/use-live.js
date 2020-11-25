@@ -1,30 +1,38 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useMessage from '../../../../services/socket'
 
-export default ({ apiData, liveModeSet, liveModeAction }) => {
-  const [live, setLive] = useState(false)
-  const [liveData, setLiveData] = useState(apiData)
+export default (collectedData, initialize, handleEvent) => {
+  const [live, setLive] = useState(!localStorage.getItem('live'))
+  const [liveData, setLiveData] = useState(collectedData)
+  const clearLiveData = () => setLiveData([])
 
   const toggleLive = async () => {
-    if (live) {
-      setLive(false)
-    } else {
-      const { data } = await liveModeSet()
+    if (!live) {
+      const { data } = await initialize()
       setLiveData(data)
-      setLive(true)
     }
+    if (live) localStorage.setItem('live', 'live')
+    else localStorage.removeItem('live')
+    setLive(!live)
   }
+
+  useEffect(() => {
+    if (live) setLiveData(collectedData)
+  }, [live, collectedData])
+
+  useEffect(() => {
+    if (live) initialize()
+    // eslint-disable-next-line
+  }, [])
 
   useMessage(
     (ctx) => {
-      if (live) {
-        liveModeAction({ setLiveData, ...ctx })
-      }
+      if (live) handleEvent({ setLiveData, ...ctx })
     },
     [live]
   )
 
-  const data = live ? liveData : apiData
+  const data = live ? liveData : collectedData
 
-  return [data, { live, toggleLive }]
+  return [data, { live, toggleLive }, { clearLiveData }]
 }

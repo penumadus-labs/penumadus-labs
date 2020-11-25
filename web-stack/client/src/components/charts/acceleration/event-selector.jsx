@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import { formatHoursMinutes, parseDate } from '../datetime'
+import { formatHoursMinutes, parseDate } from '../utils/datetime'
 
 const StyledSelect = styled.select`
   height: 32px;
@@ -8,12 +8,24 @@ const StyledSelect = styled.select`
   padding: 0 var(--xs);
 `
 
-export default ({ events, ...props }) => (
-  <StyledSelect className="shadow-button clickable-box" {...props}>
-    {events.map((time, i) => (
-      <option key={i} value={i}>
-        {parseDate(time)} - {formatHoursMinutes(time)}
-      </option>
-    ))}
-  </StyledSelect>
-)
+export default ({ eventList, useGetAccelerationEvent, ...props }) => {
+  const [, getEvent, { loading }] = useGetAccelerationEvent()
+
+  const handleChange = ({ target }) => {
+    getEvent(target.value)
+  }
+  return (
+    <StyledSelect
+      className="shadow-button clickable-box"
+      disabled={loading}
+      onChange={handleChange}
+      {...props}
+    >
+      {eventList.map((time, i) => (
+        <option key={i} value={i}>
+          {parseDate(time)} - {formatHoursMinutes(time)}
+        </option>
+      ))}
+    </StyledSelect>
+  )
+}

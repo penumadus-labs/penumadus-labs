@@ -1,17 +1,9 @@
 const EventEmitter = require('events')
-const channel = require('./channel')
-const {
-  insertStandardData,
-  insertAccelerationEvent,
-} = require('../database/client')
-const {
-  config,
-  streams,
-  commands,
-  getters,
-  setters,
-  table,
-} = require('../utils/tcp-protocol')
+const broadcaster = require('./broadcaster')
+const database = require('../database/client')
+const protocols = require('../protocols')
+
+const packetSize = 200
 
 /*
 this class wraps the tcp client
@@ -20,27 +12,31 @@ updates all settings whenever a setter is resolved
 extends EventEmitter and creates promise based methods for issuing requests to the device
 */
 
-class Device extends EventEmitter {
-  // settings = {}
+/*
+*** not implemented yet
+cache settings
+fetch on connect, store in object
+on successful set, write settings into local state
+broadcast "settings" to users
+*/
+
+// should deprecate name param on createRequest. Only used for printing info to the console
+
+module.exports = class Device extends EventEmitter {
   initialized = false
-  writeStandard = true
-  writeAcceleration = true
-  transmit = true
-  timeout = null
-  event = {}
+  recordData = true
+  broadcastData = true
 
   constructor(socket) {
     super()
     socket.setEncoding('ascii')
     socket.on('error', console.error)
     socket.on('close', () => {
-      console.info('tcp client closed')
-      delete channel.devices[this.id]
+      console.info('udp engine disconnected')
+      delete broadcaster.devices[this.id]
     })
 
     this.socket = socket
-    this.createRequestMethods()
-    this.addDataStreams()
 
     const { emitResponses } = this
 
@@ -48,120 +44,155 @@ class Device extends EventEmitter {
       let chunk
       while ((chunk = this.read(200))) {
         emitResponses(chunk)
-        await new Promise((res) => setTimeout(res, 5))
+        // prevent heavy synchronous operation
+        await new Promise((res) => setImmediate(res))
       }
     })
   }
 
+  emitResponses = (raw) => {
+    try {
+      const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+
+      if (command === 'HELLO') return
+
+      if (!this.initialized) this.initialize(id)
+      if (command === 'TIME') return console.info('request: TIME')
+
+      if (this.listenerCount(command)) {
+        console.info(`response: ${command}`)
+        this.emit(command, status === 'NACK', data)
+      } else {
+        this.emit('error', new Error(`unhandled response ${command}`))
+      }
+    } catch (error) {
+      console.log(raw)
+      console.error('god dammit Geroge')
+    }
+  }
+
   initialize(id) {
-    // if I wanted to cache the settings
-    // await this.getSettings()
-    channel.devices[id] = this
     this.id = id
+    const { deviceType } = database.schemas[id]
+    this.attachEvents(protocols[deviceType])
+
+    broadcaster.devices[id] = this
+
     this.initialized = true
   }
 
-  async getSettings() {
-    const settings = {}
+  attachEvents({
+    configurable = false,
+    commands = [],
+    getters = [],
+    setters = [],
+    streams = [],
+  }) {
+    this.getters = getters
+    // testing feature cached settings
+    if (configurable) this.getSettings()
 
-    await Promise.all(
-      getters.map(({ command, dataLabel }) =>
-        this.createRequest(command).then(
-          ({ time, ...data }) => (settings[dataLabel] = data)
-        )
-      )
-    )
+    for (const { name, command } of commands) {
+      this[name] = () => this.createRequest({ command, name })
+    }
 
-    return settings
-  }
+    for (const { name, command, args, label } of setters) {
+      this[name] = this.createSetter({ command, args, name, label })
+    }
 
-  addDataStreams() {
-    this.on(table['standardData'], (err, data) => {
-      if (this.writeStandard) insertStandardData(this.id, data)
-      if (this.transmit) channel.updateUsers('standard', data)
+    for (const { name, command } of streams) {
+      this.on(command, this.handlers[name])
+    }
+
+    this.on('error', (err) => {
+      console.error(`device broadcaster error: "${err}"`)
     })
-
-    this.on(table['accelerationData'], (err, data) => {
+  }
+  timeout = null
+  handlers = {
+    environmental: (err, data) => {
+      if (this.recordData) database.insertEnvironment(this.id, data)
+      if (this.broadcastData) this.broadcast('environment', data)
+    },
+    deflection: (err, data) => {
+      if (this.recordData) database.insertDeflection(this.id, data)
+      if (this.broadcastData) this.broadcast('deflection', data)
+    },
+    acceleration: (err, data) => {
       if (!this.timeout) this.event = []
       else clearTimeout(this.timeout)
 
       this.event.push(data)
-      if (this.transmit) channel.updateUsers('acceleration', data)
+      if (this.broadcastData) this.broadcast('acceleration', data)
 
       this.timeout = setTimeout(() => {
         this.timeout = null
         console.info(`acceleration event: ${this.event.length}`)
-        if (!this.writeAcceleration) return
-        insertAccelerationEvent(this.id, this.event)
-      }, 200)
-    })
-
-    this.on('error', (err) => {
-      console.error(`device channel error: "${err}"`)
-    })
+        if (this.recordData)
+          database.insertAccelerationEvent(this.id, this.event)
+      }, 1000)
+    },
   }
 
-  createRequest(command, args = []) {
-    console.info(`request: ${table[command]}`)
+  broadcast(type, data) {
+    broadcaster.updateUsers(this.id, type, data)
+  }
+
+  createRequest({ command, name = command, args = [] }) {
+    // in case the above code doesn't work
+    // name ??= command
+    console.info(`request: ${name}`)
 
     const message = args.length ? [command, ...args].join(' ') : command
-    this.socket.write(message.padEnd(config.packetSize))
+    this.socket.write(message.padEnd(packetSize))
 
     return new Promise((resolve, reject) => {
       this.once(command, (err, data) => {
-        if (err) reject(err)
-
+        if (err) {
+          const errorMessage = `response failed: ${name} not acknowledged`
+          console.error(errorMessage)
+          reject(new Error(errorMessage))
+        }
+        console.info(`response: ${name}`)
         resolve(data)
       })
     })
   }
 
-  createSetter(command, requiredArgs, dataLabel) {
-    return async (settings) => {
-      const args = Object.values(settings)
+  createSetter({ command, args: requiredArgs, name, label }) {
+    return async (data) => {
+      const args = Object.values(data)
       if (args.length !== requiredArgs) {
         throw new Error(
           `expected ${requiredArgs} args. received ${args.length} args`
         )
       }
 
-      const response = await this.createRequest(command, args)
-      // if I wanted to cache settings
-      // this.settings[dataLabel] = settings
+      const response = await this.createRequest({ command, name, args })
+      // testing feature cached settings
+      this.settings[label] = data
+      this.broadcast('settings')
       return response
     }
   }
 
-  createRequestMethods() {
-    for (const { name, command } of commands) {
-      this[name] = () => this.createRequest(command)
-    }
+  async getSettings() {
+    // testing feature cached settings
+    if (this.settings) return this.settings
+    this.settings = {}
 
-    for (const { name, command, args, dataLabel } of setters) {
-      this[name] = this.createSetter(command, args, dataLabel)
-    }
+    await Promise.all(
+      this.getters.map(async ({ command, name, label }) => {
+        const { time, ...data } = await this.createRequest({
+          command,
+          name,
+          label,
+        })
+        this.settings[label] = data
+      })
+    )
+
+    // testing feature cached settings
+    this.broadcast('settings')
   }
-
-  emitResponses = (raw) => {
-    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
-
-    if (!this.initialized) this.initialize(id)
-    if (command === 'HELLO') return
-    if (this.listenerCount(command)) {
-      console.info(`response: ${table[command]}`)
-
-      const err =
-        status === 'NACK' ? new Error('command not acknowledged') : null
-
-      this.emit(command, err, data)
-    } else {
-      this.emit('error', new Error(`unhandled response ${command}`))
-    }
-  }
-}
-
-module.exports = async (socket) => {
-  const device = new Device(socket)
-  // await device.initialize()
-  return device
 }

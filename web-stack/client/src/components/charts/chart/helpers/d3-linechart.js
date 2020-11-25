@@ -1,17 +1,24 @@
 import * as d3 from 'd3'
-import { formatHoursMinutes, parseDate, parseDomain } from '../../datetime'
-import { colors } from '../../units-colors'
+import {
+  formatHoursMinutes,
+  parseDate,
+  parseDomain,
+} from '../../utils/datetime'
+import { colors } from '../../utils/units-colors'
+import { formatData, formatKeys, formatLabels } from '../../utils/data'
+import { isChild } from '../../utils/dom'
 
 const marginLeft = 30
-const marginRight = 0
 const marginBottom = 50
+const marginRight = 0
 const marginTop = 5
 
-export default class {
+export default class Linechart {
   domains = []
-  constructor({ keys, data, yDomain }) {
-    this.data = data
-    this.keys = keys
+  constructor({ data, yDomain }) {
+    this.labels = formatLabels(data)
+    this.data = formatData(data)
+    this.keys = formatKeys(this.data)
     this.yDomain = yDomain
     this.currentDomain = this.previousDomain = this.xDomain = d3.extent(
       data.map((d) => d.time)
@@ -29,10 +36,27 @@ export default class {
       clearTimeout(timeout)
       timeout = setTimeout(() => this.render(), 250)
     }
-    window.addEventListener('resize', resize)
+    const clearBrushOnEsc = ({ keyCode }) => {
+      if (keyCode === 27) this.clearBrush()
+    }
+
+    const clearBrushOnClick = ({ target }) => {
+      if (!isChild(this.brushNode, target)) this.clearBrush()
+    }
+
+    const events = {
+      resize,
+      keydown: clearBrushOnEsc,
+      click: clearBrushOnClick,
+    }
+
+    for (const [event, handler] of Object.entries(events))
+      window.addEventListener(event, handler)
+
     return () => {
       this.clean()
-      window.removeEventListener('resize', resize)
+      for (const [event, handler] of Object.entries(events))
+        window.removeEventListener(event, handler)
     }
   }
   render() {
@@ -86,6 +110,8 @@ export default class {
       .attr('height', this.height)
       .attr('fill', 'rgba(20, 20, 20, .35)')
       .attr('transform', this.translate())
+
+    this.chartNode = this.root.selectChildren().nodes()[0]
 
     this.root
       .append('defs')
@@ -145,11 +171,12 @@ export default class {
       .text('Time (hours:minutes)')
 
     // tool
-    this.root
+    this.brushNode = this.root
       .append('g')
       .classed('brush', true)
       .attr('transform', this.translate())
       .call(this.brush)
+      .nodes()[0]
   }
   clean() {
     this.root.selectAll('*').remove()
@@ -232,9 +259,8 @@ export default class {
   timeAxis() {
     return d3
       .axisBottom(this.x)
-      .tickFormat((d) => {
-        return formatHoursMinutes(d)
-      })
+      .ticks(Math.floor(window.innerWidth / 80))
+      .tickFormat((d) => formatHoursMinutes(d))
       .tickSizeOuter(0)
   }
   date() {
@@ -242,6 +268,14 @@ export default class {
 
     if (!start || !end) return 'no data within range'
 
-    return `${parseDate(start)} - ${parseDate(end)}`
+    const parsedStart = parseDate(start),
+      parsedEnd = parseDate(end)
+
+    return parsedStart === parsedEnd
+      ? parsedStart
+      : `${parsedStart} - ${parsedEnd}`
+  }
+  getLabels() {
+    return this.labels
   }
 }

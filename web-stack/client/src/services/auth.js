@@ -1,52 +1,49 @@
 import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
-import useApi, { api } from '../context/api'
-// import createRequestHook from '../context/create-request-hook'
-import { initializeSocket } from './socket'
-
-// const login = (username, password) =>
-//   api.post('auth/login', { username, password }, { timeout: 3000 })
-
-// const [useLogin] = createRequestHook(login)
+import useApi from '../api'
 
 const useAuth = () => {
-  const [, { initializeApi, setId }, { useLogin }] = useApi()
-  const [loginStatus, loginRequest] = useLogin()
+  const [
+    ,
+    { initializeApi, verify, logout, setDevice },
+    { useLogin },
+  ] = useApi()
+  const [loginStatus, login] = useLogin()
 
   const [authState, setAuthState] = useState({ verifying: true })
 
-  const authenticate = async () => {
-    await initializeApi()
-    initializeSocket()
-    if (window.location.pathname === '/') navigate('charts/standard')
-    setAuthState({ loggedIn: true })
-  }
-
   useEffect(
     () => {
-      api
-        .post('auth/verify')
+      verify()
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
+          navigate('/')
         })
     },
     // eslint-disable-next-line
     []
   )
 
-  const login = (username, password) => {
-    loginRequest(username, password).then(authenticate)
+  const authenticate = async () => {
+    await initializeApi()
+    // if (window.location.pathname === '/') navigate('environment')
+    setAuthState({ loggedIn: true })
   }
 
-  const logout = async () => {
-    await api.post('auth/logout')
+  const handleLogin = (username, password) => {
+    login(username, password).then(authenticate).catch(console.error)
+  }
+
+  const handleLogout = async () => {
+    await logout()
     setAuthState({})
-    setId()
-    await navigate('')
+    setDevice(null)
+    localStorage.clear()
+    await navigate('/')
   }
 
-  return [authState, { login, loginStatus, logout }]
+  return [authState, { handleLogin, loginStatus, handleLogout }]
 }
 
 export default useAuth

@@ -1,40 +1,29 @@
 import { Router } from '@reach/router'
 import React from 'react'
 import AccelerationChart from '../components/charts/acceleration/acceleration-chart.jsx'
-import StandardChart from '../components/charts/standard/standard-chart.jsx'
-import useApi from '../context/api'
+import EnvironmentChart from '../components/charts/environment/environment-chart.jsx'
 import NotFound from './404'
 
 export default () => {
-  const [
-    { standardData, accelerationEvents },
-    { getStandardData },
-    {
-      useGetStandardData,
-      useDownloadStandardData,
-      useDeleteStandardData,
-      useGetAccelerationData,
-      useDownloadAccelerationData,
-      useDeleteAccelerationEvents,
-    },
-  ] = useApi()
-
   return (
     <Router>
-      <StandardChart
-        path="standard"
-        state={standardData}
-        getData={getStandardData}
-        useGetData={useGetStandardData}
-        useDownload={useDownloadStandardData}
-        useDelete={useDeleteStandardData}
+      <EnvironmentChart
+        path="environment"
+        // state={environment}
+        // getData={getEnvironment}
+        // useGetEnvironment={useGetEnvironment}
+        // useDownload={useDownloadEnvironment}
+        // useDelete={useDeleteEnvironment}
       />
       <AccelerationChart
         path="acceleration"
-        events={accelerationEvents}
-        useGetData={useGetAccelerationData}
-        useDownload={useDownloadAccelerationData}
-        useDelete={useDeleteAccelerationEvents}
+        // events={acceleration}
+        // getEvents={getAcceleration}
+        // useDelete={useDeleteAcceleration}
+        // event={accelerationEvent}
+        // getEvent={getAccelerationEvent}
+        // useGetEvent={useGetAccelerationEvent}
+        // useDownload={useDownloadAccelerationEvent}
       />
       <NotFound default />
     </Router>

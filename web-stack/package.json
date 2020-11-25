@@ -3,7 +3,7 @@
   "name": "web-stack",
   "version": "1.0.0",
   "description": "",
-  "main": "server/server.js",
+  "main": "server/index.js",
   "author": "Abram Bradley",
   "license": "ISC",
   "repository": {
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "node server/server",
+    "start": "node server",
     "dev": "run-p dev:client dev:server",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",

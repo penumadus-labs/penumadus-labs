@@ -30,9 +30,8 @@ const Dropdown = styled.div`
   }
 `
 
-export default ({ options, onSelect }) => {
+export default ({ selected, options, onSelect }) => {
   const [toggled, setToggled] = useState(false)
-  const [selected, setSelected] = useState(options[0])
   const ref = useRef()
 
   useEffect(() => {
@@ -50,10 +49,10 @@ export default ({ options, onSelect }) => {
     setToggled(!toggled)
   }
 
-  const handleSelect = ({ target: { value } }) => {
-    setSelected(value)
-    onSelect(value)
-  }
+  // const handleSelect = ({ target: { value } }) => {
+  //   setSelected(value)
+  //   onSelect(value)
+  // }
 
   return (
     <Root>
@@ -78,7 +77,7 @@ export default ({ options, onSelect }) => {
                   className="clickable-box"
                   key={item}
                   value={item}
-                  onClick={handleSelect}
+                  onClick={({ target }) => onSelect(target.value)}
                   onKeyDown={handleKeyDown}
                 >
                   {item}

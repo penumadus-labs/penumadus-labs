@@ -13,6 +13,7 @@
 #include <sys/mman.h>
 #include <time.h>
 #include <sys/time.h>
+#include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -22,6 +23,7 @@
 
 
 int errfd=0;
+int logfileseed=0;
 
 /* routine to display errors */
 void
@@ -45,11 +47,13 @@ int n;
 		//basename may modify buf so don't pass it program_path()
 		tptr=basename(buf);
 		//allocate a buffer for the path plus an extra / and a \0 and an E_
-		logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16);
+		logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16 + 5);
 		strcpy(logfile,LOGPATH);
 		strcat(logfile,"/e_");
 		strcat(logfile,tptr);
 		strcat(logfile,".log");
+		sprintf(obuf,"%05d",logfileseed);
+		strcat(logfile,obuf);
 		printf("logfile is %s\n",logfile);
 		//so stdout becomes the logfile as well
 		//so printfs work when not using console.
@@ -68,6 +72,8 @@ int n;
 
 	/* errfd=0,  need to open the logfile */
 	if(errfd==0){
+		/* getrid of old logfile */
+		unlink(logfile);
 		if((errfd=open(logfile,(O_SYNC|O_WRONLY|O_APPEND|O_CREAT),
 		    (S_IRWXU|S_IRWXG|S_IRWXO)) )<0){
 			fprintf(stderr,"%05d %s COULD NOT OPEN FILE %s\n", 
@@ -286,4 +292,112 @@ init_devmem(long mymaplen, long myoffset){
    
 	return((volatile unsigned char *)mem_map);
 
+}
+
+
+
+/* create pid file so never have more than one 
+ * UDPengine on same port at one time 
+ */
+
+void
+lockfiles (unsigned short hankPort )
+{
+	struct stat statme;
+	char lockfile[2048];
+	int tempfd;
+	char buf[256];
+	int n;
+	int assasinID;
+	int killcount;
+
+
+	sprintf(lockfile,"%s",LOCKPATH);
+	//may fail if exists, ok,  otherwise an error
+	if(mkdir(lockfile,S_IRWXU|S_IRWXG|S_IRWXO)<0){
+		if(errno != EEXIST){
+			fprintf(stderr,"%s: could not make lock directory %s\n",
+					__FUNCTION__,lockfile);
+			exit(1);
+		}
+	}
+
+	sprintf(lockfile,"%s/%d.lock",LOCKPATH,hankPort);
+	/* lockfile exists */
+	killcount=0;
+	while(stat(lockfile,&statme) == 0){
+		if((tempfd=open(lockfile,O_RDONLY)) < 0){
+			fprintf(stderr, "%s: Could not open existing lockfile %s\n",
+				__FUNCTION__,
+				lockfile);
+		}
+		else if( (n=read(tempfd,buf,sizeof(buf)) ) < 0){
+			fprintf(stderr, "%s: Could not read existing lockfile %s\n",
+				__FUNCTION__,
+				lockfile);
+		}
+		else{
+			close(tempfd);
+			sscanf(buf,"%d",&assasinID);
+			if(kill(assasinID,SIGUSR1) != 0){
+				//process is dead already
+				if(errno ==ESRCH)
+					break;
+				else{
+					fprintf(stderr, "%s: Could not send signal to proc %d\n",
+						__FUNCTION__,
+						assasinID);
+					exit(1);
+				}
+			}
+		}
+		if(killcount++ > KILLMAX){
+			fprintf(stderr, "%s: Killcount exceeded\n", __FUNCTION__);
+			exit(1);
+		}
+		else{
+			fprintf(stderr,"Waiting for proc %d to exit\n",assasinID);
+			sleep(1);
+		}
+	}//end while
+	
+	//if here old process should have exited and cleaned up its lock file
+	//now create a new one
+	
+	sprintf(buf,"%d",getpid());
+	if((tempfd=open(lockfile,O_WRONLY|O_CREAT|O_TRUNC,0666)) < 0){
+		fprintf(stderr, "%s: Could not open new lockfile %s\n",
+			__FUNCTION__,
+			lockfile);
+		exit(1);
+	}
+	else if( (n=write(tempfd,buf,strlen(buf)) ) < 0){
+		fprintf(stderr, "%s: Could not write to new lockfile %s\n",
+			__FUNCTION__,
+			lockfile);
+		exit(1);
+	}
+	else{
+		close(tempfd);
+	}
+
+}//end func
+
+bool
+unlockfiles (unsigned short hankPort )
+{
+	char lockfile[2048];
+	sprintf(lockfile,"%s/%d.lock",LOCKPATH,hankPort);
+	if(unlink(lockfile) <0 ){
+		g_err(NOEXIT,PERROR,"%s: Could not unlock file %s\n",
+			__FUNCTION__,
+			lockfile);
+		return(false);
+	}
+	else{
+		g_err(NOEXIT,NOPERROR,"%s: Removed unlock file %s\n",
+			__FUNCTION__,
+			lockfile);
+		return(true);
+	}
 }

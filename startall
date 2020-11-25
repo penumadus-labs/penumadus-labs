@@ -1,1 +1,2 @@
-cd DM ; nohup ./st >start.log 2>&1 &
+#!/bin/bash
+/home/ubuntu/DM/UDPengine 32159 127.0.0.1 32100  &

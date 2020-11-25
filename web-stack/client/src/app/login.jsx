@@ -9,7 +9,12 @@ const StyledForm = styled.form`
 `
 
 export default ({ handleLogin, status }) => {
-  const { handleSubmit, register } = useForm({
+  const {
+    handleSubmit,
+    register,
+    formState: { isValid },
+  } = useForm({
+    mode: 'onChange',
     defaultValues: {
       username: 'admin',
       password: 'p@ssw0rd',
@@ -17,16 +22,24 @@ export default ({ handleLogin, status }) => {
   })
 
   return (
-    <StyledForm
-      className="card-spaced inline center"
-      onSubmit={handleSubmit(({ username, password }) =>
-        handleLogin(username, password)
-      )}
-    >
-      <Input name="username" ref={register({})} />
-      <Input name="password" ref={register({})} type="password" />
-      <button className="button">Login</button>
-      {status}
-    </StyledForm>
+    <div>
+      <StyledForm
+        className="card-spaced inline center"
+        onSubmit={handleSubmit(({ username, password }) =>
+          handleLogin(username, password)
+        )}
+      >
+        <Input name="username" ref={register({ required: true })} />
+        <Input
+          name="password"
+          ref={register({ required: true })}
+          type="password"
+        />
+        <button className="button" disabled={!isValid}>
+          Login
+        </button>
+        {status}
+      </StyledForm>
+    </div>
   )
 }
