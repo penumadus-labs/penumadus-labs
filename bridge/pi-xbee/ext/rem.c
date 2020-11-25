@@ -23,7 +23,6 @@
 #include <xbeeintfc.h>
 #include <trans.h>
 #include <aqueues.h>
-#include <magdata.h>
 
 void *processrem(void *arg);
 void *processdef(void *arg);
@@ -70,13 +69,11 @@ void
 	unsigned long millis,lastmillis;
 	bool timesynced=false;
 	unsigned long secs, usecs;
-	int id;
 
 	locport=(unsigned short)((intptr_t)arg);
-	id=locport-REM0PORT;
 
 	//so id becomes morganbridge:0 for rem0 and :1 for rem1 etc 
-	sprintf(remQueue.id,"%s:%d",BRIDGEID,id);
+	sprintf(remQueue.id,"%s:%d",BRIDGEID,locport-REM0PORT);
 
 	/* possible race here so sleep 2 sec between thread starts above */
 	remSock=setupListener(locport);
@@ -133,7 +130,6 @@ void
 		//fprintf(stderr,"TIME:  %lx %lx\n",secs,usecs);
 		handleData(&remQueue, pack.accel.x, pack.accel.y, pack.accel.z, secs, usecs);
 		//call magnetometer processing and update carcount
-		handleMagData(id,pack.mag.x, pack.mag.y, pack.mag.z, secs, usecs);
 	}
 }
 
@@ -184,10 +180,10 @@ void
 			&millis, &hexdef, &hexsupply, &ambtemp, &ambhumid);
 
 		/* so we ignore zero values on humid */
-		if(ambhumid > 0.1){
+		if(ambhumid > 0.1)
 			temps[HUMIDITY].temp_humid=ambhumid;
-			temps[AMB].temp_humid = ambtemp;
-		}
+			
+		temps[AMB].temp_humid = ambtemp;
 
 		//a to d converter
 		vdef= 4.096   * ((float)(hexdef)/32767.0);

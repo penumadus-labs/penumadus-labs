@@ -20,7 +20,8 @@ extern bool locdebug;  //the serial port file descriptor
 #define BIGBUF 2048
 
 extern int transmitSocket;
-extern bool wifi_avail; 
+extern bool wifi_avail;
+
 struct tempdata {
 	char *serno; 
 	float temp_humid;
@@ -49,4 +50,3 @@ struct remdata {
 };
 
 extern int msgnum;
-

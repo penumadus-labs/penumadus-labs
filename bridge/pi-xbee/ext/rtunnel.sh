@@ -14,8 +14,7 @@
 	fulldebug="-v -v -v "
 	debug=""
 
-	options="-g -i /home/pi/.ssh/postapocalypse.pem -f -T -N"
-
+	options="-g -i /home/pi/.ssh/server2.pem -f -T -N"
 	aliveoptions="-o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -o CheckHostIP=no -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3"
 
 	addr=hankthetank.me
