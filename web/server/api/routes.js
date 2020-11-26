@@ -1,0 +1,10 @@
+const { Router } = require('express')
+const authRouter = require('./auth')
+const databaseRouter = require('./database')
+const devicesRouter = require('./devices')
+const { verifyToken } = require('../utils/auth')
+
+module.exports = Router()
+  .use('/auth', authRouter)
+  .use('/database', verifyToken(false), databaseRouter)
+  .use('/devices', verifyToken(true), devicesRouter)

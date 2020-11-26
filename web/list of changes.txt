@@ -1,0 +1,4 @@
+- figure out error catching with fetch api
+- rewrite select component
+- add esc and click out canceling to d3-linechart
+- change style 
