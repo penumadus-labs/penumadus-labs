@@ -2,6 +2,7 @@
 
 certs
 keys
+server/.env
 
 **/*copy.jsx
 **/*copy.js
