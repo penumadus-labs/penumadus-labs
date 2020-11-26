@@ -75,7 +75,7 @@ sendtoamazon(unsigned char *msg, int len)
     g_err(NOEXIT,NOPERROR,"WIFI: HANK->UDPengine [%.*s]",len,msg);
     if ((n=sendto(wifisock, msg, len, 0, (struct sockaddr *)
                &amazonhank, sizeof(amazonhank))) != len){
-		g_err(NOEXIT,PERROR,"%s: sent diff num bytes than expected %d/%d [%s]\n",
+		g_err(NOEXIT,PERROR,"%s: Failed req len:%d actual len: %d [%s]",
 			__FUNCTION__,n,len,msg);
 		return(false);
     }
@@ -94,7 +94,7 @@ udp_holdConnection(void *arg){
 			//g_err(NOEXIT,NOPERROR,"WIFIPI->UDP success sent link hold");
 		}
 		else{
-			g_err(NOEXIT,NOPERROR,"Wifi Down failed ");
+			g_err(NOEXIT,NOPERROR,"%s: Wifi Down",__FUNCTION__);
 			wifi_avail=false;
                 }
                 sleep(LINKCHECKINTERVAL);

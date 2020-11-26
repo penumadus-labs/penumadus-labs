@@ -157,9 +157,10 @@ const globalStyle = css`
     }
   }
 
-  body,
-  .root {
-    overflow-y: hidden;
+  /* body, */
+  body {
+    height: ${window.innerHeight}px;
+    overflow: hidden;
   }
 
   button,

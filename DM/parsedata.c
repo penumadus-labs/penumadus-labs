@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <stdio.h>      /* for printf() and fprintf() */
 #include <stdlib.h>     /* for atoi() and exit() */
+#include <libgen.h>     /* for atoi() and exit() */
 #include <errno.h>
 #include <sys/fcntl.h>
 #include <pthread.h>
@@ -53,13 +54,17 @@ parsedata(char *incoming, char *outgoing, int size)
 	unsigned long secs;
 	unsigned long usecs;
 	unsigned long long microsecs;
-	bool outgoingDBtraffic=false;
-	bool outgoingHank=false;
+	bool outgoingDBtraffic;
+	bool outgoingHank;
 	unsigned int msgnum;
 	int outgoingsize;
 	struct timeval tv;
 	int n;
 
+	static int logfd=-1;
+
+	outgoingDBtraffic=false;
+	outgoingHank=false;
 
 
 	switch(incoming[0]){
@@ -269,24 +274,40 @@ parsedata(char *incoming, char *outgoing, int size)
 
 		/* log data coming in */
 		case LOG:
-			g_err(NOEXIT,NOPERROR,"LOG DATA: %s\n",incoming);
-
-			if((n=snprintf(outgoing,size,
-				"{ \"type\":\"%c\",\"id\":\"%s\",\"log\":\"%s\",\"time\":%ld.%06ld,"
-				  "\"pad\":\"",
-				LOG,
-				deviceID,
-				incoming,
-				time(NULL),
-				(long)0
-			))>=size)
-				g_err(NOEXIT,NOPERROR,"OUTPUT TRUNCATION! %d",n);
-			else{
-				outgoing[n]=PADCHAR;//get rid of null term in json
+			{
+			char buf[2048];
+			char *tptr;
+			time_t a;
+			if(logfd<0){
+			    char obuf[2048];
+			    char *logfile;
+			    strcpy(buf,program_path());
+			    //basename may modify buf so don't pass it program_path()
+			    tptr=basename(buf);
+			    //allocate a buffer for the path plus an extra / and a \0 and an E_
+			    logfile=malloc(strlen(LOGPATH) + strlen(tptr) + 16 + 5);
+			    strcpy(logfile,LOGPATH);
+			    strcat(logfile,"/MSGLOG");
+			    strcat(logfile,".log");
+			    sprintf(obuf,"%05d",logfileseed);
+			    strcat(logfile,obuf);
+			    printf("log message file is %s\n",logfile);
+			    if((logfd=open(logfile,(O_SYNC|O_WRONLY|O_APPEND|O_CREAT),
+			        (S_IRWXU|S_IRWXG|S_IRWXO)) )<0){
+				    g_err(NOEXIT,PERROR,"%05d %s COULD NOT OPEN LOG MESSAGE FILE %s\n", 
+				    getpid(),stamp(),logfile);
+			    }
+			    free(logfile);
 			}
-			outgoing[size-2]='"';
-			outgoing[size-1]='}';
-			outgoingDBtraffic=true;
+
+			g_err(NOEXIT,NOPERROR,"LOG DATA: %s\n",incoming);
+			a=time(NULL);
+			tptr=ctime(&a);
+			tptr[strlen(tptr)-1]='\0';
+			n=snprintf(outgoing,size, "[ %s ] %s\n", tptr, incoming+2);
+			if(logfd>0)
+				write(logfd,outgoing,n);
+			}
 			break;
 
 		/* command coming in */

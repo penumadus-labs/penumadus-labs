@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<TITLE>Bridge Monitor</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META name="viewport" content="width=device-width" id="myviewport">
+<link rel="stylesheet" rev"stylesheet" href="mainmenu.css" />
+</HEAD>
+
+<script type="text/javascript">
+
+window.onload=timedRefresh;
+
+function timedRefresh(timeoutPeriod) {
+	var b=new Date();
+    document.getElementById("mytime").innerHTML=b.toUTCString();
+    setTimeout("location.reload(true);",10000);
+}
+
+function gotothere(myhref)
+{
+window.open(myhref,"_self");
+}
+
+function dotime()
+{
+
+	var b=Date.now();
+	outstring="cgi-bin/timesync.sh?"+b;
+	gotothere(outstring);
+}
+
+</script>
+
+<BODY>
+<div style="text-align:center; display:flex; flex-direction:column; flex-wrap:wrap; justify-content:space-around; color:white; font-size:x-large; background:blue;border:solid;.div:border:solid;">
+<div>Server Time:&nbsp&nbsp
+<!--#echo var="DATE_LOCAL" --> 
+</div>
+<div> Client Time: <span id="mytime"></span></div>
+</div>
+
+<div class="webdata" >
+<!--#include file="./webdata.html" --> 
+</div>
+<div class="menudiv" id="mainwin" >
+<div><button class="mainmenubutton" onclick='dotime()'>TIMESYNC</button></div>
+<div><button class="mainmenubutton" onclick='gotothere("cgi-bin/reboot.sh")'>REBOOT</button></div>
+<div><button class="mainmenubutton" onclick='gotothere("cgi-bin/shutdown.sh")'>SHUTDOWN</button></div>
+</div>
+</BODY>
+</HTML>

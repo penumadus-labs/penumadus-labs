@@ -51,18 +51,23 @@ module.exports = class Device extends EventEmitter {
   }
 
   emitResponses = (raw) => {
-    const { pad, type: command, status, id, ...data } = JSON.parse(raw)
+    try {
+      const { pad, type: command, status, id, ...data } = JSON.parse(raw)
 
-    if (command === 'HELLO') return
+      if (command === 'HELLO') return
 
-    if (!this.initialized) this.initialize(id)
-    if (command === 'TIME') return console.info('request: TIME')
+      if (!this.initialized) this.initialize(id)
+      if (command === 'TIME') return console.info('request: TIME')
 
-    if (this.listenerCount(command)) {
-      console.info(`response: ${command}`)
-      this.emit(command, status === 'NACK', data)
-    } else {
-      this.emit('error', new Error(`unhandled response ${command}`))
+      if (this.listenerCount(command)) {
+        console.info(`response: ${command}`)
+        this.emit(command, status === 'NACK', data)
+      } else {
+        this.emit('error', new Error(`unhandled response ${command}`))
+      }
+    } catch (error) {
+      console.log(raw)
+      console.error('god dammit Geroge')
     }
   }
 

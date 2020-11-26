@@ -135,7 +135,7 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 
 	cmndmode();
 
-	/* start xbee read thread */
+	/* start xbee read thread for protocol traffic */
 	{
 		pthread_t readthread;
 		if(pthread_create(&readthread,NULL,&processUpBound,NULL) != 0){
@@ -143,7 +143,7 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 		}
 	}
 
-	/* start xbee status thread */
+	/* start xbee status thread to poll cell status */
 	{
 		pthread_t getstatus;
 		if(pthread_create(&getstatus,NULL,&getstatusthread,NULL) != 0){
@@ -151,12 +151,20 @@ initcomms(char *serialport, unsigned short udpport, bool reset)
 		}
 	}
 
-	/* set default listen port */
-	g_err(NOEXIT,NOPERROR,"set default listen port as port+1 %d",udpport);
-	//PONDSCUM
-	sprintf(initbuf,"C0%d",udpport+1);
-	//PONDSCUM  the df would be de if using defaults
-	atcmnd("C0",2,0x7d,0xdf);
+
+	/* set default listen port  one above incoming to get out of way*/
+	g_err(NOEXIT,NOPERROR,"set default listen port as port %d = 0x%lx 0x%lx",
+		udpport,
+		(unsigned char)(((udpport+1)>>8)&0xFF),
+		(unsigned char)((udpport+1)&0xFF) );
+
+	atcmnd("C0",2,
+		(unsigned char)(((udpport+1)>>8)&0xFF),
+		(unsigned char)((udpport+1)&0xFF) );
+
+	/* automatic socket timeout */
+	g_err(NOEXIT,NOPERROR,"set timeout to 5 minutes ");
+	atcmnd("TM",2, 0x0B, 0xB8);
 
 	/* set UDP mode */
 	g_err(NOEXIT,NOPERROR,"set to UDP mode");
@@ -304,7 +312,6 @@ xbeeBind(unsigned char socket,unsigned short port){
 	else
 		return(0);
 }
-
 	
 
 
@@ -851,7 +858,7 @@ getstatusthread(void *arg)
 /* formerly used fixed FRAMESIZE udp frames for simplicity on both ends */
 /* now can be up to FRAMESIZE */
 int
-sendUDP(unsigned char socket, 
+sendUDP(unsigned char locsocket, 
 	char *addr,short port, 
 	const char *packetdata, 
 	int packetlen)
@@ -886,7 +893,7 @@ sendUDP(unsigned char socket,
 	packetpending=udpPacket[0]=framid+FRAMEDATAID;
 
 	sscanf(addr,"%d.%d.%d.%d",&ip[0],&ip[1],&ip[2],&ip[3]);
-	udpPacket[1]=socket;		//socket to use
+	udpPacket[1]=locsocket;		//socket to use
 	udpPacket[2]=ip[0];		//ip addr
 	udpPacket[3]=ip[1];		//ip addr
 	udpPacket[4]=ip[2];		//ip addr
@@ -914,7 +921,8 @@ sendUDP(unsigned char socket,
 	sendApiFrame(frame,s_fd);
 
 	if(sleep_on_status(&sendUDP_cond,5000) != 0){
-		g_err(NOEXIT,PERROR, "%s: error timeout on sleep\n",__FUNCTION__);
+		g_err(NOEXIT,PERROR, "%s: error timeout on sleep socket=%d",__FUNCTION__,socket);
+		printApiFrame(frame);
 		retcode= 256;
 	}
 	else if(sendUDP_cond.statcode !=0 ){
@@ -933,6 +941,7 @@ sendUDP(unsigned char socket,
 }
 
 /* send a UDP frame to server but don't wait on it and sequence it */
+//PONDSCUM cleanse this to work with sockets
 void
 sendUDPSneaky(char *addr,short port, const char *packetdata, int packetlen)
 {

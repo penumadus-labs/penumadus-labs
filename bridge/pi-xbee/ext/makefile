@@ -3,7 +3,7 @@ USER = -DUTK
 HEADEP = netcomms.h trans.h xbee.h xbeeintfc.h bool.h aqueues.h
 HEAD += -I. -I../include
 CFLAGS += $(USER) -g $(HEAD) -pthread -DLOC_DEBUG
-#CFLAGS += -DFULL_DEBUG 
+CFLAGS += -DFULL_DEBUG 
 LDFLAGS+= -g -pthread -lm
 
 all: trans simulate defsim
