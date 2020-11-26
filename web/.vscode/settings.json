@@ -1,0 +1,27 @@
+{
+  "cSpell.words": [
+    "Ihlmv",
+    "XXXS",
+    "bridgetest",
+    "caro",
+    "linechart",
+    "morganbridge",
+    "papaparse",
+    "pengine",
+    "ud",
+    "ud pengine",
+    "unparse",
+    "utils/datetime"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false,
+    "source.fixAll": false
+  },
+  // "editor.formatOnSave": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/build/*/**": true,
+    "**/node_modules/*/**": true
+  }
+}
