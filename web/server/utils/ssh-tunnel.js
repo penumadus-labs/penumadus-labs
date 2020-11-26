@@ -3,13 +3,27 @@
 const { readFileSync } = require('fs')
 const tunnel = require('tunnel-ssh')
 const { join } = require('path')
+const privateKey = require('./key')
+console.log(privateKey)
 
-module.exports = (port) => {
+const sshTunnel = (module.exports = (port) => {
   const config = {
     username: 'ubuntu',
     host: '52.14.30.58',
     port: '22',
-    privateKey: readFileSync(join(__dirname, '..', '..', 'keys', ':(.pem')),
+    privateKey: 'tts',
+    // privateKey: readFileSync(
+    //   join(
+    //     __dirname,
+    //     '..',
+    //     '..',
+    //     '..',
+    //     '..',
+    //     '..',
+    //     '.ssh',
+    //     'postapocalypse.pem'
+    //   )
+    // ),
   }
   return new Promise((resolve, reject) => {
     const client = tunnel({ ...config, dstPort: port.toString() }, (err) => {
@@ -20,4 +34,10 @@ module.exports = (port) => {
 
     client.on('error', reject)
   })
+})
+
+if (require.main === module) {
+  void (async () => {
+    await sshTunnel(27017)
+  })().catch(console.error)
 }
