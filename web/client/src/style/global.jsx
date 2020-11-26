@@ -157,11 +157,11 @@ const globalStyle = css`
     }
   }
 
-  body,
-  .root {
-    overflow-y: hidden;
+  /* body, */
+  body {
+    height: ${window.innerHeight}px;
+    overflow: hidden;
   }
-
   select,
   button,
   input {
@@ -169,8 +169,6 @@ const globalStyle = css`
     font-size: inherit;
     font-family: inherit;
     line-height: inherit;
-
-    /* line-height: inherit; */
     letter-spacing: inherit;
   }
 

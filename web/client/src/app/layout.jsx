@@ -26,6 +26,10 @@ const Root = styled.div`
     grid-template-rows: auto minmax(0, 1fr) auto;
   }
 
+  header {
+    z-index: var(--layer1);
+  }
+
   header > p {
     padding: var(--sm);
     font-size: var(--lg);
@@ -65,7 +69,10 @@ const Layout = () => {
     const resizeEvent = () => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
-        ref.current.style.height = `${window.innerHeight}px`
+        // do I need to set both?
+        const height = `${window.innerHeight}px`
+        ref.current.style.height = height
+        document.body.style.height = height
       }, 200)
     }
     window.addEventListener('resize', resizeEvent)
