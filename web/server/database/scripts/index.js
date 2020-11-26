@@ -1,6 +1,7 @@
 // const client = require('./client-ssh')
 const client = require('../client')
-const { writeFileSync } = require('fs')
+const { join } = require('path')
+const { writeFileSync, write } = require('fs')
 const { schemas } = require('../schemas')
 const { unparse } = require('papaparse')
 
@@ -16,6 +17,15 @@ const { unparse } = require('papaparse')
 // }
 
 const id = 'morganbridge'
+const dest = join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  '..',
+  'save-data-from-db',
+  'nov-23-20-epoxy-temperatures'
+)
 
 const modifyFields = async () => {
   for (const [field, keys] of schemas.bridge) {
@@ -42,15 +52,27 @@ const modifyFields = async () => {
     // )
   }
 }
-
 const createCsv = async () => {
   const start = new Date('11-23-20').getTime() / 1000
-  const end = new Date('11-24-20').getTime() / 1000
+  const end = new Date('11-25-20').getTime() / 1000
+
   const { data } = await client.getLinearData({
+    id,
+    field: 'deflection',
     start,
     end,
+    limit: null,
   })
-  console.log(data)
+  console.log(data.length)
+  const { time: time1 } = data[0]
+
+  const { time: time2 } = data[data.length - 1]
+  console.log(start <= time1, time2 <= end)
+  const csv = unparse(data)
+
+  writeFileSync(dest + '/deflection-data.csv', csv)
 }
 
-client.wrap()
+const test = async () => {}
+
+client.wrap(test)

@@ -1,6 +1,5 @@
 const { join } = require('path')
 require('dotenv').config({ path: join(__dirname, '.env.local') })
-require('dotenv').config({ path: join(__dirname, '.env') })
 require('dotenv').config({ path: join(__dirname, '..', 'client', '.env') })
 
 const { connect } = require('./database/client')

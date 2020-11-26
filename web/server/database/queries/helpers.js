@@ -35,3 +35,50 @@ module.exports = {
   getNoDataCollected,
   checkIsArray,
 }
+
+const $let = ({ $in, ...vars }) => ({
+  $let: {
+    vars,
+    in: $in,
+  },
+})
+
+const $filter = (input, cond) => ({
+  $filter: { input, cond },
+})
+
+const $between = (value, start, end) => ({
+  $and: [{ $gte: [value, start] }, { $lte: [value, end] }],
+})
+
+const $isZero = (value, trueCase, falseCase) => ({
+  $cond: [{ $eq: [value, 0] }, trueCase, falseCase],
+})
+
+const $roundedDivision = (a, b) => ({
+  $round: {
+    $divide: [a, b],
+  },
+})
+
+const $size = (value) => ({ $size: value })
+
+const $reduce = (input, expr, init) => ({
+  $let: {
+    vars: {
+      reduced: {
+        $reduce: {
+          input,
+          initialValue: { index: 0, result: init },
+          in: {
+            index: { $add: ['$$value.index', 1] },
+            result: expr,
+          },
+        },
+      },
+    },
+    in: '$$reduced.result',
+  },
+})
+
+$reduce()

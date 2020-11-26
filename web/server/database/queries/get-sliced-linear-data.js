@@ -3,27 +3,31 @@
 const reduceBody = {
   $cond: [
     { $eq: [{ $mod: ['$$value.index', '$$step'] }, 0] },
-    { $concatArrays: ['$$value.acc', ['$$this']] },
-    '$$value.acc',
+    { $concatArrays: ['$$value.result', ['$$this']] },
+    '$$value.result',
   ],
 }
 
 module.exports = ({ input, start, end, limit = 1000 }) => {
   //* filters the data by the selected time range
+
+  // const startTime = start ? +start : -Infinity
+  // const endTime = end ? +end : Infinity
+
   const sliced = {
     $filter: {
       input,
       cond: {
         $and: [
-          { $gte: [`$$this.time`, start ? +start : -Infinity] },
-          { $lte: [`$$this.time`, end ? +end : Infinity] },
+          { $gte: ['$$this.time', start ? +start : -Infinity] },
+          { $lte: ['$$this.time', end ? +end : Infinity] },
         ],
       },
     },
   }
 
   // if no limit return the whole slice -- used for csv download
-  if (limit === null) return { data: sliced }
+  if (limit === null) return sliced
 
   //* iterates through the data keeping track of the index
   //* skips over the dataset selecting every nth (sizeSlice / limit) packet
@@ -33,16 +37,16 @@ module.exports = ({ input, start, end, limit = 1000 }) => {
       vars: {
         reduced: {
           $reduce: {
-            input,
-            initialValue: { index: 0, acc: [] },
+            input: '$$sliced',
+            initialValue: { index: 0, result: [] },
             in: {
               index: { $add: ['$$value.index', 1] },
-              acc: reduceBody,
+              result: reduceBody,
             },
           },
         },
       },
-      in: '$$reduced.acc',
+      in: '$$reduced.result',
     },
   }
 
@@ -50,18 +54,45 @@ module.exports = ({ input, start, end, limit = 1000 }) => {
   //* if $$step equals 0 aka the size of the slice of the dataset is zero
   //* return empty array to not divide by zero
 
-  return {
+  const step = {
     $let: {
       vars: {
         step: {
-          $ceil: {
-            $divide: [{ $size: sliced }, limit],
+          $round: {
+            $divide: [{ $size: '$$sliced' }, limit],
           },
         },
       },
+
       in: {
         $cond: [{ $eq: ['$$step', 0] }, [], reduce],
       },
     },
   }
+
+  return {
+    $let: {
+      vars: {
+        sliced,
+      },
+      in: step,
+    },
+  }
 }
+
+// cleaner?
+// const step = $let({
+//   step: {
+//     $ceil: {
+//       $divide: [{ $size: '$$sliced' }, limit],
+//     },
+//   },
+//   $in: {
+//     $cond: [{ $eq: ['$$step', 0] }, [], reduce],
+//   },
+// })
+
+// return $let({
+//   sliced,
+//   $in: step,
+// })

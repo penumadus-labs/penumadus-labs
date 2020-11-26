@@ -1,17 +1,21 @@
+const { join } = require('path')
+require('dotenv').config({ path: join(__dirname, '..', '.env') })
+
 const { MongoClient } = require('mongodb')
 const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
 const { createDeviceSchema, addDeviceContext } = require('./schemas')
-const tunnel = require('../utils/ssh-tunnel')
 const startProcess = require('../commands/start-mongod')
-const { getDataKeys } = require('./queries/helpers')
 
 const defaultUdpPortIndex = 30000
 
-const url = process.env.AWS_SERVER
-  ? 'mongodb://caro:Matthew85!!@localhost/admin'
-  : 'mongodb://localhost'
+const awsServer = !!process.env.AWS_SERVER
+const { DB_USER, DB_PWD } = process.env
+
+const url = `mongodb://${DB_USER}:${DB_PWD}@${
+  awsServer ? 'localhost' : '52.14.30.58'
+}/admin`
 
 const mongoClient = new MongoClient(url, {
   useNewUrlParser: true,
@@ -19,9 +23,8 @@ const mongoClient = new MongoClient(url, {
 })
 
 const client = {
-  async connect(ssh = !process.env.AWS_SERVER) {
-    if (ssh) await tunnel(27017)
-    else await startProcess()
+  async connect() {
+    if (awsServer) await startProcess()
 
     await mongoClient.connect()
 
@@ -54,8 +57,8 @@ const client = {
   },
   async wrap(promise) {
     try {
-      await client.connect(true)
-      if (promise) await promise()
+      await client.connect()
+      if (typeof promise === 'function') await promise()
     } catch (error) {
       console.error(error)
     } finally {

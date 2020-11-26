@@ -14,15 +14,15 @@ module.exports = ({
   const input = `$${field}`
 
   // if download request
-  if (limit === null) {
-    return {
-      data: getSlicedLinearData({ input, limit }),
-    }
-  }
+  // if (limit === null) {
+  //   return {
+  //     data: getSlicedLinearData({ input, limit }),
+  //   }
+  // }
 
   return {
     ...getNoDataCollected({ input }),
-    ...getDataKeys({ deviceType, field }),
+    // ...getDataKeys({ deviceType, field }),
     data: recent
       ? getRecentLinearData({ input, resolution })
       : getSlicedLinearData({ input, start, end, limit }),
