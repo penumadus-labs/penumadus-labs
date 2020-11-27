@@ -2,7 +2,7 @@
 
 make charts nicer
 
-app compile mode bridge/tank
+size graphs better on different displays
 
 ** bugs
 

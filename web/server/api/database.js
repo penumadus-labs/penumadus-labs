@@ -7,8 +7,8 @@ const createDeviceConfigFile = require('../utils/create-device-config-file')
 module.exports = Router()
   .get(
     '/devices',
-    handleAsync(async (req, res) => {
-      res.send(await client.getDeviceSchemas())
+    handleAsync(async ({ query }, res) => {
+      res.send(await client.getDeviceSchemas(query))
     })
   )
   .get(

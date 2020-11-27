@@ -18,7 +18,7 @@ export default () => {
     localStorage.setItem('id', value)
   }
 
-  if (!devices) return null
+  if (devices.list.length < 2) return null
 
   // if (!devices.length)
   //   return (

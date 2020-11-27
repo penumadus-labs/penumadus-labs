@@ -26,7 +26,12 @@ export default ({ requestAndStore, device, setDevice }) => {
       true
     )
 
-    devices.list = Object.values(devices)
+    // move morgan bridge to the front
+    devices.list = Object.values(devices).reduce(
+      (a, value) =>
+        value.id === 'morganbridge' ? [value, ...a] : [...a, value],
+      []
+    )
 
     const storedId = localStorage.getItem('id')
 

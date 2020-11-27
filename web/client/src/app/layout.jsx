@@ -27,11 +27,11 @@ const Root = styled.div`
   }
 
   header {
-    z-index: var(--layer1);
+    padding: var(--xs);
   }
 
   header > p {
-    padding: var(--sm);
+    padding-bottom: var(--xs);
     font-size: var(--lg);
     background: var(--card-background);
 

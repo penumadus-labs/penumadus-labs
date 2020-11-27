@@ -24,7 +24,7 @@ export default ({
         <Delete {...deleteProps} />
         <Live {...liveProps} />
         <Help />
-        {children ?? (render && render(liveProps.live))}
+        {children}
       </StyledDiv>
     </>
   )

@@ -4,7 +4,7 @@ import { IoIosArrowDown as DownArrow } from 'react-icons/io'
 
 const Anchor = styled.div`
   position: relative;
-  height: 52px;
+  height: 54px;
 
   p {
     padding-left: 2px;

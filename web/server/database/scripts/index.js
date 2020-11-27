@@ -54,25 +54,24 @@ const modifyFields = async () => {
 }
 const createCsv = async () => {
   const start = new Date('11-23-20').getTime() / 1000
-  const end = new Date('11-25-20').getTime() / 1000
+  const end = new Date('11-24-20').getTime() / 1000
 
   const { data } = await client.getLinearData({
     id,
-    field: 'deflection',
+    field: 'environment',
     start,
     end,
     limit: null,
   })
-  console.log(data.length)
-  const { time: time1 } = data[0]
 
-  const { time: time2 } = data[data.length - 1]
-  console.log(start <= time1, time2 <= end)
-  const csv = unparse(data)
+  for (const d of data) {
+  }
 
-  writeFileSync(dest + '/deflection-data.csv', csv)
+  // const csv = unparse(data)
+
+  // writeFileSync(dest + '/deflection-data.csv', csv)
 }
 
 const test = async () => {}
 
-client.wrap(test)
+client.wrap(createCsv)

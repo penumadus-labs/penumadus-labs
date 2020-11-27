@@ -1,83 +1,53 @@
-// const device = {
-//   dataFields: ['environment', 'acceleration'],
-// }
+// device schemas with keys
+
+// const acceleration = ['magnitude', 'x', 'y', 'z']
 
 // const bridge = {
 //   configurable: false,
-//   dataFields: [...device.dataFields, 'deflection'],
+//   dataFields: {
+//     environment: ['temperature', 'humidity', 'sensors'], // count
+//     deflection: ['deflection'],
+//     acceleration,
+//   },
 // }
 
 // const tank = {
 //   configurable: true,
-//   dataFields: [...device.dataFields],
+//   dataFields: {
+//     environment: ['temperature', 'humidity', 'pressure'], // fills
+//     acceleration,
+//   },
 // }
 
-const acceleration = ['magnitude', 'x', 'y', 'z']
+const sharedDataFields = ['environment', 'acceleration']
 
 const bridge = {
   configurable: false,
-  dataFields: {
-    environment: ['temperature', 'humidity', 'sensors'], // count
-    deflection: ['deflection'],
-    acceleration,
-  },
+  dataFields: [...sharedDataFields, 'deflection'],
 }
 
 const tank = {
   configurable: true,
-  dataFields: {
-    environment: ['temperature', 'humidity', 'pressure'], // fills
-    acceleration,
-  },
+  dataFields: [...sharedDataFields],
 }
 
-const schemas = {
+const deviceSchemas = {
   bridge,
   tank,
 }
 
+// props { deviceType id updPort }
 const createDeviceSchema = (props) => {
+  const { dataFields } = deviceSchemas[props.deviceType]
+
+  // initialize fields
   const fields = {}
-
-  const { dataFields } = schemas[props.deviceType]
-
-  // this code would store the keys in the database
-  // for (const [field, keys] of list) {
-  //   dataFields.push(field)
-  //   fields[field] = {
-  //     keys,
-  //     data: [],
-  //   }
-  // }
-
-  for (const field of Object.keys(dataFields)) {
-    fields[field] = []
-  }
-
-  // props info
-  // props {
-  //  id
-  //  updPort
-  //  deviceType
-  // }
+  for (const field of dataFields) fields[field] = []
 
   return {
     ...props,
-    ...fields,
+    ...dataFields.reduceToObject((field) => ({ [field]: [] })),
   }
 }
 
-const getDataKeys = ({ deviceType, field }) => ({
-  keys: schemas[deviceType].dataFields[field],
-})
-
-const addDeviceContext = (deviceType) => {
-  const { dataFields, configurable } = schemas[deviceType]
-
-  return {
-    configurable,
-    dataFields: Object.keys(dataFields),
-  }
-}
-
-module.exports = { createDeviceSchema, addDeviceContext, getDataKeys }
+module.exports = { createDeviceSchema, deviceSchemas }

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import Chart from './d3-linechart'
 
-export default ({ noDataCollected, ...props }) => {
+export default (props) => {
   const ref = useRef()
 
   const { chart, ...ctx } = useMemo(() => {
-    if (noDataCollected) return {}
+    if (!props.data.length) throw new Error('no data keys to read')
+
     const chart = new Chart(props)
 
     return {

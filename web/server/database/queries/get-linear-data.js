@@ -1,30 +1,14 @@
 const getRecentLinearData = require('./get-recent-linear-data')
 const getSlicedLinearData = require('./get-sliced-linear-data')
-const { getNoDataCollected, getDataKeys } = require('./helpers')
+const { dataQuery } = require('./helpers')
 
-module.exports = ({
-  field,
-  deviceType,
-  recent,
-  resolution,
-  start,
-  end,
-  limit,
-}) => {
+module.exports = ({ field, recent, resolution, start, end, limit }) => {
   const input = `$${field}`
 
-  // if download request
-  // if (limit === null) {
-  //   return {
-  //     data: getSlicedLinearData({ input, limit }),
-  //   }
-  // }
-
-  return {
-    ...getNoDataCollected({ input }),
-    // ...getDataKeys({ deviceType, field }),
-    data: recent
+  return dataQuery(
+    input,
+    recent
       ? getRecentLinearData({ input, resolution })
-      : getSlicedLinearData({ input, start, end, limit }),
-  }
+      : getSlicedLinearData({ input, start, end, limit })
+  )
 }

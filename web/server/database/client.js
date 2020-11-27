@@ -5,13 +5,18 @@ const { MongoClient } = require('mongodb')
 const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
-const { createDeviceSchema, addDeviceContext } = require('./schemas')
+const { createDeviceSchema, deviceSchemas } = require('./schemas')
 const startProcess = require('../commands/start-mongod')
 
 const defaultUdpPortIndex = 30000
 
 const awsServer = !!process.env.AWS_SERVER
 const { DB_USER, DB_PWD } = process.env
+
+if (!DB_USER && !DB_PWD)
+  throw new Error(
+    'no database credentials provided, please but DB_USER and DB_PWD a .env file'
+  )
 
 const url = `mongodb://${DB_USER}:${DB_PWD}@${
   awsServer ? 'localhost' : '52.14.30.58'
@@ -76,24 +81,23 @@ const client = {
   },
   async getDeviceSchemas(store = false) {
     const schemas = {}
+
+    const query = process.env.MODE ? { deviceType: process.env.MODE } : {}
     await client.devices
-      .find(
-        {},
-        {
-          projection: {
-            _id: 0,
-            id: 1,
-            deviceType: 1,
-            // dataFields: 1,
-            // configurable: 1,
-          },
-        }
-      )
+      .find(query, {
+        projection: {
+          _id: 0,
+          id: 1,
+          deviceType: 1,
+          // dataFields: 1,
+          // configurable: 1,
+        },
+      })
       .forEach(({ id, deviceType }) => {
         schemas[id] = {
           id,
           deviceType,
-          ...addDeviceContext(deviceType),
+          ...deviceSchemas[deviceType],
         }
       })
 
@@ -106,9 +110,9 @@ const client = {
       $set: { udpPortIndex: defaultUdpPortIndex },
     })
   },
-  async insertDevice({ deviceType, id }) {
+  async insertDevice(props) {
     const udpPort = await client.getUdpPortIndex()
-    const deviceModel = createDeviceModel({ deviceType, id, udpPort })
+    const deviceModel = createDeviceSchema({ udpPort, ...props })
     client.devices.insertOne(deviceModel)
     return udpPort
   },

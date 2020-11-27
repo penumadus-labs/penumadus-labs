@@ -1,7 +1,6 @@
 import React from 'react'
-import Chart from '../chart/chart-x'
+import Chart from '../chart/chart'
 import DomainSelector from './domain-selector'
-import useApi from '../../../api'
 import { resolution } from '../../../utils/live-data-config'
 
 export default ({

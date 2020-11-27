@@ -30,9 +30,13 @@ const checkIsArray = (data) => ({
   data: { $cond: { if: { $isArray: input }, then: data, else: undefined } },
 })
 
+const dataQuery = (input, data) => ({
+  ...getNoDataCollected({ input }),
+  data,
+})
+
 module.exports = {
-  getDataKeys,
-  getNoDataCollected,
+  dataQuery,
   checkIsArray,
 }
 

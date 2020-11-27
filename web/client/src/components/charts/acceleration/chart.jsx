@@ -1,6 +1,5 @@
 import React from 'react'
 import Chart from '../chart/chart'
-import useMessage from '../../../services/socket'
 import EventSelector from './event-selector'
 import useApi from '../../../api'
 

@@ -19,8 +19,6 @@ export const initialState = [
 export default (initialState) => {
   const [state, setState] = useState(initialState)
 
-  console.log(state)
-
   const ctx = useMemo(() => {
     const store = (key, value) =>
       setState((state) => ({

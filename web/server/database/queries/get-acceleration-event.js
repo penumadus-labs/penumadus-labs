@@ -1,21 +1,15 @@
-const { getDataKeys, getNoDataCollected } = require('./helpers')
+const { dataQuery } = require('./helpers')
 
-const accelerationData = ({ index, deviceType }) => {
+const accelerationData = ({ index }) => {
   const field = 'acceleration'
   const input = `$${field}`
 
-  const data = {
+  return dataQuery(input, {
     $cond: {
       if: { $eq: [{ $size: input }, 0] },
       then: [],
       else: { $arrayElemAt: [input, +index] },
     },
-  }
-
-  return {
-    data,
-    ...getNoDataCollected({ input }),
-    ...getDataKeys({ field, deviceType }),
-  }
+  })
 }
 module.exports = accelerationData

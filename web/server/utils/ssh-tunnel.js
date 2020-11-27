@@ -4,7 +4,6 @@ const { readFileSync } = require('fs')
 const tunnel = require('tunnel-ssh')
 const { join } = require('path')
 const privateKey = require('./key')
-console.log(privateKey)
 
 const sshTunnel = (module.exports = (port) => {
   const config = {
