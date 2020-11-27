@@ -5,7 +5,7 @@ make sure all development takes place in development branch!!
 
 ### Folders are laid out as follows:
 
-- web-stack: nodejs client and server
+- web: main server application - MERN stack
 - DM: Data Monitoring code 
 - Stub: code that bridges Hank and DM
 - Hank: arduino code for tank module
