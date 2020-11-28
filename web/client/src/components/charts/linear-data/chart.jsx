@@ -4,13 +4,14 @@ import DomainSelector from './domain-selector'
 import { resolution } from '../../../utils/live-data-config'
 
 export default ({
-  dataLabel,
-  data,
+  // dataType,
+  // data,
+  // useDownloadData,
+  // useDeleteData,
+  // yDomain = [-1, 100],
   getData,
   useGetData,
-  useDownloadData,
-  useDeleteData,
-  yDomain = [-1, 100],
+  ...props
 }) => {
   const initializeLive = () => {
     return getData({ recent: true }, true)
@@ -22,16 +23,16 @@ export default ({
   ]
 
   return (
-    <>
-      <Chart
-        {...{ initializeLive, handleMutation, dataLabel }}
-        data={data}
-        getData={getData}
-        useDownload={useDownloadData}
-        useDelete={useDeleteData}
-        yDomain={yDomain}
-        render={(live) => live || <DomainSelector useGetData={useGetData} />}
-      ></Chart>
-    </>
+    <Chart
+      yDomain={[-1, 100]}
+      {...{ initializeLive, handleMutation, getData }}
+      {...props}
+      // data={data}
+      // getData={getData}
+      // useDownload={useDownloadData}
+      // useDelete={useDeleteData}
+      // yDomain={yDomain}
+      render={(live) => live || <DomainSelector useGetData={useGetData} />}
+    />
   )
 }

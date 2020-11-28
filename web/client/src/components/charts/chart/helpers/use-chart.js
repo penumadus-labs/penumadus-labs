@@ -5,7 +5,7 @@ export default (props) => {
   const ref = useRef()
 
   const { chart, ...ctx } = useMemo(() => {
-    if (!props.data.length) throw new Error('no data keys to read')
+    console.log('memo')
 
     const chart = new Chart(props)
 
@@ -19,7 +19,7 @@ export default (props) => {
     }
 
     // eslint-disable-next-line
-  }, [props.data])
+  }, [props.data.length])
 
   useEffect(
     () => {

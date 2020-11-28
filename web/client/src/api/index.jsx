@@ -8,7 +8,8 @@ const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
   const [device, setDevice] = useState()
-  const [state, mutateStore, requestAndStore] = useApiStore(initialState)
+  const [state, requestAndStore, mutateStore] = useApiStore(initialState)
+
   const [actions, hooks] = useMemo(
     () =>
       createApiMethods({

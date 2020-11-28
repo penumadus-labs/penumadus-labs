@@ -72,6 +72,11 @@ const createCsv = async () => {
   // writeFileSync(dest + '/deflection-data.csv', csv)
 }
 
+const getAccelerationEvent = async () => {
+  const { data } = await client.getAccelerationEvent({ id, index: 0 })
+  console.log(data)
+}
+
 const test = async () => {}
 
-client.wrap(createCsv)
+client.wrap(getAccelerationEvent)

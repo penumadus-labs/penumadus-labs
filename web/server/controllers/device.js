@@ -67,13 +67,15 @@ module.exports = class Device extends EventEmitter {
   }
 
   initialize(id) {
-    this.id = id
-    const { deviceType } = database.schemas[id]
-    this.attachEvents(protocols[deviceType])
-
-    broadcaster.devices[id] = this
-
-    this.initialized = true
+    try {
+      const { deviceType } = database.schemas[id]
+      this.attachEvents(protocols[deviceType])
+      this.id = id
+      broadcaster.devices[id] = this
+      this.initialized = true
+    } catch (error) {
+      return console.error(new Error(`could not initialize: ${id}`))
+    }
   }
 
   attachEvents({

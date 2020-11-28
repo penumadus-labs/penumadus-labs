@@ -27,7 +27,7 @@ import Request from './request'
 //   )
 // }
 
-export default ({ useDelete, getData, clearLiveData }) => {
+export default ({ useDelete, getData }) => {
   const wrapRequest = async (request) => {
     if (
       !window.confirm(
@@ -36,7 +36,6 @@ export default ({ useDelete, getData, clearLiveData }) => {
     )
       return
     await request()
-    clearLiveData()
     await getData()
   }
   return (

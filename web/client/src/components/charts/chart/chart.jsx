@@ -6,7 +6,7 @@ import useMessage from '../../../services/socket'
 
 export default ({
   children,
-  dataLabel,
+  dataType,
   data: [status, { noDataCollected, data } = {}],
   initializeLive,
   handleMutation,
@@ -16,20 +16,27 @@ export default ({
 
   const [, { mutateStore }] = useApi()
 
-  const [live, setLive] = useState(localStorage.getItem('live') === 'true')
+  const [live, setLive] = useState(
+    localStorage.getItem('live') || noDataCollected
+  )
   const toggleLive = async () => {
-    if (!live) await initializeLive()
-    localStorage.setItem('live', !live)
+    if (!live) {
+      if (initializeLive) await initializeLive()
+      localStorage.setItem('live', 'live')
+    } else localStorage.removeItem('live')
     setLive(!live)
   }
 
-  useMessage(({ type, data: messageData }) => {
-    if (live && type !== dataLabel) return
-    mutateStore(dataLabel, (store) => {
-      const [status, { data }] = store
-      return [status, { data: handleMutation(messageData, data) }]
-    })
-  })
+  useMessage(
+    ({ type, data: messageData }) => {
+      if (!live || type !== dataType) return
+      mutateStore(dataType, (store) => {
+        const [status, { data }] = store
+        return [status, { data: handleMutation(messageData, data) }]
+      })
+    },
+    [live]
+  )
 
   if (noDataCollected)
     return (

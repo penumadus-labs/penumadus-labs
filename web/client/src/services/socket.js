@@ -30,14 +30,14 @@ export const useSocket = (init) => {
   }, [init])
 }
 
-const useMessage = (task) => {
+const useMessage = (task, [dep1] = []) => {
   useEffect(() => {
     tasks.push(task)
     return () => {
       tasks = tasks.filter((t) => t !== task)
     }
     // eslint-disable-next-line
-  }, [])
+  }, [dep1])
 }
 
 export default useMessage

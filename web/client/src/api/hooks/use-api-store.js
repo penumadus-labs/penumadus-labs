@@ -20,24 +20,25 @@ export default (initialState) => {
   const [state, setState] = useState(initialState)
 
   const ctx = useMemo(() => {
-    const store = (key, value) =>
+    const mutateStore = (key, mutation) =>
       setState((state) => ({
         ...state,
-        [key]: value, // typeof value === 'function' ? value(key[state]) : value,
+        [key]: typeof mutation === 'function' ? mutation(state[key]) : mutation,
       }))
 
     const requestAndStore = async (key, url, params, storeError = false) => {
       try {
         const data = await request(url, params)
-        store(key, [null, data])
+        mutateStore(key, [null, data])
         return data
       } catch (error) {
-        if (storeError) store(key, [<ErrorCard error={parseError(error)} />])
+        if (storeError)
+          mutateStore(key, [<ErrorCard error={parseError(error)} />])
         else throw error
       }
     }
 
-    return [store, requestAndStore]
+    return [requestAndStore, mutateStore]
   }, [])
 
   return [state, ...ctx]

@@ -15,8 +15,8 @@ export default () => {
       data={environment}
       getData={getEnvironment}
       useGetData={useGetEnvironment}
-      useDownloadData={useDownloadEnvironment}
-      useDeleteData={useDeleteEnvironment}
+      useDownload={useDownloadEnvironment}
+      useDelete={useDeleteEnvironment}
     />
   )
 }

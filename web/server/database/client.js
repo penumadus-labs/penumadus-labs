@@ -83,7 +83,6 @@ const client = {
     const schemas = {}
 
     const query = process.env.MODE ? { deviceType: process.env.MODE } : {}
-    console.log('query:', query)
     await client.devices
       .find(query, {
         projection: {
@@ -103,8 +102,6 @@ const client = {
       })
 
     if (store) client.schemas = schemas
-
-    console.log(client.schemas)
 
     return schemas
   },
