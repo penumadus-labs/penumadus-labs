@@ -31,6 +31,7 @@ bool doconnect(void );
 bool sendHello(void );
 
 
+extern unsigned short hankPort;     
 extern struct sockaddr_in controlDBIp;
 extern char deviceID[];
 extern parsetbl_t parsetbl[];
@@ -48,7 +49,7 @@ setupDBcomms(
 	int tsize;
 
 	struct tm *filetime;
-	char backbuf[128];
+	char backbuf[256];
 	time_t myloctime;
  
 	/* create a backup file so if we lose connection to database data */
@@ -57,8 +58,8 @@ setupDBcomms(
 	myloctime=time(NULL);
 	filetime=localtime(&myloctime);
 	
-	sprintf(backbuf,"/tmp/backup_%hd_%02d-%02d-%d_%02d:%02d:%02d",
-			port,
+	sprintf(backbuf,"/home/ubuntu/logs/backup_%d_%02d-%02d-%d_%02d:%02d:%02d",
+			(unsigned int)hankPort,
 			filetime->tm_mon+1,
 			filetime->tm_mday,
 			filetime->tm_year+1900,
