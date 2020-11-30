@@ -6,7 +6,7 @@ const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
 const { createDeviceSchema, deviceSchemas } = require('./schemas')
-const startProcess = require('../commands/start-mongod')
+// const startProcess = require('../commands/start-mongod')
 
 const defaultUdpPortIndex = 30000
 
@@ -18,18 +18,18 @@ if (!DB_USER && !DB_PWD)
     'no database credentials provided, please but DB_USER and DB_PWD a .env file'
   )
 
-const url = `mongodb://${DB_USER}:${DB_PWD}@${
+const uri = `mongodb://${DB_USER}:${DB_PWD}@${
   awsServer ? 'localhost' : '52.14.30.58'
 }/admin`
 
-const mongoClient = new MongoClient(url, {
+const mongoClient = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
 const client = {
   async connect() {
-    if (awsServer) await startProcess()
+    // if (awsServer) await startProcess()
 
     await mongoClient.connect()
 
@@ -121,9 +121,7 @@ const client = {
     return devices.map(({ udpPort }) => udpPort)
   },
   pushData(id, data, field) {
-    return client.devices
-      .updateOne({ id }, { $push: { [field]: data } })
-      .catch(console.error)
+    return client.devices.updateOne({ id }, { $push: { [field]: data } })
   },
   insertEnvironment(id, data) {
     return client.pushData(id, data, 'environment')

@@ -1,6 +1,6 @@
 {
-  "git.enabled": false,
-  "prettier.enable": false,
+  // "git.enabled": false,
+  // "prettier.enable": false,
   "cSpell.words": [
     "Ihlmv",
     "XXXS",

@@ -1,14 +1,10 @@
 import * as d3 from 'd3'
-import {
-  formatHoursMinutes,
-  parseDate,
-  parseDomain,
-} from '../../utils/datetime'
-import { colors } from '../../utils/units-colors'
-import { formatData, formatKeys, formatLabels } from '../../utils/data'
-import { isChild } from '../../utils/dom'
+import { formatHoursMinutes, parseDate, parseDomain } from '../utils/datetime'
+import { colors } from '../utils/units-colors'
+import { formatData, formatKeys, formatLabels } from '../utils/data'
+import { isChild } from '../utils/dom'
 
-const marginLeft = 30
+const marginLeft = 40
 const marginBottom = 50
 const marginRight = 0
 const marginTop = 5

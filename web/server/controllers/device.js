@@ -127,7 +127,7 @@ module.exports = class Device extends EventEmitter {
         console.info(`acceleration event: ${this.event.length}`)
         if (this.recordData)
           database.insertAccelerationEvent(this.id, this.event)
-      }, 1000)
+      }, 500)
     },
   }
 

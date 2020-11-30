@@ -8,7 +8,7 @@ const reduceBody = {
   ],
 }
 
-module.exports = ({ input, start, end, limit = 1000 }) => {
+const old = ({ input, start, end, limit }) => {
   //* filters the data by the selected time range
 
   // const startTime = start ? +start : -Infinity
@@ -79,6 +79,19 @@ module.exports = ({ input, start, end, limit = 1000 }) => {
     },
   }
 }
+
+module.exports = ({ input, start, end, limit }) => ({
+  $function: {
+    lang: 'js',
+    args: [input, start ? +start : -Infinity, end ? +end : Infinity, +limit],
+    body: function (input, start, end, limit) {
+      const slice = input.filter(({ time }) => start < time && time < end)
+      if (!limit) return slice
+      const step = Math.ceil(slice.length / limit)
+      return slice.filter((_, i) => i % step === 0)
+    }.toString(),
+  },
+})
 
 // cleaner?
 // const step = $let({

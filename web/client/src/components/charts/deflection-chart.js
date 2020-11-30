@@ -17,7 +17,7 @@ export default () => {
       useGetData={useGetDeflection}
       useDownloadData={useDownloadDeflection}
       useDeleteData={useDeleteDeflection}
-      yDomain={[0, 45]}
+      yDomain={[13.3, 13.6]}
     />
   )
 }

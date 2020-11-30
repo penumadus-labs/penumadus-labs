@@ -73,10 +73,42 @@ const createCsv = async () => {
 }
 
 const getAccelerationEvent = async () => {
-  const { data } = await client.getAccelerationEvent({ id, index: 0 })
-  console.log(data)
+  const { data } = await client.getAccelerationEvent({
+    id,
+    index: 0,
+    limit: 1000,
+  })
 }
 
 const test = async () => {}
 
-client.wrap(getAccelerationEvent)
+const sortData = async () => {
+  const { data } = await client.getLinearData({
+    id,
+    field: 'environment',
+    limit: null,
+  })
+
+  data.sort((a, b) => a.time - b.time)
+
+  await client.devices.updateOne({ id }, { $set: { environment: data } })
+}
+
+const script = async () => {
+  await client.devices.findOne(
+    { id },
+    {
+      projection: {
+        data: {
+          $function: {
+            body: function () {},
+            args: [],
+            lang: 'js',
+          },
+        },
+      },
+    }
+  )
+}
+
+client.wrap(script)

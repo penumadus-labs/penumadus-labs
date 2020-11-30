@@ -6,21 +6,13 @@ size graphs better on different displays
 
 ** bugs
 
-live mode :(
-
 
 ** test
 
 tcp device client settings cache is working properly
 
-live mode when no data
-
-deleting data
-
 
 ** review
-
-stop sending keys from database
 
 find better charting library?
 

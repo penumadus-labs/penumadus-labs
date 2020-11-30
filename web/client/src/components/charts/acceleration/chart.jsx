@@ -26,14 +26,12 @@ export default () => {
       : eventList.indexOf(event.data[0].time)
 
   const handleMutation = (data, store) => {
-    console.log('mutation')
     const result = timeout ? [...store, data] : [data]
     clearTimeout(timeout)
-    timeout = setTimeout(getAcceleration, 1000)
+    timeout = setTimeout(getAcceleration, 500)
     return result
   }
 
-  console.log(accelerationEvent)
   return (
     <Chart
       {...{

@@ -1,7 +1,6 @@
 import React from 'react'
 import Chart from '../chart/chart'
 import DomainSelector from './domain-selector'
-import { resolution } from '../../../utils/live-data-config'
 
 export default ({
   // dataType,
@@ -18,13 +17,13 @@ export default ({
   }
 
   const handleMutation = (data, store) => [
-    ...store.slice(+(store.length >= resolution)),
+    ...store.slice(+(store.length >= process.env.REACT_APP_DATA_LIMIT)),
     data,
   ]
 
   return (
     <Chart
-      yDomain={[-1, 100]}
+      yDomain={[-1, 50]}
       {...{ initializeLive, handleMutation, getData }}
       {...props}
       // data={data}
@@ -32,7 +31,9 @@ export default ({
       // useDownload={useDownloadData}
       // useDelete={useDeleteData}
       // yDomain={yDomain}
-      render={(live) => live || <DomainSelector useGetData={useGetData} />}
+      render={(live) =>
+        !live ? <DomainSelector useGetData={useGetData} /> : null
+      }
     />
   )
 }

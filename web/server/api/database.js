@@ -24,6 +24,7 @@ module.exports = Router()
         ...query,
         limit: null,
       })
+      console.log(data.length)
       const csv = unparse(data)
       res.send(csv)
     })
@@ -43,7 +44,7 @@ module.exports = Router()
   .get(
     '/acceleration-event-csv',
     handleAsync(async ({ query }, res) => {
-      const { data } = await client.getAccelerationEventData(query)
+      const { data } = await client.getAccelerationEvent(query)
       const csv = unparse(data)
       res.send(csv)
     })

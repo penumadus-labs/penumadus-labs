@@ -1,10 +1,10 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import Controls from './controls'
-import useChart from './helpers/use-chart'
 import Legend from './legend'
 import Tools from './tools'
+import Chart from './d3-linechart'
 
 const SvgStyle = css`
   svg {
@@ -44,22 +44,38 @@ const Header = styled.div`
 export default ({
   live,
   toggleLive,
+  downloadProps,
   getData,
   useDownload,
   useDelete,
-  downloadProps,
   render,
   children,
-  ...props
+  data,
+  yDomain,
 }) => {
+  const ref = useRef()
+
   const {
-    ref,
+    chart,
     date,
     domain,
     defaultDownloadProps,
     toolProps,
     labels,
-  } = useChart(props)
+  } = useMemo(() => {
+    const chart = new Chart({ data, yDomain })
+
+    return {
+      chart,
+      date: chart.date(),
+      domain: chart.getDomainParsed(),
+      defaultDownloadProps: chart.getDomain(),
+      toolProps: chart.getToolProps(),
+      labels: chart.getLabels(),
+    }
+  }, [data, yDomain])
+
+  useEffect(() => chart.mount(ref.current), [chart])
 
   const controlProps = {
     downloadProps: {

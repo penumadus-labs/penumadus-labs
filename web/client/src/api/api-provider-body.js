@@ -1,6 +1,5 @@
 import { request, update } from './api'
 import createRequestHook from './hooks/create-request-hook'
-import { resolution } from '../utils/live-data-config'
 
 //* requests without dependencies
 
@@ -52,7 +51,7 @@ export default ({ requestAndStore, device, setDevice }) => {
     requestAndStore(
       'protocol',
       'devices/protocol',
-      { ...params, id, deviceType },
+      { id, deviceType, ...params },
       true
     )
 
@@ -67,11 +66,11 @@ export default ({ requestAndStore, device, setDevice }) => {
         'environment',
         'database/linear-data',
         {
-          ...params,
           id,
           deviceType,
           field: 'environment',
-          resolution,
+          limit: process.env.REACT_APP_DATA_LIMIT,
+          ...params,
         },
         storeError
       )
@@ -83,11 +82,11 @@ export default ({ requestAndStore, device, setDevice }) => {
         'deflection',
         'database/linear-data',
         {
-          ...params,
           id,
           deviceType,
           field: 'deflection',
-          resolution,
+          limit: process.env.REACT_APP_DATA_LIMIT,
+          ...params,
         },
         storeError
       )
@@ -113,13 +112,22 @@ export default ({ requestAndStore, device, setDevice }) => {
   //* local requests requests
 
   const [useDownloadEnvironment] = createRequestHook((start, end) =>
-    request('database/linear-data-csv', { id, start, end })
+    request('database/linear-data-csv', {
+      field: 'environment',
+      id,
+      start,
+      end,
+    })
   )
   const [useDownloadDeflection] = createRequestHook((start, end) =>
-    request('database/linear-data-csv', { id, start, end })
+    request('database/linear-data-csv', { field: 'deflection', id, start, end })
   )
   const [useDownloadAccelerationEvent] = createRequestHook((index) =>
-    request('database/acceleration-event-csv', { id, index })
+    request('database/acceleration-event-csv', {
+      field: 'acceleration',
+      id,
+      index,
+    })
   )
 
   const [useDeleteEnvironment] = createRequestHook(() =>

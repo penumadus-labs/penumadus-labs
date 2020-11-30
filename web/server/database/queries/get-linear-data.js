@@ -1,14 +1,14 @@
-const getRecentLinearData = require('./get-recent-linear-data')
-const getSlicedLinearData = require('./get-sliced-linear-data')
+const getLinearDataByValue = require('./get-linear-data-value-slice')
+const getLinearDataByTime = require('./get-linear-data-time-slice')
 const { dataQuery } = require('./helpers')
 
-module.exports = ({ field, recent, resolution, start, end, limit }) => {
+module.exports = ({ field, recent, start, end, limit }) => {
   const input = `$${field}`
 
   return dataQuery(
     input,
     recent
-      ? getRecentLinearData({ input, resolution })
-      : getSlicedLinearData({ input, start, end, limit })
+      ? getLinearDataByValue({ input, limit })
+      : getLinearDataByTime({ input, start, end, limit })
   )
 }

@@ -64,11 +64,9 @@ const Title = styled.p`
 `
 
 const Body = styled.div`
+  margin: auto;
   text-align: center;
-  > div {
-    display: inline-block;
-    text-align: initial;
-  }
+  max-width: 400px;
 `
 
 export const useEsc = (callback) =>
@@ -103,10 +101,8 @@ export default ({ children, buttonText, disabled, render, title }) => {
                 <Close size="20" />
               </CloseButton>
               {title && <Title className="title">{title}</Title>}
-              <Body>
-                <div className="space-children-y">
-                  {typeof render === 'function' ? render({ close }) : children}
-                </div>
+              <Body className="space-children-y">
+                {typeof render === 'function' ? render({ close }) : children}
               </Body>
             </StyledDiv>
           </Anchor>
