@@ -1,0 +1,67 @@
+:root {
+  --green: green;
+}
+
+html,
+body {
+  background: #ddd;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  background: white;
+  display: inline-block;
+  border-radius: 0.1rem;
+  padding: 2rem 0;
+}
+
+.responsive-iframe-container {
+  --height: 80%;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+  padding-top: calc(var(--height) * 0.5625);
+  /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+  margin: 0 auto;
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
