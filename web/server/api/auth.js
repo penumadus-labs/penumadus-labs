@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { compare } = require('bcrypt')
 const { verifyToken, signToken } = require('../utils/auth')
 const { findUser } = require('../database/client')
-const handleAsync = require('./handle-async')
+const { handlePost } = require('./route-decorators')
 
 /*
 connect database
@@ -15,18 +15,18 @@ const oneDayInMilliseconds = 1000 * 360 * 24
 module.exports = Router()
   .post(
     '/login',
-    handleAsync(async ({ body: { username, password }, query }, res) => {
+    handlePost(async ({ username, password }, res) => {
       if (!username) return res.sendStatus(404)
       const user = await findUser(username)
 
       if (!user) {
         res.statusMessage = 'user not found'
-        return res.sendStatus(400)
+        return 400
       }
 
       if (!(await compare(password, user.password))) {
         res.statusMessage = 'invalid password'
-        return res.sendStatus(401)
+        return 401
       }
 
       const token = signToken(user.admin, { username })
@@ -34,17 +34,14 @@ module.exports = Router()
         httpOnly: true,
         maxAge: oneDayInMilliseconds,
       })
-      res.sendStatus(200)
-      // sessionStorage auth system
-      // res.send({ token, admin: user.admin })
     })
   )
 
-  .post('/logout', verifyToken(false), (req, res) => {
+  .post('/logout', verifyToken(false), (_, res) => {
     res.clearCookie('token')
     res.sendStatus(200)
   })
 
-  .post('/verify', verifyToken(false), (req, res) => {
+  .post('/verify', verifyToken(false), (_, res) => {
     res.sendStatus(200)
   })

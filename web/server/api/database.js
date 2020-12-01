@@ -1,65 +1,38 @@
 const { Router } = require('express')
-const { unparse } = require('papaparse')
-const handleAsync = require('./handle-async')
-const client = require('../database/client')
+const {
+  handleAsync,
+  handleQuery,
+  handleDownload,
+} = require('./route-decorators')
+const database = require('../database/client')
 const createDeviceConfigFile = require('../utils/create-device-config-file')
 
 module.exports = Router()
-  .get(
-    '/devices',
-    handleAsync(async ({ query }, res) => {
-      res.send(await client.getDeviceSchemas(query))
-    })
-  )
-  .get(
-    '/linear-data',
-    handleAsync(async ({ query }, res) => {
-      res.send(await client.getLinearData(query))
-    })
-  )
+  .get('/devices', handleQuery(database.getDeviceSchemas))
+  .get('/linear-data', handleQuery(database.getLinearData))
   .get(
     '/linear-data-csv',
-    handleAsync(async ({ query }, res) => {
-      const { data } = await client.getLinearData({
+    handleDownload((query) =>
+      database.getLinearData({
         ...query,
         limit: null,
       })
-      console.log(data.length)
-      const csv = unparse(data)
-      res.send(csv)
-    })
+    )
   )
-  .get(
-    '/acceleration',
-    handleAsync(async ({ query }, res) => {
-      res.send(await client.getAcceleration(query))
-    })
-  )
-  .get(
-    '/acceleration-event',
-    handleAsync(async ({ query }, res) => {
-      res.send(await client.getAccelerationEvent(query))
-    })
-  )
-  .get(
-    '/acceleration-event-csv',
-    handleAsync(async ({ query }, res) => {
-      const { data } = await client.getAccelerationEvent(query)
-      const csv = unparse(data)
-      res.send(csv)
-    })
-  )
+  .get('/acceleration', handleQuery(database.getAcceleration))
+  .get('/acceleration-event', handleQuery(database.getAccelerationEvent))
+  .get('/acceleration-event-csv', handleDownload(database.getAccelerationEvent))
   .delete(
     '/data',
     handleAsync(async ({ query }, res) => {
-      await client.deleteField(query)
+      await database.deleteField(query)
       res.sendStatus(200)
     })
   )
   .post(
     '/register',
     handleAsync(async ({ body }, res) => {
-      const port = await client.insertDevice(body)
+      const port = await database.insertDevice(body)
       const file = createDeviceConfigFile({ ...body, port })
       res.send(file)
     })

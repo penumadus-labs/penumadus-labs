@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const handleAsync = require('./handle-async')
+const { handleAsync, handleQuery, handlePost } = require('./route-decorators')
 const testSettings = require('../protocols/test-settings-tank')
 const deviceProtocols = require('../protocols')
 
@@ -10,22 +10,22 @@ const {
 const { commands } = require('../protocols/tank')
 
 module.exports = Router()
-  .get('/protocol', ({ query: { deviceType } }, res) => {
-    const { commands, setters, streams } = deviceProtocols[deviceType]
-    res.send({ commands, setters, streams })
-  })
+  .get(
+    '/protocol',
+    handleQuery(({ deviceType }) => {
+      const { commands, setters, streams } = deviceProtocols[deviceType]
+      return { commands, setters, streams }
+    })
+  )
   .get(
     '/settings',
-    handleAsync(async ({ query: { id } }, res) => {
-      res.send(
-        process.env.AWS_SERVER ? await getDeviceSettings(id) : testSettings
-      )
+    handleQuery(async ({ id }) => {
+      return process.env.AWS_SERVER ? await getDeviceSettings(id) : testSettings
     })
   )
   .post(
     '/command',
-    handleAsync(async ({ body }, res) => {
-      if (process.env.AWS_SERVER) await sendDeviceCommand(body)
-      res.sendStatus(200)
+    handlePost((body) => {
+      if (process.env.AWS_SERVER) return sendDeviceCommand(body)
     })
   )

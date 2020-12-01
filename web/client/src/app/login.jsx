@@ -14,13 +14,7 @@ export default ({ handleLogin, status }) => {
     handleSubmit,
     register,
     formState: { isValid },
-  } = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      username: 'admin',
-      password: 'p@ssw0rd',
-    },
-  })
+  } = useForm({ mode: 'onChange' })
 
   return (
     <div>

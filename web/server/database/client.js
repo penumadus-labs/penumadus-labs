@@ -112,9 +112,12 @@ const client = {
   },
   async insertDevice(props) {
     const udpPort = await client.getUdpPortIndex()
-    const deviceModel = createDeviceSchema({ udpPort, ...props })
-    client.devices.insertOne(deviceModel)
+    const deviceSchema = createDeviceSchema({ udpPort, ...props })
+    client.devices.insertOne(deviceSchema)
     return udpPort
+  },
+  insertUser(user) {
+    return client.users.insertOne(user)
   },
   async getUdpPorts() {
     const devices = await client.devices.find().toArray()
