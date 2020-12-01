@@ -18,7 +18,7 @@ const useAuth = () => {
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
-          navigate('/')
+          navigate(process.env.REACT_APP_MOUNT_PATH)
         })
     },
     // eslint-disable-next-line
@@ -27,7 +27,6 @@ const useAuth = () => {
 
   const authenticate = async () => {
     await initializeApi()
-    // if (window.location.pathname === '/') navigate('environment')
     setAuthState({ loggedIn: true })
   }
 
@@ -40,7 +39,7 @@ const useAuth = () => {
     setAuthState({})
     setDevice(null)
     localStorage.clear()
-    await navigate('/')
+    await navigate(process.env.REACT_APP_MOUNT_PATH)
   }
 
   return [authState, { handleLogin, loginStatus, handleLogout }]

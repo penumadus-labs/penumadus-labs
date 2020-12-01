@@ -93,8 +93,9 @@ export default ({ handleLogout }) => {
       await apiRequests[field]()
 
       // navigate to valid route on page load or device change
-      if (index === 0 && !paths.includes(window.location.pathname.slice(1)))
-        navigate(field)
+      const path = window.location.pathname.split('/').slice(-1)[0]
+      if (index === 0 && !paths.includes(path))
+        navigate(`${process.env.REACT_APP_MOUNT_PATH}/${field}`)
     })
   }, [id, apiRequests, paths, requests])
 
@@ -115,7 +116,9 @@ export default ({ handleLogout }) => {
   return (
     <>
       <main>
-        <Router className="space-children-y"  basepath="/app">{routes}</Router>
+        <Router className="space-children-y" basepath="/app">
+          {routes}
+        </Router>
       </main>
       <nav className="shadow-card">
         {links}

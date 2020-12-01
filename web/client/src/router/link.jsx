@@ -22,7 +22,7 @@ export const linkData = {}
 export default ({ Icon, label, to, onClick, ...props }) => (
   <Root
     className="center-child clickable-box"
-    to={to}
+    to={`${process.env.REACT_APP_MOUNT_PATH}/${to}`}
     onClick={onClick}
     {...props}
   >

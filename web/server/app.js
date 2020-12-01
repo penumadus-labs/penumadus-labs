@@ -24,7 +24,7 @@ module.exports = express()
   .use(test)
   .use(cors(corsConfig))
   .use(cookieParser())
-  .use('/api', express.json(), apiRouter)
+  .use(`${process.env.REACT_APP_MOUNT_PATH}/api`, express.json(), apiRouter)
   // .use((_, res, next) => (dev ? res.sendStatus(404) : next()))
   .use(express.static(clientDir))
   .get('*', (req, res) => {
