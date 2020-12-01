@@ -115,7 +115,7 @@ export default ({ handleLogout }) => {
   return (
     <>
       <main>
-        <Router className="space-children-y">{routes}</Router>
+        <Router className="space-children-y"  basepath="/app">{routes}</Router>
       </main>
       <nav className="shadow-card">
         {links}
