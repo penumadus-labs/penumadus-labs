@@ -17,6 +17,8 @@ mkdir $ROOTNAME/1
 myfiles=$(ls $ROOTLOGS | grep "^e_")
 myfiles+=" "
 myfiles+=$(ls $ROOTLOGS | grep "MSGLOG")
+myfiles+=" "
+myfiles+=sessions.log
 for i in $myfiles
 do
         echo "$ROOTLOGS/$i $A"
