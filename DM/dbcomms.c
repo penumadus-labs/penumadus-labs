@@ -58,16 +58,17 @@ setupDBcomms(
 	myloctime=time(NULL);
 	filetime=localtime(&myloctime);
 	
-	sprintf(backbuf,"/home/ubuntu/logs/backup_%d_%02d-%02d-%d_%02d:%02d:%02d",
-			(unsigned int)hankPort,
-			filetime->tm_mon+1,
-			filetime->tm_mday,
-			filetime->tm_year+1900,
-			filetime->tm_hour,
-			filetime->tm_min,
-			filetime->tm_sec);
+	sprintf(backbuf,"/home/ubuntu/logs/backup_%d",
+			(unsigned int)hankPort
+			//filetime->tm_mon+1,
+			//filetime->tm_mday,
+			//filetime->tm_year+1900,
+			//filetime->tm_hour,
+			//filetime->tm_min,
+			//filetime->tm_sec
+			);
 
-	if((back_fd=open(backbuf,O_CREAT|O_APPEND|O_WRONLY,0444))<0)
+	if((back_fd=open(backbuf,O_CREAT|O_APPEND|O_WRONLY,0644))<0)
 		g_err(EXIT,PERROR,"Could Not Create Backup File %s",backbuf);
 	else
 		g_err(NOEXIT,NOPERROR,"Created Backup File %s",backbuf);
