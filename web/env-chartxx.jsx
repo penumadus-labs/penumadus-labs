@@ -1,8 +1,11 @@
 import React from 'react'
-import useApi from '../../../api'
-import Chart from '../chart/chart'
-import { oneHourAgo, oneHourInSeconds } from '../utils/datetime'
-import DomainSelector from './domain-selector'
+import useApi from './client/src/api'
+import Chart from './client/src/components/charts/chart/chart'
+import {
+  oneHourAgo,
+  oneHourInSeconds,
+} from './client/src/components/charts/utils/datetime'
+import DomainSelector from './client/src/components/charts/linear-data/domain-selector'
 
 export default () =>
   //   {
@@ -41,7 +44,7 @@ export default () =>
           useDownload={useDownloadEnvironment}
           useDelete={useDeleteEnvironment}
           yDomain={[-1, 100]}
-          render={(live) =>
+          render={({ live }) =>
             live || <DomainSelector useGetData={useGetEnvironment} />
           }
         ></Chart>

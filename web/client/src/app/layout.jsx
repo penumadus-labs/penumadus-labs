@@ -5,6 +5,7 @@ import { useSocket } from '../services/socket'
 import Login from './login'
 import Routes from '../router/routes'
 import StatusBar from './status-bar'
+import ErrorBoundary from '../components/error-boundary'
 
 const Root = styled.div`
   display: grid;
@@ -91,9 +92,9 @@ const Layout = () => {
     <Root ref={ref}>
       <header className="card">
         <p>HankMon Dashboard</p>
-        {loggedIn && <StatusBar />}
+        <ErrorBoundary>{loggedIn && <StatusBar />}</ErrorBoundary>
       </header>
-      {main}
+      <ErrorBoundary>{main}</ErrorBoundary>
     </Root>
   )
 }

@@ -9,12 +9,16 @@ const StyledForm = styled.form`
   margin: var(--sm);
 `
 
+const required = process.env.NODE_ENV !== 'development'
+
 export default ({ handleLogin, status }) => {
   const {
     handleSubmit,
     register,
     formState: { isValid },
   } = useForm({ mode: 'onChange' })
+
+  // throw new Error('oops')
 
   return (
     <div>
@@ -24,12 +28,8 @@ export default ({ handleLogin, status }) => {
           handleLogin(username, password)
         )}
       >
-        <Input name="username" ref={register({ required: true })} />
-        <Input
-          name="password"
-          ref={register({ required: true })}
-          type="password"
-        />
+        <Input name="username" ref={register({ required })} />
+        <Input name="password" ref={register({ required })} type="password" />
         <button className="button" disabled={!isValid}>
           Login
         </button>

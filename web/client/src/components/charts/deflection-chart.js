@@ -9,15 +9,18 @@ export default () => {
     { useGetDeflection, useDownloadDeflection, useDeleteDeflection },
   ] = useApi()
 
+  debugger
+
+  debugger
   return (
     <LinearDataChart
       dataType="deflection"
       data={deflection}
       getData={getDeflection}
       useGetData={useGetDeflection}
-      useDownloadData={useDownloadDeflection}
-      useDeleteData={useDeleteDeflection}
-      yDomain={[13.3, 13.6]}
+      useDownload={useDownloadDeflection}
+      useDelete={useDeleteDeflection}
+      yDomain={[5, 50]}
     />
   )
 }

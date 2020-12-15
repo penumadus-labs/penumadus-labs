@@ -31,15 +31,11 @@ import Request from './request'
 //   )
 // }
 
-export default ({
-  domain: [startTime, endTime],
-  useDownload,
-  downloadProps,
-}) => {
+export default ({ domainString, useDownload, downloadProps }) => {
   const wrapRequest = async (request) => {
     try {
       const data = await request(...downloadProps)
-      downloadFile(data, `${startTime} - ${endTime}.csv`)
+      downloadFile(data, `${domainString}.csv`)
     } catch (error) {
       console.error(error)
     }
@@ -53,8 +49,7 @@ export default ({
       useRequest={useDownload}
       wrapRequest={wrapRequest}
     >
-      <p>{startTime}</p>
-      <p>{endTime}</p>
+      <p>{domainString}</p>
     </Request>
   )
 }

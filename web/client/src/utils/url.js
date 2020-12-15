@@ -1,7 +1,8 @@
-const { NODE_ENV, REACT_APP_DEVELOPMENT_PORT, REACT_APP_MOUNT_PATH } = process.env
-const dev = NODE_ENV === 'development'
+const { NODE_ENV, REACT_APP_MOUNT_PATH } = process.env
 
-const port = dev ? `:${REACT_APP_DEVELOPMENT_PORT}` : ''
-const protocolPostfix = dev ? '' : 's'
+const secure = NODE_ENV === 'development' ? '' : 's'
 
-export default `${protocolPostfix}://${window.location.hostname}${port}${REACT_APP_MOUNT_PATH}/`
+const urlBody = `${secure}://${window.location.host}${REACT_APP_MOUNT_PATH}`
+
+export const websocketUrl = 'ws' + urlBody
+export default 'http' + urlBody

@@ -5,18 +5,31 @@ export const parseDate = (date) =>
     day: 'numeric',
   })
 
+export const oneDay = 86400000
+
 const parseTime = (time) => {
   return `${formatHoursMinutes(time)}, ` + parseDate(time)
 }
 
-export const parseDomain = ([start, end]) => {
-  return [parseTime(start), parseTime(end)]
+export const formatDomain = ([start, end]) => {
+  // if (end - start <= oneDay)
+  return `${parseTime(start)} - ${parseTime(end)}`
 }
 
 export const formatHoursMinutes = (time) => {
   const date = new Date(time * 1000)
   const minutes = date.getMinutes()
   return `${date.getHours()}:${minutes < 10 ? '0' + minutes : minutes}`
+}
+
+export const formatMonthDayHoursMinutes = (time) => {
+  const date = new Date(time * 1000)
+  const month = date.getMonth()
+  const day = date.getDate()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+
+  return `${month}-${day} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 }
 
 export const oneDayAgo = () => {

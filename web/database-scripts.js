@@ -1,7 +1,6 @@
 const { join } = require('path')
-const client = require('../database/client')
-const { schemas } = require('../database/schemas')
-const { hash } = require('bcrypt')
+const client = require('./server/database/client')
+const { schemas } = require('./server/database/schemas')
 
 const id = 'morganbridge'
 const dest = join(
@@ -57,14 +56,10 @@ const createUserDocument = (username, password, admin = true) => ({
   admin,
 })
 
+const users = []
+
 const insertUsers = () =>
-  Promise.all([
-    ...users.map(async (user) => {
-      user.password = await hash(user.password, 10)
-      await client.insertUser(user)
-    }),
-    client.users.deleteOne({ username: 'admin' }),
-  ])
+  Promise.all(users.map((user) => client.insertUser(user)))
 
 const test = async () => {}
 
@@ -73,4 +68,11 @@ const showUsers = async () => {
   console.log(users)
 }
 
-client.wrap(showUsers)
+const insertUser = () => client.insertUser()
+
+const getTimeZone = async () => {
+  const device = await client.devices.findOne({ id })
+  console.log(new Date(device.environment[0].time * 1000).getTimezoneOffset())
+}
+
+client.wrap(getTimeZone)

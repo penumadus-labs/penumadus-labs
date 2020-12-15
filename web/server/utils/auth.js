@@ -12,14 +12,13 @@ const check = (token, secret) => {
   try {
     verify(token, secret)
     return true
-  } catch (error) {
+  } catch (_) {
     return false
   }
 }
 
 const verifyToken = (admin) => (req, res, next) => {
-  // sessionStorage auth system
-  // req.get('token')
+  if (process.env.NODE_ENV === 'development') return next()
   const token = req.cookies.token
 
   if (!token) return res.sendStatus(401)

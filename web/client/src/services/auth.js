@@ -2,6 +2,8 @@ import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
 import useApi from '../api'
 
+const goHome = () => navigate(process.env.REACT_APP_MOUNT_PATH)
+
 const useAuth = () => {
   const [
     ,
@@ -18,7 +20,7 @@ const useAuth = () => {
         .then(authenticate)
         .catch((error) => {
           setAuthState({})
-          navigate(process.env.REACT_APP_MOUNT_PATH)
+          goHome()
         })
     },
     // eslint-disable-next-line
@@ -39,7 +41,7 @@ const useAuth = () => {
     setAuthState({})
     setDevice(null)
     localStorage.clear()
-    await navigate(process.env.REACT_APP_MOUNT_PATH)
+    await goHome()
   }
 
   return [authState, { handleLogin, loginStatus, handleLogout }]

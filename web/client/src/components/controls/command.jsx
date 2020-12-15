@@ -40,6 +40,7 @@ const CommandBody = ({
 export default ({ disabled, children, ...props }) => {
   return (
     <Alert
+      tooltip={false}
       buttonText={props.name}
       disabled={disabled}
       render={({ close }) => (

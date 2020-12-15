@@ -16,6 +16,8 @@ module.exports = Router()
   .post(
     '/login',
     handlePost(async ({ username, password }, res) => {
+      if (process.env.NODE_ENV === 'development') return
+
       if (!username) return res.sendStatus(404)
       const user = await findUser(username)
 

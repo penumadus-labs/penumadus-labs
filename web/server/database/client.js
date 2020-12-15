@@ -2,6 +2,7 @@ const { join } = require('path')
 require('dotenv').config({ path: join(__dirname, '..', '.env') })
 
 const { MongoClient } = require('mongodb')
+const { hash } = require('bcrypt')
 const getLinearData = require('./queries/get-linear-data')
 const getAccelerationEventTimes = require('./queries/get-acceleration')
 const getAccelerationEvent = require('./queries/get-acceleration-event')
@@ -116,7 +117,8 @@ const client = {
     client.devices.insertOne(deviceSchema)
     return udpPort
   },
-  insertUser(user) {
+  async insertUser(user) {
+    user.password = await hash(user.password, 10)
     return client.users.insertOne(user)
   },
   async getUdpPorts() {

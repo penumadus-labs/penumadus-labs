@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import useApi from '../api'
-import urlPostfix from '../utils/url'
-
-const url = 'ws' + urlPostfix
+import { websocketUrl } from '../utils/url'
 
 let tasks = []
 let ws = null
@@ -11,7 +9,7 @@ export const useSocket = (init) => {
   const [{ device }, { getSettings }] = useApi()
   useEffect(() => {
     if (!init || ws) return
-    ws = new WebSocket(url)
+    ws = new WebSocket(websocketUrl)
 
     ws.onmessage = ({ data }) => {
       const { id, ...event } = JSON.parse(data)

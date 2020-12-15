@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from 'react'
 import { Router, navigate } from '@reach/router'
+import ErrorBoundary from '../components/error-boundary'
 
 import {
   // FaChartLine as Environment,
@@ -7,6 +8,7 @@ import {
 } from 'react-icons/fa'
 import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
+import { GrDocumentText as UserManual } from 'react-icons/gr'
 import { FiLogOut as Logout } from 'react-icons/fi'
 import { MdDashboard as Dashboard, MdDevices as Devices } from 'react-icons/md'
 
@@ -19,8 +21,11 @@ import DeflectionChart from '../components/charts/deflection-chart'
 
 import Controls from './controls'
 import Register from './register'
+import Manual from './maunual'
 
-const staticRoutes = ['register']
+const { REACT_APP_MOUNT_PATH } = process.env
+
+const staticRoutes = ['register', 'manual']
 
 const icons = {
   environment: Environment,
@@ -28,6 +33,7 @@ const icons = {
   acceleration: Acceleration,
   controls: Dashboard,
   register: Devices,
+  manual: UserManual,
 }
 
 const Components = {
@@ -36,6 +42,7 @@ const Components = {
   acceleration: AccelerationChart,
   controls: Controls,
   register: Register,
+  manual: Manual,
 }
 
 // creates routes, links, and data fetches based on device's data fields
@@ -95,7 +102,7 @@ export default ({ handleLogout }) => {
       // navigate to valid route on page load or device change
       const path = window.location.pathname.split('/').slice(-1)[0]
       if (index === 0 && !paths.includes(path))
-        navigate(`${process.env.REACT_APP_MOUNT_PATH}/${field}`)
+        navigate(`${REACT_APP_MOUNT_PATH}${field}`)
     })
   }, [id, apiRequests, paths, requests])
 
@@ -116,18 +123,17 @@ export default ({ handleLogout }) => {
   return (
     <>
       <main>
-        <Router className="space-children-y" basepath="/app">
-          {routes}
-        </Router>
+        <ErrorBoundary>
+          <Router className="space-children-y" basepath={REACT_APP_MOUNT_PATH}>
+            {routes}
+          </Router>
+        </ErrorBoundary>
       </main>
       <nav className="shadow-card">
-        {links}
-        <Link
-          Icon={Logout}
-          label="Logout"
-          to={window.location.pathname}
-          onClick={handleLogout}
-        />
+        <ErrorBoundary>
+          {links}
+          <Link Icon={Logout} label="Logout" to={''} onClick={handleLogout} />
+        </ErrorBoundary>
       </nav>
     </>
   )

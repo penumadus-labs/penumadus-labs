@@ -10,13 +10,7 @@ const StyledDiv = styled.div`
   align-items: center;
 `
 
-export default ({
-  children,
-  render,
-  downloadProps,
-  deleteProps,
-  liveProps,
-}) => {
+export default ({ children, downloadProps, deleteProps, liveProps }) => {
   return (
     <>
       <StyledDiv className="space-children-x">

@@ -44,7 +44,7 @@ export default () => {
       useDownload={useDownloadAccelerationEvent}
       useDelete={useDeleteAcceleration}
       yDomain={[-10, 10]}
-      render={(live) =>
+      render={({ live }) =>
         !live &&
         !!eventList && (
           <EventSelector

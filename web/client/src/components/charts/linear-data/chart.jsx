@@ -10,6 +10,8 @@ export default ({
   // yDomain = [-1, 100],
   getData,
   useGetData,
+  children,
+  render,
   ...props
 }) => {
   const initializeLive = () => {
@@ -31,9 +33,14 @@ export default ({
       // useDownload={useDownloadData}
       // useDelete={useDeleteData}
       // yDomain={yDomain}
-      render={(live) =>
-        !live ? <DomainSelector useGetData={useGetData} /> : null
-      }
+      render={({ live, domain }) => (
+        <>
+          {!live ? (
+            <DomainSelector domain={domain} useGetData={useGetData} />
+          ) : null}
+          {typeof render === 'function' ? render(live) : children}
+        </>
+      )}
     />
   )
 }

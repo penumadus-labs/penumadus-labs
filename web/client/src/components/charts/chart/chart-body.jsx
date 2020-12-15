@@ -1,10 +1,11 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import Controls from './controls'
 import Legend from './legend'
 import Tools from './tools'
 import Chart from './d3-linechart'
+import { useResize } from '../../../hooks/use-events'
 
 const SvgStyle = css`
   svg {
@@ -23,7 +24,7 @@ const SvgStyle = css`
 
 const StyledSVG = styled.svg`
   width: 100%;
-  height: ${(window.innerHeight * 11) / 16}px;
+  min-height: 800px;
 `
 
 const ControlBarStyle = styled.div`
@@ -34,11 +35,6 @@ const ControlBarStyle = styled.div`
   > * {
     margin-bottom: var(--xs);
   }
-`
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
 `
 
 export default ({
@@ -53,34 +49,51 @@ export default ({
   data,
   yDomain,
 }) => {
-  const ref = useRef()
+  const svgRef = useRef()
 
-  const {
-    chart,
-    date,
-    domain,
-    defaultDownloadProps,
-    toolProps,
-    labels,
-  } = useMemo(() => {
+  const [[domain, domainString], setDomain] = useState([[0, 0], ''])
+
+  const { chart, getDomain, toolProps, labels } = useMemo(() => {
     const chart = new Chart({ data, yDomain })
+    const { getDomain } = chart
+
+    setDomain(getDomain())
 
     return {
       chart,
-      date: chart.date(),
-      domain: chart.getDomainParsed(),
-      defaultDownloadProps: chart.getDomain(),
+      getDomain,
       toolProps: chart.getToolProps(),
       labels: chart.getLabels(),
     }
   }, [data, yDomain])
 
-  useEffect(() => chart.mount(ref.current), [chart])
+  useEffect(() => chart.mount(svgRef.current), [chart])
+
+  const containerRef = useResize(({ current }) => {
+    const main = document.querySelector('main')
+    const targetHeight = Math.floor(
+      main.getBoundingClientRect().height -
+        parseInt(getComputedStyle(main).padding) * 2
+    )
+
+    const increment = 10
+
+    let x = 0
+    svgRef.current.style.height = '200px'
+    while (current.getBoundingClientRect().height + increment < targetHeight) {
+      svgRef.current.style.height = `${
+        svgRef.current.getBoundingClientRect().height + increment
+      }px`
+      if (x++ > 500) break
+    }
+
+    chart.render()
+  })
 
   const controlProps = {
     downloadProps: {
-      downloadProps: downloadProps ?? defaultDownloadProps,
-      domain,
+      downloadProps: downloadProps ?? domain,
+      domainString,
       useDownload,
     },
     deleteProps: {
@@ -93,19 +106,26 @@ export default ({
     },
   }
 
+  for (const [key, fn] of Object.entries(toolProps)) {
+    toolProps[key] = () => {
+      fn()
+      setDomain(getDomain())
+    }
+  }
+
   return (
-    <div className="card-spaced">
+    <div className="card-spaced" ref={containerRef}>
       <Global styles={SvgStyle} />
-      <Header>
-        <p>{date}</p>
-      </Header>
-      <ControlBarStyle>
-        <Controls {...controlProps} render={render}>
-          {typeof render === 'function' ? render(live) : children}
-        </Controls>
-        {!live ? <Tools {...toolProps} /> : null}
-      </ControlBarStyle>
-      <StyledSVG ref={ref} />
+      <div className="space-children-y">
+        <p>{domainString}</p>
+        <ControlBarStyle>
+          <Controls {...controlProps} render={render}>
+            {typeof render === 'function' ? render({ live, domain }) : children}
+          </Controls>
+          {!live ? <Tools {...toolProps} /> : null}
+        </ControlBarStyle>
+      </div>
+      <StyledSVG ref={svgRef} />
       <Legend labels={labels} />
     </div>
   )

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import url from '../utils/url'
 
-const baseURL = 'http' + url + 'api/'
 const withCredentials = process.env.NODE_ENV === 'development'
 
 const headers = {
@@ -11,7 +10,7 @@ const headers = {
 }
 
 export const api = axios.create({
-  baseURL,
+  baseURL: url + 'api/',
   headers,
   withCredentials,
 })

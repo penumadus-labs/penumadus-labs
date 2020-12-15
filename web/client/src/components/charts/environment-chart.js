@@ -1,10 +1,14 @@
 import React from 'react'
 import LinearDataChart from './linear-data/chart'
+import BridgeSensorInfo from './bridge-sensor-info'
 import useApi from '../../api'
 
 export default () => {
   const [
-    { environment },
+    {
+      device: { deviceType },
+      environment,
+    },
     { getEnvironment },
     { useGetEnvironment, useDownloadEnvironment, useDeleteEnvironment },
   ] = useApi()
@@ -17,6 +21,8 @@ export default () => {
       useGetData={useGetEnvironment}
       useDownload={useDownloadEnvironment}
       useDelete={useDeleteEnvironment}
-    />
+    >
+      {deviceType === 'bridge' ? <BridgeSensorInfo /> : null}
+    </LinearDataChart>
   )
 }

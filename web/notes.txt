@@ -2,16 +2,26 @@
 
 make charts nicer
 
-size graphs better on different displays
+rewrite datetime file
+
+change colors for T1-T8
+
+add yDomain state, and configuration
+
+localStorage?
 
 ** bugs
 
 
 ** test
 
+size graphs better on different displays
+
 tcp device client settings cache is working properly
 
 make sure my route wrappers didn't break anything
+
+check that configurable basePath didn't break anything
 
 ** review
 

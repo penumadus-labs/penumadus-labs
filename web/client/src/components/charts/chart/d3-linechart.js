@@ -1,5 +1,9 @@
 import * as d3 from 'd3'
-import { formatHoursMinutes, parseDate, parseDomain } from '../utils/datetime'
+import {
+  formatMonthDayHoursMinutes,
+  parseDate,
+  formatDomain,
+} from '../utils/datetime'
 import { colors } from '../utils/units-colors'
 import { formatData, formatKeys, formatLabels } from '../utils/data'
 import { isChild } from '../utils/dom'
@@ -12,9 +16,9 @@ const marginTop = 5
 export default class Linechart {
   domains = []
   constructor({ data, yDomain }) {
-    this.labels = formatLabels(data)
     this.data = formatData(data)
     this.keys = formatKeys(this.data)
+    this.labels = formatLabels(this.keys)
     this.yDomain = yDomain
     this.currentDomain = this.previousDomain = this.xDomain = d3.extent(
       data.map((d) => d.time)
@@ -27,11 +31,6 @@ export default class Linechart {
     this.rootNode = root
     this.root = d3.select(root)
     this.render()
-    let timeout
-    const resize = () => {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => this.render(), 250)
-    }
     const clearBrushOnEsc = ({ keyCode }) => {
       if (keyCode === 27) this.clearBrush()
     }
@@ -41,7 +40,6 @@ export default class Linechart {
     }
 
     const events = {
-      resize,
       keydown: clearBrushOnEsc,
       click: clearBrushOnClick,
     }
@@ -221,11 +219,8 @@ export default class Linechart {
     this.previousDomain = domain
   }
 
-  getDomain() {
-    return this.currentDomain
-  }
-  getDomainParsed() {
-    return parseDomain(this.currentDomain)
+  getDomain = () => {
+    return [this.currentDomain, formatDomain(this.currentDomain)]
   }
 
   undo = () => {
@@ -256,7 +251,7 @@ export default class Linechart {
     return d3
       .axisBottom(this.x)
       .ticks(Math.floor(window.innerWidth / 80))
-      .tickFormat((d) => formatHoursMinutes(d))
+      .tickFormat(formatMonthDayHoursMinutes)
       .tickSizeOuter(0)
   }
   date() {

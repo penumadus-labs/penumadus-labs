@@ -1,7 +1,9 @@
+const { join } = require('path')
 const development = process.env.NODE_ENV === 'development'
 
-const { join } = require('path')
-require('dotenv').config({ path: join(__dirname, '..', 'client', '.env') })
+const clientPath = join(__dirname, '..', 'client')
+
+require('dotenv').config({ path: join(clientPath, '.env') })
 require('dotenv').config({ path: join(__dirname, '.env.local') })
 if (!development)
   require('dotenv').config({ path: join(__dirname, '.env.production') })

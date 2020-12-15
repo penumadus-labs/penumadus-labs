@@ -16,9 +16,7 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
-    "cors": "*",
-    "nodemon": "*",
-    "tunnel-ssh": "*"
+    "nodemon": "*"
   },
   "repository": {
     "type": "git",

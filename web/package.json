@@ -24,6 +24,6 @@
     "install:server": "cd server && npm i",
     "postinstall": "run-p install:client install:server",
     "format": "prettier --write .",
-    "script": "node server/scripts"
+    "script": "node database-scripts"
   }
 }

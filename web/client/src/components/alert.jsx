@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
-import React, { useEffect, useState } from 'react'
+import Tooltip from './tooltip'
+import React, { useState } from 'react'
 import { IoMdClose as Close } from 'react-icons/io'
+import { useEsc } from '../hooks/use-events'
 
 /* @keyframes open {
     0% {
@@ -38,12 +40,11 @@ const ClickOut = styled.button`
   opacity: 0;
 `
 
-const StyledDiv = styled.div`
+const AlertContainer = styled.div`
   z-index: 50;
-  width: 60vw;
+  min-width: 40vw;
   max-width: 650px;
-
-  /* min-height: 300px; */
+  margin: var(--sm);
 `
 
 const CloseButton = styled.button`
@@ -66,23 +67,16 @@ const Title = styled.p`
 const Body = styled.div`
   margin: auto;
   text-align: center;
-  max-width: 400px;
 `
 
-export const useEsc = (callback) =>
-  useEffect(() => {
-    const handleKeyDown = ({ keyCode }) => {
-      if (keyCode === 27) callback()
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [callback])
-
-export default ({ children, buttonText, disabled, render, title }) => {
+export default ({
+  children,
+  render,
+  title,
+  buttonText,
+  disabled,
+  tooltip = true,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const open = () => setIsOpen(true)
   const close = () => {
@@ -90,13 +84,19 @@ export default ({ children, buttonText, disabled, render, title }) => {
   }
   useEsc(close)
 
+  const button = (
+    <button className="button open-alert" disabled={disabled} onClick={open}>
+      {buttonText}
+    </button>
+  )
+
   return (
     <>
       {isOpen && (
         <>
           <Anchor className="center-child fixed">
             <ClickOut className="fixed" onClick={close} />
-            <StyledDiv className="card">
+            <AlertContainer className="card">
               <CloseButton className="button-text" onClick={close}>
                 <Close size="20" />
               </CloseButton>
@@ -104,14 +104,12 @@ export default ({ children, buttonText, disabled, render, title }) => {
               <Body className="space-children-y">
                 {typeof render === 'function' ? render({ close }) : children}
               </Body>
-            </StyledDiv>
+            </AlertContainer>
           </Anchor>
           <OpaqueCover className="fixed" />
         </>
       )}
-      <button className="button" disabled={disabled} onClick={open}>
-        {buttonText}
-      </button>
+      {tooltip ? <Tooltip text={title}>{button}</Tooltip> : button}
     </>
   )
 }

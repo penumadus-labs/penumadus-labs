@@ -15,9 +15,16 @@ const validateTime = (time) =>
   new Date(time).getTime() <= Date.now() ||
   'date must not exceed preset'
 
+const addZero = (date) => (date.toString().length === 1 ? `0${date}` : date)
 const formatData = (time) => time && new Date(time).getTime() / 1000
+const getTime = (time) => {
+  const date = new Date(time * 1000)
+  return `${date.getFullYear()}-${addZero(date.getMonth() + 1)}-${addZero(
+    date.getDate()
+  )}`
+}
 
-export default ({ useGetData }) => {
+export default ({ domain, useGetData }) => {
   const {
     handleSubmit,
     reset,
@@ -26,19 +33,25 @@ export default ({ useGetData }) => {
     register,
     clearErrors,
     errors,
-  } = useForm()
+  } = useForm({
+    defaultValues: {
+      start: getTime(domain[0]),
+      end: getTime(domain[1]),
+    },
+  })
   const inputCtx = { setValue, errors, clearErrors }
 
   const validateStart = (start) => {
     const { end } = getValues()
-    if (end !== '' && new Date(end).getTime() < new Date(start).getTime())
-      return 'start time must not be greater than end time'
+    if (end !== '' && new Date(end).getTime() <= new Date(start).getTime())
+      return 'start time must be less than end time'
 
     return validateTime(start)
   }
 
   return (
     <Request
+      title="select data domain"
       buttonText={<GoGear size="20" />}
       useRequest={useGetData}
       render={([status, request]) => {
