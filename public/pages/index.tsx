@@ -1,10 +1,13 @@
-import Head from "next/head"
+import Head from 'next/head'
 
 export default function Home() {
+  const redirect = () => {
+    window.location.href = 'http://hankthetank.me:20020'
+  }
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>Composite Bridge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header>
@@ -12,18 +15,22 @@ export default function Home() {
           <a href="/">Composite Bridge</a>
         </h1>
         <nav>
-          <a href="./app">go to app</a>
+          <a href="./app">dashboard</a>
+          <a href="./static">utilities</a>
+          <button onClick={redirect}>live video feed</button>
         </nav>
       </header>
       <main>
+        {/* <div className="responsive-iframe-container">
+          <iframe src="http://hankthetank.me:20020" />
+        </div> */}
         <div className="responsive-iframe-container">
           <iframe
-            className="responsive-iframe"
             src="https://www.youtube-nocookie.com/embed/pSOBWOKEmJE"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-          ></iframe>
+          />
         </div>
       </main>
       <footer></footer>
@@ -33,6 +40,7 @@ export default function Home() {
           background: gray;
           padding: 0.5rem;
           color: #eee;
+          padding-left: 4rem;
         }
 
         h1 {
@@ -45,9 +53,12 @@ export default function Home() {
           background: white;
         }
 
-        .iframe-container {
-          text-align: center;
-          margin-top: 1rem;
+        nav {
+          display: flex;
+        }
+
+        nav > * {
+          margin-left: 1rem;
         }
       `}</style>
     </>
