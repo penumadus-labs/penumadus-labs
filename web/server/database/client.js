@@ -11,7 +11,7 @@ const { createDeviceSchema, deviceSchemas } = require('./schemas')
 
 const defaultUdpPortIndex = 30000
 
-const awsServer = !!process.env.AWS_SERVER
+const host = !!process.env.DB_HOST
 const { DB_USER, DB_PWD } = process.env
 
 if (!DB_USER && !DB_PWD)
@@ -20,7 +20,7 @@ if (!DB_USER && !DB_PWD)
   )
 
 const uri = `mongodb://${DB_USER}:${DB_PWD}@${
-  awsServer ? 'localhost' : '52.14.30.58'
+  host ? 'localhost' : '52.14.30.58'
 }/admin`
 
 const mongoClient = new MongoClient(uri, {
@@ -30,7 +30,7 @@ const mongoClient = new MongoClient(uri, {
 
 const client = {
   async connect() {
-    // if (awsServer) await startProcess()
+    // if (host) await startProcess()
 
     await mongoClient.connect()
 
