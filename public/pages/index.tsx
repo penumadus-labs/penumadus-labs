@@ -17,7 +17,9 @@ export default function Home() {
         <nav>
           <a href="./app">dashboard</a>
           <a href="./static">utilities</a>
-          <button onClick={redirect}>live video feed</button>
+          <a href="http://138.43.158.210:20020/" target="blank">
+            live video feed
+          </a>
         </nav>
       </header>
       <main>
