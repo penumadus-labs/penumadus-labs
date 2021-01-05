@@ -509,7 +509,8 @@ checkReceivedFrames(unsigned char *frameptr)
 			/* DB command */
 			if(strncmp(frameptr+5,"DB",2)==0){
 				cell_DB=frameptr[8];
-				printf("Cell Strength: %ddBm\n",cell_DB);
+				if(locdebug)
+					printf("Cell Strength: %ddBm\n",cell_DB);
 				statDBwait=false;
 			}
 			else if(strncmp(frameptr+5,"TP",2)==0){

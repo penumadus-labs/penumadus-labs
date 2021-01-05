@@ -29,6 +29,13 @@ void *processrem(void *arg);
 void *processdef(void *arg);
 int setupListener(unsigned short port);
 
+bool monitorremotes=false;
+
+static float 
+vectmag(float x,float y,float z){
+		return ( sqrtf( (x*x) + (y*y) + (z*z) ) );
+}
+
 /* read UDP packets from the two remotes and call processing */
 void
 setupRemotes(void)
@@ -95,7 +102,7 @@ void
 		//fprintf(stderr,"Recv From Remote %s:%d [%s]\n",
 			 //inet_ntoa(RemoteIP.sin_addr),locport,tmpbuf);
 
-		sscanf(tmpbuf,"%lu %f %f %f %f %f %f %f %f %f",
+		sscanf(tmpbuf,"%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 				&millis,
 				&pack.accel.x,
 				&pack.accel.y,
@@ -108,6 +115,24 @@ void
 				&pack.gyro.z
 		);
 	
+
+		//printf("buf%d: [%s]\n",id,tmpbuf);
+
+		if(monitorremotes){
+			fprintf(stderr,"rem%d: %lu \nA-%f %f %f %f\nM-%f %f %f %f\n",
+				id,	millis, 
+					vectmag( pack.accel.x/GRAVITYCONST, 
+						 pack.accel.y/GRAVITYCONST, 
+						 pack.accel.z/GRAVITYCONST),
+					pack.accel.x/GRAVITYCONST,
+					pack.accel.y/GRAVITYCONST,
+					pack.accel.z/GRAVITYCONST,
+					vectmag( pack.mag.x, pack.mag.y, pack.mag.z),
+					pack.mag.x,
+					pack.mag.y,
+					pack.mag.z
+			);
+		}
 
 		//the remotes have no sense of clock time so have to interpolate here
 		if(!timesynced || (millis <= lastmillis)){
@@ -131,9 +156,11 @@ void
 		
 		//call handle data accell processing and send data with sendData A packets
 		//fprintf(stderr,"TIME:  %lx %lx\n",secs,usecs);
-		handleData(&remQueue, pack.accel.x, pack.accel.y, pack.accel.z, secs, usecs);
+//PONDSCUM
+	//	handleData(&remQueue, pack.accel.x, pack.accel.y, pack.accel.z, secs, usecs);
 		//call magnetometer processing and update carcount
-		handleMagData(id,pack.mag.x, pack.mag.y, pack.mag.z, secs, usecs);
+//PONDSCUM
+	//	handleMagData(id,pack.mag.x, pack.mag.y, pack.mag.z, secs, usecs);
 	}
 }
 
@@ -244,7 +271,8 @@ void
 			sprintf(tmpbuf,"%s %s %.2f %lx %lx %x",
 			"b",
 			BRIDGEID,
-			DEFLECTION_OFFSET-deflection,
+			//DEFLECTION_OFFSET-deflection,
+			deflection,
 			(long)secs,
 			(long)usecs,
 			msgnum++

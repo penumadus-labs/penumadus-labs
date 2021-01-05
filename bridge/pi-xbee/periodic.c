@@ -34,7 +34,7 @@ int msgnum=0;
 /* acceleration packets mimic old hank packets so don't go through here */
 
 struct tempdata temps[] = {		//the temp sensor array with defaults set
-	"28-012018c0083b", -273.0,	//T1
+	"28-012018c00b3b", -273.0,	//T1
 	"28-0120191d70c6", -273.0,	//T2
 	"28-0120191eb0c0", -273.0,	//T3
 	"28-012019180437", -273.0,	//T4
@@ -44,7 +44,7 @@ struct tempdata temps[] = {		//the temp sensor array with defaults set
 	"28-012019266fa5", -273.0,	//T8
 	"wifi filled", -273.0,  	//AMB
 	"wifi filled", -273.0  	//HUMIDITY
-} ;
+};
 
 void
 setupPeriodic(void)
@@ -86,8 +86,9 @@ periodic(void *arg)
 		for(i=0;i<numentries-2; i++){
 			sprintf(filebuf,"/sys/bus/w1/devices/%s/temperature",temps[i].serno);
 			if((fd=open(filebuf,O_RDONLY))<0){
-				g_err(NOEXIT,PERROR,"%s: Could not open [%s]",
-					__FUNCTION__,filebuf);
+				if(locdebug)
+					g_err(NOEXIT,PERROR,"%s: Could not open [%s]",
+						__FUNCTION__,filebuf);
 			}
 			else{
 				read(fd,buf,sizeof(buf));

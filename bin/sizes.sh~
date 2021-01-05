@@ -1,5 +1,0 @@
-for i in `find . -type d`
-do
-	a=$(du -sh $i)
-	echo  $a $i 
-done
