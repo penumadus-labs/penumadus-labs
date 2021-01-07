@@ -1,6 +1,6 @@
 const exec = require('./exec')
 const { join } = require('path')
-const client = require('../database/client')
+const database = require('../database/client')
 
 const udpEngine = 'UDPengine'
 const udpEnginePath = join(__dirname, '..', '..', '..', 'DM', udpEngine)
@@ -20,7 +20,7 @@ module.exports = async ({ tcpPort }) => {
   if (!process.env.AWS_SERVER) return
   try {
     await killUdpEngines()
-    const udpPorts = (await client.getUdpPorts()).filter(
+    const udpPorts = (await database.getUdpPorts()).filter(
       (port) => !excludedUdpPorts.includes(port)
     )
 

@@ -4,7 +4,7 @@ import Alert from '../components/alert'
 import RegisterBody from '../components/register/register-body'
 import Input from '../components/input'
 
-export default () => {
+export default function Register() {
   const {
     handleSubmit,
     register,

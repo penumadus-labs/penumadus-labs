@@ -1,10 +1,11 @@
-export const formatData = (data) =>
-  data.map(({ sensors = [], count, fills, ...data }) => {
+export const formatData = (data) => {
+  return data.map(({ sensors = [], count, fills, ...data }) => {
     sensors.forEach((value, i) => {
       data[`T${i + 1}`] = value
     })
     return data
   })
+}
 
 export const formatKeys = (data) => Object.keys(data[0])
 

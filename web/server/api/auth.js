@@ -1,8 +1,8 @@
 const { Router } = require('express')
 const { compare } = require('bcrypt')
 const { verifyToken, signToken } = require('../utils/auth')
-const { findUser } = require('../database/client')
 const { handlePost } = require('./route-decorators')
+const database = require('../database/client')
 
 /*
 connect database
@@ -19,7 +19,7 @@ module.exports = Router()
       if (process.env.NODE_ENV === 'development') return
 
       if (!username) return res.sendStatus(404)
-      const user = await findUser(username)
+      const user = await database.findUser(username)
 
       if (!user) {
         res.statusMessage = 'user not found'

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { parseError } from '../api'
 import { ErrorInline, LoadingInline } from '../api-status-components'
 
-export default (method) => {
+export default function createRequestHook(method) {
   let timeout
 
   const useRequest = ({ clearStatus = true } = {}) => {

@@ -20,7 +20,7 @@ const Body = () => {
   )
 }
 
-export default () => {
+export default function BridgeSensorsInfo() {
   return (
     <Alert title="bridge sensors location" buttonText={<Image size="20" />}>
       <Body />

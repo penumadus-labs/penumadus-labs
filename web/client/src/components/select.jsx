@@ -5,6 +5,7 @@ import { IoIosArrowDown as DownArrow } from 'react-icons/io'
 const Anchor = styled.div`
   position: relative;
   height: 54px;
+  width: 10rem;
 
   p {
     padding-left: 2px;
@@ -37,7 +38,7 @@ const Dropdown = styled.div`
   }
 `
 
-export default ({ selected, options, onSelect, label }) => {
+export default function Select({ selected, options, onSelect, label }) {
   const [toggled, setToggled] = useState(false)
   const ref = useRef()
 
@@ -60,7 +61,6 @@ export default ({ selected, options, onSelect, label }) => {
   //   setSelected(value)
   //   onSelect(value)
   // }
-
   return (
     <Anchor>
       <p>{label}</p>

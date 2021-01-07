@@ -8,7 +8,7 @@ const StyledLink = styled(Link)`
 
 const routes = ['environment', 'acceleration']
 
-export default () => {
+export default function Navigator() {
   const links = routes.reduce((acc, route) => {
     const path = `/${route}`
     if (path !== window.location.pathname)

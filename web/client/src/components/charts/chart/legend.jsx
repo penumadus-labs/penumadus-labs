@@ -11,7 +11,7 @@ const StyledItem = styled.li`
   color: ${(props) => props.color};
 `
 
-export default ({ labels }) => {
+export default function Legend({ labels }) {
   return (
     <StyledList className="space-children-x">
       {useMemo(

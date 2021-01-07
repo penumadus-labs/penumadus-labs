@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaFileDownload as Download } from 'react-icons/fa'
+import { FaFileDownload as DownloadIcon } from 'react-icons/fa'
 import downloadFile from '../../../../utils/download-file'
 import Request from './request'
 
@@ -31,7 +31,7 @@ import Request from './request'
 //   )
 // }
 
-export default ({ domainString, useDownload, downloadProps }) => {
+export default function Download({ domainString, useDownload, downloadProps }) {
   const wrapRequest = async (request) => {
     try {
       const data = await request(...downloadProps)
@@ -43,7 +43,7 @@ export default ({ domainString, useDownload, downloadProps }) => {
 
   return (
     <Request
-      buttonText={<Download size="20" />}
+      buttonText={<DownloadIcon size="20" />}
       title="download selected domain"
       requestName="download"
       useRequest={useDownload}

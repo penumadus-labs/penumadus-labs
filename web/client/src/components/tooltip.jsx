@@ -8,18 +8,18 @@ const Container = styled.div`
   }
 `
 
-const ToolTip = styled.p`
+const ToolTipBody = styled.p`
   position: absolute;
   opacity: 0;
   transition: opacity 0.3s;
   white-space: nowrap;
 `
 
-export default ({ children, text }) => {
+export default function ToolTip({ children, text }) {
   return (
     <Container>
       {children}
-      <ToolTip className="card">{text}</ToolTip>
+      <ToolTipBody className="card">{text}</ToolTipBody>
     </Container>
   )
 }

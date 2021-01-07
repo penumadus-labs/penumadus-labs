@@ -10,7 +10,7 @@ const Root = styled.div`
   }
 `
 
-export default () => {
+export default function Colors() {
   return (
     <Root className="grid-4">
       {Object.entries(colors).map(([name, color], i) => (

@@ -2,7 +2,7 @@ import React from 'react'
 import downloadFile from '../../utils/download-file'
 import useApi from '../../api'
 
-export default ({ close, postData }) => {
+export default function RegisterBody({ close, postData }) {
   const [, , { useRegisterDevice }] = useApi()
   const [status, request] = useRegisterDevice()
 

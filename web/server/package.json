@@ -1,19 +1,16 @@
 {
-  "name": "server",
+  "name": "@web/server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "author": "Abram Bradley",
-  "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.0",
-    "cookie-parser": "^1.4.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.6.2",
-    "papaparse": "^5.3.0",
-    "ws": "^7.3.1"
+    "bcrypt": "*",
+    "cookie-parser": "*",
+    "dotenv": "*",
+    "express": "*",
+    "jsonwebtoken": "*",
+    "mongodb": "*",
+    "papaparse": "*",
+    "saslprep": "^1.0.3",
+    "ws": "*"
   },
   "devDependencies": {
     "nodemon": "*"

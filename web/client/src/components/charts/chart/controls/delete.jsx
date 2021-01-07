@@ -1,5 +1,5 @@
 import React from 'react'
-import { VscTrash as Delete } from 'react-icons/vsc'
+import { VscTrash as DeleteIcon } from 'react-icons/vsc'
 import Request from './request'
 
 // export default ({ useDelete, getData, clearLiveData }) => {
@@ -27,7 +27,7 @@ import Request from './request'
 //   )
 // }
 
-export default ({ useDelete, getData }) => {
+export default function Delete({ useDelete, getData }) {
   const wrapRequest = async (request) => {
     if (
       !window.confirm(
@@ -40,7 +40,7 @@ export default ({ useDelete, getData }) => {
   }
   return (
     <Request
-      buttonText={<Delete size="20" />}
+      buttonText={<DeleteIcon size="20" />}
       title="clear database"
       requestName="delete"
       useRequest={useDelete}

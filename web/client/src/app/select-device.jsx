@@ -4,7 +4,7 @@ import Select from '../components/select'
 
 // const formatDevice = ({ id, deviceType }) => `${id} (${deviceType})`
 
-export default () => {
+export default function SelectDevice() {
   const [
     {
       device,

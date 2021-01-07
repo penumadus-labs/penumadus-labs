@@ -2,16 +2,13 @@ import React from 'react'
 import LinearDataChart from './linear-data/chart'
 import useApi from '../../api'
 
-export default () => {
+export default function DeflectionChart() {
   const [
     { deflection },
     { getDeflection },
     { useGetDeflection, useDownloadDeflection, useDeleteDeflection },
   ] = useApi()
 
-  debugger
-
-  debugger
   return (
     <LinearDataChart
       dataType="deflection"

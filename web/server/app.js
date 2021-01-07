@@ -23,6 +23,9 @@ module.exports = express().use(
     .use(test)
     .use(cookieParser())
     .use(`/api`, json(), apiRouter)
+    // .use((_, __, next) => {
+    //   if (!process.env.NODE_ENV === 'development') next()
+    // })
     .use(static(clientDir))
     .get('*', (req, res) => {
       if (req.accepts('text/html'))

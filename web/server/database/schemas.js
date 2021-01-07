@@ -19,16 +19,16 @@
 //   },
 // }
 
-const sharedDataFields = ['environment', 'acceleration']
+const { reduceToObject } = require('@web/utils')
 
 const bridge = {
   configurable: false,
-  dataFields: [...sharedDataFields, 'deflection'],
+  dataTypes: ['acceleration', 'deflection', 'environment'],
 }
 
 const tank = {
   configurable: true,
-  dataFields: [...sharedDataFields],
+  dataTypes: ['acceleration', 'environment'],
 }
 
 const deviceSchemas = {
@@ -37,16 +37,27 @@ const deviceSchemas = {
 }
 
 // props { deviceType id updPort }
-const createDeviceSchema = (props) => {
-  const { dataFields } = deviceSchemas[props.deviceType]
+// const createDeviceSchema = (props) => {
+//   const { dataFields } = deviceSchemas[props.deviceType]
 
-  // initialize fields
-  const fields = {}
-  for (const field of dataFields) fields[field] = []
+//   // initialize fields
+//   const fields = {}
+//   for (const field of dataFields) fields[field] = []
 
+//   return {
+//     ...props,
+//     ...dataFields.reduceToObject((field) => ({ [field]: [] })),
+//   }
+// }
+
+const createDeviceSchema = ({ id, deviceType, udpPort }) => {
+  const schema = deviceSchemas[deviceType]
   return {
-    ...props,
-    ...dataFields.reduceToObject((field) => ({ [field]: [] })),
+    id,
+    deviceType,
+    udpPort,
+    ...schema,
+    counters: reduceToObject(schema.dataTypes, (value) => ({ [value]: 0 })),
   }
 }
 

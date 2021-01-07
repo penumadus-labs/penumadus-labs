@@ -8,21 +8,22 @@ const StyledSelect = styled.select`
   appearance: none;
 `
 
-export default ({ eventList, useGetAccelerationEvent, ...props }) => {
+export default function EventSelector({
+  eventList,
+  useGetAccelerationEvent,
+  ...props
+}) {
   const [, getEvent, { loading }] = useGetAccelerationEvent()
   // const options = eventList.map(
   //   (time, i) => `${parseDate(time)} - ${formatHoursMinutes(time)}`
   // )
   // const [selected, setSelected] = useState(options[0])
-
   // const handleChange = async (value) => {
   //   const indexOf = options.indexOf(value)
   //   await getEvent(indexOf)
   //   setSelected()
   // }
-
   // return <Select selected={selected} options={options} />
-
   const handleChange = ({ target }) => {
     getEvent(target.value)
   }
@@ -35,7 +36,7 @@ export default ({ eventList, useGetAccelerationEvent, ...props }) => {
       {...props}
     >
       {eventList.map((time, i) => (
-        <option key={i} value={i}>
+        <option key={i} value={time}>
           {parseDate(time)} - {formatHoursMinutes(time)}
         </option>
       ))}

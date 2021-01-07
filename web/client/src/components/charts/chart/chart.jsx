@@ -4,16 +4,14 @@ import ChartBody from './chart-body'
 import useApi from '../../../api'
 import useMessage from '../../../services/socket'
 
-export default ({
+export default function Chart({
   children,
   dataType,
   data: [status, { noDataCollected, data } = {}],
   initializeLive,
   handleMutation,
   ...props
-}) => {
-  if (status) return status
-
+}) {
   const [, { mutateStore }] = useApi()
 
   const [live, setLive] = useState(
@@ -37,6 +35,8 @@ export default ({
     },
     [live]
   )
+
+  if (status) return status
 
   if (noDataCollected)
     return (

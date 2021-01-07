@@ -108,11 +108,13 @@ module.exports = class Device extends EventEmitter {
   timeout = null
   handlers = {
     environmental: (err, data) => {
-      if (this.recordData) database.insertEnvironment(this.id, data)
+      // if (this.recordData) database.insertEnvironment(this.id, data)
+      if (this.recordData) database.insertData('environment', this.id, data)
       if (this.broadcastData) this.broadcast('environment', data)
     },
     deflection: (err, data) => {
-      if (this.recordData) database.insertDeflection(this.id, data)
+      // if (this.recordData) database.insertDeflection(this.id, data)
+      if (this.recordData) database.insertData('deflection', this.id, data)
       if (this.broadcastData) this.broadcast('deflection', data)
     },
     acceleration: (err, data) => {
@@ -126,7 +128,13 @@ module.exports = class Device extends EventEmitter {
         this.timeout = null
         console.info(`acceleration event: ${this.event.length}`)
         if (this.recordData)
-          database.insertAccelerationEvent(this.id, this.event)
+          if (this.recordData)
+            database.insertData('acceleration', this.id, {
+              time: this.event[0].time,
+              data: this.event,
+            })
+
+        // database.insertAccelerationEvent(this.id, this.event)
       }, 500)
     },
   }

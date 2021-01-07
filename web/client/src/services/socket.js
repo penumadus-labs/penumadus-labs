@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import useApi from '../api'
 import { websocketUrl } from '../utils/url'
 
+console.log(websocketUrl)
+
 let tasks = []
 let ws = null
 
@@ -10,6 +12,10 @@ export const useSocket = (init) => {
   useEffect(() => {
     if (!init || ws) return
     ws = new WebSocket(websocketUrl)
+
+    ws.onopen = () => {
+      console.log('opened')
+    }
 
     ws.onmessage = ({ data }) => {
       const { id, ...event } = JSON.parse(data)

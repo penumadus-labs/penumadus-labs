@@ -1,4 +1,4 @@
-const { Router } = require('express')
+const { Router, query } = require('express')
 const {
   handleAsync,
   handleQuery,
@@ -8,12 +8,17 @@ const database = require('../database/client')
 const createDeviceConfigFile = require('../utils/create-device-config-file')
 
 module.exports = Router()
-  .get('/devices', handleQuery(database.getDeviceSchemas))
-  .get('/linear-data', handleQuery(database.getLinearData))
+  .get('/devices', handleQuery(database.getDevices))
+  .get(
+    '/linear-data',
+    handleQuery(({ recent, ...query }) =>
+      recent ? database.getDataRecent(query) : database.getDataRange(query)
+    )
+  )
   .get(
     '/linear-data-csv',
     handleDownload((query) =>
-      database.getLinearData({
+      database.getDataRange({
         ...query,
         limit: null,
       })
@@ -25,7 +30,7 @@ module.exports = Router()
   .delete(
     '/data',
     handleAsync(async ({ query }, res) => {
-      await database.deleteField(query)
+      await database.deleteData(query)
       res.sendStatus(200)
     })
   )

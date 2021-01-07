@@ -10,24 +10,37 @@ export default class ErrorBoundary extends Component {
     // add an error tracker
   }
 
+  componentDidMount() {
+    if (this.props.test)
+      this.setState({
+        error: new Error('test'),
+        hasError: true,
+      })
+  }
+
   static getDerivedStateFromError(error) {
     return { hasError: true, error }
   }
 
   render() {
-    const { state, props } = this
+    const {
+      state: { hasError, error },
+      props: {
+        card,
+        children,
+        message = 'Something has caused the app to crash',
+      },
+    } = this
 
-    if (state.hasError) {
+    if (hasError) {
       return (
-        <div className="card">
-          <p className="red-text">
-            Error caught: Something has caused the app to crash
-          </p>
-          <p>{state.error?.toString()}</p>
+        <div className={card ? 'card' : ''}>
+          <p className="red-text">Error caught: {message}</p>
+          <p>{error?.toString()}</p>
         </div>
       )
     }
 
-    return props.children ?? null
+    return children ?? null
   }
 }

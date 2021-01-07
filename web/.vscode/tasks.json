@@ -19,7 +19,13 @@
     },
     {
       "label": "develop",
-      "dependsOn": ["dev:client", "dev:server"]
+      "dependsOn": ["dev:client", "dev:server"],
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "npm run test"
     }
   ]
 }

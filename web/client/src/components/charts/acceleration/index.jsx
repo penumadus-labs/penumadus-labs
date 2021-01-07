@@ -5,7 +5,7 @@ import useApi from '../../../api'
 
 let timeout
 
-export default () => {
+export default function AccelerationChart() {
   const [
     {
       acceleration: [, eventList],
@@ -20,10 +20,8 @@ export default () => {
   ] = useApi()
 
   const [, event] = accelerationEvent
-  const index =
-    !event?.data.length || !eventList
-      ? null
-      : eventList.indexOf(event.data[0].time)
+
+  const time = !event?.data.length || !eventList ? null : event.data[0].time
 
   const handleMutation = (data, store) => {
     const result = timeout ? [...store, data] : [data]
@@ -35,7 +33,7 @@ export default () => {
   return (
     <Chart
       {...{
-        downloadProps: [index],
+        downloadProps: [time],
         handleMutation,
       }}
       dataType="accelerationEvent"
@@ -49,7 +47,7 @@ export default () => {
         !!eventList && (
           <EventSelector
             {...{ eventList, useGetAccelerationEvent }}
-            defaultValue={index}
+            defaultValue={eventList.indexOf(time)}
           />
         )
       }

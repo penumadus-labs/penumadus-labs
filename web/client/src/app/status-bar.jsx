@@ -25,7 +25,7 @@ const Menu = styled.div`
 // const reduceFields = (fields) =>
 //   fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
 
-export default () => {
+export default function StatusBar() {
   // const [
   //   {
   //     device: { id, dataFields },

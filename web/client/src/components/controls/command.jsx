@@ -37,7 +37,7 @@ const CommandBody = ({
   )
 }
 
-export default ({ disabled, children, ...props }) => {
+export default function Command({ disabled, children, ...props }) {
   return (
     <Alert
       tooltip={false}

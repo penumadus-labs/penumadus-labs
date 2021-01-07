@@ -18,17 +18,18 @@ const getTimeInHoursMinutesSeconds = () => {
 const reduceFields = (fields) =>
   fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
 
-export default () => {
+export default function Status() {
   const [
     {
-      device: { id, dataFields },
+      device: { id, dataTypes },
     },
   ] = useApi()
-  const [status, setStatus] = useState(reduceFields(dataFields))
+
+  const [status, setStatus] = useState(reduceFields(dataTypes))
 
   useEffect(() => {
-    setStatus(reduceFields(dataFields))
-  }, [id, dataFields])
+    setStatus(reduceFields(dataTypes))
+  }, [id, dataTypes])
 
   useMessage(({ type }) => {
     setStatus((status) => ({

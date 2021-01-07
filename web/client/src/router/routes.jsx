@@ -8,20 +8,24 @@ import {
 } from 'react-icons/fa'
 import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
-import { GrDocumentText as UserManual } from 'react-icons/gr'
+import { IoMdDocument as UserManual } from 'react-icons/io'
 import { FiLogOut as Logout } from 'react-icons/fi'
 import { MdDashboard as Dashboard, MdDevices as Devices } from 'react-icons/md'
 
 import useApi from '../api'
 import Link from './link'
 
-import AccelerationChart from '../components/charts/acceleration/chart'
-import EnvironmentChart from '../components/charts/environment-chart'
-import DeflectionChart from '../components/charts/deflection-chart'
+// import AccelerationChart from '@web/d3-charts/acceleration'
+// import EnvironmentChart from '@web/d3-charts/environment'
+// import DeflectionChart from '@web/d3-charts/deflection'
+
+import AccelerationChart from '../components/charts/acceleration'
+import EnvironmentChart from '../components/charts/environment'
+import DeflectionChart from '../components/charts/deflection'
 
 import Controls from './controls'
 import Register from './register'
-import Manual from './maunual'
+import Manual from './manual'
 
 const { REACT_APP_MOUNT_PATH } = process.env
 
@@ -47,10 +51,10 @@ const Components = {
 
 // creates routes, links, and data fetches based on device's data fields
 // configurable device includes control panel for configuring device remotely
-export default ({ handleLogout }) => {
+export default function Routes({ handleLogout }) {
   const [
     {
-      device: { id, dataFields, configurable },
+      device: { id, dataTypes, configurable },
     },
     {
       getProtocol,
@@ -62,7 +66,7 @@ export default ({ handleLogout }) => {
   ] = useApi()
 
   const { requests, paths, apiRequests } = useMemo(() => {
-    const requests = [...dataFields, ...(configurable ? ['controls'] : [])]
+    const requests = [...dataTypes, ...(configurable ? ['controls'] : [])]
 
     const paths = [...requests, ...staticRoutes]
 
@@ -78,7 +82,7 @@ export default ({ handleLogout }) => {
 
     return { requests, paths, apiRequests }
   }, [
-    dataFields,
+    dataTypes,
     configurable,
     getProtocol,
     getSettings,
@@ -88,14 +92,9 @@ export default ({ handleLogout }) => {
   ])
 
   // changes data when device is toggled
-
   useEffect(() => {
     // fetches the data for each field
     // navigates to first field once it's resolved
-
-    // could do this, if clear data from top level to reinstate loading
-    // if (!paths.includes(window.location.pathname.slice(1))) navigate(paths[0])
-
     requests.forEach(async (field, index) => {
       await apiRequests[field]()
 
@@ -123,17 +122,15 @@ export default ({ handleLogout }) => {
   return (
     <>
       <main>
-        <ErrorBoundary>
+        <ErrorBoundary card={true} message="application body has crashed">
           <Router className="space-children-y" basepath={REACT_APP_MOUNT_PATH}>
             {routes}
           </Router>
         </ErrorBoundary>
       </main>
       <nav className="shadow-card">
-        <ErrorBoundary>
-          {links}
-          <Link Icon={Logout} label="Logout" to={''} onClick={handleLogout} />
-        </ErrorBoundary>
+        {links}
+        <Link Icon={Logout} label="Logout" to={''} onClick={handleLogout} />
       </nav>
     </>
   )

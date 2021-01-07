@@ -3,7 +3,7 @@ import LinearDataChart from './linear-data/chart'
 import BridgeSensorInfo from './bridge-sensor-info'
 import useApi from '../../api'
 
-export default () => {
+export default function EnvironmentChart() {
   const [
     {
       device: { deviceType },

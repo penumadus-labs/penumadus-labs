@@ -1,171 +1,248 @@
-const { join } = require('path')
-require('dotenv').config({ path: join(__dirname, '..', '.env') })
+require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
 const { MongoClient } = require('mongodb')
 const { hash } = require('bcrypt')
-const getLinearData = require('./queries/get-linear-data')
-const getAccelerationEventTimes = require('./queries/get-acceleration')
-const getAccelerationEvent = require('./queries/get-acceleration-event')
-const { createDeviceSchema, deviceSchemas } = require('./schemas')
-// const startProcess = require('../commands/start-mongod')
+
+const { expectString } = require('@web/utils/error')
+
+const { createDeviceSchema } = require('./schemas')
+const { increment, resolveData } = require('./utils')
 
 const defaultUdpPortIndex = 30000
 
-const host = !!process.env.DB_HOST
-const { DB_USER, DB_PWD } = process.env
+class DatabaseClient {
+  silent = false
+  constructor({ DB_USER, DB_PWD, DB_URL }) {
+    if (!DB_USER || !DB_PWD)
+      throw new Error(
+        'no database credentials provided, please but DB_USER and DB_PWD a .env file'
+      )
 
-if (!DB_USER && !DB_PWD)
-  throw new Error(
-    'no database credentials provided, please but DB_USER and DB_PWD a .env file'
-  )
+    this.uri = `mongodb://${DB_USER}:${DB_PWD}@${DB_URL ?? 'localhost'}/admin`
+  }
 
-const uri = `mongodb://${DB_USER}:${DB_PWD}@${
-  host ? 'localhost' : '52.14.30.58'
-}/admin`
+  connect = async (uri = this.uri, initialize) => {
+    const connection = (this.connection = await MongoClient.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }))
+    this.db = connection.db.bind(connection)
 
-const mongoClient = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+    if (!this.silent) console.info('mongo client connected')
 
-const client = {
-  async connect() {
-    // if (host) await startProcess()
+    if (initialize)
+      await connection
+        .db('app')
+        .collection('data')
+        .insertOne({ udpPortIndex: defaultUdpPortIndex })
 
-    await mongoClient.connect()
+    await connection
+      .db('app')
+      .collection('devices')
+      .createIndex({ id: 1 }, { unique: true })
 
-    console.info('mongo client connected')
+    this.app = await this.db('app')
 
-    client.app = await mongoClient.db('app')
+    this.users = await this.app.collection('users')
 
-    client.devices = await client.app.collection('devices')
-    await client.getDeviceSchemas(true)
-    client.users = await client.app.collection('users')
+    this.devices = await this.app.collection('devices')
+    this.schemas = await this.getDevices()
 
-    appData = await client.app.collection('data')
-    const [{ _id }] = await appData.find().toArray()
+    const appData = await this.app.collection('data')
+    const { _id } = await appData.findOne()
 
-    client.appData = new Proxy(appData, {
+    this.appData = new Proxy(appData, {
       get: (obj, prop) => (...args) => obj[prop]({ _id }, ...args),
     })
-  },
-  // ^^ if I change my mind about the proxy
-  // appData(op, ...params) {
-  //   return client.appData[op](client.appDataQuery, ...params)
-  // },
-  async close() {
+  }
+  close = async () => {
     try {
-      await mongoClient.close()
-      console.info('database client disconnected')
+      await this.connection.close()
+      if (!this.silent) console.info('database client disconnected')
     } catch (error) {
       console.error(error)
     }
-  },
-  async wrap(promise) {
-    try {
-      await client.connect()
-      if (typeof promise === 'function') await promise()
-    } catch (error) {
-      console.error(error)
-    } finally {
-      client.close()
-    }
-  },
-  findUser(username) {
-    return client.users.findOne({ username })
-  },
+  }
+  wrap = async (promise) => {
+    await this.connect()
+    await promise()
+    await this.connection.close()
+    // try {
+    // } catch (error) {
+    //   if (catchError) console.error(error)
+    //   else throw error
+    // } finally {
+    // }
+  }
 
-  async getUdpPortIndex() {
-    const { udpPortIndex } = await client.appData.findOne()
-    await client.appData.updateOne({ $inc: { udpPortIndex: 1 } })
-    return udpPortIndex
-  },
-  async getDeviceSchemas(store = false) {
+  findUser = (username) => {
+    return this.users.findOne({ username })
+  }
+  getUdpPortIndex = async () => {
+    const { value } = await this.appData.findOneAndUpdate({
+      $inc: { udpPortIndex: 1 },
+    })
+    return value.udpPortIndex
+  }
+  getDevices = async () => {
     const schemas = {}
 
     const query = process.env.MODE ? { deviceType: process.env.MODE } : {}
-    await client.devices
+
+    await this.devices
       .find(query, {
         projection: {
           _id: 0,
-          id: 1,
-          deviceType: 1,
-          // dataFields: 1,
-          // configurable: 1,
         },
       })
-      .forEach(({ id, deviceType }) => {
-        schemas[id] = {
-          id,
-          deviceType,
-          ...deviceSchemas[deviceType],
-        }
-      })
-
-    if (store) client.schemas = schemas
+      .forEach((device) => (schemas[device.id] = device))
 
     return schemas
-  },
-  resetUdpPortIndex() {
-    return client.appData.updateOne({
+  }
+  resetUdpPortIndex = () => {
+    return this.appData.updateOne({
       $set: { udpPortIndex: defaultUdpPortIndex },
     })
-  },
-  async insertDevice(props) {
-    const udpPort = await client.getUdpPortIndex()
-    const deviceSchema = createDeviceSchema({ udpPort, ...props })
-    client.devices.insertOne(deviceSchema)
-    return udpPort
-  },
-  async insertUser(user) {
+  }
+  insertUser = async (user) => {
     user.password = await hash(user.password, 10)
-    return client.users.insertOne(user)
-  },
-  async getUdpPorts() {
-    const devices = await client.devices.find().toArray()
-    return devices.map(({ udpPort }) => udpPort)
-  },
-  pushData(id, data, field) {
-    return client.devices.updateOne({ id }, { $push: { [field]: data } })
-  },
-  insertEnvironment(id, data) {
-    return client.pushData(id, data, 'environment')
-  },
-  insertDeflection(id, data) {
-    return client.pushData(id, data, 'deflection')
-  },
-  insertAccelerationEvent(id, event) {
-    return client.pushData(
-      id,
-      {
-        $each: [event],
-        $position: 0,
-      },
-      'acceleration'
+    return this.users.insertOne(user)
+  }
+  insertDevice = async (props) => {
+    const udpPort = await this.getUdpPortIndex()
+    const schema = createDeviceSchema({ udpPort, ...props })
+    await this.devices.insertOne(schema)
+    await Promise.all(
+      schema.dataTypes.map((dataType) =>
+        this.db(dataType).collection(props.id).createIndex({
+          index: 1,
+          time: 1,
+        })
+      )
     )
-  },
+    this.schemas = await this.getDevices()
+    return udpPort
+  }
+  removeDevice = async (id) => {
+    const {
+      value: { dataTypes },
+    } = await this.devices.findOneAndDelete({ id })
+    this.schemas = await this.getDevices()
+    return Promise.all(
+      dataTypes.map((type) => this.db(type).dropCollection(id))
+    )
+  }
 
-  getDeviceData(id, projection) {
-    projection._id = 0
-    return client.devices.findOne({ id }, { projection })
-  },
-  getLinearData({ id, ...params }) {
-    return client.getDeviceData(id, getLinearData(params))
-  },
-  async getAcceleration({ id }) {
-    const { data } = await client.getDeviceData(id, getAccelerationEventTimes())
-    return data
-  },
-  getAccelerationEvent({ id, ...params }) {
-    return client.getDeviceData(id, getAccelerationEvent(params))
-  },
-  deleteField({ id, field }) {
-    return client.devices.updateOne({ id }, { $set: { [field]: [] } })
-  },
+  getUdpPorts = async () => {
+    return Object.values(this.schemas.map(({ udpPort }) => udpPort))
+  }
+
+  data({ field, id }) {
+    expectString(field)
+    expectString(id)
+    return this.db(field).collection(id)
+  }
+
+  acceleration(id) {
+    return this.data({ field: 'acceleration', id })
+  }
+
+  async incrementCounterAndAddIndexToData(field, id, data) {
+    const counter = `counters.${field}`
+    const { [counter]: index } = await increment(this.devices, { id }, counter)
+    return { index, ...data }
+  }
+
+  insertData = async (field, id, data) => {
+    return this.data({ field, id }).insertOne(
+      await this.incrementCounterAndAddIndexToData(field, id, data)
+    )
+  }
+
+  insertAccelerationEvent = async (id, event) => {
+    return this.acceleration(id).insertOne(
+      await this.incrementCounterAndAddIndexToData('acceleration', id, event)
+    )
+  }
+
+  getAcceleration = ({ id }) => {
+    return this.acceleration(id)
+      .find()
+      .sort({ time: -1 })
+      .map(({ time }) => time)
+      .toArray()
+  }
+
+  getAccelerationEvent = async ({ id, time }) => {
+    const col = await this.acceleration(id)
+
+    return resolveData(
+      col,
+      async () =>
+        (
+          await col.findOne({
+            time: time ?? (await this.getAcceleration({ id }))[0],
+          })
+        ).data
+    )
+  }
+  getDataRecent = async ({ limit = 1000, ...ctx }) => {
+    const col = await this.data(ctx)
+
+    return resolveData(col, async () =>
+      col
+        .find()
+        .sort({ time: 1 })
+        .project({ _id: 0, index: 0 })
+        .limit(limit)
+        .toArray()
+    )
+  }
+  getDataRange = async ({
+    start = -Infinity,
+    end = Infinity,
+    limit,
+    ...ctx
+  }) => {
+    const handleLimit = limit
+      ? [
+          {
+            $bucketAuto: {
+              groupBy: '$time',
+              buckets: limit,
+              output: {
+                docs: { $push: '$$CURRENT' },
+              },
+            },
+          },
+          { $replaceWith: { $first: '$docs' } },
+        ]
+      : []
+
+    const col = await this.data(ctx)
+
+    return resolveData(col, async () =>
+      this.data(ctx)
+        .aggregate([
+          { $match: { time: { $gte: +start, $lte: +end } } },
+          ...handleLimit,
+          { $sort: { time: 1 } },
+          { $project: { _id: 0, index: 0 } },
+        ])
+        .toArray()
+    )
+  }
+  resetCounter({ field, id }) {
+    return this.devices.updateOne(
+      { id },
+      { $set: { [`counters.${field}`]: 0 } }
+    )
+  }
+  deleteData = (ctx) => {
+    return Promise.all([this.data(ctx).deleteMany(), this.resetCounter(ctx)])
+  }
 }
 
-// client.test = async () => {
-//   await client.resetUdpPortIndex()
-// }
+module.exports = new DatabaseClient(process.env)
 
-module.exports = client
+if (require.main === module) (() => client.connect())()

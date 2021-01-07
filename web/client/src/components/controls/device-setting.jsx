@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import Input from '../input'
 import Command from './command'
 
-export default ({ name, settings, useCommand }) => {
+export default function DeviceSettings({ name, settings, useCommand }) {
   const { register, handleSubmit, watch } = useForm()
   const [changes, setChanges] = useState({})
   const [data, setData] = useState()

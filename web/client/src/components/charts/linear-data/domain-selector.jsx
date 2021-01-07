@@ -24,7 +24,7 @@ const getTime = (time) => {
   )}`
 }
 
-export default ({ domain, useGetData }) => {
+export default function DomainSelector({ domain, useGetData }) {
   const {
     handleSubmit,
     reset,

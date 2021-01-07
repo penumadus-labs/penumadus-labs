@@ -1,11 +1,12 @@
-import { css, Global } from '@emotion/core'
+import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import Controls from './controls'
 import Legend from './legend'
 import Tools from './tools'
 import Chart from './d3-linechart'
-import { useResize } from '../../../hooks/use-events'
+// import { useResize } from '../../../hooks/use-events'
+import { useResize } from '@web/hooks/use-events'
 
 const SvgStyle = css`
   svg {
@@ -37,7 +38,7 @@ const ControlBarStyle = styled.div`
   }
 `
 
-export default ({
+export default function ChartBody({
   live,
   toggleLive,
   downloadProps,
@@ -48,7 +49,7 @@ export default ({
   children,
   data,
   yDomain,
-}) => {
+}) {
   const svgRef = useRef()
 
   const [[domain, domainString], setDomain] = useState([[0, 0], ''])
@@ -106,9 +107,9 @@ export default ({
     },
   }
 
-  for (const [key, fn] of Object.entries(toolProps)) {
+  for (const [key, action] of Object.entries(toolProps)) {
     toolProps[key] = () => {
-      fn()
+      action()
       setDomain(getDomain())
     }
   }

@@ -1,0 +1,14 @@
+{
+  "name": "@web/d3-charts",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@emotion/react": "*",
+    "@emotion/styled": "*",
+    "d3": "*",
+    "react": "*"
+  },
+  "scripts": {
+    "watch": "parcel watch src"
+  }
+}

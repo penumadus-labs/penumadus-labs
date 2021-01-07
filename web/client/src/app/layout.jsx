@@ -91,10 +91,11 @@ const Layout = () => {
   return (
     <Root ref={ref}>
       <header className="card">
-        <p>HankMon Dashboard</p>
-        <ErrorBoundary>{loggedIn && <StatusBar />}</ErrorBoundary>
+        <ErrorBoundary message="status bar has crashed">
+          {loggedIn && <StatusBar />}
+        </ErrorBoundary>
       </header>
-      <ErrorBoundary>{main}</ErrorBoundary>
+      {main}
     </Root>
   )
 }

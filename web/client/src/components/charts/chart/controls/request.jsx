@@ -3,7 +3,7 @@ import Alert from '../../../alert'
 
 // request will un-mount when alert is closed resetting request status
 // component is separate so the hook can be called inside the Alert body
-const Request = ({
+const RequestBody = ({
   requestName,
   useRequest,
   wrapRequest,
@@ -27,10 +27,10 @@ const Request = ({
   )
 }
 
-export default ({ buttonText, title, children, ...props }) => {
+export default function Request({ buttonText, title, children, ...props }) {
   return (
     <Alert buttonText={buttonText} title={title}>
-      <Request {...props}>{children}</Request>
+      <RequestBody {...props}>{children}</RequestBody>
     </Alert>
   )
 }

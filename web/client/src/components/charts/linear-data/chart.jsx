@@ -2,7 +2,7 @@ import React from 'react'
 import Chart from '../chart/chart'
 import DomainSelector from './domain-selector'
 
-export default ({
+export default function LinearDataChart({
   // dataType,
   // data,
   // useDownloadData,
@@ -13,7 +13,7 @@ export default ({
   children,
   render,
   ...props
-}) => {
+}) {
   const initializeLive = () => {
     return getData({ recent: true }, true)
   }

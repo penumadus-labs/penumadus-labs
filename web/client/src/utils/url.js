@@ -1,6 +1,7 @@
-const { NODE_ENV, REACT_APP_MOUNT_PATH } = process.env
+const { REACT_APP_SECURE, NODE_ENV, REACT_APP_MOUNT_PATH } = process.env
 
-const secure = NODE_ENV === 'development' ? '' : 's'
+const secure =
+  REACT_APP_SECURE === 'secure' && NODE_ENV !== 'development' ? 's' : ''
 
 const urlBody = `${secure}://${window.location.host}${REACT_APP_MOUNT_PATH}`
 

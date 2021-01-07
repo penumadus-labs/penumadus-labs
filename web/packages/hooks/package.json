@@ -1,0 +1,15 @@
+{
+  "name": "@web/hooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "use-events.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.14.0"
+  }
+}

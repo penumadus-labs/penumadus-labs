@@ -3,7 +3,7 @@ import Command from '../components/controls/command'
 import Setting from '../components/controls/device-setting'
 import useApi from '../api'
 
-export default () => {
+export default function Controls() {
   const [
     {
       protocol: [status, protocol],

@@ -27,6 +27,7 @@ module.exports = (app, port) => {
   broadcaster.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
+    console.log('upgrade')
     // sessionStorage auth system
     const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {
@@ -37,6 +38,7 @@ module.exports = (app, port) => {
 
     wsServer.handleUpgrade(req, socket, head, (ws) => {
       // wsServer.emit('connection', ws, req)
+
       if (process.env.NODE_ENV !== 'development')
         console.info('websocket connected')
     })

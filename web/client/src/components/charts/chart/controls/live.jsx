@@ -2,7 +2,7 @@ import React from 'react'
 import { MdPlayArrow as LiveOn, MdPause as LiveOff } from 'react-icons/md'
 import Tooltip from '../../../tooltip'
 
-export default ({ live, toggleLive }) => {
+export default function Live({ live, toggleLive }) {
   const tooltip = live ? 'turn live off' : 'turn live on'
   return (
     <Tooltip text={tooltip}>

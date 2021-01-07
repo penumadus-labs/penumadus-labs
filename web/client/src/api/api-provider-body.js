@@ -14,10 +14,9 @@ const [useRegisterDevice] = createRequestHook((data) =>
   update('database/register', data)
 )
 
-export default ({ requestAndStore, device, setDevice }) => {
+export default function ApiProvider({ requestAndStore, device, setDevice }) {
   const initializeApi = async () => {
     //* top level calls that only need to be made once
-
     const devices = await requestAndStore(
       'devices',
       'database/devices',
@@ -40,13 +39,11 @@ export default ({ requestAndStore, device, setDevice }) => {
   }
 
   //* returns if not authorized
-
   if (!device) return [{ initializeApi, verify }, { useLogin }]
 
   const { id, deviceType } = device
 
   //* top level requests
-
   const getProtocol = (params) =>
     requestAndStore(
       'protocol',
@@ -59,7 +56,6 @@ export default ({ requestAndStore, device, setDevice }) => {
     requestAndStore('settings', 'devices/settings', { id }, true)
 
   //* top level and manually updated requests
-
   const [useGetEnvironment, getEnvironment] = createRequestHook(
     (params, storeError) =>
       requestAndStore(
@@ -95,22 +91,21 @@ export default ({ requestAndStore, device, setDevice }) => {
   const [
     useGetAccelerationEvent,
     getAccelerationEvent,
-  ] = createRequestHook((index, storeError) =>
+  ] = createRequestHook((time, storeError) =>
     requestAndStore(
       'accelerationEvent',
       'database/acceleration-event',
-      { index, id, deviceType },
+      { time, id, deviceType },
       storeError
     )
   )
 
   const getAcceleration = () => {
     requestAndStore('acceleration', 'database/acceleration', { id }, true)
-    getAccelerationEvent(0, true)
+    getAccelerationEvent(null, true)
   }
 
   //* local requests requests
-
   const [useDownloadEnvironment] = createRequestHook((start, end) =>
     request('database/linear-data-csv', {
       field: 'environment',
@@ -122,11 +117,11 @@ export default ({ requestAndStore, device, setDevice }) => {
   const [useDownloadDeflection] = createRequestHook((start, end) =>
     request('database/linear-data-csv', { field: 'deflection', id, start, end })
   )
-  const [useDownloadAccelerationEvent] = createRequestHook((index) =>
+  const [useDownloadAccelerationEvent] = createRequestHook((time) =>
     request('database/acceleration-event-csv', {
       field: 'acceleration',
       id,
-      index,
+      time,
     })
   )
 

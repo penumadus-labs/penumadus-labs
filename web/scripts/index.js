@@ -1,6 +1,7 @@
 const { join } = require('path')
-const client = require('./server/database/client')
-const { schemas } = require('./server/database/schemas')
+const client = require('../server/database/client')
+const { lookup } = require('./scratch')
+// const { schemas } = require('../server/database/schemas')
 
 const id = 'morganbridge'
 const dest = join(
@@ -65,14 +66,23 @@ const test = async () => {}
 
 const showUsers = async () => {
   const users = await client.users.find().toArray()
-  console.log(users)
 }
 
 const insertUser = () => client.insertUser()
 
 const getTimeZone = async () => {
   const device = await client.devices.findOne({ id })
-  console.log(new Date(device.environment[0].time * 1000).getTimezoneOffset())
 }
 
-client.wrap(getTimeZone)
+// const data = require('../../../../Desktop/bridge-test-data.json')[0]
+
+// delete data._id
+// data.id = 'bridge_test'
+// data.udpPort = 50000
+// data.deviceType = 'bridge'
+// data.configurable = false
+// data.acceleration = data.acceleration.slice(0, 5)
+// data.deflection = data.deflection.slice(0, 100)
+// data.environment = data.environment.slice(0, 100)
+
+client.wrap(lookup)

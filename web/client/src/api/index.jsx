@@ -30,4 +30,6 @@ export const ApiProvider = ({ children }) => {
   )
 }
 
-export default () => useContext(ApiContext)
+export default function useApi() {
+  return useContext(ApiContext)
+}

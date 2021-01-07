@@ -6,7 +6,7 @@ const Controls = styled.div`
   justify-content: center;
 `
 
-export default ({ applyBrush, undo, reset }) => {
+export default function ChartTools({ applyBrush, undo, reset }) {
   return (
     <Controls className="space-children-x">
       <button className="button" onClick={applyBrush}>

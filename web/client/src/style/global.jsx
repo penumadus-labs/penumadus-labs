@@ -1,5 +1,4 @@
-import { css, Global } from '@emotion/core'
-import { ThemeProvider } from 'emotion-theming'
+import { css, Global, ThemeProvider } from '@emotion/react'
 import React from 'react'
 import * as colors from './colors'
 import * as mediaqueries from './mediaqueries'
@@ -364,9 +363,11 @@ const globalStyle = css`
   }
 `
 
-export default ({ children }) => (
-  <ThemeProvider theme={mediaqueries}>
-    <Global styles={globalStyle} />
-    {children}
-  </ThemeProvider>
-)
+export default function GlobalStyleProvider({ children }) {
+  return (
+    <ThemeProvider theme={mediaqueries}>
+      <Global styles={globalStyle} />
+      {children}
+    </ThemeProvider>
+  )
+}

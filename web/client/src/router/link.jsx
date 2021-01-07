@@ -19,16 +19,18 @@ const Root = styled(Link)`
 
 export const linkData = {}
 
-export default ({ Icon, label, to, onClick, ...props }) => (
-  <Root
-    className="center-child clickable-box"
-    to={`${process.env.REACT_APP_MOUNT_PATH}${to}`}
-    onClick={onClick}
-    {...props}
-  >
-    <div>
-      <Icon size="36" />
-      <p>{label}</p>
-    </div>
-  </Root>
-)
+export default function RouteLink({ Icon, label, to, onClick, ...props }) {
+  return (
+    <Root
+      className="center-child clickable-box"
+      to={`${process.env.REACT_APP_MOUNT_PATH}${to}`}
+      onClick={onClick}
+      {...props}
+    >
+      <div>
+        <Icon size="36" />
+        <p>{label}</p>
+      </div>
+    </Root>
+  )
+}

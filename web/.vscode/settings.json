@@ -6,6 +6,7 @@
     "XXXS",
     "bridgetest",
     "caro",
+    "hankthetank",
     "linechart",
     "morganbridge",
     "papaparse",
@@ -24,6 +25,14 @@
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/build/*/**": true,
-    "**/node_modules/*/**": true
+    "node_modules": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules/": true
   }
 }

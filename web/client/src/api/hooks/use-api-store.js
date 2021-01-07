@@ -16,7 +16,7 @@ export const initialState = [
 
 // returns a request that will store the result in the top level state
 
-export default (initialState) => {
+export default function useApiStore(initialState) {
   const [state, setState] = useState(initialState)
 
   const ctx = useMemo(() => {

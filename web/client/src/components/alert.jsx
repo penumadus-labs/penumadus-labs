@@ -69,14 +69,14 @@ const Body = styled.div`
   text-align: center;
 `
 
-export default ({
+export default function Alert({
   children,
   render,
   title,
   buttonText,
   disabled,
   tooltip = true,
-}) => {
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const open = () => setIsOpen(true)
   const close = () => {
