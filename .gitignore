@@ -25,6 +25,7 @@
 .unionfs-fuse/
 .sudo_as_admin_successful
 .vim/
+.vimrc
 .viminfo
 .vscode-server/
 .vscode/
@@ -47,3 +48,5 @@ gellowifipi.c
 hank/hank-latest-3.1/tankmon/libraries/
 DM/UDPengine
 DM/dbtestmon
+micro
+to_be_trashed
