@@ -31,9 +31,10 @@ export default function Login({ handleLogin, status }) {
           <h1>Morgan Bridge</h1>
           <form
             className="space-children-y"
-            onSubmit={handleSubmit(({ username, password }) =>
+            onSubmit={handleSubmit(({ username, password }, e) => {
+              e.preventDefault()
               handleLogin(username, password)
-            )}
+            })}
           >
             <Input name="username" ref={register({ required })} />
             <Input
