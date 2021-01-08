@@ -1,5 +1,6 @@
 #!/bin/bash
 
+touch /tmp/logmaint
 ROOTLOGS=/home/ubuntu/logs
 ROOTNAME=$ROOTLOGS/oldlogs
 echo ROOT DIRECTORY FOR LOGS BACKUP IS $ROOTNAME
@@ -16,9 +17,11 @@ A="CLEARED ON $A"
 mkdir $ROOTNAME/1
 myfiles=$(ls $ROOTLOGS | grep "^e_")
 myfiles+=" "
-myfiles+=$(ls $ROOTLOGS | grep "MSGLOG")
+myfiles+=$(ls $ROOTLOGS | grep "^MSGLOG")
 myfiles+=" "
 myfiles+=sessions.log
+myfiles+=" "
+myfiles+=$(ls $ROOTLOGS | grep "^backup_")
 for i in $myfiles
 do
         echo "$ROOTLOGS/$i $A"

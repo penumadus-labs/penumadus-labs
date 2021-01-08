@@ -9,7 +9,7 @@ LDFLAGS+= -g -pthread -lm
 OBJ=trans.o utils.o  portsetup.o apiframes.o xbee.o sync.o rem.o periodic.o wifi.o \
 	accel.o magdata.o
 
-all: trans simulate defsim
+all: trans simulate defsim 
 
 trans.o: trans.h $(HEADEP) trans.c 
 rem.o: trans.h $(HEADEP) rem.c magdata.h

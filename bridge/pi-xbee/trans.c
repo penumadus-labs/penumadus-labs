@@ -23,7 +23,9 @@
 extern int errfd;	//used in utils.c to determine error output
 int journal_fd;		//journal file to log all messages 
 
-bool locdebug=false;
+//interrupt routine flags
+extern bool monitorremotes;	//used in rem.c to turn on printfs for calibration
+bool locdebug=false;		//turn on extra debug
 
 //sockets to use as fifo queues between threads
 int receiveSocket;
@@ -84,6 +86,7 @@ main(int argc, char *argv[])
 	/* catch signals and cntr-C so can clean up nicely */
         signal (SIGINT, interrupt_handler);
         signal (SIGUSR1, interrupt_handler);
+        signal (SIGUSR2, interrupt_handler);
         signal (SIGPIPE, interrupt_handler);
         signal (SIGTERM, interrupt_handler);
 
@@ -121,7 +124,7 @@ main(int argc, char *argv[])
 	retry=0;
 	while(true)
 	{
-		g_err(NOEXIT,NOPERROR,"%d %d\n",(int)wifi_avail,(int)cell_avail);
+		g_err(NOEXIT,NOPERROR,"%d %d",(int)wifi_avail,(int)cell_avail);
 		if(retry > MAXRETRY){
 			g_err(NOEXIT,NOPERROR,"Max Retries Exceeded: [%.*s]\n",n,tmpbuf);
 			retry=0;
@@ -212,9 +215,17 @@ interrupt_handler (int signum) {
 			locdebug=true;
 			fprintf(stderr,"Debug On\n");
 		}
-		return;
 	}
-
+	else if(signum == SIGUSR2){
+		if(monitorremotes){
+			monitorremotes=false;
+			fprintf(stderr,"monitorremotes Off\n");
+		}
+		else{
+			monitorremotes=true;
+			fprintf(stderr,"monitorremotes On\n");
+		}
+	}
 	else{
 		g_err(NOEXIT,NOPERROR,"\nShutting Down!!\n");
 		locdebug=true;

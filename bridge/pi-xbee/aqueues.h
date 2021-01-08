@@ -1,5 +1,6 @@
 #define MAXELEMENTS 40
-#define EVENTTHRESHOLD 3.5
+#define GRAVITYCONST 9.806
+#define EVENTTHRESHOLD 3.5 * GRAVITYCONST
 #define BYTE 256
  
 typedef float Vector;

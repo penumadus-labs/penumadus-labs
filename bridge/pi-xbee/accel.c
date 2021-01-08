@@ -59,9 +59,9 @@ sendAsAccel(Data *dptr, char *l_id)
 		"%s %s %.2f %.2f %.2f %lx %lx %x",
 		"A",
 		l_id,
-		dptr->x,
-		dptr->y,
-		dptr->z,
+		dptr->x/GRAVITYCONST,
+		dptr->y/GRAVITYCONST,
+		dptr->z/GRAVITYCONST,
 		dptr->secs,
 		dptr->usecs
 		);

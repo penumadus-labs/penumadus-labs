@@ -72,7 +72,7 @@ sendtoamazon(unsigned char *msg, int len)
     int n;
 
     /* Send the string to the server */
-    g_err(NOEXIT,NOPERROR,"WIFI: HANK->UDPengine [%.*s]",len,msg);
+    g_err(NOEXIT,NOPERROR,"WIFI: HANK->UDPengine %.*s",len,msg);
     if ((n=sendto(wifisock, msg, len, 0, (struct sockaddr *)
                &amazonhank, sizeof(amazonhank))) != len){
 		g_err(NOEXIT,PERROR,"%s: Failed req len:%d actual len: %d [%s]",
@@ -134,7 +134,8 @@ udp_readthreadproc(void *arg){
                             WIFIQUERYRESP,
                             sizeof(WIFIQUERYRESP)-1)==0) {
 
-                        g_err(NOEXIT,NOPERROR,"WIFI/UDPserver AVAIL");
+			if(locdebug)
+				g_err(NOEXIT,NOPERROR,"WIFI/UDPserver AVAIL");
 			wifi_avail=true;
                 }
 
