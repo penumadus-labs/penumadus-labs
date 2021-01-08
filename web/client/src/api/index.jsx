@@ -1,14 +1,12 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import createApiMethods from './api-provider-body'
-import useApiStore, { initialState } from './hooks/use-api-store'
-
-// export { api } from './api'
+import useApiStore from './hooks/use-api-store'
 
 const ApiContext = createContext()
 
 export const ApiProvider = ({ children }) => {
   const [device, setDevice] = useState()
-  const [state, requestAndStore, mutateStore] = useApiStore(initialState)
+  const [state, requestAndStore, mutateStore] = useApiStore()
 
   const [actions, hooks] = useMemo(
     () =>

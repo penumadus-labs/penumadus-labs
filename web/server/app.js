@@ -17,19 +17,16 @@ const test = (req, _res, next) => {
   next()
 }
 
-module.exports = express().use(
-  process.env.REACT_APP_MOUNT_PATH,
-  express()
-    .use(test)
-    .use(cookieParser())
-    .use(`/api`, json(), apiRouter)
-    // .use((_, __, next) => {
-    //   if (!process.env.NODE_ENV === 'development') next()
-    // })
-    .use(static(clientDir))
-    .get('*', (req, res) => {
-      if (req.accepts('text/html'))
-        res.sendFile('index.html', { root: clientDir })
-      else return res.sendStatus(404)
-    })
-)
+module.exports = express()
+  .use(test)
+  .use(cookieParser())
+  .use(`/api`, json(), apiRouter)
+  // .use((_, __, next) => {
+  //   if (!process.env.NODE_ENV === 'development') next()
+  // })
+  .use(static(clientDir))
+  .get('*', (req, res) => {
+    if (req.accepts('text/html'))
+      res.sendFile('index.html', { root: clientDir })
+    else return res.sendStatus(404)
+  })

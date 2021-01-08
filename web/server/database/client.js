@@ -194,22 +194,17 @@ class DatabaseClient {
         .find()
         .sort({ time: 1 })
         .project({ _id: 0, index: 0 })
-        .limit(limit)
+        .limit(+limit)
         .toArray()
     )
   }
-  getDataRange = async ({
-    start = -Infinity,
-    end = Infinity,
-    limit,
-    ...ctx
-  }) => {
+  getDataRange = async ({ start, end, limit, ...ctx }) => {
     const handleLimit = limit
       ? [
           {
             $bucketAuto: {
               groupBy: '$time',
-              buckets: limit,
+              buckets: +limit,
               output: {
                 docs: { $push: '$$CURRENT' },
               },
@@ -224,7 +219,11 @@ class DatabaseClient {
     return resolveData(col, async () =>
       this.data(ctx)
         .aggregate([
-          { $match: { time: { $gte: +start, $lte: +end } } },
+          {
+            $match: {
+              time: { $gte: +start || -Infinity, $lte: +end || Infinity },
+            },
+          },
           ...handleLimit,
           { $sort: { time: 1 } },
           { $project: { _id: 0, index: 0 } },

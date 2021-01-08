@@ -1,5 +1,5 @@
-const { connectToServer } = require('./tcp-client.ts')
-const { createEnvironmentData, createAccelerationData } = require('./data.ts')
+const { connectToServer } = require('./tcp-client')
+const { createEnvironmentData, createAccelerationData } = require('./data')
 
 const writeEnvironmentEvent = () =>
   connectToServer(createEnvironmentData, {
@@ -9,3 +9,5 @@ const writeEnvironmentEvent = () =>
 
 const writeAccelerationEvent = () =>
   connectToServer(createAccelerationData, { timeBetween: 50, limit: 40 })
+
+writeEnvironmentEvent()

@@ -6,6 +6,7 @@ export const parseDate = (date) =>
   })
 
 export const oneDay = 86400000
+export const threeDays = oneDay * 3
 
 const parseTime = (time) => {
   return `${formatHoursMinutes(time)}, ` + parseDate(time)
@@ -29,7 +30,7 @@ export const formatMonthDayHoursMinutes = (time) => {
   const hours = date.getHours()
   const minutes = date.getMinutes()
 
-  return `${month}-${day} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+  return `${month}/${day} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 }
 
 export const oneDayAgo = () => {

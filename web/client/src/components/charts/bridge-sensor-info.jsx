@@ -1,7 +1,7 @@
 import React from 'react'
 import Alert from '../alert'
 import { AiFillFileImage as Image } from 'react-icons/ai'
-import { useResize } from '../../hooks/use-events'
+import { useResize } from '@web/hooks/use-events'
 
 const getHeight = () => window.innerHeight * 0.8
 

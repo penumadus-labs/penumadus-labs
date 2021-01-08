@@ -2,10 +2,7 @@ import React, { useMemo, useEffect } from 'react'
 import { Router, navigate } from '@reach/router'
 import ErrorBoundary from '../components/error-boundary'
 
-import {
-  // FaChartLine as Environment,
-  FaThermometerHalf as Environment,
-} from 'react-icons/fa'
+import { FaThermometerHalf as Environment } from 'react-icons/fa'
 import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
 import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
 import { IoMdDocument as UserManual } from 'react-icons/io'
@@ -26,8 +23,6 @@ import DeflectionChart from '../components/charts/deflection'
 import Controls from './controls'
 import Register from './register'
 import Manual from './manual'
-
-const { REACT_APP_MOUNT_PATH } = process.env
 
 const staticRoutes = ['register', 'manual']
 
@@ -93,15 +88,12 @@ export default function Routes({ handleLogout }) {
 
   // changes data when device is toggled
   useEffect(() => {
-    // fetches the data for each field
-    // navigates to first field once it's resolved
     requests.forEach(async (field, index) => {
-      await apiRequests[field]()
+      // fetches the data for each field
+      const path = window.location.pathname.slice(1)
+      if (index === 0 && !paths.includes(path)) navigate(`/${field}`) // navigate to valid route on page load or device change
 
-      // navigate to valid route on page load or device change
-      const path = window.location.pathname.split('/').slice(-1)[0]
-      if (index === 0 && !paths.includes(path))
-        navigate(`${REACT_APP_MOUNT_PATH}${field}`)
+      await apiRequests[field]()
     })
   }, [id, apiRequests, paths, requests])
 
@@ -123,9 +115,7 @@ export default function Routes({ handleLogout }) {
     <>
       <main>
         <ErrorBoundary card={true} message="application body has crashed">
-          <Router className="space-children-y" basepath={REACT_APP_MOUNT_PATH}>
-            {routes}
-          </Router>
+          <Router className="space-children-y height100">{routes}</Router>
         </ErrorBoundary>
       </main>
       <nav className="shadow-card">

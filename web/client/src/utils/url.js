@@ -1,9 +1,8 @@
-const { REACT_APP_SECURE, NODE_ENV, REACT_APP_MOUNT_PATH } = process.env
+const { REACT_APP_NOT_SECURE, NODE_ENV } = process.env
 
-const secure =
-  REACT_APP_SECURE === 'secure' && NODE_ENV !== 'development' ? 's' : ''
+const secure = REACT_APP_NOT_SECURE || NODE_ENV === 'development' ? '' : 's'
 
-const urlBody = `${secure}://${window.location.host}${REACT_APP_MOUNT_PATH}`
+const host = `${secure}://${window.location.host}/`
 
-export const websocketUrl = 'ws' + urlBody
-export default 'http' + urlBody
+export const websocketUrl = 'ws' + host
+export default 'http' + host

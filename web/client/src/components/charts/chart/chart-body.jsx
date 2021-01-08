@@ -5,7 +5,6 @@ import Controls from './controls'
 import Legend from './legend'
 import Tools from './tools'
 import Chart from './d3-linechart'
-// import { useResize } from '../../../hooks/use-events'
 import { useResize } from '@web/hooks/use-events'
 
 const SvgStyle = css`
@@ -52,7 +51,8 @@ export default function ChartBody({
 }) {
   const svgRef = useRef()
 
-  const [[domain, domainString], setDomain] = useState([[0, 0], ''])
+  const [[domain, parsedTime], setDomain] = useState([[0, 0], ''])
+  const domainString = data.length ? parsedTime : null
 
   const { chart, getDomain, toolProps, labels } = useMemo(() => {
     const chart = new Chart({ data, yDomain })
@@ -82,14 +82,13 @@ export default function ChartBody({
     let x = 0
     svgRef.current.style.height = '200px'
     while (current.getBoundingClientRect().height + increment < targetHeight) {
-      svgRef.current.style.height = `${
-        svgRef.current.getBoundingClientRect().height + increment
-      }px`
-      if (x++ > 500) break
+      const height = svgRef.current.getBoundingClientRect().height + increment
+      svgRef.current.style.height = `${height}px`
+      if (x++ > 500) break // safety
     }
 
     chart.render()
-  })
+  }) // grows svg until the root node's height fill's the app's body
 
   const controlProps = {
     downloadProps: {
@@ -118,7 +117,7 @@ export default function ChartBody({
     <div className="card-spaced" ref={containerRef}>
       <Global styles={SvgStyle} />
       <div className="space-children-y">
-        <p>{domainString}</p>
+        <p>{domainString ?? 'no data within range'}</p>
         <ControlBarStyle>
           <Controls {...controlProps} render={render}>
             {typeof render === 'function' ? render({ live, domain }) : children}

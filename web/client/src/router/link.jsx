@@ -23,7 +23,7 @@ export default function RouteLink({ Icon, label, to, onClick, ...props }) {
   return (
     <Root
       className="center-child clickable-box"
-      to={`${process.env.REACT_APP_MOUNT_PATH}${to}`}
+      to={to}
       onClick={onClick}
       {...props}
     >

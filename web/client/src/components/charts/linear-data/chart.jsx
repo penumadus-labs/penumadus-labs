@@ -1,13 +1,9 @@
 import React from 'react'
 import Chart from '../chart/chart'
 import DomainSelector from './domain-selector'
+import { dataLimit } from '../../../utils/config'
 
 export default function LinearDataChart({
-  // dataType,
-  // data,
-  // useDownloadData,
-  // useDeleteData,
-  // yDomain = [-1, 100],
   getData,
   useGetData,
   children,
@@ -19,7 +15,7 @@ export default function LinearDataChart({
   }
 
   const handleMutation = (data, store) => [
-    ...store.slice(+(store.length >= process.env.REACT_APP_DATA_LIMIT)),
+    ...store.slice(+(store.length >= dataLimit)),
     data,
   ]
 
@@ -28,11 +24,6 @@ export default function LinearDataChart({
       yDomain={[-1, 50]}
       {...{ initializeLive, handleMutation, getData }}
       {...props}
-      // data={data}
-      // getData={getData}
-      // useDownload={useDownloadData}
-      // useDelete={useDeleteData}
-      // yDomain={yDomain}
       render={({ live, domain }) => (
         <>
           {!live ? (

@@ -1,11 +1,13 @@
 import * as d3 from 'd3'
 import {
   formatMonthDayHoursMinutes,
+  formatHoursMinutes,
   parseDate,
   formatDomain,
+  threeDays,
 } from '../utils/datetime'
 import { colors } from '../utils/units-colors'
-import { formatData, formatKeys, formatLabels } from '../utils/data'
+import { formatData, formatKeys, formatLabels, getYDomain } from '../utils/data'
 import { isChild } from '../utils/dom'
 
 const marginLeft = 40
@@ -19,10 +21,12 @@ export default class Linechart {
     this.data = formatData(data)
     this.keys = formatKeys(this.data)
     this.labels = formatLabels(this.keys)
-    this.yDomain = yDomain
+    this.yDomain = getYDomain(this)
     this.currentDomain = this.previousDomain = this.xDomain = d3.extent(
       data.map((d) => d.time)
     )
+    const [start, end] = this.xDomain
+    this.dataSpansSeveralDays = end - start >= threeDays
   }
   translate(height = 0) {
     return `translate(${marginLeft} ${marginTop + height})`
@@ -157,12 +161,13 @@ export default class Linechart {
       .call(d3.axisLeft(this.y).tickSizeOuter(0))
 
     // axis text
+    const timeFormat = this.dataSpansSeveralDays ? 'M/D Hr:Min' : 'Hrs:Mins'
     this.root
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('x', this.rootWidth / 2)
       .attr('y', this.height + marginBottom - 5)
-      .text('Time (hours:minutes)')
+      .text(`Time (${timeFormat})`)
 
     // tool
     this.brushNode = this.root
@@ -248,10 +253,13 @@ export default class Linechart {
     }
   }
   timeAxis() {
+    const formatFunction = this.dataSpansSeveralDays
+      ? formatMonthDayHoursMinutes
+      : formatHoursMinutes
     return d3
       .axisBottom(this.x)
       .ticks(Math.floor(window.innerWidth / 80))
-      .tickFormat(formatMonthDayHoursMinutes)
+      .tickFormat(formatFunction)
       .tickSizeOuter(0)
   }
   date() {

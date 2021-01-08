@@ -7,7 +7,6 @@ const {
   getDeviceSettings,
   sendDeviceCommand,
 } = require('../controllers/broadcaster')
-const { commands } = require('../protocols/tank')
 
 module.exports = Router()
   .get(

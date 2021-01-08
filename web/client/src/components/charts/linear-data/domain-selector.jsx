@@ -10,10 +10,10 @@ const StyledForm = styled.form`
   margin: auto;
 `
 
-const validateTime = (time) =>
-  time === '' ||
-  new Date(time).getTime() <= Date.now() ||
-  'date must not exceed preset'
+// const validateTime = (time) =>
+//   time === '' ||
+//   new Date(time).getTime() <= Date.now() ||
+//   'date must not exceed preset'
 
 const addZero = (date) => (date.toString().length === 1 ? `0${date}` : date)
 const formatData = (time) => time && new Date(time).getTime() / 1000
@@ -46,7 +46,7 @@ export default function DomainSelector({ domain, useGetData }) {
     if (end !== '' && new Date(end).getTime() <= new Date(start).getTime())
       return 'start time must be less than end time'
 
-    return validateTime(start)
+    // return validateTime(start)
   }
 
   return (
@@ -57,7 +57,7 @@ export default function DomainSelector({ domain, useGetData }) {
       render={([status, request]) => {
         const onSubmit = (data) => {
           request({
-            start: formatData(data.start),
+            start: console.log(formatData(data.start)),
             end: formatData(data.end),
           })
         }
@@ -77,7 +77,7 @@ export default function DomainSelector({ domain, useGetData }) {
                 {...inputCtx}
               />
               <SettingInput
-                ref={register({ validate: validateTime })}
+                ref={register}
                 name="end"
                 label="end time"
                 {...inputCtx}

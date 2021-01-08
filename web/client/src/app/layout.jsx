@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import useAuth from '../services/auth'
 import { useSocket } from '../services/socket'
 import Login from './login'
@@ -9,7 +9,7 @@ import ErrorBoundary from '../components/error-boundary'
 
 const Root = styled.div`
   display: grid;
-  height: ${window.innerHeight}px;
+  height: 100%;
 
   ${({ theme }) => theme.gt.layout} {
     grid-template-rows: auto minmax(0, 1fr);
@@ -52,50 +52,30 @@ const Root = styled.div`
   main {
     padding: var(--sm);
     overflow: auto;
+    height: 100%;
   }
 `
-
-let timeout
 
 const Layout = () => {
   const [
     { verifying, loggedIn },
     { handleLogin, loginStatus, handleLogout },
   ] = useAuth()
+
   useSocket(loggedIn)
 
-  const ref = useRef()
+  if (verifying) return null
 
-  useEffect(() => {
-    const resizeEvent = () => {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        // do I need to set both?
-        const height = `${window.innerHeight}px`
-        ref.current.style.height = height
-        document.body.style.height = height
-      }, 200)
-    }
-    window.addEventListener('resize', resizeEvent)
-    return () => {
-      window.removeEventListener('resize', resizeEvent)
-    }
-  }, [])
-
-  const main = verifying ? null : !loggedIn ? (
-    <Login handleLogin={handleLogin} status={loginStatus} />
-  ) : (
-    <Routes handleLogout={handleLogout} />
-  )
+  if (!loggedIn) return <Login handleLogin={handleLogin} status={loginStatus} />
 
   return (
-    <Root ref={ref}>
+    <Root>
       <header className="card">
         <ErrorBoundary message="status bar has crashed">
-          {loggedIn && <StatusBar />}
+          <StatusBar />
         </ErrorBoundary>
       </header>
-      {main}
+      <Routes handleLogout={handleLogout} />
     </Root>
   )
 }

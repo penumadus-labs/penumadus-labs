@@ -17,7 +17,7 @@ export default function DeflectionChart() {
       useGetData={useGetDeflection}
       useDownload={useDownloadDeflection}
       useDelete={useDeleteDeflection}
-      yDomain={[5, 50]}
+      // yDomain={[5, 50]}
     />
   )
 }

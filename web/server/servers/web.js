@@ -27,7 +27,6 @@ module.exports = (app, port) => {
   broadcaster.users = wsServer.clients
 
   server.on('upgrade', (req, socket, head) => {
-    console.log('upgrade')
     // sessionStorage auth system
     const { token } = parseCookies(req.headers.cookie)
     if (!verifyUserSocket(token)) {

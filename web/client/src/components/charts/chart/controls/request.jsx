@@ -27,9 +27,15 @@ const RequestBody = ({
   )
 }
 
-export default function Request({ buttonText, title, children, ...props }) {
+export default function Request({
+  buttonText,
+  title,
+  children,
+  disabled,
+  ...props
+}) {
   return (
-    <Alert buttonText={buttonText} title={title}>
+    <Alert buttonText={buttonText} title={title} disabled={disabled}>
       <RequestBody {...props}>{children}</RequestBody>
     </Alert>
   )

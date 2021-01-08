@@ -80,6 +80,8 @@ const clickableText = css`
 `
 
 const globalStyle = css`
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
   :root {
     /* layout config */
     --header-size: 75px;
@@ -141,14 +143,19 @@ const globalStyle = css`
     font-size: 110%;
   }
 
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
   body {
-    height: 100vh;
+    /* height: 100vh; */
     margin: 0;
     color: var(--font);
     font-size: 0.8rem;
-    font-family: 'Segoe UI' 'Roboto', sans-serif;
+    font-family: nunito, sans-serif;
 
-    letter-spacing: 0.04rem;
     background: var(--body-background);
     * {
       margin: 0;
@@ -156,11 +163,6 @@ const globalStyle = css`
     }
   }
 
-  /* body, */
-  body {
-    height: ${window.innerHeight}px;
-    overflow: hidden;
-  }
   select,
   button,
   input {
@@ -360,6 +362,10 @@ const globalStyle = css`
   .main {
     ${spaceChildrenY}
     padding: var(--sm);
+  }
+
+  .height100 {
+    height: 100%;
   }
 `
 

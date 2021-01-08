@@ -41,7 +41,7 @@ export default function AccelerationChart() {
       getData={getAcceleration}
       useDownload={useDownloadAccelerationEvent}
       useDelete={useDeleteAcceleration}
-      yDomain={[-10, 10]}
+      // yDomain={[-10, 10]}
       render={({ live }) =>
         !live &&
         !!eventList && (

@@ -2,7 +2,7 @@ import { navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
 import useApi from '../api'
 
-const goHome = () => navigate(process.env.REACT_APP_MOUNT_PATH)
+const goHome = () => navigate('/')
 
 const useAuth = () => {
   const [

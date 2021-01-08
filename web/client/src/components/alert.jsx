@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Tooltip from './tooltip'
 import React, { useState } from 'react'
 import { IoMdClose as Close } from 'react-icons/io'
-import { useEsc } from '../hooks/use-events'
+import { useEsc } from '@web/hooks/use-events'
 
 /* @keyframes open {
     0% {

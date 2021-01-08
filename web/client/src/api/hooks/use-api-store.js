@@ -12,11 +12,11 @@ export const initialState = [
   'acceleration',
   'accelerationEvent',
   'settings',
-].reduce((acc, key) => ({ ...acc, [key]: [<LoadingCard />] }), {})
+].reduce((acc, key) => ({ ...acc, [key]: [] }), {})
 
 // returns a request that will store the result in the top level state
 
-export default function useApiStore(initialState) {
+export default function useApiStore() {
   const [state, setState] = useState(initialState)
 
   const ctx = useMemo(() => {
@@ -28,6 +28,7 @@ export default function useApiStore(initialState) {
 
     const requestAndStore = async (key, url, params, storeError = false) => {
       try {
+        if (storeError) mutateStore(key, [<LoadingCard />])
         const data = await request(url, params)
         mutateStore(key, [null, data])
         return data

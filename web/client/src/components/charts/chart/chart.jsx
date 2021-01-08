@@ -36,14 +36,10 @@ export default function Chart({
     [live]
   )
 
-  if (status) return status
+  if (!data) return status || null
 
   if (noDataCollected)
-    return (
-      <div className="card">
-        <p>no data has been collected for this unit</p>
-      </div>
-    )
+    return <p className="card">no data has been collected for this unit</p>
 
   return <ChartBody {...props} {...{ live, toggleLive, data }} />
 }

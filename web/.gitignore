@@ -2,6 +2,10 @@
 
 stale
 
+.env
+
+globalConfig.json
+
 keys
 server/.env
 

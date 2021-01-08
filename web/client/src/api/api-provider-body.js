@@ -1,5 +1,6 @@
 import { request, update } from './api'
 import createRequestHook from './hooks/create-request-hook'
+import { dataLimit as limit } from '../utils/config'
 
 //* requests without dependencies
 
@@ -65,7 +66,7 @@ export default function ApiProvider({ requestAndStore, device, setDevice }) {
           id,
           deviceType,
           field: 'environment',
-          limit: process.env.REACT_APP_DATA_LIMIT,
+          limit,
           ...params,
         },
         storeError
@@ -81,7 +82,7 @@ export default function ApiProvider({ requestAndStore, device, setDevice }) {
           id,
           deviceType,
           field: 'deflection',
-          limit: process.env.REACT_APP_DATA_LIMIT,
+          limit,
           ...params,
         },
         storeError
