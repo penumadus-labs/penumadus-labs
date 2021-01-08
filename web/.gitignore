@@ -3,21 +3,13 @@
 stale
 
 .env
+.env.*
 
 globalConfig.json
 
-keys
-server/.env
-
-**/*copy.jsx
-**/*copy.js
-
-legacy
 scratch
 build
 .yarn
-**/unused
-
 
 # dependencies
 node_modules
@@ -28,8 +20,6 @@ node_modules
 # testing
 /coverage
 
-# production
-/build
 
 # misc
 .DS_Store

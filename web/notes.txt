@@ -1,12 +1,8 @@
 ** todo
 
-try chart.js
-
-rewrite datetime file
+redo charts with visx
 
 change colors for T1-T8
-
-add yDomain state, and configuration
 
 localStorage?
 
@@ -14,21 +10,16 @@ localStorage?
 
 ** test
 
-size graphs better on different displays
+dynamic yDomain
 
 tcp device client settings cache is working properly
 
-make sure my route wrappers didn't break anything
-
-check that configurable basePath didn't break anything
 
 ** review
 
-find better charting library?
-
 cache chart domain in local storage?
-
-finalize where device dataFields, and dataKeys come from
 
 add fills count indicator
 
+
+rewrite datetime file

@@ -3,11 +3,8 @@ const development = process.env.NODE_ENV === 'development'
 
 const clientPath = join(__dirname, '..', 'client')
 
-require('dotenv').config({ path: join(clientPath, '.env') }) // MOUNT_PATH
-
-require('dotenv').config({ path: join(__dirname, '.env.local') })
 if (!development)
-  require('dotenv').config({ path: join(__dirname, '.env.production') }) // COMPILE_MODE
+  require('dotenv').config({ path: join(__dirname, '.env.production.local') }) // COMPILE_MODE
 
 require('./utils/extend')
 
