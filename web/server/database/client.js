@@ -13,9 +13,9 @@ const defaultUdpPortIndex = 30000
 class DatabaseClient {
   silent = false
   constructor({ DB_USER, DB_PWD, DB_URL }) {
-    if (!DB_USER || !DB_PWD)
+    if (!DB_URL || !DB_USER || !DB_PWD)
       throw new Error(
-        'no database credentials provided, please but DB_USER and DB_PWD a .env file'
+        'no database credentials provided, please put DB_URl DB_USER DB_PWD a .env file in the database directory'
       )
 
     this.uri = `mongodb://${DB_USER}:${DB_PWD}@${DB_URL ?? 'localhost'}/admin`
@@ -87,7 +87,9 @@ class DatabaseClient {
   getDevices = async () => {
     const schemas = {}
 
-    const query = process.env.MODE ? { deviceType: process.env.MODE } : {}
+    const mode = process.env.MODE
+
+    const query = mode ? { deviceType: mode } : {}
 
     await this.devices
       .find(query, {

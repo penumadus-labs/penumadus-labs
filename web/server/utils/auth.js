@@ -1,5 +1,9 @@
 const { sign, verify } = require('jsonwebtoken')
 
+const authDisabled =
+  process.env.NODE_ENV === 'development' ||
+  process.env.AUTH_DISABLED === 'disabled'
+
 const userSecret =
   'V}Dk,62m"TmIB*5Q~%2w}+p-bE_%!V4gd!SA%:Fq3xoZw2@^6^W_b}8Tr..pS"5'
 const adminSecret =
@@ -18,7 +22,7 @@ const check = (token, secret) => {
 }
 
 const verifyToken = (admin) => (req, res, next) => {
-  if (process.env.NODE_ENV === 'development') return next()
+  if (authDisabled) return next()
   const token = req.cookies.token
 
   if (!token) return res.sendStatus(401)
@@ -28,9 +32,7 @@ const verifyToken = (admin) => (req, res, next) => {
 }
 
 const verifyUserSocket = (token) =>
-  check(token, userSecret) ||
-  check(token, adminSecret) ||
-  process.env.NODE_ENV === 'development'
+  check(token, userSecret) || check(token, adminSecret) || authDisabled
 
 module.exports = {
   signToken,

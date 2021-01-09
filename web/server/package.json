@@ -9,7 +9,7 @@
     "jsonwebtoken": "*",
     "mongodb": "*",
     "papaparse": "*",
-    "saslprep": "^1.0.3",
+    "saslprep": "*",
     "ws": "*"
   },
   "devDependencies": {

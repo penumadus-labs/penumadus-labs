@@ -19,12 +19,14 @@ module.exports = Router()
   .get(
     '/settings',
     handleQuery(async ({ id }) => {
-      return process.env.AWS_SERVER ? await getDeviceSettings(id) : testSettings
+      return process.env.LOCAL_SERVER
+        ? testSettings
+        : await getDeviceSettings(id)
     })
   )
   .post(
     '/command',
     handlePost((body) => {
-      if (process.env.AWS_SERVER) return sendDeviceCommand(body)
+      if (!process.env.LOCAL_SERVER) return sendDeviceCommand(body)
     })
   )

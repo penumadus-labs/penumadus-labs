@@ -3,12 +3,11 @@
   "name": "web",
   "repository": "https://github.com/carosaur/tankmon/",
   "dependencies": {
-    "node-gyp": "^7.1.2",
-    "node-pre-gyp": "^0.15.0"
+    "node-gyp": "*",
+    "node-pre-gyp": "*"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^1.2.3",
-    "jest": "^26.6.0",
+    "@shelf/jest-mongodb": "*",
     "prettier": "*"
   },
   "scripts": {

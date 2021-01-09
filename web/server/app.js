@@ -13,7 +13,7 @@ const { json, static } = express
 
 const clientDir = join(__dirname, '..', 'client', 'build')
 
-const test = (req, _res, next) => {
+const test = (req, res, next) => {
   next()
 }
 

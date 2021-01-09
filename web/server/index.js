@@ -1,12 +1,20 @@
 const { join } = require('path')
 const development = process.env.NODE_ENV === 'development'
 
-const clientPath = join(__dirname, '..', 'client')
+require('dotenv').config({ path: join(__dirname, '.env') })
 
-if (!development)
-  require('dotenv').config({ path: join(__dirname, '.env.production.local') }) // COMPILE_MODE
+const { LOCAL_SERVER, SERVER_IP, MODE, AUTH_DISABLED } = process.env
 
-require('./utils/extend')
+if (!development) {
+  if (LOCAL_SERVER)
+    console.warn('warning: LOCAL_SERVER environment variables set')
+  if (!MODE) console.warn('warning: no runtime mode set')
+  if (AUTH_DISABLED) console.warn('warning: authorization is disabled')
+  console.log()
+}
+
+if (!LOCAL_SERVER && !SERVER_IP)
+  throw new Error('must provide SERVER_IP when on aws server')
 
 const database = require('./database/client')
 const startUdpEngines = require('./commands/udp-engine')

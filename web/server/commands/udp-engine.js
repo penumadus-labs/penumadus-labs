@@ -14,10 +14,12 @@ const killUdpEngines = async () => {
   }
 }
 
-const excludedUdpPorts = [] //32159]
+const { EXCLUDED_UDP_PORTS: ports, LOCAL_SERVER } = process.env
+
+const excludedUdpPorts = ports ? ports.split(',').map((port) => +port) : []
 
 module.exports = async ({ tcpPort }) => {
-  if (!process.env.AWS_SERVER) return
+  if (LOCAL_SERVER) return
   try {
     await killUdpEngines()
     const udpPorts = (await database.getUdpPorts()).filter(
@@ -29,8 +31,7 @@ module.exports = async ({ tcpPort }) => {
         console.error
       )
 
-    const s = udpPorts.length === 1 ? '' : 's'
-    console.info(`udp engine${s} started on port${s}: ${udpPorts.join(', ')}`)
+    console.info(`udp engine(s) started on port(s): ${udpPorts.join(', ')}`)
   } catch (error) {
     throw error.stderr ?? error
   }
