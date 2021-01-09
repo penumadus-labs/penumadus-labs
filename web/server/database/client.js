@@ -136,7 +136,7 @@ class DatabaseClient {
   }
 
   getUdpPorts = async () => {
-    return Object.values(this.schemas.map(({ udpPort }) => udpPort))
+    return Object.values(this.schemas).map(({ udpPort }) => udpPort)
   }
 
   data({ field, id }) {

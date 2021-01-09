@@ -59,6 +59,17 @@ describe('test udp port functionality', () => {
     const { udpPortIndex } = await db.appData.findOne()
     expect(udpPortIndex).toEqual(initialValue)
   })
+  it('', async () => {
+    await db.insertDevice({ id: 'test1', deviceType })
+    await db.insertDevice({ id: 'test2', deviceType })
+    await db.insertDevice({ id: 'test3', deviceType })
+
+    const udpPorts = await db.getUdpPorts()
+    expect(Array.isArray(udpPorts)).toBe(true)
+    udpPorts.forEach((port, i) => {
+      expect(port).toBe(initialValue + i)
+    })
+  })
 })
 
 describe('device inserts and removes', () => {
