@@ -14,5 +14,8 @@ do
 	cp -p /$i $i
 done
 
-echo cp -r -p /var/www ./var/www
-sudo cp -r -p /var/www ./var/www
+echo cp -r -p /var/www ./var
+sudo cp -r -p /var/www ./var
+
+
+find . | grep -v z_backup | cpio -pdvum logs/z_backup
