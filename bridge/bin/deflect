@@ -1,0 +1,1 @@
+tail -f /home/pi/logs/e_trans.log | grep --line-buffered "b morgan" | cut -d' ' -f6 
