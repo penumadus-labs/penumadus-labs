@@ -18,7 +18,7 @@
 
 	aliveoptions="-o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -o CheckHostIP=no -o TCPKeepAlive=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3"
 
-	addr=hankthetank.me
+	addr=compositebridge.org
 	port=32170
 	user="ubuntu"
 

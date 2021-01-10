@@ -1,7 +1,10 @@
+#define COMPOSITEIP "3.16.142.118"
+#define COMPOSITEPORT 40000
 
 #define JOURNALFILE "/home/pi/logs/journal"
 extern int s_fd;  //the serial port file descriptor
 extern bool locdebug;  //the serial port file descriptor
+
 
 #define BRIDGEID "morganbridge"
 

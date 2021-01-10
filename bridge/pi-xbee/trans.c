@@ -51,10 +51,10 @@ main(int argc, char *argv[])
 	int retry;		//if a message doesn't go,  
 				//retry it till it goes somewhere or count expires
 
-	//defaults
+	//defaults as defined in trans.h
 	unsigned char serport[128]="/dev/ttyS0";	   
-	unsigned char destaddr[16]="52.14.30.58";	   
-	unsigned short port=40000;
+	unsigned char destaddr[16]=COMPOSITEIP;	   
+	unsigned short port=COMPOSITEPORT;
 
 
 	/* for debug only */
