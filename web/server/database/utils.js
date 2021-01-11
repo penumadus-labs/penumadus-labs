@@ -1,5 +1,7 @@
-const increment = async (col, query, field) => {
-  const { value } = await col.findOneAndUpdate(query, { $inc: { [field]: 1 } })
+const increment = async (col, query, field, amount = 1) => {
+  const { value } = await col.findOneAndUpdate(query, {
+    $inc: { [field]: amount },
+  })
   return value
 }
 

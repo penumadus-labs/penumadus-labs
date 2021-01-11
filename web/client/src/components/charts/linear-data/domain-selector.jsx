@@ -57,7 +57,7 @@ export default function DomainSelector({ domain, useGetData }) {
       render={([status, request]) => {
         const onSubmit = (data) => {
           request({
-            start: console.log(formatData(data.start)),
+            start: formatData(data.start),
             end: formatData(data.end),
           })
         }

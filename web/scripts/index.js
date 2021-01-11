@@ -1,24 +1,37 @@
 const { join } = require('path')
-const client = require('../server/database/client')
+const db = require('../server/database/client')
 const { lookup } = require('./scratch')
-// const { schemas } = require('../server/database/schemas')
+const [
+  { acceleration, environment, deflection },
+] = require('../data/bridge-test-data.json')
 
 const id = 'morganbridge'
-const dest = join(
-  __dirname,
-  '..',
-  '..',
-  '..',
-  '..',
-  'save-data-from-db',
-  'nov-23-20-epoxy-temperatures'
-)
+
+const insertAcceleration = async () => {
+  for (const event of acceleration) {
+    await db.insertAccelerationEvent(id, event)
+  }
+}
+
+const insertLinear = async (field, data) => db.insertLotsOfData(field, id, data)
+
+const insertData = async () => {
+  const proms = [
+    insertLinear('environment', environment),
+    // insertLinear('deflection', deflection),
+  ]
+  try {
+    return Promise.all(proms)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const createCsv = async () => {
   const start = new Date('11-23-20').getTime() / 1000
   const end = new Date('11-24-20').getTime() / 1000
 
-  const { data } = await client.getLinearData({
+  const { data } = await db.getLinearData({
     id,
     field: 'environment',
     start,
@@ -32,7 +45,7 @@ const createCsv = async () => {
 }
 
 const getAccelerationEvent = async () => {
-  const { data } = await client.getAccelerationEvent({
+  const { data } = await db.getAccelerationEvent({
     id,
     index: 0,
     limit: 1000,
@@ -40,7 +53,7 @@ const getAccelerationEvent = async () => {
 }
 
 const sortData = async () => {
-  const { data } = await client.getLinearData({
+  const { data } = await db.getLinearData({
     id,
     field: 'environment',
     limit: null,
@@ -48,7 +61,7 @@ const sortData = async () => {
 
   data.sort((a, b) => a.time - b.time)
 
-  await client.devices.updateOne({ id }, { $set: { environment: data } })
+  await db.devices.updateOne({ id }, { $set: { environment: data } })
 }
 
 const createUserDocument = (username, password, admin = true) => ({
@@ -59,19 +72,18 @@ const createUserDocument = (username, password, admin = true) => ({
 
 const users = []
 
-const insertUsers = () =>
-  Promise.all(users.map((user) => client.insertUser(user)))
+const insertUsers = () => Promise.all(users.map((user) => db.insertUser(user)))
 
 const test = async () => {}
 
 const showUsers = async () => {
-  const users = await client.users.find().toArray()
+  const users = await db.users.find().toArray()
 }
 
-const insertUser = () => client.insertUser()
+const insertUser = () => db.insertUser()
 
 const getTimeZone = async () => {
-  const device = await client.devices.findOne({ id })
+  const device = await db.devices.findOne({ id })
 }
 
 // const data = require('../../../../Desktop/bridge-test-data.json')[0]
@@ -85,4 +97,4 @@ const getTimeZone = async () => {
 // data.deflection = data.deflection.slice(0, 100)
 // data.environment = data.environment.slice(0, 100)
 
-client.wrap(lookup)
+db.wrap(insertData)
