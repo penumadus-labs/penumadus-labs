@@ -9,10 +9,7 @@ exports.createAccelerationEvent = (length = 40) => {
     data.push(createDocument())
   }
 
-  return {
-    time: data[0].time,
-    data,
-  }
+  return data
 }
 
 exports.createDocuments = (nDocs, timeout = 1) =>

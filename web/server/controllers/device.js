@@ -129,12 +129,7 @@ module.exports = class Device extends EventEmitter {
         console.info(`acceleration event: ${this.event.length}`)
         if (this.recordData)
           if (this.recordData)
-            database.insertData('acceleration', this.id, {
-              time: this.event[0].time,
-              data: this.event,
-            })
-
-        // database.insertAccelerationEvent(this.id, this.event)
+            database.insertAccelerationEvent(this.id, this.event)
       }, 500)
     },
   }

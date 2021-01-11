@@ -63,16 +63,15 @@ class DatabaseClient {
       console.error(error)
     }
   }
-  wrap = async (promise) => {
-    await this.connect()
-    await promise()
-    await this.connection.close()
-    // try {
-    // } catch (error) {
-    //   if (catchError) console.error(error)
-    //   else throw error
-    // } finally {
-    // }
+  wrap = async (promise = () => {}) => {
+    try {
+      await this.connect()
+      await promise()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      await this.connection.close()
+    }
   }
 
   findUser = (username) => {
@@ -151,7 +150,9 @@ class DatabaseClient {
 
   async incrementCounterAndAddIndexToData(field, id, data) {
     const counter = `counters.${field}`
-    const { [counter]: index } = await increment(this.devices, { id }, counter)
+    const {
+      counters: { [field]: index },
+    } = await increment(this.devices, { id }, counter)
     return { index, ...data }
   }
 
@@ -163,7 +164,10 @@ class DatabaseClient {
 
   insertAccelerationEvent = async (id, event) => {
     return this.acceleration(id).insertOne(
-      await this.incrementCounterAndAddIndexToData('acceleration', id, event)
+      await this.incrementCounterAndAddIndexToData('acceleration', id, {
+        time: event[0].time,
+        data: event,
+      })
     )
   }
 
