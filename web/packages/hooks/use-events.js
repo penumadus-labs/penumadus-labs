@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
+
 export const useEvent = (event, callback, initialize = false) => {
   useEffect(() => {
     const handler = initialize ? callback() : callback
@@ -6,13 +7,14 @@ export const useEvent = (event, callback, initialize = false) => {
     return () => {
       window.removeEventListener(event, handler)
     }
+    // eslint-disable-next-line
   }, [event, initialize, callback])
 }
 
-export const useResize = (callback) => {
+export const useResize = (callback, deps) => {
   const ref = useRef()
 
-  const handler = () => {
+  const handler = useCallback(() => {
     let timeout
     callback(ref)
     return () => {
@@ -21,7 +23,7 @@ export const useResize = (callback) => {
         callback(ref)
       }, 200)
     }
-  }
+  }, [deps])
 
   useEvent('resize', handler, true)
 

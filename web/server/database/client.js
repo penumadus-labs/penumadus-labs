@@ -71,6 +71,7 @@ class DatabaseClient {
       console.error(error)
     } finally {
       await this.connection.close()
+      console.info('database closed')
     }
   }
 
@@ -149,16 +150,26 @@ class DatabaseClient {
   }
 
   async incrementCounterAndAddIndexToData(field, id, data) {
-    const counter = `counters.${field}`
     const {
       counters: { [field]: index },
-    } = await increment(this.devices, { id }, counter)
+    } = await increment(this.devices, { id }, `counters.${field}`)
     return { index, ...data }
   }
 
   insertData = async (field, id, data) => {
     return this.data({ field, id }).insertOne(
       await this.incrementCounterAndAddIndexToData(field, id, data)
+    )
+  }
+
+  insertLotsOfData = async (field, id, arrayOfData) => {
+    const n = arrayOfData.length
+    const {
+      counters: { [field]: index },
+    } = await increment(this.devices, { id }, `counters.${field}`, n)
+
+    return this.data({ field, id }).insertMany(
+      arrayOfData.map((data, i) => ({ index: index + i, ...data }))
     )
   }
 

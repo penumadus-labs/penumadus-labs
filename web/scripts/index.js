@@ -13,16 +13,11 @@ const insertAcceleration = async () => {
   }
 }
 
-const insertLinear = async (field, data) => {
-  for (const d of data) {
-    await db.insertData(field, id, data)
-  }
-}
+const insertLinear = async (field, data) => db.insertLotsOfData(field, id, data)
 
 const insertData = async () => {
   const proms = [
-    insertAcceleration(),
-    // insertLinear('environment', environment),
+    insertLinear('environment', environment),
     // insertLinear('deflection', deflection),
   ]
   try {

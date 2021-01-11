@@ -87,8 +87,8 @@ export default function ChartBody({
       if (x++ > 500) break // safety
     }
 
-    chart.render()
-  }) // grows svg until the root node's height fill's the app's body
+    chart.render(live)
+  }, live) // grows svg until the root node's height fill's the app's body
 
   const controlProps = {
     downloadProps: {

@@ -57,7 +57,7 @@ export default class Linechart {
         window.removeEventListener(event, handler)
     }
   }
-  render() {
+  render(live) {
     const { width, height } = this.rootNode.getBoundingClientRect()
     this.rootWidth = width
     this.width = width - (marginLeft + marginRight)
@@ -174,7 +174,7 @@ export default class Linechart {
       .append('g')
       .classed('brush', true)
       .attr('transform', this.translate())
-      .call(this.brush)
+      .call(!live ? this.brush : () => {})
       .nodes()[0]
   }
   clean() {
