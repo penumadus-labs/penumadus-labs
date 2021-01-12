@@ -1,8 +1,14 @@
 import { useEffect } from 'react'
 
+interface Elm extends Element {
+  innerText: string
+}
+
 export default function ActivateLinks() {
   useEffect(() => {
-    const contentLinks = document.querySelectorAll('.content-link')
+    const contentLinks = document.querySelectorAll(
+      '.content-link'
+    ) as NodeListOf<Elm>
     const contentAreas = document.querySelectorAll('.content-area')
 
     const setActiveLink = () => {
@@ -17,9 +23,9 @@ export default function ActivateLinks() {
         }
       })
 
-      contentLinks.forEach(elm => {
-        if (elm.innerText === title) elm.classList.add('active')
-        else elm.classList.remove('active')
+      contentLinks.forEach(({ innerText, classList }) => {
+        if (innerText === title) classList.add('active')
+        else classList.remove('active')
       })
     }
 

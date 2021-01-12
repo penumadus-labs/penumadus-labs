@@ -20,7 +20,9 @@
     "script": "node scripts",
     "test": "jest",
     "test-detect": "jest --detectOpenHandles",
-    "build:package": "cd packages/test && rollup -c"
+    "build:package": "cd packages/test && rollup -c",
+    "start:pm2": "pm2 start --name public npm -- start",
+    "restart:pm2": "npm run build && pm2 restart public"
   },
   "workspaces": [
     "client",
