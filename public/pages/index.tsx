@@ -1,7 +1,7 @@
 import ActivateLinks from '../components/ActivateLinks'
 import SideBar from '../components/SideBar'
 import ContentArea from '../components/ContentArea'
-import * as content from '../utils/dummyText'
+import * as content from '../utils/contentText'
 
 export default function Home() {
   return (
@@ -16,11 +16,13 @@ export default function Home() {
           allowFullScreen
         />
       </div>
-      <ContentArea title="content area 1" content={content.l200} />
-      <ContentArea title="content area 2" content={content.l800} />
-      <ContentArea title="content area 3" content={content.l500} />
-      <ContentArea title="content area 4" content={content.l400} />
-      <ContentArea title="content area 5" content={content.l300} />
+      <ContentArea title="Home" content={content.home} />
+      <ContentArea title="Safety & Specifications" content={content.safety} />
+      <ContentArea title="Design" content={content.design} />
+      <ContentArea title="Process" content={content.process} />
+      <ContentArea title="Testing & Data" content={content.testing} />
+      <ContentArea title="Sensors & Telemetry" content={content.sensors} />
+
       <style jsx>{``}</style>
     </>
   )
