@@ -2,12 +2,13 @@ import Link from 'next/link'
 
 export default function SideBar() {
   const links = [
-    'content area 1',
-    'content area 2',
-    'content area 3',
-    'content area 4',
-    'content area 5',
-    'other links',
+    'Home',
+    'Safety & Specifications',
+    'Design',
+    'Process',
+    'Testing & Data',
+    'Sensors & Telemetry',
+    'Other Links & Data'
   ]
   return (
     <>
