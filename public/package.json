@@ -8,10 +8,12 @@
     "start": "next start -p 5000"
   },
   "dependencies": {
+    "@zeit/next-sass": "^1.0.1",
     "axios": "^0.21.1",
     "next": "^10.0.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "sass": "^1.32.4",
     "styled-jsx": "^3.3.2"
   },
   "devDependencies": {

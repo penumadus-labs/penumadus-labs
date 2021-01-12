@@ -1,50 +1,59 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import '../styles/globals.css'
+import '../styles/index.scss'
+import Link from 'next/link'
+import { useMemo } from 'react'
+import { useRouter } from 'next/dist/client/router'
+
+const navLinks = [
+  ['/', 'home'],
+  [`https://admin.compositebridge.org`, 'data analysis'],
+  ['/live', 'live video feed'],
+  ['/static', 'utilities'],
+]
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter()
+  const links = useMemo(
+    () =>
+      navLinks.map(([href, text], i) => (
+        <li key={i}>
+          <Link href={href}>
+            <a
+              className={href === pathname ? 'active' : ''}
+              style={{ marginRight: '2rem' }}
+            >
+              {text}
+            </a>
+          </Link>
+        </li>
+      )),
+    [pathname]
+  )
   return (
     <>
       <Head>
         <title>Composite Bridge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header>
+      <header className="container fixed-height">
         <h1>
-          <a href="/">Composite Bridge</a>
+          <Link href="/">
+            <a>Composite Bridge</a>
+          </Link>
         </h1>
-        <nav>
-          <a href="https://admin.compositebridge.org">dashboard</a>
-          <a href="./static">utilities</a>
-          <a href="./live">live video feed</a>
-        </nav>
       </header>
-      <main>
+      <main className="container">
         <Component {...pageProps} />
       </main>
-      <footer></footer>
+      <footer>
+        <nav id="other links">
+          <ul className="fixed-height container">{links}</ul>
+        </nav>
+      </footer>
       <style jsx>{`
-        header {
-          margin: 0;
-          background: #333;
-          padding: 0.5rem 1rem;
-          color: #eee;
-        }
-
-        h1 {
-          margin-bottom: 0.5rem;
-        }
-
-        main {
-          margin: 1rem;
-        }
-
-        nav {
-          display: flex;
-        }
-
-        nav > * {
-          margin-right: 1rem;
+        nav li {
+          margin-right: 2rem;
         }
       `}</style>
     </>

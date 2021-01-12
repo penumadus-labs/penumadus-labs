@@ -5,9 +5,6 @@ export default function Live() {
   return (
     <>
       <img src={liveVideoUrl} alt={liveVideoUrl} width="100%" height="auto" />
-      <a href={liveVideoUrl} target="blank">
-        live video feed
-      </a>
     </>
   )
 }

@@ -1,0 +1,19 @@
+.container {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.p {
+  padding: 1rem;
+}
+
+.fixed-height {
+  display: flex;
+  align-items: center;
+  height: var(--fixed-height);
+}
+
+.py {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}

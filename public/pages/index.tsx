@@ -1,6 +1,13 @@
+import ActivateLinks from '../components/ActivateLinks'
+import SideBar from '../components/SideBar'
+import ContentArea from '../components/ContentArea'
+import * as content from '../utils/dummyText'
+
 export default function Home() {
   return (
     <>
+      <ActivateLinks />
+      <SideBar />
       <div className="responsive-iframe-container">
         <iframe
           src="https://www.youtube-nocookie.com/embed/pSOBWOKEmJE"
@@ -9,30 +16,12 @@ export default function Home() {
           allowFullScreen
         />
       </div>
-      <style jsx>{`
-        .responsive-iframe-container {
-          --height: 80%;
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          height: 100%;
-
-          padding-top: calc(var(--height) * 0.5625);
-          /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
-          margin: 0 auto;
-        }
-
-        /* Then style the iframe to fit in the container div with full height and width */
-        .responsive-iframe-container iframe {
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          width: 100%;
-          height: 100%;
-        }
-      `}</style>
+      <ContentArea title="content area 1" content={content.l200} />
+      <ContentArea title="content area 2" content={content.l800} />
+      <ContentArea title="content area 3" content={content.l500} />
+      <ContentArea title="content area 4" content={content.l400} />
+      <ContentArea title="content area 5" content={content.l300} />
+      <style jsx>{``}</style>
     </>
   )
 }
