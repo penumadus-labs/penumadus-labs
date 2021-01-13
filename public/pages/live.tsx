@@ -5,6 +5,11 @@ export default function Live() {
   return (
     <>
       <img src={liveVideoUrl} alt={liveVideoUrl} width="100%" height="auto" />
+      <style jsx>{`
+        img {
+          margin-top: 3rem;
+        }
+      `}</style>
     </>
   )
 }

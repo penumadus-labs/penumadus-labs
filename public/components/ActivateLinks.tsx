@@ -7,12 +7,12 @@ interface Elm extends Element {
 export default function ActivateLinks() {
   useEffect(() => {
     const contentLinks = document.querySelectorAll(
-      '.content-link'
+      '.qs-link'
     ) as NodeListOf<Elm>
     const contentAreas = document.querySelectorAll('.content-area')
 
     const setActiveLink = () => {
-      let title: string | null
+      let title = contentAreas[0]?.getAttribute('title')
       let max = -Infinity
       contentAreas.forEach(elm => {
         const { top } = elm.getBoundingClientRect()
@@ -31,7 +31,17 @@ export default function ActivateLinks() {
 
     setActiveLink()
 
-    window.onscroll = setActiveLink
+    let timeout: NodeJS.Timeout | null
+
+    const throttleInterval = 100
+
+    window.onscroll = () => {
+      if (!timeout)
+        timeout = setTimeout(() => {
+          setActiveLink()
+          timeout = null
+        }, throttleInterval)
+    }
   })
   return null
 }
