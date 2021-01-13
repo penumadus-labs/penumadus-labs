@@ -17,3 +17,14 @@
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
+
+.center-items {
+  display: grid;
+  place-items: center;
+}
+
+.cols-2 {
+  & > * {
+    width: 50%;
+  }
+}
