@@ -31,6 +31,7 @@ $orange: #ff8200;
   &.active {
     background: $orange;
     font-style: italic;
+    text-transform: uppercase;
   }
   &.faded {
     color: #999;

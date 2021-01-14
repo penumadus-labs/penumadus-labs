@@ -12,7 +12,7 @@ export default function ActivateLinks() {
     const contentAreas = document.querySelectorAll('.content-area')
 
     const setActiveLink = () => {
-      let title = contentAreas[0]?.getAttribute('title')
+      let title: string | null = 'Home'
       let max = -Infinity
       contentAreas.forEach(elm => {
         const { top } = elm.getBoundingClientRect()
@@ -24,7 +24,8 @@ export default function ActivateLinks() {
       })
 
       contentLinks.forEach(({ innerText, classList }) => {
-        if (innerText === title) classList.add('active')
+        if (innerText.toUpperCase() === title?.toUpperCase())
+          classList.add('active')
         else classList.remove('active')
       })
     }
