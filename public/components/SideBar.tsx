@@ -1,14 +1,6 @@
 import Link from 'next/link'
-import { useRef, useState, useEffect } from 'react'
 
 export default function SideBar() {
-  const [sideBarWidth, setSideBarWidth] = useState('0')
-  useEffect(() => {
-    if (sideBarRef.current) {
-      const { width } = getComputedStyle(sideBarRef.current)
-      setSideBarWidth(width)
-    }
-  }, [])
   const links = [
     'Home',
     'Safety & Specifications',
@@ -17,16 +9,13 @@ export default function SideBar() {
     'Testing & Data',
     'Sensors & Telemetry',
   ]
-  const sideBarRef = useRef<HTMLDivElement>(null)
-  const iacmiRef = useRef<HTMLDivElement>(null)
-  const utRef = useRef<HTMLDivElement>(null)
   return (
     <>
       <div className="placeholder" />
       <div className="sidebar">
         <div>
           <div className="logo">
-            <div className="img-wrapper">
+            <div className="img-container ic1">
               <Link href="/">
                 <img
                   style={{ background: 'white', cursor: 'pointer' }}
@@ -38,7 +27,7 @@ export default function SideBar() {
               </Link>
             </div>
           </div>
-          <nav ref={sideBarRef}>
+          <nav>
             <ul>
               {links.map((link, i) => (
                 <li key={i}>
@@ -62,10 +51,9 @@ export default function SideBar() {
               </li>
             </ul>
           </nav>
-          <div className="logo-wrapper">
-            <div className="img-wrapper">
-              <img src="iacmi.png" alt="iacmi.png" />
-              <img src="ut.png" alt="ut.png" />
+          <div className="logo">
+            <div className="img-container ic2">
+              <img src="combined logo.png" alt="combined logo.png" />
             </div>
           </div>
         </div>
@@ -73,56 +61,57 @@ export default function SideBar() {
       <style jsx>{`
         img {
           vertical-align: bottom;
-        }
-
-        .img-wrapper {
-          background: white;
-          padding: 0.5rem 0;
           width: 100%;
         }
-        .logo,
+
+        .sidebar,
         .placeholder,
-        .logo-wrapper {
-          width: ${sideBarWidth};
+        .logo {
+          width: 18rem;
         }
 
-        .logo,
-        .logo-wrapper {
+        .logo {
           padding-left: 4rem;
         }
 
-        .logo-wrapper > .img-wrapper {
+        .img-container {
+          background: white;
+        }
+        .ic1 {
+          padding: 0.25rem 0;
+        }
+        .ic2 {
+          padding: 0.5rem 1rem;
           display: flex;
-          justify-content: space-evenly;
-          height: 100px;
-          text-align: center;
+          align-items: center;
         }
 
-        .logo-wrapper img {
-          width: auto%;
-          height: 100%;
-        }
         .sidebar {
           position: fixed;
           top: 0;
           bottom: 0;
           left: 0;
-          display: grid;
-          place-items: center;
+          margin-top: 1rem;
+          display: flex;
+          align-items: center;
         }
+
         ul {
           border-right: 5px solid var(--orange);
-          margin-right: 1rem;
+          margin-right: 0.5rem;
           padding: 1rem 0;
         }
+
         li {
-          padding: 1.5rem 0;
+          padding: 0.5rem 0;
           text-align: right;
         }
+
         a {
-          padding-right: 0.5rem;
-          padding-left: 4rem;
+          padding: 0.5rem 0;
+          padding-right: 1rem;
           color: white;
+          white-space: nowrap;
         }
       `}</style>
     </>
