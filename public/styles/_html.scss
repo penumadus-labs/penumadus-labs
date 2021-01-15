@@ -11,6 +11,8 @@ $gray: #58595b;
 :root {
   --orange: #ff8200;
   --gray: #58595b;
+  // value of 16rem is no margin from the side
+  --sidebar-width: 20rem;
 }
 
 html {

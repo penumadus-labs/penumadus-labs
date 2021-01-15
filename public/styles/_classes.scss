@@ -24,6 +24,8 @@ $orange: #ff8200;
 
 .link {
   display: block;
+  transition: text-transition font-style background;
+  transition-duration: 0.3s;
 
   &:hover {
     color: var(--gray);

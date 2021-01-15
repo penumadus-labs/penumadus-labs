@@ -1,5 +1,6 @@
 import ActivateLinks from '../components/ActivateLinks'
 import SideBar from '../components/SideBar'
+import SmallNavBar from '../components/SmallNavBar'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import '../styles/index.scss'
@@ -12,12 +13,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Composite Bridge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <SmallNavBar />
       <div className="layout">
         <header>
           <SideBar />
           <ActivateLinks />
         </header>
-        <main>
+        <main className="body-responsive-side-margins">
           <Component {...pageProps} />
         </main>
       </div>
@@ -33,10 +35,6 @@ export default function App({ Component, pageProps }: AppProps) {
         header {
           display: grid;
           place-items: center;
-        }
-        main {
-          margin-right: 6rem;
-          margin-left: 2rem;
         }
       `}</style>
     </>

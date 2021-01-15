@@ -67,7 +67,7 @@ const routes: Routes = [
   },
   {
     component: null,
-    title: 'Live video feed',
+    title: 'LIve Video Feed',
     path: '/feed',
     active: false,
     contentSection: false,

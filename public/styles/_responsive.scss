@@ -1,0 +1,45 @@
+$break-small: 60rem;
+$break-medium: 100rem;
+
+@media only screen and (max-width: $break-small) {
+  .hidden-small {
+    display: none;
+  }
+}
+@media only screen and (min-width: $break-small) {
+  .hidden-large {
+    display: none;
+  }
+}
+
+.body-responsive-side-margins {
+  margin-left: 0;
+  margin-right: 0;
+  @media only screen and (min-width: $break-small) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  @media only screen and (min-width: $break-medium) {
+    margin-right: 6rem;
+    margin-left: 2rem;
+  }
+}
+
+:root {
+  @media only screen and (max-width: $break-medium) {
+    --sidebar-width: 17rem;
+  }
+}
+
+body {
+  background-size: 200% 100%;
+  background-position: 60% 0%;
+  @media only screen and (min-width: $break-small) {
+    background-size: 150% 100%;
+    background-position: 40% 0%;
+  }
+  @media only screen and (min-width: $break-medium) {
+    background-size: 100% 100%;
+    background-position: 0% 0%;
+  }
+}

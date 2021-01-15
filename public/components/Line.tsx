@@ -25,7 +25,7 @@ export default function Line({
 
         svg line {
           stroke: var(--orange);
-          stroke-width: 12;
+          stroke-width: 0.5rem;
         }
       `}</style>
     </>

@@ -11,49 +11,51 @@ export default function SideBar() {
   ]
   return (
     <>
-      <div className="placeholder" />
-      <div className="sidebar">
-        <div>
-          <div className="logo">
-            <div className="img-container ic1">
-              <Link href="/">
-                <img
-                  style={{ background: 'white', cursor: 'pointer' }}
-                  src="logo.png"
-                  alt="logo.png"
-                  height="auto"
-                  width="100%"
-                />
-              </Link>
+      <div className="hidden-small">
+        <div className="placeholder" />
+        <div className="sidebar">
+          <div>
+            <div className="logo">
+              <div className="img-container ic1">
+                <Link href="/">
+                  <img
+                    style={{ background: 'white', cursor: 'pointer' }}
+                    src="logo.png"
+                    alt="logo.png"
+                    height="auto"
+                    width="100%"
+                  />
+                </Link>
+              </div>
             </div>
-          </div>
-          <nav>
-            <ul>
-              {links.map((link, i) => (
-                <li key={i}>
-                  <a className="qs-link link" href={`/#${link}`}>
-                    {link}
+            <nav>
+              <ul>
+                {links.map((link, i) => (
+                  <li key={i}>
+                    <a className="qs-link link" href={`/#${link}`}>
+                      {link}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a className="link faded" href="./live">
+                    LIve Video Feed
                   </a>
                 </li>
-              ))}
-              <li>
-                <a className="link faded" href="./live">
-                  live video feed
-                </a>
-              </li>
-              <li>
-                <a
-                  className="link faded"
-                  href="https://admin.compositebridge.org"
-                >
-                  data analysis
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div className="logo">
-            <div className="img-container ic2">
-              <img src="combined logo.png" alt="combined logo.png" />
+                <li>
+                  <a
+                    className="link faded"
+                    href="https://admin.compositebridge.org"
+                  >
+                    Data Analysis
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <div className="logo">
+              <div className="img-container ic2">
+                <img src="combined logo.png" alt="combined logo.png" />
+              </div>
             </div>
           </div>
         </div>
@@ -67,23 +69,24 @@ export default function SideBar() {
         .sidebar,
         .placeholder,
         .logo {
-          width: 18rem;
+          width: var(--sidebar-width);
         }
 
         .logo {
-          padding-left: 4rem;
+          padding-left: calc(var(--sidebar-width) - 16rem);
         }
 
         .img-container {
           background: white;
+          display: flex;
+          align-items: center;
         }
         .ic1 {
-          padding: 0.25rem 0;
+          padding-top: 0.25rem;
+          padding-bottom: 1rem;
         }
         .ic2 {
           padding: 0.5rem 1rem;
-          display: flex;
-          align-items: center;
         }
 
         .sidebar {
@@ -98,7 +101,7 @@ export default function SideBar() {
 
         ul {
           border-right: 5px solid var(--orange);
-          margin-right: 0.5rem;
+          margin-right: 1rem;
           padding: 1rem 0;
         }
 

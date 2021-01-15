@@ -4,8 +4,8 @@ import { useRouter } from 'next/dist/client/router'
 
 const navLinks = [
   ['/', 'home'],
-  [`https://admin.compositebridge.org`, 'data analysis'],
-  ['/live', 'live video feed'],
+  [`https://admin.compositebridge.org`, 'Data Analysis'],
+  ['/live', 'LIve Video Feed'],
   ['/static', 'utilities'],
 ]
 
