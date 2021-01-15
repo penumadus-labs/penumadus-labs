@@ -69,14 +69,14 @@ export default function ContentArea({
         }
 
         h1 {
-          border-bottom: 10px solid var(--orange);
-          width: 400px;
+          border-bottom: 0.5rem solid var(--orange);
+          width: 24rem;
           margin: 0 auto;
           font-size: 4rem;
         }
 
         p {
-          margin-top: 1.75rem;
+          margin-top: 4rem;
         }
       `}</style>
     </>
