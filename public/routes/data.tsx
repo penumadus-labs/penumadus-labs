@@ -58,7 +58,7 @@ export const routes: Routes = [
   },
   {
     component: null,
-    title: 'LIve Video Feed',
+    title: 'Live Video Feed',
     path: '/feed',
     active: false,
     contentSection: false,
