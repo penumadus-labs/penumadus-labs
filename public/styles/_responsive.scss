@@ -6,8 +6,21 @@ $break-medium: 100rem;
     display: none;
   }
 }
+
 @media only screen and (min-width: $break-small) {
-  .hidden-large {
+  .visible-small {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $break-medium) {
+  .visible-large {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $break-medium) {
+  .visible-medium-and-down {
     display: none;
   }
 }
@@ -41,5 +54,13 @@ body {
   @media only screen and (min-width: $break-medium) {
     background-size: 100% 100%;
     background-position: 0% 0%;
+  }
+}
+
+.content-area {
+  section {
+    @media only screen and (min-width: $break-medium) {
+      width: 60%;
+    }
   }
 }

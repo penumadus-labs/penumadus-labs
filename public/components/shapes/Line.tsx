@@ -1,15 +1,13 @@
-import { objectToCSS, cssObj } from '../utils/css'
+import { objectToCSS, ShapeProps } from '../../utils/css'
 
-export default function Line({
-  negative = false,
-  css = {},
-}: {
+interface LineProps extends ShapeProps {
   negative?: boolean
-  css: cssObj
-}) {
+}
+
+export default function Line({ negative = false, css = {} }: LineProps) {
   return (
     <>
-      <svg>
+      <svg className="visible-large">
         <line
           x1="0"
           y1={negative ? '0' : '100%'}
@@ -22,8 +20,7 @@ export default function Line({
           ${objectToCSS(css)}
           position: absolute;
         }
-
-        svg line {
+        line {
           stroke: var(--orange);
           stroke-width: 0.5rem;
         }

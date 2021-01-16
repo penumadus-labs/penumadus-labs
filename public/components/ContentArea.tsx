@@ -1,5 +1,8 @@
-import Line from './Line'
-import Box from './Box'
+import Line from './shapes/Line'
+import AbsoluteBox from './shapes/AbsoluteBox'
+import Box from './shapes/Box'
+import { useEffect, useRef } from 'react'
+import { throttle } from '../utils/timeout'
 
 const line1 = {
   bottom: '-10%',
@@ -32,51 +35,59 @@ const box3 = {
 export default function ContentArea({
   title,
   content,
-  contentWidth = '60%',
 }: {
   title: string
   content: string
   contentWidth?: string
 }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handleScroll = throttle(() => {})
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
   return (
     <>
-      <div id={title} className="content-area p cols-2">
+      <div ref={ref} id={title} className="content-area">
+        <Box
+          css={{
+            height: '16rem',
+            width: '100%',
+          }}
+        />
         <section>
-          <h1>{title}</h1>
+          <h1 className="hidden-small">{title}</h1>
           <p>{content}</p>
         </section>
-        <div />
-        <Box css={box1} />
-        <Box css={box2} />
-        <Box css={box3} />
+        <AbsoluteBox css={box1} />
+        <AbsoluteBox css={box2} />
+        <AbsoluteBox css={box3} />
         <Line css={line1} />
       </div>
       <style jsx>{`
         .content-area {
-          padding-top: 4rem;
           position: relative;
           min-height: 100vh;
           background: white;
           text-align: center;
-          margin-top: 2rem;
-          margin-bottom: 2rem;
-          display: flex;
           overflow: hidden;
         }
 
-        section {
-          width: ${contentWidth};
-        }
-
         h1 {
+          padding-top: 4rem;
           border-bottom: 0.5rem solid var(--orange);
-          width: 24rem;
+          max-width: 24rem;
           margin: 0 auto;
           font-size: 4rem;
         }
 
         p {
           margin-top: 4rem;
+          max-width: 85%;
+          margin: 0 auto;
         }
       `}</style>
     </>

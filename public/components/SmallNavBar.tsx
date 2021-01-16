@@ -1,8 +1,12 @@
 import { useState } from 'react'
 
+const animationDuration = 500
+
+console.log(animationDuration / 1000)
+
 const initialState = {
   opacity: 0,
-  position: '0',
+  position: '-4rem',
 }
 
 export default function SmallNavBar() {
@@ -16,12 +20,12 @@ export default function SmallNavBar() {
       setTimeout(() =>
         setTransition({
           opacity: 1,
-          position: '3rem',
+          position: '0',
         })
       )
     } else {
       setTransition(initialState)
-      setTimeout(() => setOpen(false), 500)
+      setTimeout(() => setOpen(false), animationDuration)
     }
   }
 
@@ -36,10 +40,10 @@ export default function SmallNavBar() {
 
   return (
     <>
-      <header className="hidden-large">
+      <header className="visible-small">
         <img src="logo.png" alt="logo.png" />
       </header>
-      <div className="menu hidden-large" onClick={openMenu}>
+      <div className="menu visible-small" onClick={openMenu}>
         <div>
           <svg>
             <line x1="0" x2="100%" y1="10%" y2="10%"></line>
@@ -47,6 +51,8 @@ export default function SmallNavBar() {
             <line x1="0" x2="100%" y1="90%" y2="90%"></line>
           </svg>
         </div>
+      </div>
+      <div className="anchor visible-small">
         {open && (
           <nav>
             <ul>
@@ -95,7 +101,6 @@ export default function SmallNavBar() {
         }
 
         .menu > div {
-          position: relative;
           border-top: 0.2rem solid var(--orange);
           border-bottom: 0.2rem solid var(--orange);
         }
@@ -117,10 +122,14 @@ export default function SmallNavBar() {
           stroke: var(--gray);
         }
 
+        .anchor {
+          position: relative;
+        }
+
         nav {
           background: white;
           transition: opacity top;
-          transition-duration: 0.5s;
+          transition-duration: ${animationDuration / 1000}s;
           opacity: ${opacity};
           top: ${position};
           position: absolute;
