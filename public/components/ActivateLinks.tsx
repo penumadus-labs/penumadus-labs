@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, FC, ReactNode } from 'react'
 
 interface Elm extends Element {
   innerText: string

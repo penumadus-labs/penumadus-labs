@@ -1,6 +1,13 @@
-export const throttle = (fn: (...args: any[]) => any, time = 300) => {
-  let timeout: NodeJS.Timer
+export const throttle = (fn: (...args: any[]) => any, time = 200) => {
+  let timeout: NodeJS.Timer | null
   return () => {
-    if (!timeout) setTimeout(fn, 300)
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        timeout = null
+        fn()
+      }, time)
+    }
   }
 }
+
+export const wait = (time = 1000) => new Promise(res => setTimeout(res, time))

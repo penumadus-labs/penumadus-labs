@@ -1,8 +1,8 @@
 import Line from './shapes/Line'
 import AbsoluteBox from './shapes/AbsoluteBox'
 import Box from './shapes/Box'
-import { useEffect, useRef } from 'react'
-import { throttle } from '../utils/timeout'
+import { useEffect, useRef, FC } from 'react'
+import { useRoutes } from '../routes'
 
 const line1 = {
   bottom: '-10%',
@@ -32,26 +32,22 @@ const box3 = {
   right: '10%',
 }
 
-export default function ContentArea({
-  title,
-  content,
-}: {
+export const ContentArea: FC<{
   title: string
-  content: string
-  contentWidth?: string
-}) {
+  href: string
+}> = ({ title, href, children }) => {
+  const [, addEvent] = useRoutes()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const handleScroll = throttle(() => {})
-
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+    if (ref.current !== null)
+      addEvent(() => [
+        href,
+        ref.current?.getBoundingClientRect().top ?? Infinity,
+      ])
   }, [])
   return (
     <>
-      <div ref={ref} id={title} className="content-area">
+      <div ref={ref} id={href.slice(2)} className="content-area">
         <Box
           css={{
             height: '16rem',
@@ -60,7 +56,7 @@ export default function ContentArea({
         />
         <section>
           <h1 className="hidden-small">{title}</h1>
-          <p>{content}</p>
+          {children}
         </section>
         <AbsoluteBox css={box1} />
         <AbsoluteBox css={box2} />
@@ -76,17 +72,21 @@ export default function ContentArea({
           overflow: hidden;
         }
 
+        section {
+          padding: 2rem;
+        }
+
         h1 {
-          padding-top: 4rem;
           border-bottom: 0.5rem solid var(--orange);
           max-width: 24rem;
           margin: 0 auto;
           font-size: 4rem;
+          margin-top: 2rem;
+          margin-bottom: 4rem;
         }
 
         p {
-          margin-top: 4rem;
-          max-width: 85%;
+          padding: 2rem;
           margin: 0 auto;
         }
       `}</style>

@@ -2,8 +2,6 @@ import { useState } from 'react'
 
 const animationDuration = 500
 
-console.log(animationDuration / 1000)
-
 const initialState = {
   opacity: 0,
   position: '-4rem',
