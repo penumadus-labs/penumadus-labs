@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { ReactChild, useCallback, useState } from 'react'
+import * as content from '../utils/contentText'
 
 type Ref = HTMLElement | undefined
 
 interface Route {
-  component: (() => JSX.Element) | null
+  component?: ReactChild
   title: string
-  path: string
-  active: boolean
-  contentSection: boolean
+  href: string
+  active: 'active' | ''
   ref?: Ref
 }
 
@@ -15,74 +15,67 @@ export type Routes = Route[]
 
 export const routes: Routes = [
   {
-    component: () => <p></p>,
+    component: content.home,
     title: 'Home',
-    path: '/',
-    active: false,
-    contentSection: true,
+    href: '/#home',
+    active: '',
   },
   {
-    component: null,
+    component: content.safety,
     title: 'Safety & Specifications',
-    path: '/#safety',
-    active: false,
-    contentSection: true,
+    href: '/#safety',
+    active: '',
   },
   {
-    component: null,
+    component: content.design,
     title: 'Design',
-    path: '/#design',
-    active: false,
-    contentSection: true,
+    href: '/#design',
+    active: '',
   },
   {
-    component: null,
+    component: content.process,
     title: 'Process',
-    path: '/#process',
-    active: false,
-    contentSection: true,
+    href: '/#process',
+    active: '',
   },
   {
-    component: null,
+    component: content.testing,
     title: 'Testing & Data',
-    path: '/#data',
-    active: false,
-    contentSection: true,
+    href: '/#testing',
+    active: '',
   },
   {
-    component: null,
+    component: content.sensors,
     title: 'Sensors & Telemetry',
-    path: '/#sensors',
-    active: false,
-    contentSection: true,
+    href: '/#sensors',
+    active: '',
   },
   {
-    component: null,
     title: 'Live Video Feed',
-    path: '/feed',
-    active: false,
-    contentSection: false,
+    href: '/feed',
+    active: '',
   },
   {
-    component: null,
     title: 'Admin Login',
-    path: 'https://admin.compositebridge.org',
-    active: false,
-    contentSection: false,
+    href: 'https://admin.compositebridge.org',
+    active: '',
   },
 ]
 
-const contentRoutes = routes.filter(({ contentSection }) => contentSection)
-
-export type DataHook = [Routes, (route: string) => void]
-
-export const useData = (): DataHook => {
+export const useData = (): [Routes, (location: string) => void] => {
   const [data, setData] = useState(routes)
-  const setActive = (route: string) => {
-    for (const r of routes) {
-      r.active = r.title === route
-    }
-    setData([...data])
-  }
-  return [data, setActive]
+
+  return [
+    data,
+    useCallback(
+      location =>
+        setData(
+          routes.map(route => {
+            route.active = route.href === location ? 'active' : ''
+            return route
+          })
+        ),
+      []
+    ),
+  ]
 }

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRoutes } from '../routes'
 
 export default function SideBar() {
   const links = [
@@ -9,6 +10,8 @@ export default function SideBar() {
     'Testing & Data',
     'Sensors & Telemetry',
   ]
+  const [routes, setActive] = useRoutes()
+
   return (
     <>
       <div className="hidden-small">
@@ -17,20 +20,18 @@ export default function SideBar() {
           <div>
             <div className="logo">
               <div className="img-container ic1">
-                <Link href="/">
-                  <img
-                    style={{ background: 'white', cursor: 'pointer' }}
-                    src="logo.png"
-                    alt="logo.png"
-                    height="auto"
-                    width="100%"
-                  />
-                </Link>
+                <img
+                  style={{ background: 'white', cursor: 'pointer' }}
+                  src="logo.png"
+                  alt="logo.png"
+                  height="auto"
+                  width="100%"
+                />
               </div>
             </div>
             <nav>
               <ul>
-                {links.map((link, i) => (
+                {/* {links.map((link, i) => (
                   <li key={i}>
                     <a className="qs-link link" href={`/#${link}`}>
                       {link}
@@ -49,7 +50,19 @@ export default function SideBar() {
                   >
                     Data Analysis
                   </a>
-                </li>
+                </li> */}
+                {routes?.map(({ active, href, title }, i) => (
+                  <li key={i}>
+                    <a
+                      className={`link ${active} ${
+                        href[1] === '#' ? '' : 'faded'
+                      }`}
+                      href={href}
+                    >
+                      {title}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </nav>
             <div className="logo">

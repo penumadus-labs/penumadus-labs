@@ -20,7 +20,6 @@ export default function Shape({
   css = {},
   root = 'div',
 }: ShapeProps) {
-  console.log(css)
   return (
     <>
       {children}
