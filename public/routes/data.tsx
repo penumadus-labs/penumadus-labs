@@ -1,5 +1,5 @@
 import { ReactChild, useCallback, useState } from 'react'
-import * as content from '../utils/contentText'
+import * as content from './content'
 
 type Ref = HTMLElement | undefined
 

@@ -46,11 +46,12 @@ $orange: #ff8200;
 
 .title {
   display: inline-block;
-  border-bottom: 0.5rem solid var(--orange);
+  border-bottom: 0.4rem solid var(--orange);
   margin: 0 auto;
   font-size: 3rem;
   margin-top: 2rem;
   margin-bottom: 4rem;
   padding-left: 2rem;
   padding-right: 2rem;
+  padding-bottom: 0.2rem;
 }
