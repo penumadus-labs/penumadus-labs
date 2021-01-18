@@ -17,16 +17,20 @@
  * if a hash link is the target, fireEvents will be called to calculate the link that needs to be highlighted
  */
 
-import { createContext, useContext, useEffect, FC } from 'react'
-import { routes, Routes } from './data'
-import { addEvent, AddEvent, useEvents } from './events'
+import { createContext, FC, useContext } from 'react'
+import { routes } from './data'
+import { useAddEvent, UseAddEvent, useEvents, UseEvents } from './events'
 
-const RouteContext = createContext<[Routes, AddEvent]>([routes, addEvent])
+export interface EventProps {
+  useAddEvent: UseAddEvent
+  href: string
+  title: string
+}
+
+const RouteContext = createContext<UseEvents>([routes, useAddEvent])
 
 export const RouteProvider: FC = ({ children }) => (
-  <RouteContext.Provider value={[useEvents(), addEvent]}>
-    {children}
-  </RouteContext.Provider>
+  <RouteContext.Provider value={useEvents()}>{children}</RouteContext.Provider>
 )
 
 export const useRoutes = () => useContext(RouteContext)

@@ -4,7 +4,7 @@
 }
 
 .p {
-  padding: 1rem;
+  padding: 2rem;
 }
 
 .fixed-height {
@@ -19,8 +19,9 @@
 }
 
 .center-items {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cols-2 {

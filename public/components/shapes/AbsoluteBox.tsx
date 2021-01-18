@@ -1,5 +1,5 @@
-import Box from './Box'
 import { ShapeProps } from '../../utils/css'
+import Box from './Box'
 
 export default function AbsoluteBox({ css = {} }: ShapeProps) {
   return (

@@ -10,7 +10,6 @@
     "restart:pm2": "npm run build && pm2 restart public"
   },
   "dependencies": {
-    "@zeit/next-sass": "^1.0.1",
     "axios": "^0.21.1",
     "next": "^10.0.3",
     "react": "17.0.1",

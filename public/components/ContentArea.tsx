@@ -1,8 +1,8 @@
-import Line from './shapes/Line'
+import { FC } from 'react'
+import { UseAddEvent } from '../routes/events'
 import AbsoluteBox from './shapes/AbsoluteBox'
 import Box from './shapes/Box'
-import { useEffect, useRef, FC } from 'react'
-import { useRoutes } from '../routes'
+import Line from './shapes/Line'
 
 const line1 = {
   bottom: '-10%',
@@ -35,16 +35,9 @@ const box3 = {
 export const ContentArea: FC<{
   title: string
   href: string
-}> = ({ title, href, children }) => {
-  const [, addEvent] = useRoutes()
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (ref.current !== null)
-      addEvent(() => [
-        href,
-        ref.current?.getBoundingClientRect().top ?? Infinity,
-      ])
-  }, [])
+  useAddEvent: UseAddEvent
+}> = ({ children, title, href, useAddEvent }) => {
+  const ref = useAddEvent(href)
   return (
     <>
       <div ref={ref} id={href.slice(2)} className="content-area">
@@ -54,8 +47,10 @@ export const ContentArea: FC<{
             width: '100%',
           }}
         />
-        <section>
-          <h1 className="hidden-small">{title}</h1>
+        <section className="p">
+          <div className="hidden-small">
+            <h1 className="title">{title}</h1>
+          </div>
           {children}
         </section>
         <AbsoluteBox css={box1} />
@@ -72,17 +67,15 @@ export const ContentArea: FC<{
           overflow: hidden;
         }
 
-        section {
-          padding: 2rem;
-        }
-
         h1 {
+          display: inline-block;
           border-bottom: 0.5rem solid var(--orange);
-          max-width: 24rem;
           margin: 0 auto;
-          font-size: 4rem;
+          font-size: 3rem;
           margin-top: 2rem;
           margin-bottom: 4rem;
+          padding-left: 2rem;
+          padding-right: 2rem;
         }
 
         p {

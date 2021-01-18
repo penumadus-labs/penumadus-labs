@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRoutes } from '../routes'
 
 const animationDuration = 500
 
@@ -26,7 +27,7 @@ export default function SmallNavBar() {
       setTimeout(() => setOpen(false), animationDuration)
     }
   }
-
+  const [routes] = useRoutes()
   const links = [
     'Home',
     'Safety & Specifications',
@@ -41,20 +42,21 @@ export default function SmallNavBar() {
       <header className="visible-small">
         <img src="logo.png" alt="logo.png" />
       </header>
-      <div className="menu visible-small" onClick={openMenu}>
-        <div>
-          <svg>
-            <line x1="0" x2="100%" y1="10%" y2="10%"></line>
-            <line x1="0" x2="100%" y1="50%" y2="50%"></line>
-            <line x1="0" x2="100%" y1="90%" y2="90%"></line>
-          </svg>
+      <div className="menu-container visible-small">
+        <div className="menu">
+          <div onClick={openMenu}>
+            <svg>
+              <line x1="0" x2="100%" y1="10%" y2="10%"></line>
+              <line x1="0" x2="100%" y1="50%" y2="50%"></line>
+              <line x1="0" x2="100%" y1="90%" y2="90%"></line>
+            </svg>
+          </div>
         </div>
-      </div>
-      <div className="anchor visible-small">
-        {open && (
-          <nav>
-            <ul>
-              {links.map((link, i) => (
+        <div className="anchor">
+          {open && (
+            <nav>
+              <ul>
+                {/* {links.map((link, i) => (
                 <li key={i}>
                   <a className="qs-link link" href={`/#${link}`}>
                     {link}
@@ -73,17 +75,34 @@ export default function SmallNavBar() {
                 >
                   Data Analysis
                 </a>
-              </li>
-            </ul>
-          </nav>
-        )}
+              </li> */}
+                {routes.map(({ active, href, title }, i) => (
+                  <li key={i}>
+                    <a
+                      className={`link ${active} ${
+                        href[1] === '#' ? '' : 'faded'
+                      }`}
+                      href={href}
+                    >
+                      {title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
       </div>
       <style jsx>{`
+        .menu-container {
+          z-index: 15;
+          position: sticky;
+          top: 0;
+        }
+
         .menu {
           padding-top: 0.5rem;
           padding-bottom: 0.5rem;
-          position: sticky;
-          top: 0;
           cursor: pointer;
         }
 
@@ -94,7 +113,6 @@ export default function SmallNavBar() {
         header,
         .menu {
           background: white;
-          z-index: 20;
           /* margin: 0 auto; */
         }
 
@@ -125,13 +143,12 @@ export default function SmallNavBar() {
         }
 
         nav {
+          position: absolute;
           background: white;
           transition: opacity top;
           transition-duration: ${animationDuration / 1000}s;
           opacity: ${opacity};
           top: ${position};
-          position: absolute;
-          z-index: 15;
           width: 100%;
         }
 
