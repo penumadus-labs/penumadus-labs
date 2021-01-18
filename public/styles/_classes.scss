@@ -30,15 +30,27 @@ $orange: #ff8200;
   &:hover {
     color: var(--gray);
   }
-  &.active {
-    background: $orange;
-    font-style: italic;
-    text-transform: uppercase;
-  }
   &.faded {
     color: #999;
     &:hover {
       color: var(--gray);
     }
   }
+  &.active {
+    background: $orange;
+    font-style: italic;
+    text-transform: uppercase;
+    color: white;
+  }
+}
+
+.title {
+  display: inline-block;
+  border-bottom: 0.5rem solid var(--orange);
+  margin: 0 auto;
+  font-size: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }

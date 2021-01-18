@@ -1,16 +1,7 @@
-import Link from 'next/link'
 import { useRoutes } from '../routes'
 
 export default function SideBar() {
-  const links = [
-    'Home',
-    'Safety & Specifications',
-    'Design',
-    'Process',
-    'Testing & Data',
-    'Sensors & Telemetry',
-  ]
-  const [routes, setActive] = useRoutes()
+  const [routes] = useRoutes()
 
   return (
     <>
@@ -31,27 +22,7 @@ export default function SideBar() {
             </div>
             <nav>
               <ul>
-                {/* {links.map((link, i) => (
-                  <li key={i}>
-                    <a className="qs-link link" href={`/#${link}`}>
-                      {link}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a className="link faded" href="./live">
-                    LIve Video Feed
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="link faded"
-                    href="https://admin.compositebridge.org"
-                  >
-                    Data Analysis
-                  </a>
-                </li> */}
-                {routes?.map(({ active, href, title }, i) => (
+                {routes.map(({ active, href, title }, i) => (
                   <li key={i}>
                     <a
                       className={`link ${active} ${

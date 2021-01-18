@@ -52,7 +52,7 @@ export const routes: Routes = [
   },
   {
     title: 'Live Video Feed',
-    href: '/feed',
+    href: '/live',
     active: '',
   },
   {

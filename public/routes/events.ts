@@ -1,23 +1,36 @@
-import { useEffect } from 'react'
+import { RefObject, useEffect, useRef } from 'react'
 import { throttle } from '../utils/timeout'
-import { useData } from './data'
+import { Routes, useData } from './data'
 
 type ElementPosition = number
 type ElementID = string
 
 type EventResult = [ElementID, ElementPosition]
-type Event = () => EventResult
-type EffectCleanUp = () => void
-export type AddEvent = (event: Event) => EffectCleanUp
+export type UseAddEvent = (href: ElementID) => RefObject<HTMLDivElement>
 
-let events: Event[] = []
+export type UseEvents = [Routes, UseAddEvent]
 
-export const addEvent: AddEvent = event => {
-  events.push(event)
-  return () => void (events = events.filter(e => e !== event))
+let events: (() => EventResult)[] = []
+
+export const useAddEvent: UseAddEvent = (href: string) => {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (ref.current === null) return
+
+    const event = (): EventResult => [
+      href,
+      ref.current?.getBoundingClientRect().top ?? Infinity,
+    ]
+
+    events.push(event)
+
+    return () => void (events = events.filter(e => e !== event))
+  }, [])
+  return ref
 }
 
-export const useEvents = () => {
+export const useEvents = (): UseEvents => {
   const [data, setActive] = useData()
 
   useEffect(() => {
@@ -44,5 +57,5 @@ export const useEvents = () => {
     window.onscroll = throttle(() => fireEvents(), 300)
   }, [])
 
-  return data
+  return [data, useAddEvent]
 }
