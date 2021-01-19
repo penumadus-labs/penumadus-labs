@@ -15,6 +15,8 @@ const FillerContent: FC<{ name?: string; src?: string }> = ({ name, src }) => {
   )
 }
 
+const fillerContentDir = 'https://compositebridge.org/static/images/'
+
 export const home = (
   <>
     <p>
@@ -35,7 +37,8 @@ export const safety = (
 export const design = (
   <>
     <p>Andrew</p>
-    <FillerContent />
+    <FillerContent src={fillerContentDir + 'Slide2.jpeg'} />
+    <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
   </>
 )
 
@@ -49,13 +52,14 @@ export const process = (
 export const testing = (
   <>
     <p>George/Stephen/Abram</p>
-    <FillerContent />
+    <FillerContent src={`${fillerContentDir}Slide1.jpeg`} />
+    <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
   </>
 )
 
 export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
-    <FillerContent />
+    <FillerContent src={fillerContentDir + 'Slide4.jpeg'} />
   </>
 )
