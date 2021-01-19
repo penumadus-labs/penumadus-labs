@@ -29,7 +29,6 @@
 .vimrc
 .viminfo
 .vscode-server/
-.vscode/
 .wget-hsts
 *.o
 *.exe
