@@ -37,7 +37,8 @@ export const safety = (
 export const design = (
   <>
     <p>Andrew</p>
-    <FillerContent />
+    <FillerContent src={fillerContentDir + 'Slide2.jpeg'} />
+    <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
   </>
 )
 
@@ -50,18 +51,15 @@ export const process = (
 
 export const testing = (
   <>
-    <p>Stephen/George/Abram</p>
-    <FillerContent />
+    <p>George/Stephen/Abram</p>
+    <FillerContent src={`${fillerContentDir}Slide1.jpeg`} />
+    <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
   </>
 )
 
 export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
-    <FillerContent src={`${fillerContentDir}Slide1.jpeg`} />
-    <FillerContent src={fillerContentDir + 'Slide2.jpeg'} />
-    <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
     <FillerContent src={fillerContentDir + 'Slide4.jpeg'} />
-    <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
   </>
 )
