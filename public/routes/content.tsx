@@ -1,6 +1,10 @@
 import { FC } from 'react'
 
-const FillerContent: FC<{ name?: string; src?: string }> = ({ name, src }) => {
+const FillerContent: FC<{
+  name?: string
+  src?: string
+  maxWidth?: string
+}> = ({ name, src, maxWidth = 'initial' }) => {
   return (
     <>
       <p>{name}</p>
@@ -9,6 +13,9 @@ const FillerContent: FC<{ name?: string; src?: string }> = ({ name, src }) => {
         img {
           margin-top: 2rem;
           font-size: 2rem;
+          width: 100%;
+          max-width ${maxWidth};
+          height: auto;
         }
       `}</style>
     </>
@@ -23,7 +30,7 @@ export const home = (
       Smart Composite Deck A low cost, light weight composite bridge deck.
       Caroline
     </p>
-    <FillerContent src={`${fillerContentDir}outline1.jpg`} />
+    <FillerContent src={`${fillerContentDir}outline1.jpg`} maxWidth="1000px" />
     <FillerContent src={fillerContentDir + 'outline2.jpg'} />
     <FillerContent src={`${fillerContentDir}outline3.jpg`} />
     <FillerContent src={fillerContentDir + 'home.JPG'} />
@@ -34,7 +41,7 @@ export const design = (
   <>
     <p>Andrew</p>
     <FillerContent src={`${fillerContentDir}design1.JPG`} />
-    <FillerContent src={`${fillerContentDir}design2.JPG`} /> 
+    <FillerContent src={`${fillerContentDir}design2.JPG`} />
     <FillerContent src={`${fillerContentDir}design3.JPG`} />
     <FillerContent src={`${fillerContentDir}design4.JPG`} />
     <FillerContent src={`${fillerContentDir}design5.JPG`} />
