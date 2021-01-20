@@ -40,7 +40,8 @@ $break-medium: 100rem;
 
 :root {
   @media only screen and (max-width: $break-medium) {
-    --sidebar-width: 18rem;
+    // is 1 rem padding on the left
+    --sidebar-width: 17rem;
   }
 }
 

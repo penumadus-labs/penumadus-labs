@@ -24,7 +24,7 @@ $orange: #ff8200;
 
 .link {
   display: block;
-  transition: text-transition font-style background;
+  transition: background;
   transition-duration: 0.3s;
 
   &:hover {
@@ -41,6 +41,7 @@ $orange: #ff8200;
     font-style: italic;
     text-transform: uppercase;
     color: white;
+    font-size: 0.8em;
   }
 }
 

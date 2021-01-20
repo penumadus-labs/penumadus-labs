@@ -34,7 +34,7 @@ export const useEvents = (): UseEvents => {
   const [data, setActive] = useData()
 
   useEffect(() => {
-    const height = -400
+    const height = 200
 
     const fireEvents = () => {
       const results = events.map(e => e())
@@ -42,7 +42,7 @@ export const useEvents = (): UseEvents => {
       const [href] = results.slice(1).reduce((res, cur) => {
         const res1 = res[1]
         const cur1 = cur[1]
-        return res1 < height && cur1 > res1 ? cur : res
+        return cur1 < height && cur1 > res1 ? cur : res
       }, results[0])
 
       setActive(href)
