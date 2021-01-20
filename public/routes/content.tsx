@@ -47,6 +47,7 @@ export const design = (
     <FillerContent src={`${fillerContentDir}design5.JPG`} />
     <FillerContent src={`${fillerContentDir}design6.JPG`} />
     <FillerContent src={`${fillerContentDir}design7.JPG`} />
+    <FillerContent src={`${fillerContentDir}acceleration-graph.png`} />
   </>
 )
 
@@ -60,11 +61,10 @@ export const process = (
 export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
-    <FillerContent src={`${fillerContentDir}Slide1.jpeg`} />
-    <FillerContent src={fillerContentDir + 'Slide2.jpeg'} />
-    <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
-    <FillerContent src={fillerContentDir + 'Slide4.jpeg'} />
-    <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
+    <FillerContent src={`${fillerContentDir}sensors1.JPG`} />
+    <FillerContent src={fillerContentDir + 'sensors2.JPG'} />
+    <FillerContent src={`${fillerContentDir}sensors3.JPG`} />
+    <FillerContent src={fillerContentDir + 'sensors4.JPG'} />
   </>
 )
 
