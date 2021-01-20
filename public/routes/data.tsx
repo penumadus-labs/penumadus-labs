@@ -21,14 +21,8 @@ export const routes: Routes = [
     active: '',
   },
   {
-    component: content.safety,
-    title: 'Safety & Specifications',
-    href: '/#safety',
-    active: '',
-  },
-  {
     component: content.design,
-    title: 'Design',
+    title: 'Design, Process, & Testing',
     href: '/#design',
     active: '',
   },
@@ -39,15 +33,15 @@ export const routes: Routes = [
     active: '',
   },
   {
-    component: content.testing,
-    title: 'Testing & Data',
-    href: '/#testing',
-    active: '',
-  },
-  {
     component: content.sensors,
     title: 'Sensors & Telemetry',
     href: '/#sensors',
+    active: '',
+  },
+  {
+    component: content.partners,
+    title: 'Partners',
+    href: '/#partners',
     active: '',
   },
   {

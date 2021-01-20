@@ -23,7 +23,6 @@ export const home = (
       Smart Composite Deck A low cost, light weight composite bridge deck.
       Caroline
     </p>
-    
     <FillerContent src={`${fillerContentDir}outline1.jpg`} />
     <FillerContent src={fillerContentDir + 'outline2.jpg'} />
     <FillerContent src={`${fillerContentDir}outline3.jpg`} />
@@ -31,17 +30,9 @@ export const home = (
   </>
 )
 
-export const safety = (
-  <>
-    <p>Joey/Andrew</p>
-    <FillerContent />
-  </>
-)
-
 export const design = (
   <>
     <p>Andrew</p>
-    
     <FillerContent src={`${fillerContentDir}design1.JPG`} />
     <FillerContent src={`${fillerContentDir}design2.JPG`} /> 
     <FillerContent src={`${fillerContentDir}design3.JPG`} />
@@ -59,13 +50,6 @@ export const process = (
   </>
 )
 
-export const testing = (
-  <>
-    <p>Stephen/George/Abram</p>
-    <FillerContent />
-  </>
-)
-
 export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
@@ -74,5 +58,12 @@ export const sensors = (
     <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
     <FillerContent src={fillerContentDir + 'Slide4.jpeg'} />
     <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
+  </>
+)
+
+export const partners = (
+  <>
+    <p></p>
+    <FillerContent src={fillerContentDir + 'partners.JPG'} />
   </>
 )
