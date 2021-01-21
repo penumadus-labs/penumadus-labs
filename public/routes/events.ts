@@ -14,7 +14,7 @@ let events: (() => EventResult)[] = []
 
 export const useAddEvent: UseAddEvent = (href: string) => {
   const ref = useRef<HTMLDivElement>(null)
-
+  // change to useLayoutEffect?
   useEffect(() => {
     if (ref.current === null) return
 
@@ -32,7 +32,7 @@ export const useAddEvent: UseAddEvent = (href: string) => {
 
 export const useEvents = (): UseEvents => {
   const [data, setActive] = useData()
-
+  // change to useLayoutEffect?
   useEffect(() => {
     const height = 200
 

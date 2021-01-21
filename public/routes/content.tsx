@@ -24,44 +24,54 @@ const FillerContent: FC<{
 
 const fillerContentDir = 'https://compositebridge.org/static/images/'
 
+const homeDir = fillerContentDir + 'home/v2/'
+
 export const home = (
   <>
     <p>
       Smart Composite Deck A low cost, light weight composite bridge deck.
       Caroline
     </p>
-    <FillerContent src={`${fillerContentDir}newhome1.jpg`} maxWidth="1000px" />
-    <FillerContent src={fillerContentDir + 'newhome2.jpg'} />
-    <FillerContent src={`${fillerContentDir}newhome3.jpg`} />
-    <FillerContent src={fillerContentDir + 'home.JPG'} />
+    <FillerContent src={`${homeDir}home1.JPG`} maxWidth="1000px" />
+    <FillerContent src={`${homeDir}home2.JPG`} />
+    <FillerContent src={`${homeDir}home3.JPG`} />
+    {/* <FillerContent src={`${fillerContentDir}home.JPG`} /> */}
   </>
 )
+
+const designDir = fillerContentDir + 'design/'
 
 export const design = (
   <>
     <p>Andrew</p>
-    <FillerContent src={`${fillerContentDir}newdesign1.JPG`} />
-    <FillerContent src={`${fillerContentDir}newdesign2.JPG`} />
-    <FillerContent src={`${fillerContentDir}newdesign3.JPG`} />
-    <FillerContent src={`${fillerContentDir}newdesign4.JPG`} />
-    <FillerContent src={`${fillerContentDir}design5.JPG`} />
-    <FillerContent src={`${fillerContentDir}design6.JPG`} />
-    <FillerContent src={`${fillerContentDir}design7.JPG`} />
-    <FillerContent src={`${fillerContentDir}acceleration-graph.png`} />
+    <FillerContent src={`${designDir}design1.1.JPG`} />
+    <FillerContent src={`${designDir}design1.2.JPG`} />
+    <FillerContent src={`${designDir}design1.3.JPG`} />
+    <FillerContent src={`${designDir}design1.4.JPG`} />
+    <FillerContent src={`${designDir}design1.5.JPG`} />
+    <FillerContent src={`${designDir}design1.6.JPG`} />
+    <FillerContent src={`${designDir}design1.7.JPG`} />
+    <FillerContent src={`${designDir}design2.1.JPG`} />
+    <FillerContent src={`${designDir}design2.2.JPG`} />
+    <FillerContent src={`${designDir}design2.3.JPG`} />
+    <FillerContent src={`${designDir}design2.4.JPG`} />
+    <FillerContent src={`${designDir}acceleration-graph.png`} />
   </>
 )
+
+const sensorsDir = fillerContentDir + 'sensors/'
 
 export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
-    <FillerContent src={`${fillerContentDir}Slide1.jpeg`} />
-    <FillerContent src={`${fillerContentDir}Slide3.jpeg`} />
-    <FillerContent src={fillerContentDir + 'Slide4.jpeg'} />
-    <FillerContent src={fillerContentDir + 'Slide5.jpeg'} />
-    <FillerContent src={`${fillerContentDir}sensors1.JPG`} />
-    <FillerContent src={fillerContentDir + 'sensors2.JPG'} />
-    <FillerContent src={`${fillerContentDir}sensors3.JPG`} />
-    <FillerContent src={fillerContentDir + 'sensors4.JPG'} />
+    <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
+    <FillerContent src={`${sensorsDir}Slide3.jpeg`} />
+    <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
+    <FillerContent src={`${sensorsDir}Slide5.jpeg`} />
+    <FillerContent src={`${sensorsDir}sensors1.JPG`} />
+    <FillerContent src={`${sensorsDir}sensors2.JPG`} />
+    <FillerContent src={`${sensorsDir}sensors3.JPG`} />
+    <FillerContent src={`${sensorsDir}sensors4.JPG`} />
   </>
 )
 

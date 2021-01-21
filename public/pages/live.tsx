@@ -20,12 +20,12 @@ export default function Live() {
       <style jsx>{`
         .root {
           background: white;
-          height: 100vh;
+          min-height: 100vh;
           text-align: center;
         }
         img {
           vertical-align: middle;
-          margin-top: 3rem;
+          margin-top: 2rem;
         }
       `}</style>
     </>
