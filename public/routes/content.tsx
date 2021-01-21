@@ -30,9 +30,9 @@ export const home = (
       Smart Composite Deck A low cost, light weight composite bridge deck.
       Caroline
     </p>
-    <FillerContent src={`${fillerContentDir}outline1.jpg`} maxWidth="1000px" />
-    <FillerContent src={fillerContentDir + 'outline2.jpg'} />
-    <FillerContent src={`${fillerContentDir}outline3.jpg`} />
+    <FillerContent src={`${fillerContentDir}newhome1.jpg`} maxWidth="1000px" />
+    <FillerContent src={fillerContentDir + 'newhome2.jpg'} />
+    <FillerContent src={`${fillerContentDir}newhome3.jpg`} />
     <FillerContent src={fillerContentDir + 'home.JPG'} />
   </>
 )
@@ -40,21 +40,14 @@ export const home = (
 export const design = (
   <>
     <p>Andrew</p>
-    <FillerContent src={`${fillerContentDir}design1.JPG`} />
-    <FillerContent src={`${fillerContentDir}design2.JPG`} />
-    <FillerContent src={`${fillerContentDir}design3.JPG`} />
-    <FillerContent src={`${fillerContentDir}design4.JPG`} />
+    <FillerContent src={`${fillerContentDir}newdesign1.JPG`} />
+    <FillerContent src={`${fillerContentDir}newdesign2.JPG`} />
+    <FillerContent src={`${fillerContentDir}newdesign3.JPG`} />
+    <FillerContent src={`${fillerContentDir}newdesign4.JPG`} />
     <FillerContent src={`${fillerContentDir}design5.JPG`} />
     <FillerContent src={`${fillerContentDir}design6.JPG`} />
     <FillerContent src={`${fillerContentDir}design7.JPG`} />
     <FillerContent src={`${fillerContentDir}acceleration-graph.png`} />
-  </>
-)
-
-export const process = (
-  <>
-    <p>Joey</p>
-    <FillerContent />
   </>
 )
 

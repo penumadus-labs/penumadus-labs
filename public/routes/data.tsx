@@ -22,14 +22,8 @@ export const routes: Routes = [
   },
   {
     component: content.design,
-    title: 'Design, Process, & Testing',
+    title: 'Design & Process',
     href: '/#design',
-    active: '',
-  },
-  {
-    component: content.process,
-    title: 'Process',
-    href: '/#process',
     active: '',
   },
   {
