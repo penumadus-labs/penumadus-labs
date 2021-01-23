@@ -28,14 +28,6 @@ export default function SmallNavBar() {
     }
   }
   const [routes] = useRoutes()
-  const links = [
-    'Home',
-    'Safety & Specifications',
-    'Design',
-    'Process',
-    'Testing & Data',
-    'Sensors & Telemetry',
-  ]
 
   return (
     <>
@@ -56,26 +48,6 @@ export default function SmallNavBar() {
           {open && (
             <nav>
               <ul>
-                {/* {links.map((link, i) => (
-                <li key={i}>
-                  <a className="qs-link link" href={`/#${link}`}>
-                    {link}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a className="link faded" href="./live">
-                  LIve Video Feed
-                </a>
-              </li>
-              <li>
-                <a
-                  className="link faded"
-                  href="https://admin.compositebridge.org"
-                >
-                  Data Analysis
-                </a>
-              </li> */}
                 {routes.map(({ active, href, title }, i) => (
                   <li key={i}>
                     <a
@@ -138,6 +110,11 @@ export default function SmallNavBar() {
           stroke: var(--gray);
         }
 
+        a {
+          text-align: center;
+          padding: 0.5rem;
+        }
+
         .anchor {
           position: relative;
         }
@@ -150,11 +127,6 @@ export default function SmallNavBar() {
           opacity: ${opacity};
           top: ${position};
           width: 100%;
-        }
-
-        a {
-          text-align: center;
-          padding: 0.5rem;
         }
       `}</style>
     </>
