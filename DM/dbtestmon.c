@@ -12,6 +12,8 @@
 
 struct sockaddr_in controlDBIp;
 
+unsigned short hankPort=0;
+
 extern int errfd;
 
 int infd;
