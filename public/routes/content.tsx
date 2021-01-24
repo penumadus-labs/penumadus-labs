@@ -65,10 +65,8 @@ export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
     <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
-    <FillerContent src={`${sensorsDir}Slide2.jpeg`} />
     <FillerContent src={`${sensorsDir}Slide3.jpeg`} />
     <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
-    <FillerContent src={`${sensorsDir}Slide5.jpeg`} />
     <FillerContent src={`${sensorsDir}Slide6.jpeg`} />
   </>
 )
