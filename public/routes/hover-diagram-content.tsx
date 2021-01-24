@@ -3,7 +3,7 @@ import { HoverBox as Box } from '../components/HoverBox'
 const magnetometerDescription = <p></p>
 
 export const hoverDiagramContent = (
-  <p>
+  <>
     <Box top="45" left="16.3" width="8.5" height="14" round>
       <h1>temp</h1>
       <p></p>
@@ -48,5 +48,5 @@ export const hoverDiagramContent = (
       <h1>strain gauge</h1>
       <p></p>
     </Box>
-  </p>
+  </>
 )

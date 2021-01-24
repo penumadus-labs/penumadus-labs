@@ -67,7 +67,6 @@ export const sensors = (
   <>
     <p>Stephen/George/Ryan</p>
     <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
-    {/* <FillerContent src={`${sensorsDir}Slide3.jpeg`} /> */}
     <HoverDiagram>{hoverDiagramContent}</HoverDiagram>
     <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
     <FillerContent src={`${sensorsDir}Slide6.jpeg`} />
