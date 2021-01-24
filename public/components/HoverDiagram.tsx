@@ -1,10 +1,10 @@
 import { FC } from 'react'
 
-export const HoverDiagram: FC = ({ children }) => {
+export const HoverDiagram: FC<{ src: string }> = ({ children, src }) => {
   return (
     <>
       <div className="relative">
-        <img src="test/bridge-diagram.png" alt="test/bridge-diagram.png" />
+        <img src={src} alt={src} />
         {children}
       </div>
 

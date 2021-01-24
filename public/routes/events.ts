@@ -38,6 +38,7 @@ export const useEvents = (): UseEvents => {
 
     const fireEvents = () => {
       const results = events.map(e => e())
+      if (!results.length) return
 
       const [href] = results.slice(1).reduce((res, cur) => {
         const res1 = res[1]
