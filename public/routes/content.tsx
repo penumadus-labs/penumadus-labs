@@ -48,6 +48,7 @@ export const design = (
     <p>Andrew</p>
     <FillerContent src={`${designDir}design1.1.JPG`} />
     <FillerContent src={`${designDir}design1.2.JPG`} />
+    <h1>Hover over an object for more information</h1>
     <FillerContent src={`${designDir}design1.3.JPG`} />
     <FillerContent src={`${designDir}design1.4.JPG`} />
     <FillerContent src={`${designDir}design1.5.JPG`} />
@@ -57,7 +58,6 @@ export const design = (
     <FillerContent src={`${designDir}design2.2.JPG`} />
     <FillerContent src={`${designDir}design2.3.JPG`} />
     <FillerContent src={`${designDir}design2.4.JPG`} />
-    <FillerContent src={`${designDir}acceleration-graph.png`} />
   </>
 )
 
@@ -65,13 +65,11 @@ const sensorsDir = fillerContentDir + 'sensors/'
 
 export const sensors = (
   <>
-    <p>Stephen/George/Ryan</p>
     <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
     <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
-    <FillerContent src={`${sensorsDir}Slide6.jpeg`} />
   </>
 )
 

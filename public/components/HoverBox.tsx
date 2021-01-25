@@ -15,7 +15,6 @@ export const HoverBox: FC<{
       </div>
       <style jsx>{`
         .box {
-          border: 1px solid red;
           position: absolute;
           top: ${top}%;
           left: ${left}%;
