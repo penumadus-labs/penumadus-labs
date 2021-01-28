@@ -31,13 +31,16 @@ export const FillerContent: FC<{
 const fillerContentDir = 'https://compositebridge.org/static/images/'
 
 const homeDir = fillerContentDir + 'home/v2/'
+const updateDir = fillerContentDir + 'jan28/'
+ 
 
 export const home = (
   <>
-    <FillerContent src={`${homeDir}home1.JPG`} />
-    <FillerContent src={`${homeDir}home2.JPG`} />
-    <FillerContent src={`${homeDir}home3.JPG`} />
+  
+    <FillerContent src={`${updateDir}home1.JPG`} />
     <BridgeEvolution />
+    <FillerContent src={`${updateDir}home2.JPG`} />
+    <FillerContent src={`${updateDir}home3.JPG`} />
   </>
 )
 
@@ -46,11 +49,9 @@ const processDir = fillerContentDir + 'process/'
 
 export const design = (
   <>
-    <FillerContent src={`${designDir}design1.7.JPG`} />
-    <FillerContent src={`${designDir}design2.1.JPG`} />
-    <FillerContent src={`${designDir}design2.1.JPG`} />
-    <FillerContent src={`${designDir}design2.3.JPG`} />
-    <FillerContent src={`${designDir}design2.4.JPG`} />
+    <FillerContent src={`${designDir}design3.1.JPG`} />
+    <FillerContent src={`${designDir}design3.2.JPG`} />
+    <FillerContent src={`${designDir}design3.3.JPG`} />
     <p className="ugly-header">hover over images for more information</p>
     <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
     <style jsx>{``}</style>
@@ -66,7 +67,7 @@ export const sensors = (
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
-    <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
+    <FillerContent src={`${sensorsDir}straingraph.jpg`} />
   </>
 )
 
