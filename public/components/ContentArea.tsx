@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { UseAddEvent } from '../routes/events'
-import Box from './shapes/Box'
 
 export const ContentArea: FC<{
   title: string
@@ -11,12 +10,12 @@ export const ContentArea: FC<{
   return (
     <>
       <div ref={ref} id={href.slice(2)} className="content-area">
-        <Box
+        {/* <Box
           css={{
             height: '16rem',
             width: '100%',
           }}
-        />
+        /> */}
         <section className="p">
           <div className="hidden-small">
             <h1 className="title">{title}</h1>

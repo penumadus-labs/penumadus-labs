@@ -39,12 +39,18 @@ export const home = (
   </>
 )
 
-// const designDir = fillerContentDir + 'design/'
+const designDir = fillerContentDir + 'design/'
 const processDir = fillerContentDir + 'process/'
 
 export const design = (
   <>
-    <FlowchartContent src={`${processDir}fullprocess.jpeg `} />
+    <FlowchartContent src={`${designDir}design1.7.JPG`} />
+    <FlowchartContent src={`${designDir}design2.1.JPG`} />
+    <FlowchartContent src={`${designDir}design2.1.JPG`} />
+    <FlowchartContent src={`${designDir}design2.3.JPG`} />
+    <FlowchartContent src={`${designDir}design2.4.JPG`} />
+    <h1>hover over images for more information</h1>
+    <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
   </>
 )
 
@@ -53,6 +59,7 @@ const sensorsDir = fillerContentDir + 'sensors/'
 export const sensors = (
   <>
     <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
+    <h1>hover over any object for more information</h1>
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
