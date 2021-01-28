@@ -6,7 +6,18 @@ export const HoverBox: FC<{
   width: string
   height: string
   round?: boolean
-}> = ({ top, left, width, height, round = false, children }) => {
+  leftDropdown?: string
+  topDropdown?: string
+}> = ({
+  top,
+  left,
+  width,
+  height,
+  round = false,
+  children,
+  leftDropdown,
+  topDropdown,
+}) => {
   return (
     <>
       <div className="absolute box">
@@ -25,9 +36,10 @@ export const HoverBox: FC<{
         }
 
         .info {
-          left: calc(50% - 6rem);
-          top: 50%;
-          width: 18rem;
+          left: calc(50% - 15rem ${leftDropdown ? `+ ${leftDropdown}` : ''});
+          top: calc(50% + ${topDropdown || 0});
+          max-height: 90vh;
+          width: 30rem;
           background: white;
           padding: 1rem;
           opacity: 0;
