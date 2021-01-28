@@ -36,7 +36,6 @@ const updateDir = fillerContentDir + 'jan28/'
 
 export const home = (
   <>
-  
     <FillerContent src={`${updateDir}home1.JPG`} />
     <BridgeEvolution />
     <FillerContent src={`${updateDir}home2.JPG`} />
@@ -54,6 +53,7 @@ export const design = (
     <FillerContent src={`${designDir}design3.3.JPG`} />
     <p className="ugly-header">hover over images for more information</p>
     <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
+
     <style jsx>{``}</style>
   </>
 )
