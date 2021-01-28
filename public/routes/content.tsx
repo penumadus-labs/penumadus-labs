@@ -49,14 +49,9 @@ export const design = (
     <FillerContent src={`${designDir}design2.1.JPG`} />
     <FillerContent src={`${designDir}design2.3.JPG`} />
     <FillerContent src={`${designDir}design2.4.JPG`} />
-    <h1>hover over images for more information</h1>
+    <p className="ugly-header">hover over images for more information</p>
     <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
-    <style jsx>{`
-      h1 {
-        color: red;
-        font-size: 1.5rem;
-      }
-    `}</style>
+    <style jsx>{``}</style>
   </>
 )
 
@@ -65,7 +60,7 @@ const sensorsDir = fillerContentDir + 'sensors/'
 export const sensors = (
   <>
     <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
-    <h1>hover over any object for more information</h1>
+    <p className="ugly-header">hover over any object for more information</p>
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
