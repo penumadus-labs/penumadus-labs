@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { HoverDiagram } from '../components/HoverDiagram'
+import { BridgeEvolution } from './BridgeEvolution'
 import { FlowchartContent } from './FlowchartContent'
 import { hoverDiagramContent } from './hover-diagram-content'
 
@@ -36,6 +37,7 @@ export const home = (
     <FillerContent src={`${homeDir}home1.JPG`} />
     <FillerContent src={`${homeDir}home2.JPG`} />
     <FillerContent src={`${homeDir}home3.JPG`} />
+    <BridgeEvolution />
   </>
 )
 
