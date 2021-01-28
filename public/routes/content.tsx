@@ -44,13 +44,19 @@ const processDir = fillerContentDir + 'process/'
 
 export const design = (
   <>
-    <FlowchartContent src={`${designDir}design1.7.JPG`} />
-    <FlowchartContent src={`${designDir}design2.1.JPG`} />
-    <FlowchartContent src={`${designDir}design2.1.JPG`} />
-    <FlowchartContent src={`${designDir}design2.3.JPG`} />
-    <FlowchartContent src={`${designDir}design2.4.JPG`} />
+    <FillerContent src={`${designDir}design1.7.JPG`} />
+    <FillerContent src={`${designDir}design2.1.JPG`} />
+    <FillerContent src={`${designDir}design2.1.JPG`} />
+    <FillerContent src={`${designDir}design2.3.JPG`} />
+    <FillerContent src={`${designDir}design2.4.JPG`} />
     <h1>hover over images for more information</h1>
     <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
+    <style jsx>{`
+      h1 {
+        color: red;
+        font-size: 1.5rem;
+      }
+    `}</style>
   </>
 )
 
