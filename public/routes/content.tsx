@@ -70,6 +70,16 @@ export const sensors = (
   </>
 )
 
+const futureDir = fillerContentDir + 'future/'
+
+export const future = (
+  <>
+    <FillerContent src={`${futureDir}`} />
+    <FillerContent src={`${futureDir}`} />
+    <FillerContent src={`${futureDir}`} />
+  </>
+)
+
 export const partners = (
   <>
     <FillerContent src={fillerContentDir + 'partners.JPG'} />

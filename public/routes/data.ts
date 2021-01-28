@@ -33,6 +33,12 @@ export const routes: Routes = [
     active: '',
   },
   {
+    component: content.future,
+    title: 'Future Applications',
+    href: '/#future',
+    active: '',
+  },
+  {
     component: content.partners,
     title: 'Partners',
     href: '/#partners',
@@ -43,11 +49,11 @@ export const routes: Routes = [
     href: '/live',
     active: '',
   },
-  {
-    title: 'Admin Login',
-    href: 'https://admin.compositebridge.org',
-    active: '',
-  },
+  // {
+  //   title: 'Admin Login',
+  //   href: 'https://admin.compositebridge.org',
+  //   active: '',
+  // },
 ]
 
 export const useData = (): [Routes, (location: string) => void] => {

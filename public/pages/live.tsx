@@ -1,5 +1,5 @@
 export default function Live() {
-  const liveVideoUrl = 'https://camera.compositebridge.org/'
+  const liveVideoUrl = 'https://camera.compositebridge.org/' && ''
 
   return (
     <>
