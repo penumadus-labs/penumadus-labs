@@ -1,0 +1,13 @@
+	<style jsx>{` 
+			h1 {
+				color:yellow;
+				text-decoration:underline;
+				font-size:x-large;
+				background-color:blue;
+			}
+			p {
+				color:yellow;
+				font-size:large;
+				background-color:blue;
+			}
+		`}</style>

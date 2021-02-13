@@ -48,9 +48,6 @@ const processDir = fillerContentDir + 'process/'
 
 export const design = (
   <>
-    <FillerContent src={`${designDir}design3.1.JPG`} />
-    <FillerContent src={`${designDir}design3.2.JPG`} />
-    <FillerContent src={`${designDir}design3.3.JPG`} />
     <p className="ugly-header">hover over images for more information</p>
     <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
 
@@ -67,6 +64,7 @@ export const sensors = (
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
+    <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
     <FillerContent src={`${sensorsDir}straingraph.jpg`} />
   </>
 )
@@ -75,9 +73,9 @@ const futureDir = fillerContentDir + 'future/'
 
 export const future = (
   <>
-    <FillerContent src={`${futureDir}`} />
-    <FillerContent src={`${futureDir}`} />
-    <FillerContent src={`${futureDir}`} />
+    <FillerContent src={`${futureDir}future1.JPG`} />
+    <FillerContent src={`${futureDir}future2.JPG`} />
+    <FillerContent src={`${futureDir}future3.JPG`} />
   </>
 )
 
