@@ -12,6 +12,10 @@ import { FC } from 'react'
 
 let lastClicked: any
 
+interface blurElement extends Element {
+  blur: () => void
+}
+
 export const HoverBox: FC<{
   top: string
   left: string
@@ -45,7 +49,7 @@ export const HoverBox: FC<{
           className="filled sibling"
           onClick={({ target }) => {
             if (lastClicked === target) {
-              document.activeElement.blur()
+              void (document.activeElement as blurElement).blur()
               lastClicked = null
             } else {
               lastClicked = target
