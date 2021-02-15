@@ -1,13 +1,25 @@
 import { FC } from 'react'
 
+/**
+ * open dropdown with focus
+ *
+ * or open dropdown with react state, and close with screen cover
+ *
+ * focus version is not able to be toggled
+ *
+ * react state blocks any other input until it's clicked
+ */
+
+let lastClicked: any
+
 export const HoverBox: FC<{
   top: string
   left: string
   width: string
   height: string
   round?: boolean
-  leftDropdown?: string
-  topDropdown?: string
+  leftDropdown?: string | number
+  topDropdown?: string | number
 }> = ({
   top,
   left,
@@ -18,15 +30,46 @@ export const HoverBox: FC<{
   leftDropdown,
   topDropdown,
 }) => {
+  // const [open, setOpen] = useState(false)
+
+  // const { useGlobalClick } = useGlobalListener()
+
+  // useGlobalClick(() => {
+  //   console.log(open)
+  // }, open)
+
   return (
     <>
       <div className="absolute box">
-        <div className="filled sibling" />
-        <div className="absolute info">{children}</div>
+        <button
+          className="filled sibling"
+          onClick={({ target }) => {
+            if (lastClicked === target) {
+              document.activeElement.blur()
+              lastClicked = null
+            } else {
+              lastClicked = target
+            }
+          }}
+        />
+        <div className="absolute info shadow">{children}</div>
       </div>
+
+      {/* {open ? (
+        <div
+          className="fixed click-listener"
+          onClick={() => {
+            console.log('clicked')
+            setOpen(false)
+          }}
+        />
+      ) : null} */}
       <style jsx>{`
+        .click-listener {
+          z-index: 20;
+        }
         .box {
-          /* border: 1px solid red; */
+          /*  border: 1px solid red; */
 
           position: absolute;
           top: ${top}%;
@@ -37,8 +80,8 @@ export const HoverBox: FC<{
         }
 
         .info {
-          left: calc(50% - 15rem ${leftDropdown ? `+ ${leftDropdown}` : ''});
-          top: calc(50% + ${topDropdown || 0});
+          left: calc(50% - 15rem ${leftDropdown ? `+ ${leftDropdown}%` : ''});
+          top: calc(50% + ${topDropdown || 0}%);
           max-height: 90vh;
           width: 30rem;
           background: white;
@@ -50,10 +93,18 @@ export const HoverBox: FC<{
 
         .sibling {
           position: relative;
+          cursor: pointer;
           z-index: 5;
         }
 
+        .sibling:focus {
+          outline: none;
+        }
+
         .sibling:hover + .info {
+          opacity: 1;
+        }
+        .sibling:focus + .info {
           opacity: 1;
         }
       `}</style>

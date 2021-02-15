@@ -3,6 +3,7 @@ import { HoverDiagram } from '../components/HoverDiagram'
 import { BridgeEvolution } from './BridgeEvolution'
 import { FlowchartContent } from './FlowchartContent'
 import { hoverDiagramContent } from './hover-diagram-content'
+import { sensorsContent } from './sensors-content'
 
 export const FillerContent: FC<{
   name?: string
@@ -32,7 +33,6 @@ const fillerContentDir = 'https://compositebridge.org/static/images/'
 
 const homeDir = fillerContentDir + 'home/v2/'
 const updateDir = fillerContentDir + 'jan28/'
- 
 
 export const home = (
   <>
@@ -43,7 +43,7 @@ export const home = (
   </>
 )
 
-const designDir = fillerContentDir + 'design/'
+// const designDir = fillerContentDir + 'design/'
 const processDir = fillerContentDir + 'process/'
 
 export const design = (
@@ -59,12 +59,12 @@ const sensorsDir = fillerContentDir + 'sensors/'
 
 export const sensors = (
   <>
-    <FillerContent src={`${sensorsDir}Slide1.jpeg`} />
+    {sensorsContent}
+    {/* <FillerContent src={`${sensorsDir}Slide1.jpeg`} /> */}
     <p className="ugly-header">hover over any object for more information</p>
     <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
       {hoverDiagramContent}
     </HoverDiagram>
-    <FillerContent src={`${sensorsDir}Slide4.jpeg`} />
     <FillerContent src={`${sensorsDir}straingraph.jpg`} />
   </>
 )

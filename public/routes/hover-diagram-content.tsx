@@ -2,7 +2,7 @@ import { HoverBox as Box } from '../components/HoverBox'
 
 export const hoverDiagramContent = (
   <>
-    <Box top="45" left="22.1" width="6.9" height="10" round>
+    <Box top="45" left="22.1" width="6.9" height="10" round leftDropdown="100">
       <h1>Temperature</h1>
       <p>
         Multiple digital temperature sensors are embedded directly in the
@@ -30,7 +30,7 @@ export const hoverDiagramContent = (
         resolution envelope profiles to the archive for analysis.
       </p>
     </Box>
-    <Box top="71" left="10.2" width="9.2" height="11">
+    <Box top="71" left="10.2" width="9.2" height="11" leftDropdown="200">
       <h1>Local Concentrator</h1>
       <p>
         The local concentrator creates and manages the wireless sensor network,
@@ -55,7 +55,7 @@ export const hoverDiagramContent = (
         Multiple secure servers are run virtually in the Amazon cloud to accept
         and archive data from multiple field deployments and return commands to
         sensor networks on the bridge. The entire system may be distributed
-        across mutliple servers for load balancing and reliability.
+        across multiple servers for load balancing and reliability.
       </p>
     </Box>
     <Box top="79.5" left="52.3" width="4.8" height="7.4">
@@ -74,7 +74,7 @@ export const hoverDiagramContent = (
         researches look search data, view it graphically, and extract it for
         further analysis. This interface also provides the ability to monitor
         and push commands to the bridge to change sampling parameters and check
-        on overall healt of the wireless sensor network
+        on overall health of the wireless sensor network
       </p>
     </Box>
     <Box top="69.9" left="60.1" width="6" height="8">
@@ -83,7 +83,7 @@ export const hoverDiagramContent = (
         A custom camera solution monitors the bridge in real time and
         simultaneous records and timestamps motion events. This allows events in
         the database to have associated video to observe exactly what was
-        occuring in the event of an anomaly. Or to look up data based on an
+        occurring in the event of an anomaly. Or to look up data based on an
         observed video event. All clocks are synchronized for accurate retrieval
       </p>
     </Box>
@@ -97,7 +97,7 @@ export const hoverDiagramContent = (
         humidity under the bridge
       </p>
     </Box>
-    <Box top="39.5" left="76.2" width="5.3" height="10.4">
+    <Box top="39.5" left="76.2" width="5.3" height="10.4" leftDropdown="-250">
       <h1>Strain Gauge</h1>
       <p>
         Multiple Strain Gauges are placed on metallic members to record offsets
@@ -105,7 +105,8 @@ export const hoverDiagramContent = (
       </p>
     </Box>
     <style jsx>{`
-      h1 {
+       {
+        /* h1 {
         color: yellow;
         text-decoration: underline;
         font-size: x-large;
@@ -115,6 +116,7 @@ export const hoverDiagramContent = (
         color: yellow;
         font-size: large;
         background-color: blue;
+      } */
       }
     `}</style>
   </>
