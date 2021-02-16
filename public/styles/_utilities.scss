@@ -42,16 +42,16 @@
   justify-content: center;
 }
 
-.cols-2 {
-  & > * {
-    width: 50%;
-  }
-}
-
 .flex {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cols-2 {
+  & > * {
+    width: 50%;
+  }
 }
 
 .cols-3 {

@@ -1,4 +1,4 @@
-export const sensorsContent = (
+export const content1 = (
   <>
     <p>
       A team of researchers at the University of Tennessee’s Fibers and
@@ -53,5 +53,40 @@ export const sensorsContent = (
       <img src="slides/deck-deflection.png" alt="" />
       <img src="slides/temperature-humidity.png" alt="" />
     </div>
+  </>
+)
+
+export const content2 = (
+  <>
+    <h1>Optical Sensing</h1>
+    <p>
+      Fiber Optic Sensor utilizes proprietary sensing technology for continuous
+      and on-demand sensing for detecting strains and damage locations along the
+      bridge deck panels. As an examples bridge is routinely subjected to
+      tension and compressive force in response to normal vehicular traffic.
+      Fiber Optic sensors are able to detect loads from vehicular traffic to
+      access the health of the bridge. Tension and compressive strains along the
+      bridge deck with external loading are monitored with multiple continuous
+      fiber optic senses and an examples result if shown below.
+    </p>
+    <img src="slides/tension-example.png" alt="" className="image" />
+    <img src="slides/fiber-optic-sensing1.png" alt="" />
+    <img src="slides/fiber-optic-sensing2.png" alt="" />
+    <img src="slides/fiber-optic-sensing3.png" alt="" />
+
+    <h1>Ways fiber optic sensing shows what you've been missing</h1>
+    <p>Small, lightweight, flexible</p>
+    <p>More data, more insight</p>
+    <p>Electrically passive and environmentally stable</p>
+    <p>Distributes</p>
+    <p>Multi-parameter</p>
+
+    <img src="slides/fiber-optic-sensing5.png" alt="" />
+    <style jsx>{`
+      img {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+    `}</style>
   </>
 )

@@ -1,4 +1,4 @@
-import { HoverBox as Box } from '../components/HoverBox'
+import { HoverBox as Box } from '../../components/HoverBox'
 
 export const hoverDiagramContent = (
   <>

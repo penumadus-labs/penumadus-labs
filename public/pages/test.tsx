@@ -1,5 +1,5 @@
 import { HoverDiagram } from '../components/HoverDiagram'
-import { hoverDiagramContent } from '../routes/hover-diagram-content'
+import { hoverDiagramContent } from '../routes/content/hover-diagram'
 
 export default function Test() {
   return (

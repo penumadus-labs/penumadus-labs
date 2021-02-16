@@ -1,9 +1,10 @@
 import { FC } from 'react'
 import { HoverDiagram } from '../components/HoverDiagram'
-import { BridgeEvolution } from './BridgeEvolution'
-import { FlowchartContent } from './FlowchartContent'
-import { hoverDiagramContent } from './hover-diagram-content'
-import { sensorsContent } from './sensors-content'
+import { FlowchartContent } from './content/FlowchartContent'
+import { futureContent } from './content/future'
+import { homeContent } from './content/home'
+import { hoverDiagramContent } from './content/hover-diagram'
+import * as sensor from './content/sensors'
 
 export const FillerContent: FC<{
   name?: string
@@ -29,58 +30,34 @@ export const FillerContent: FC<{
   )
 }
 
-const fillerContentDir = 'https://compositebridge.org/static/images/'
-
-const homeDir = fillerContentDir + 'home/v2/'
-const updateDir = fillerContentDir + 'jan28/'
-
-export const home = (
-  <>
-    <FillerContent src={`${updateDir}home1.JPG`} />
-    <BridgeEvolution />
-    <FillerContent src={`${updateDir}home2.JPG`} />
-    <FillerContent src={`${updateDir}home3.JPG`} />
-  </>
-)
-
-// const designDir = fillerContentDir + 'design/'
-const processDir = fillerContentDir + 'process/'
+export const home = homeContent
 
 export const design = (
   <>
     <p className="ugly-header">hover over images for more information</p>
-    <FlowchartContent src={`${processDir}fullprocess.jpeg`} />
+    <FlowchartContent src={'slides/fullprocess.jpeg'} />
 
     <style jsx>{``}</style>
   </>
 )
 
-const sensorsDir = fillerContentDir + 'sensors/'
-
 export const sensors = (
   <>
-    {sensorsContent}
-    {/* <FillerContent src={`${sensorsDir}Slide1.jpeg`} /> */}
+    {sensor.content1}
     <p className="ugly-header">hover over any object for more information</p>
-    <HoverDiagram src={`${sensorsDir}Slide3.jpeg`}>
+    <HoverDiagram src={'slides/bridge-diagram.jpeg'}>
       {hoverDiagramContent}
     </HoverDiagram>
-    <FillerContent src={`${sensorsDir}straingraph.jpg`} />
+    {sensor.content2}
   </>
 )
 
-const futureDir = fillerContentDir + 'future/'
-
-export const future = (
-  <>
-    <FillerContent src={`${futureDir}future1.JPG`} />
-    <FillerContent src={`${futureDir}future2.JPG`} />
-    <FillerContent src={`${futureDir}future3.JPG`} />
-  </>
-)
+export const future = futureContent
 
 export const partners = (
   <>
-    <FillerContent src={fillerContentDir + 'partners.JPG'} />
+    <FillerContent
+      src={'https://compositebridge.org/static/images/partners.JPG'}
+    />
   </>
 )

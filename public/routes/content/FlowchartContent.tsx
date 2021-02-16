@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { HoverBox as Box } from '../components/HoverBox'
-import { FillerContent } from './content'
+import { HoverBox as Box } from '../../components/HoverBox'
+import { FillerContent } from '../content'
 
 const contentDir = 'https://compositebridge.org/static/images/process/'
 
