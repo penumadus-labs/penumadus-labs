@@ -209,7 +209,7 @@ class DatabaseClient {
     return resolveData(col, async () =>
       col
         .find()
-        .sort({ time: 1 })
+        .sort({ time: -1 })
         .project({ _id: 0, index: 0 })
         .limit(+limit)
         .toArray()
