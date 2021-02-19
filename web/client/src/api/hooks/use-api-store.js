@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { request, parseError } from '../api'
+import { request } from '../api'
 import { ErrorCard, LoadingCard } from '../api-status-components'
 
 // sets intial state of each api call to loading
@@ -34,7 +34,7 @@ export default function useApiStore() {
         return data
       } catch (error) {
         if (storeError)
-          mutateStore(key, [<ErrorCard error={parseError(error)} />])
+          mutateStore(key, [<ErrorCard error={error.toString()} />])
         else throw error
       }
     }

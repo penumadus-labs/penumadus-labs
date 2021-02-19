@@ -1,7 +1,7 @@
 import React from 'react'
+import useApi from '../../../api'
 import Chart from '../chart/chart'
 import EventSelector from './event-selector'
-import useApi from '../../../api'
 
 let timeout
 

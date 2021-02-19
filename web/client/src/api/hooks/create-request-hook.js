@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { parseError } from '../api'
 import { ErrorInline, LoadingInline } from '../api-status-components'
 
 export default function createRequestHook(method) {
@@ -33,7 +32,7 @@ export default function createRequestHook(method) {
           }, 3000)
         return res
       } catch (error) {
-        setError(parseError(error))
+        setError(error.toString())
         throw error
       }
     }
