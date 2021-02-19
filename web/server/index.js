@@ -7,8 +7,8 @@ const { LOCAL_SERVER, SERVER_IP, MODE, AUTH_DISABLED } = process.env
 
 if (!development) {
   if (LOCAL_SERVER)
-    console.warn('warning: LOCAL_SERVER environment variables set')
-  if (!MODE) console.warn('warning: no runtime mode set')
+    console.warn('warning: LOCAL_SERVER environment variables not set')
+  if (!MODE) console.warn('warning: runtime mode not set')
   if (AUTH_DISABLED) console.warn('warning: authorization is disabled')
 }
 
