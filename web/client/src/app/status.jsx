@@ -15,6 +15,7 @@ const getTimeInHoursMinutesSeconds = () => {
   return `${hours}:${minutes}:${seconds}`
 }
 
+// turns array values into object keys
 const reduceFields = (fields) =>
   fields.reduce((o, field) => ({ ...o, [field]: 'not received' }), {})
 

@@ -17,6 +17,7 @@ export default function Chart({
   const [live, setLive] = useState(
     localStorage.getItem('live') || noDataCollected
   )
+
   const toggleLive = async () => {
     if (!live) {
       if (initializeLive) await initializeLive()

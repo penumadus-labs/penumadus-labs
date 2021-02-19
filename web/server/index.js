@@ -10,7 +10,6 @@ if (!development) {
     console.warn('warning: LOCAL_SERVER environment variables set')
   if (!MODE) console.warn('warning: no runtime mode set')
   if (AUTH_DISABLED) console.warn('warning: authorization is disabled')
-  console.log()
 }
 
 if (!LOCAL_SERVER && !SERVER_IP)

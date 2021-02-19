@@ -20,9 +20,12 @@ export const units = {
   magnitude: 'g',
 }
 
+const makeColor = (value, saturation = 100, lightness = 75) =>
+  `hsl(${value}, ${saturation}%, ${lightness}%)`
+
 export const colors = {
-  humidity: c.blue,
-  temperature: c.red,
+  temperature: makeColor(350, 100, 50),
+  humidity: makeColor(115, 80, 40),
   pressure: c.green,
   deflection: c.jade,
   count: c.orange,
@@ -31,14 +34,14 @@ export const colors = {
   y: c.red,
   z: c.yellow,
   magnitude: c.green,
-  T1: 'tomato',
-  T2: 'orange',
-  T3: 'yellow',
-  T4: 'green',
-  T5: 'blue',
-  T6: 'cyan',
-  T7: 'mediumpurple',
-  T8: 'magenta',
+  T1: makeColor(0),
+  T2: makeColor(45),
+  T3: makeColor(90),
+  T4: makeColor(135),
+  T5: makeColor(180),
+  T6: makeColor(225),
+  T7: makeColor(270),
+  T8: makeColor(315),
 }
 
 for (let index = 1; index < 9; index++) {

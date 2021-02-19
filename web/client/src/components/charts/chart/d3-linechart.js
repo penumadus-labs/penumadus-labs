@@ -128,11 +128,20 @@ export default class Linechart {
       .attr('clip-path', 'url(#clip)')
 
     // line data
+    let lastValue = 1
     this.lines = this.keys.map((key) => {
       const line = d3
         .line(this.data)
         .x((d) => this.x(d.time))
-        .y((d) => this.y(d[key]))
+        .y((d) => {
+          const value = d[key]
+
+          if (value !== -273 && value < 100) {
+            lastValue = value
+          }
+
+          return this.y(lastValue)
+        })
 
       const path = this.chart
         .append('path')
@@ -256,6 +265,7 @@ export default class Linechart {
     const formatFunction = this.dataSpansSeveralDays
       ? formatMonthDayHoursMinutes
       : formatHoursMinutes
+
     return d3
       .axisBottom(this.x)
       .ticks(Math.floor(window.innerWidth / 80))
