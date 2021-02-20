@@ -2,8 +2,6 @@
 
 redo charts with visx
 
-change colors for T1-T8
-
 localStorage?
 
 ** bugs
@@ -21,5 +19,6 @@ cache chart domain in local storage?
 
 add fills count indicator
 
+add vertical brushing
 
 rewrite datetime file

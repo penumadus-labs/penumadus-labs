@@ -6,7 +6,7 @@ import url from '../utils/url'
 const headers = {
   'X-Requested-With': 'XMLHttpRequest',
   'Content-Type': 'application/json',
-  Accept: 'application/json',
+  Accept: 'application/json, text/plain, application/csv',
 }
 
 const baseURL = url + 'api/'
@@ -55,5 +55,12 @@ export const request = async (...ctx) => {
   })
 
   if (!response.ok) throw Error(response.statusText)
-  return response.json()
+
+  const data = await response.text()
+
+  try {
+    return JSON.parse(data)
+  } catch (_) {
+    return data
+  }
 }
