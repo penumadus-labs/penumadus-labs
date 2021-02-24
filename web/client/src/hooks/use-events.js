@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 export const useEvent = (event, callback, initialize = false) => {
   useEffect(() => {
@@ -23,6 +23,7 @@ export const useResize = (callback, deps) => {
         callback(ref)
       }, 200)
     }
+    // eslint-disable-next-line
   }, [deps])
 
   useEvent('resize', handler, true)

@@ -1,14 +1,14 @@
 import * as d3 from 'd3'
+import { formatData, formatKeys, formatLabels, getYDomain } from '../utils/data'
 import {
-  formatMonthDayHoursMinutes,
-  formatHoursMinutes,
-  parseDate,
   formatDomain,
+  formatHoursMinutes,
+  formatMonthDayHoursMinutes,
+  parseDate,
   threeDays,
 } from '../utils/datetime'
-import { colors } from '../utils/units-colors'
-import { formatData, formatKeys, formatLabels, getYDomain } from '../utils/data'
 import { isChild } from '../utils/dom'
+import { colors } from '../utils/units-colors'
 
 const marginLeft = 40
 const marginBottom = 50
@@ -127,21 +127,15 @@ export default class Linechart {
       .attr('transform', this.translate())
       .attr('clip-path', 'url(#clip)')
 
+    console.log(this.data)
+
     // line data
-    let lastValue = 1
     this.lines = this.keys.map((key) => {
       const line = d3
         .line(this.data)
         .x((d) => this.x(d.time))
-        .y((d) => {
-          const value = d[key]
-
-          if (value !== -273 && value < 100) {
-            lastValue = value
-          }
-
-          return this.y(lastValue)
-        })
+        .y((d) => this.y(d[key]))
+        .defined((d) => d[key] !== -273 && d[key] < 100)
 
       const path = this.chart
         .append('path')

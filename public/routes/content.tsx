@@ -36,8 +36,6 @@ export const design = (
   <>
     <p className="ugly-header">hover over images for more information</p>
     <FlowchartContent src={'slides/fullprocess.jpeg'} />
-
-    <style jsx>{``}</style>
   </>
 )
 

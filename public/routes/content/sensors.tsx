@@ -86,6 +86,8 @@ export const content2 = (
       img {
         margin-top: 2rem;
         margin-bottom: 2rem;
+        width: 100%;
+        vertical-align: middle;
       }
     `}</style>
   </>

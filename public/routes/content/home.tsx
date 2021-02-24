@@ -1,5 +1,8 @@
+import YouTubeVideo from '../../components/YouTubeVideo'
+
 export const homeContent = (
   <>
+    <YouTubeVideo />
     <h1>Fiber-Reinforced-Polymer Smart Composite Bridge Deck</h1>
     <p>
       A demonstration of FRP -- modular solution for the future of road
