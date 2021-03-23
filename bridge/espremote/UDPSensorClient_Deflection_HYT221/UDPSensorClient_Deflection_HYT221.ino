@@ -99,14 +99,13 @@ void setup(){
   
   //Connect to the WiFi network
   connectToWiFi(networkName, networkPswd);
- 
-  WiFi.begin(networkName, networkPswd);
+  
   while (WiFi.status() != WL_CONNECTED) {
     delay(50);
     Serial.print(".");
   }
- 
- 
+  
+  udp.begin(WiFi.localIP(),udpPort);
   
   // The ADC input range (or gain) can be changed via the following
   // functions, but be careful never to exceed VDD +0.3V max, or to
@@ -125,17 +124,15 @@ void setup(){
 }
 
 void loop(){
-  //only send data when connected
-  if(connected){
+  if (WiFi.status() == WL_CONNECTED) {
     //Send a packet
-
     // read adc
     uint16_t adcMax = 0;
     uint16_t adcRefMax = 0;
     for (uint8_t reading = 0; reading < 5; reading++) {
       adcMax = max(adcMax, ads.readADC_SingleEnded(0));
       adcRefMax = max(adcRefMax, ads.readADC_SingleEnded(3));
-      delay(20);
+      //delay(20);
     }
 
     char serialBuf[150];
@@ -151,9 +148,12 @@ void loop(){
 
       temperature = 0;
       humidity = 0;
-  }
+} else {
+          Serial.println("turned off tuned out dropped off resetting...");
+          delay(1000);
+         ESP.restart();
 }
-
+}
 void connectToWiFi(const char * ssid, const char * pwd){
   Serial.println("Connecting to WiFi network: " + String(ssid));
  
@@ -170,22 +170,22 @@ void connectToWiFi(const char * ssid, const char * pwd){
  
 //wifi event handler
 void WiFiEvent(WiFiEvent_t event){
-    switch(event) {
+    switch(event) { 
       case ARDUINO_EVENT_WIFI_STA_GOT_IP:
           //When connected set 
           Serial.print("WiFi connected! IP address: ");
           Serial.println(WiFi.localIP());  
           //initializes the UDP state
           //This initializes the transfer buffer
-          udp.begin(WiFi.localIP(),udpPort);
-          connected = true;
           break;
-      case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
-          Serial.println("WiFi lost connection, restarting...");
-          connected = false;
-          delay(1000);
-          ESP.restart();
+      //case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
+      //    Serial.println("ARDUINO_EVENT_WIFI_STA_DISCONNECTED");//, restarting...");
+      //    delay(1000);
+     //     ESP.restart();
           break;
+      //case WL_CONNECTION_LOST:
+      //    Serial.println("ARDUINO_EVENT_WIFI_CONNECTION_LOST");
+      //    break;
       default: break;
     }
 }
