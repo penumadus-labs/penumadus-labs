@@ -17,10 +17,8 @@ import Link from './link'
 // import DeflectionChart from '@web/d3-charts/deflection'
 
 import AccelerationChart from '../components/charts/acceleration'
-// import EnvironmentChart from '../components/charts/environment'
+import EnvironmentChart from '../components/charts/environment'
 import DeflectionChart from '../components/charts/deflection'
-
-import TestChart from '../test/index'
 
 import Controls from './controls'
 import Register from './register'
@@ -38,7 +36,7 @@ const icons = {
 }
 
 const Components = {
-  environment: TestChart,
+  environment: EnvironmentChart,
   deflection: DeflectionChart,
   acceleration: AccelerationChart,
   controls: Controls,
@@ -117,10 +115,7 @@ export default function Routes({ handleLogout }) {
     <>
       <main>
         <ErrorBoundary card={true} message="application body has crashed">
-          <Router className="space-children-y height100">
-            {routes}
-            <TestChart path="test" />
-          </Router>
+          <Router className="space-children-y height100">{routes}</Router>
         </ErrorBoundary>
       </main>
       <nav className="shadow-card">

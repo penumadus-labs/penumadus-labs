@@ -1,75 +1,74 @@
-// brush
-// extent
-// x scale
-// y scale
-// line
-
-// @ts-check
-
-import { LineSeries, XYChart } from '@visx/xychart'
-import { LinePath } from '@visx/shape'
-import { AxisTop, AxisRight } from '@visx/axis'
-import * as Scale from '@visx/scale'
-import React, { useRef, useEffect } from 'react'
-import { render } from 'react-dom'
-import { extent } from 'd3'
-import { appleStock as data } from '@visx/mock-data'
+import { AxisBottom, AxisLeft } from '@visx/axis'
+import { LinearGradient } from '@visx/gradient'
 import { Group } from '@visx/group'
+import { appleStock as data } from '@visx/mock-data'
+import { scaleLinear, scaleTime } from '@visx/scale'
+import { AreaClosed } from '@visx/shape'
+import { extent, max } from 'd3'
+import React from 'react'
+import { render } from 'react-dom'
 
-// range is width of display
-// domain is extend of data
+console.log(data)
+const width = 750
+const height = 400
 
-for (const d of data) {
-  d.date = new Date(d.date)
+const x = ({ date }) => new Date(date)
+const y = ({ close }) => close
+
+// Bounds
+const margin = {
+  top: 60,
+  bottom: 60,
+  left: 80,
+  right: 80,
 }
+const xMax = width - margin.left - margin.right
+const yMax = height - margin.top - margin.bottom
 
-const xAccessor = ({ date }) => date
-const yAccessor = ({ close }) => close
-
-const xScale = Scale.scaleTime({
-  range: [0, 800],
-  domain: extent(data, xAccessor),
+const xScale = scaleTime({
+  range: [0, xMax],
+  domain: extent(data, x),
 })
-const yScale = Scale.scaleLinear({
-  range: [0, 800],
-  domain: extent(data, yAccessor),
+const yScale = scaleLinear({
+  range: [yMax, 0],
+  domain: [0, max(data, y)],
 })
 
-const Chart = () => {
-  const ref = useRef()
+const Chart = () => (
+  <div>
+    <svg width={width} height={height}>
+      <LinearGradient from="#fbc2eb" to="#a6c1ee" id="gradient" />
 
-  useEffect(() => {
-    console.log(ref.current)
-  }, [ref])
-
-  return (
-    <svg ref={ref} width="800" height="800">
-      <Group>
-        {/* <XYChart
-          width={800}
-          height={800}
-          xScale={{ type: 'time' }}
-          yScale={{ type: 'linear' }}
-        >
-          <LineSeries
-            data={data}
-            dataKey="data 1"
-            xAccessor={xAccessor}
-            yAccessor={yAccessor}
-          ></LineSeries>
-        </XYChart> */}
-        <LinePath
-          stroke="red"
-          strokeWidth={2}
+      <Group top={margin.top} left={margin.left}>
+        <AreaClosed
           data={data}
-          x={(d) => xScale(xAccessor(d)) ?? 0}
-          y={(d) => yScale(yAccessor(d)) ?? 0}
+          // xScale={xScale}
+          yScale={yScale}
+          x={x}
+          y={y}
+          fill={'url(#gradient)'}
+          stroke={''}
         />
-        <AxisTop top={800} scale={xScale} />
-        <AxisRight scale={yScale} />
+
+        <AxisLeft
+          scale={yScale}
+          top={0}
+          left={0}
+          label={'Close Price ($)'}
+          stroke={'#1b1a1e'}
+          tickTextFill={'#1b1a1e'}
+        />
+
+        <AxisBottom
+          scale={xScale}
+          top={yMax}
+          label={'Years'}
+          stroke={'#1b1a1e'}
+          tickTextFill={'#1b1a1e'}
+        />
       </Group>
     </svg>
-  )
-}
+  </div>
+)
 
 render(<Chart />, document.querySelector('#root'))

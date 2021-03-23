@@ -15,8 +15,7 @@
     "ud pengine",
     "unparse",
     "utils/datetime",
-    "visx",
-    "xychart"
+    "visx"
   ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": false,
