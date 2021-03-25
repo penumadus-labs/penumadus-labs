@@ -17,14 +17,12 @@ export default function Controls({
   liveProps,
 }) {
   return (
-    <>
-      <StyledDiv className="space-children-x">
-        <Download {...downloadProps} />
-        <Delete {...deleteProps} />
-        <Live {...liveProps} />
-        <Help />
-        {children}
-      </StyledDiv>
-    </>
+    <StyledDiv className="space-children-x">
+      <Download {...downloadProps} />
+      <Delete {...deleteProps} />
+      <Live {...liveProps} />
+      <Help />
+      {children}
+    </StyledDiv>
   )
 }

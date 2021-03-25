@@ -4,7 +4,7 @@ import { filterData, resizeChart, changeView, resizeBrush } from './mutators'
 import * as settingsImport from './settings'
 import { getExtentTime, getObjectExtent } from './utils'
 
-const init = ({ label, data }) => {
+const init = ({ label, data = {} }) => {
   const settings = settingsImport[label]
   const { extentLeft, extentRight } = getObjectExtent(data, settings)
 
@@ -15,10 +15,14 @@ const init = ({ label, data }) => {
       extentLeft,
       extentRight,
     },
+    live: true,
+    realtimeData: [],
     data,
     settings,
     brush: {},
-    view: null,
+    view: {
+      timeDomainString: '',
+    },
     size: {},
   }
 }
@@ -76,6 +80,15 @@ const reducer = (state, { type, ...action }) => {
       }
     }
 
+    case 'data':
+      return { ...state }
+
+    case 'set-live':
+      return {
+        ...state,
+        live: !state.live,
+      }
+
     default:
       console.warn('unimplemented state')
       return { ...state }
@@ -85,7 +98,7 @@ const reducer = (state, { type, ...action }) => {
 export const useChartReducer = ({ width, height, ...props }) => {
   const [state, dispatch] = useReducer(reducer, props, init)
 
-  const { resize, ...actions } = useMemo(() => {
+  const [actions, hooks] = useMemo(() => {
     const handleReset = () => {
       dispatch({ type: 'reset' })
     }
@@ -95,18 +108,26 @@ export const useChartReducer = ({ width, height, ...props }) => {
       dispatch({ type: 'brush', ...props })
     }, 100)
 
-    const resize = ({ width, height }) => {
-      if (width !== 0 && height !== 0) {
-        dispatch({ type: 'resize', width, height })
-      }
+    const setLive = () => {
+      dispatch({ type: 'set-live' })
     }
 
-    return { handleReset, handleBrush, resize }
+    // const resize = throttle((width, height) => {
+    //   if (width !== 0 && height !== 0) {
+    //     dispatch({ type: 'resize', width, height })
+    //   }
+    // }, 0)
+
+    const useMount = (width, height) => {
+      useEffect(() => {
+        if (width !== 0 && height !== 0) {
+          dispatch({ type: 'resize', width, height })
+        }
+      }, [width, height])
+    }
+
+    return [{ handleReset, handleBrush, setLive }, { useMount }]
   }, [])
 
-  useEffect(() => {
-    resize({ width, height })
-  }, [width, height, resize])
-
-  return [state, actions]
+  return [state, actions, hooks]
 }

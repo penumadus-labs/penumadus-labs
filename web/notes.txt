@@ -1,8 +1,8 @@
 ** todo
 
-redo charts with visx
-
 localStorage?
+
+make status bar at top narrow
 
 ** bugs
 

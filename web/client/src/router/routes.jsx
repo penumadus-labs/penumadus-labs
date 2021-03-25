@@ -20,7 +20,7 @@ import AccelerationChart from '../components/charts/acceleration'
 // import EnvironmentChart from '../components/charts/environment'
 import DeflectionChart from '../components/charts/deflection'
 
-import TestChart from '../test/index'
+import TestChart from '../data/views/index.jsx'
 
 import Controls from './controls'
 import Register from './register'

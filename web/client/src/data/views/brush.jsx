@@ -1,7 +1,7 @@
 import { AxisBottom } from '@visx/axis'
 import { Brush as VisxBrush } from '@visx/brush'
 import React from 'react'
-import { brushHeight, yScaleBrush } from './helpers/size'
+import { brushHeight, yScaleBrush } from '../model/size'
 
 export const Brush = ({ onClick, onChange, innerWidth, scale }) => {
   return (
@@ -18,6 +18,15 @@ export const Brush = ({ onClick, onChange, innerWidth, scale }) => {
         onChange={onChange}
         onClick={onClick}
         selectedBoxStyle={{ fill: 'rgb(50, 150, 250, .1)' }}
+      />
+      <line className="line" y1="0" y2="0" x1="0" x2={innerWidth} />
+      <line className="line" y1="0" y2={brushHeight} x1="0" x2="0" />
+      <line
+        className="line"
+        y1="0"
+        y2={brushHeight}
+        x1={innerWidth}
+        x2={innerWidth}
       />
       <AxisBottom
         top={brushHeight}

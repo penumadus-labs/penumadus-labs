@@ -1,23 +1,17 @@
 // @ts-check
 import styled from '@emotion/styled'
 import { LegendOrdinal as Legend } from '@visx/legend'
-import { ParentSize } from '@visx/responsive'
 import { scaleOrdinal } from '@visx/scale'
 import React, { useMemo } from 'react'
-import useApi from '../api'
-import { Chart } from './chart'
-import * as settingsImport from './helpers/settings'
+import { Controls } from './controllers'
+
+import useApi from '../../api'
+
+import * as settingsImport from '../model/settings'
 
 const StyledDiv = styled.div`
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  .legend {
-    margin: 0 auto;
-
-    /* center legend vertically */
-    display: grid;
-    align-items: center;
-  }
+  grid-template-rows: auto minmax(0, 1fr) auto;
 `
 
 export default function ContainerChart({ label = 'environment' }) {
@@ -25,7 +19,11 @@ export default function ContainerChart({ label = 'environment' }) {
     {
       [label]: [status, result],
     },
+    ,
+    { useDownloadEnvironment, useDeleteEnvironment, useGetEnvironmentData },
   ] = useApi()
+
+  const data = result?.data
 
   const scaleLegend = useMemo(() => {
     const settings = settingsImport[label]
@@ -36,25 +34,21 @@ export default function ContainerChart({ label = 'environment' }) {
 
   if (status) return status
 
-  if (!result?.data) return null
+  if (!data) return null
+
+  const api = {
+    useDownload: useDownloadEnvironment,
+    useGet: useGetEnvironmentData,
+    useDelete: useDeleteEnvironment,
+  }
 
   return (
     <StyledDiv className="card height100">
-      <ParentSize>
-        {({ width, height }) => (
-          <Chart
-            width={width}
-            height={height}
-            label={label}
-            data={result.data}
-          />
-        )}
-      </ParentSize>
+      <Controls label={label} data={data} api={api} />
       <Legend
-        className="legend"
+        className="center-child"
         direction="row"
         itemMargin="0 .5rem"
-        // never changes
         scale={scaleLegend}
       />
     </StyledDiv>

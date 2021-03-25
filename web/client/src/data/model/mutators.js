@@ -10,6 +10,9 @@ const brushGroupTopOffset = margin.bottom + brushHeight
 const chartHeightOffset =
   margin.top + margin.center + brushHeight + margin.bottom
 
+export const resolveData = ({ mode, realtimeData, data }) =>
+  mode === 'live' ? realtimeData : data
+
 export const resizeChart = (width, height, brushDomain) => {
   const innerWidth = width - margin.x
   const chartHeight = height - chartHeightOffset
@@ -38,9 +41,11 @@ export const changeView = (
   { chartHeight, innerWidth },
   { extentLeft, extentRight }
 ) => {
+  const timeDomain = extent(data.map(accessTime))
+
   const xScale = scaleTime({
     range: [0, innerWidth],
-    domain: extent(data.map(accessTime)),
+    domain: timeDomain,
   })
 
   const yRange = [chartHeight, 0]
@@ -70,7 +75,7 @@ export const changeView = (
     )
   })
 
-  return (
+  const View = () => (
     <>
       {lines}
       <AxisBottom
@@ -88,6 +93,12 @@ export const changeView = (
       />
     </>
   )
+
+  return {
+    View,
+    timeDomain,
+    timeDomainString: timeDomain.toString(),
+  }
 }
 
 export const filterData = (initialData, { x0, x1 }) =>
