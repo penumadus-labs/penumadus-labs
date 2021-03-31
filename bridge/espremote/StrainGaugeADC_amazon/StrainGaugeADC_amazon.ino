@@ -40,8 +40,10 @@ double results;
 double mVexcitation;
 
 void IRAM_ATTR adjoffset() {
-  // raw ADC reading in lastdiff copied to g_offset
+  // raw ADC reading in lastdiff copied to g_offset if unstrained
+  if ((g_lastdiff-g_offset) < 63) {
    g_offset = g_lastdiff;
+  }
 }
 
  float humidity;
@@ -131,13 +133,14 @@ void loop(){
                 if (readingValue == 2) {
                      requestHumidityAndTemp();
                   // both readings have been taken, time to send
-                  if (readingsSinceCalibration < MAXREADINGSBEFORECAL) {
+                  if (readingsSinceCalibration < MAXREADINGSBEFORECAL || !((g_lastdiff-g_offset) < 63)) {
                       Serial.printf("%lu, D, %.2f, %.2f, %.2f, %.2f, %.2f\n", millis(), (results - g_offset)  * DIFFGAINMULT, mVexcitation, g_offset*DIFFGAINMULT, temperature, humidity);
                       udp.beginPacket(udpAddress,udpPort);
                       udp.printf("%lu, D, %.2f, %.2f, %.2f, %.2f, %.2f\n", millis(), (results - g_offset)  * DIFFGAINMULT, mVexcitation, g_offset*DIFFGAINMULT,  temperature, humidity);
                       udp.endPacket(); 
-                  } else if ((g_lastdiff-g_offset) < 1638) {
-                      // if it's been more than ten readings since last cal, and gauge is under 5% load (26 mV) diff, calibrate
+                  } else if ((g_lastdiff-g_offset) < 63) {
+                      // if it's been more than ten readings since last cal, and gauge is under (1 mV) diff, calibrate
+                      
                       Serial.printf("%lu, C, %.2f, %.2f, %.2f, %.2f, %.2f\n", millis(), results * DIFFGAINMULT, mVexcitation, 0, temperature, humidity);
                       udp.beginPacket(udpAddress,udpPort);
                       udp.printf("%lu, C, %.2f, %.2f, %.2f, %.2f, %.2f\n", millis(), results * DIFFGAINMULT, mVexcitation, 0, temperature, humidity);
