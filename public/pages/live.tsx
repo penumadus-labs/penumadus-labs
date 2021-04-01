@@ -2,7 +2,7 @@ import { useState } from 'react'
 import LoadingEllipsis from '../components/LoadingEllipsis'
 
 export default function Live() {
-  const liveVideoUrl = 'https://compositebridge.org/live-camera-feed-proxy'
+  const liveVideoUrl = 'https://compositebridge.org/camera-feed-proxy'
 
   const [loading, setLoading] = useState(true)
 
