@@ -2,7 +2,7 @@ import { HoverBox as Box } from '../../components/HoverBox'
 
 export const hoverDiagramContent = (
   <>
-    <Box top="45" left="22.1" width="6.9" height="10" round leftDropdown="100">
+    <Box top="45" left="22.1" width="6.9" height="10" round>
       <h1>Temperature</h1>
       <p>
         Multiple digital temperature sensors are embedded directly in the
@@ -30,7 +30,7 @@ export const hoverDiagramContent = (
         resolution envelope profiles to the archive for analysis.
       </p>
     </Box>
-    <Box top="71" left="10.2" width="9.2" height="11" leftDropdown="200">
+    <Box top="71" left="10.2" width="9.2" height="11">
       <h1>Local Concentrator</h1>
       <p>
         The local concentrator creates and manages the wireless sensor network,
@@ -97,7 +97,7 @@ export const hoverDiagramContent = (
         humidity under the bridge
       </p>
     </Box>
-    <Box top="39.5" left="76.2" width="5.3" height="10.4" leftDropdown="-250">
+    <Box top="39.5" left="76.2" width="5.3" height="10.4">
       <h1>Strain Gauge</h1>
       <p>
         Multiple Strain Gauges are placed on metallic members to record offsets

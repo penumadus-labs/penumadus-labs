@@ -22,17 +22,15 @@ export const HoverBox: FC<{
   width: string
   height: string
   round?: boolean
-  leftDropdown?: string | number
-  topDropdown?: string | number
+  disabled?: boolean
 }> = ({
   top,
   left,
   width,
   height,
   round = false,
+  disabled = false,
   children,
-  leftDropdown,
-  topDropdown,
 }) => {
   // const [open, setOpen] = useState(false)
 
@@ -41,6 +39,8 @@ export const HoverBox: FC<{
   // useGlobalClick(() => {
   //   console.log(open)
   // }, open)
+
+  if (disabled) return null
 
   return (
     <>
@@ -73,7 +73,7 @@ export const HoverBox: FC<{
           z-index: 20;
         }
         .box {
-          /*  border: 1px solid red; */
+          /* border: 1px solid red; */
 
           position: absolute;
           top: ${top}%;
@@ -84,15 +84,16 @@ export const HoverBox: FC<{
         }
 
         .info {
-          left: calc(50% - 15rem ${leftDropdown ? `+ ${leftDropdown}%` : ''});
-          top: calc(50% + ${topDropdown || 0}%);
+          left: calc(50% - 15rem);
+          top: 30%;
           max-height: 90vh;
           width: 30rem;
           background: white;
           padding: 1rem;
           opacity: 0;
-          position: absolute;
+          position: fixed;
           transition: opacity 0.2s;
+          z-index: 100;
         }
 
         .sibling {

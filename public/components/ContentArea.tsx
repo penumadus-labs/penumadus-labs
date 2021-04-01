@@ -29,7 +29,9 @@ export const ContentArea: FC<{
           min-height: 100vh;
           background: white;
           text-align: center;
-          overflow: hidden;
+           {
+            /* overflow: hidden; */
+          }
         }
 
         p {

@@ -1,4 +1,4 @@
-import YouTubeVideo from '../../components/YouTubeVideo'
+import YouTubeVideo from '../../components/Video'
 
 export const homeContent = (
   <>
