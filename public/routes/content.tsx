@@ -33,11 +33,7 @@ export const FillerContent: FC<{
 export const home = homeContent
 
 export const design = (
-  <>
-    <p className="ugly-header">hover over images for more information</p>
-    <FillerContent topMargin={false} src="slides/fullprocess.jpeg" />
-    {/* <FlowchartContent src={'slides/fullprocess.jpeg'} /> */}
-  </>
+  <FillerContent topMargin={false} src="slides/fullprocess.jpeg" />
 )
 
 export const sensors = (

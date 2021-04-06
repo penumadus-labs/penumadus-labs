@@ -45,7 +45,7 @@ export const routes: Routes = [
     active: '',
   },
   {
-    title: 'Live Video Feed',
+    title: 'Live Video & Contact',
     href: '/live',
     active: '',
   },

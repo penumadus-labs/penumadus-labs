@@ -16,6 +16,14 @@ export default function Live() {
             <img src="bridge-picture.png" alt="" />
           </div>
         </div>
+        <h1 className="title">Contact Information</h1>
+        <p>312 John D. Tickle Building</p>
+        <p>Phone: 865-974-7708</p>
+        <p>
+          <a href="mailto: morgancobridge@utk.edu">
+            E-mail: morgancobridge@utk.edu <Icon size="14" />
+          </a>
+        </p>
       </div>
       <style jsx>{`
         .root {
@@ -23,8 +31,12 @@ export default function Live() {
           min-height: 100vh;
           text-align: center;
         }
+        * + h1 {
+          margin-top: 4rem;
+        }
 
         a {
+          color: #0074d9;
         }
 
         p {

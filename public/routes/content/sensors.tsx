@@ -8,6 +8,16 @@ export const content1 = (
       state-of-the-art wireless sensor module system to monitor the composite
       bridge deck system while in-service.
     </p>
+    <p>
+      <span className="quote">
+        “Lack of durability data is one of the major barriers of the adoption of
+        novel and advance materials including carbon, basalt, or glass fiber
+        reinforced polymeric composites in civil infrastructure,”
+      </span>{' '}
+      said Dayakar Penumadu, the Fred N. Peebles Professor in the Tickle College
+      of Engineering at UT and Characterization Fellow for Materials and
+      Processing for IACMI.
+    </p>
     <h1>Optical Sensors:</h1>
     <p>
       Composed of high density optic fiber and fiber bragg grating sensors
@@ -18,6 +28,17 @@ export const content1 = (
       structural component. Because of its expense and susceptibility to theft
       or damage, the optical system interface is not employed continuously but
       is easily attached and activated on demand.
+    </p>
+    <p>
+      <span className="quote">
+        “This is a major obstacle for integrating new materials and structures
+        quickly and thus require successful demonstration as being done through
+        this IACMI project. Bridge decks are the most damage prone elements, and
+        we are integrating smart sensors distributed throughout the composite
+        bridge deck that will provide us valuable performance data with time for
+        years to come.”
+      </span>{' '}
+      Professor Penumadu
     </p>
     <h1>Wireless Sensors:</h1>
     <p>
@@ -48,7 +69,8 @@ export const content1 = (
       <em>unique configurations</em> enabled by the composite construction of
       the bridge deck.
     </p>
-    <div className="flex cols-3">
+    <h1>Display of an Acceleration Event Time vs. G's</h1>
+    <div className="flex cols-1">
       <img src="slides/acceleration.png" alt="" />
       <img src="slides/deck-deflection.png" alt="" />
       <img src="slides/temperature-humidity.png" alt="" />
