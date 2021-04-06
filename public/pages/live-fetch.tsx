@@ -5,15 +5,18 @@ const liveVideoUrl = 'http://138.43.190.248:20020/'
 // const liveVideoUrl = 'http://ceecam.edu:20020/'
 
 export default function Live() {
-  const [imageState, setImageState] = useState('loading')
   const [imageUrl, setImageUrl] = useState<string>('')
 
   useEffect(() => {
-    setInterval(async () => {
+    void (async () => {
       try {
         const response = await fetch(liveVideoUrl, {
           mode: 'cors',
           headers: {
+            Connection: 'Keep-Alive',
+            'Transfer-Encoding': 'chunked',
+            'Content-Type':
+              'multipart/x-mixed-replace; boundary=BoundaryString',
             'Access-Control-Allow-Origin': '*',
           },
         })
@@ -21,7 +24,7 @@ export default function Live() {
         const url = URL.createObjectURL(blob)
         setImageUrl(url)
       } catch (error) {}
-    }, 1000)
+    })()
   })
 
   return (
@@ -30,7 +33,6 @@ export default function Live() {
         <div className="hidden-small">
           <h1 className="title">Live Video Feed</h1>
         </div>
-        {imageState === 'loading' && <LoadingEllipsis />}
       </div>
       <div className="center-items">
         <img src={imageUrl} alt="" height="auto" />
