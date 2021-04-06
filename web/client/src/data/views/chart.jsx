@@ -42,7 +42,32 @@ const ChartContent = ({ width, height, reducer }) => {
     <StyledSvg height={height} width={width}>
       <Group left={margin.left} top={margin.top}>
         <line className="line" y1="0" y2="0" x1="0" x2={innerWidth} />
-        <View />
+        {settings.map(({ stroke, accessor, scale }, i) => {
+          return (
+            <LinePath
+              key={i}
+              stroke={stroke}
+              strokeWidth={2}
+              data={data}
+              x={(d) => xScale(accessTime(d))}
+              y={(d) => scale(accessor(d))}
+              defined={isDefined}
+            />
+          )
+        })}
+        <AxisBottom
+          top={chartHeight}
+          axisClassName="axis"
+          label="time"
+          scale={xScale}
+        />
+        <AxisLeft axisClassName="axis" label="temperature" scale={scaleLeft} />,
+        <AxisRight
+          axisClassName="axis"
+          label="temp"
+          scale={scaleRight}
+          left={innerWidth}
+        />
       </Group>
       <Group left={margin.left} top={groupTop}>
         {!live && (

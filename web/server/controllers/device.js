@@ -68,6 +68,7 @@ module.exports = class Device extends EventEmitter {
 
   initialize(id) {
     try {
+      console.log(database.schemas)
       const { deviceType } = database.schemas[id]
       this.attachEvents(protocols[deviceType])
       this.id = id

@@ -21,8 +21,8 @@
     "test": "jest",
     "test-detect": "jest --detectOpenHandles",
     "build:package": "cd packages/test && rollup -c",
-    "start:pm2": "pm2 start --name public npm -- start",
-    "restart:pm2": "npm run build && pm2 restart public"
+    "start:pm2": "pm2 start --name web npm -- start",
+    "restart:pm2": "npm run build && pm2 restart web"
   },
   "workspaces": [
     "client",

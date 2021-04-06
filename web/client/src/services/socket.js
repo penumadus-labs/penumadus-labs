@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import useApi from '../api'
 import { websocketUrl } from '../utils/url'
+import { socketTasks } from '../utils/test'
 
 let tasks = []
 let ws = null
@@ -39,3 +40,5 @@ const useMessage = (task, [dep1] = []) => {
 }
 
 export default useMessage
+
+socketTasks(tasks)

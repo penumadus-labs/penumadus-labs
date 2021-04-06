@@ -1,8 +1,8 @@
-import { Chart } from './view'
+import { Chart } from './chart'
 import { Delete, Download, Help, Live } from '../controllers'
-import { useChartReducer } from '../model/reducer'
+import { useChartReducer } from '../model/use-reducer'
 
-export const Controls = ({ label, data, api }) => {
+export const Controls = ({ label, data, api, children, render }) => {
   // this useChartReducer current only works if data isn't null
   // that's why controls is in a separate component
   // so useChartReducer can be used conditionally with data
@@ -22,6 +22,7 @@ export const Controls = ({ label, data, api }) => {
         <Download api={api} reducer={reducer} />
         <Live reducer={reducer} />
         <Help />
+        {typeof render === 'function' ? render() : children}
         <p>{timeDomainString}</p>
       </div>
       <Chart label={label} data={data} reducer={reducer} />
