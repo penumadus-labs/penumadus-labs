@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import LoadingEllipsis from '../components/LoadingEllipsis'
 
 // const liveVideoUrl = 'http://138.43.190.248:20020/'
-// const redirectUrl = 'https://camera.compositebridge.org'
+const proxyUrl = 'https://camera.compositebridge.org'
 const liveVideoUrl = 'http://ceecam.edu:20020/'
 
 export default function Live() {
@@ -28,6 +28,13 @@ export default function Live() {
         ) : (
           <p>live video feed could not be loaded</p>
         )}
+        <img
+          src={proxyUrl}
+          alt=""
+          height="auto"
+          onLoad={() => setImageState('')}
+          onError={() => setImageState('error')}
+        />
       </div>
       <style jsx>{`
         .root {
