@@ -1,26 +1,20 @@
-import { useState } from 'react'
-import LoadingEllipsis from '../components/LoadingEllipsis'
+const redirectUrl = 'https://camera.compositebridge.org'
+import { BiLinkExternal as Icon } from 'react-icons/bi'
 
 export default function Live() {
-  const liveVideoUrl = 'https://compositebridge.org/camera-feed-proxy'
-
-  const [loading, setLoading] = useState(true)
-
   return (
     <>
       <div className="root p">
         <div className="hidden-small">
           <h1 className="title">Live Video Feed</h1>
-        </div>
-        {loading && <LoadingEllipsis />}
-        <div className="center-items">
-          <img
-            src={liveVideoUrl}
-            alt="broken page"
-            width="100%"
-            height="auto"
-            onLoad={() => setLoading(false)}
-          />
+          <p>
+            <a href={redirectUrl} target="_blank">
+              open video feed <Icon size="14" />
+            </a>
+          </p>
+          <div className="center-items">
+            <img src="bridge-picture.png" alt="" />
+          </div>
         </div>
       </div>
       <style jsx>{`
@@ -28,6 +22,9 @@ export default function Live() {
           background: white;
           min-height: 100vh;
           text-align: center;
+        }
+
+        a {
         }
 
         p {
@@ -38,6 +35,7 @@ export default function Live() {
         img {
           vertical-align: middle;
           margin-top: 2rem;
+          width: 100%;
         }
       `}</style>
     </>

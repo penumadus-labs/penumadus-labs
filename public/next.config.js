@@ -9,4 +9,7 @@ module.exports = {
   sassOptions: {
     includePaths: [join(__dirname, 'styles')],
   },
+  future: {
+    webpack5: true,
+  },
 }

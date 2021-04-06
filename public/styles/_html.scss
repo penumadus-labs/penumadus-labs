@@ -71,3 +71,8 @@ button {
   background: inherit;
   cursor: pointer;
 }
+
+img[alt]:after {
+  display: none;
+  content: attr(alt);
+}
