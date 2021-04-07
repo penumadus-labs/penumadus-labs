@@ -77,7 +77,10 @@ body {
     // margin-top: 2rem;
     // margin-bottom: 2rem;
     margin: 2rem auto;
-    max-width: 800px;
+    max-width: 50rem;
+    @media only screen and (min-width: 140rem) {
+      max-width: 60rem;
+    }
   }
 
   ul {
