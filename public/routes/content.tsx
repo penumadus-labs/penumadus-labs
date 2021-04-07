@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { HoverDiagram } from '../components/HoverDiagram'
-import { FlowchartContent } from './content/FlowchartContent'
 import { futureContent } from './content/future'
 import { homeContent } from './content/home'
 import { hoverDiagramContent } from './content/hover-diagram'

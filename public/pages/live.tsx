@@ -1,5 +1,6 @@
 const redirectUrl = 'https://camera.compositebridge.org'
-import { BiLinkExternal as Icon } from 'react-icons/bi'
+import { VscLinkExternal as LinkIcon } from 'react-icons/vsc'
+import { HiOutlineMailOpen as MailIcon } from 'react-icons/hi'
 
 export default function Live() {
   return (
@@ -9,21 +10,28 @@ export default function Live() {
           <h1 className="title">Live Video Feed</h1>
           <p>
             <a href={redirectUrl} target="_blank">
-              open video feed <Icon size="14" />
+              open video feed <LinkIcon size="14" />
             </a>
           </p>
           <div className="center-items">
             <img src="bridge-picture.png" alt="" />
           </div>
         </div>
-        <h1 className="title">Contact Information</h1>
-        <p>312 John D. Tickle Building</p>
-        <p>Phone: 865-974-7708</p>
-        <p>
-          <a href="mailto: morgancobridge@utk.edu">
-            E-mail: morgancobridge@utk.edu <Icon size="14" />
-          </a>
-        </p>
+        <div className="contact">
+          <h1 className="title">Contact Information</h1>
+
+          <h2 className="bold">Dayakar Penumadu</h2>
+          <p className="bold info">
+            Fred N. Peebles Professor and JIAM Chair of Excellence
+          </p>
+
+          <p>325 John D. Tickle Building</p>
+          <p>
+            <a href="mailto: morgancobridge@utk.edu">
+              morgancobridge@utk.edu <MailIcon size="14" />
+            </a>
+          </p>
+        </div>
       </div>
       <style jsx>{`
         .root {
@@ -31,12 +39,18 @@ export default function Live() {
           min-height: 100vh;
           text-align: center;
         }
-        * + h1 {
+        .info {
+          max-width: 24rem;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        * + h1,
+        h2 {
           margin-top: 4rem;
         }
 
         a {
-          color: #0074d9;
+          /* color: #0074d9; */
         }
 
         p {

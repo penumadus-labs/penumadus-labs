@@ -69,11 +69,11 @@ export const content1 = (
       <em>unique configurations</em> enabled by the composite construction of
       the bridge deck.
     </p>
-    <h1>Display of an Acceleration Event Time vs. G's</h1>
+    <h1>Data Collection</h1>
     <div className="flex cols-1">
       <img src="slides/acceleration.png" alt="" />
-      <img src="slides/deck-deflection.png" alt="" />
-      <img src="slides/temperature-humidity.png" alt="" />
+      <img src="slides/deflection.png" alt="" />
+      <img src="slides/environment.png" alt="" />
     </div>
   </>
 )
