@@ -72,6 +72,7 @@ export const content1 = (
     <h1>Data Collection</h1>
     <div className="flex cols-1">
       <img src="slides/acceleration.png" alt="" />
+      <p>Example Displacement Data with Time for Extreme Loading Conditions</p>
       <img src="slides/deflection.png" alt="" />
       <img src="slides/environment.png" alt="" />
     </div>
