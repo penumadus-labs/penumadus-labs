@@ -59,6 +59,10 @@ body {
 }
 
 .content-area {
+  position: relative;
+  min-height: 100vh;
+  background: white;
+  text-align: center;
   section {
     @media only screen and (min-width: $break-medium) {
       // width: 60%;
@@ -76,7 +80,8 @@ body {
   p {
     // margin-top: 2rem;
     // margin-bottom: 2rem;
-    margin: 2rem auto;
+    padding: 2rem;
+    margin: 0 auto;
     max-width: 50rem;
     @media only screen and (min-width: 140rem) {
       max-width: 60rem;

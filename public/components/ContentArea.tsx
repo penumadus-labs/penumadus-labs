@@ -25,18 +25,9 @@ export const ContentArea: FC<{
       </div>
       <style jsx>{`
         .content-area {
-          position: relative;
-          min-height: 100vh;
-          background: white;
-          text-align: center;
-           {
-            /* overflow: hidden; */
-          }
         }
 
         p {
-          padding: 2rem;
-          margin: 0 auto;
         }
       `}</style>
     </>
