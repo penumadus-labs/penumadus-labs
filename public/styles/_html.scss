@@ -32,12 +32,15 @@ body {
 
 html,
 body {
+  // overflow-x: hidden;
   padding: 0;
   margin: 0;
   font-family: Georgia, 'Times New Roman', Times, serif;
-
   font-size: 115%;
-  // overflow-x: hidden;
+  @media only screen and (min-width: 140rem) {
+    font-size: 130%;
+    color: green;
+  }
 }
 
 * {
