@@ -12,15 +12,6 @@ const ipFile = join(
   'ip-request.json'
 )
 
-export const readIp = async () => {
-  await readFile(ipFile)
-  const data = await readFile(ipFile)
-  const { ip }: { ip: string } = JSON.parse(data.toString())
-  return ip
-}
-
-export const writeIp = (data: object) => writeFile(ipFile, JSON.stringify(data))
-
 export default async (
   { method, body }: NextApiRequest,
   res: NextApiResponse
@@ -28,8 +19,8 @@ export default async (
   switch (method) {
     case 'GET':
       try {
-        const ip = await readIp()
-        res.status(200).end(ip)
+        const response = await readFile(ipFile)
+        res.status(200).end(response)
       } catch (e) {
         console.error(e)
         res.status(404).end('ip address not found')
@@ -38,7 +29,13 @@ export default async (
 
     case 'POST':
       try {
-        await writeIp(body)
+        await writeFile(
+          ipFile,
+          JSON.stringify({
+            time: new Date(Date.now()).toTimeString(),
+            ...body,
+          })
+        )
         res.status(200).end('okay')
       } catch (e) {
         console.error(e)
