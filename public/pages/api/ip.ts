@@ -15,13 +15,10 @@ const writeDir = join(
 
 import { writeFile } from 'fs/promises'
 
-const writePost = (fileName: string) =>
-  join(__dirname, '..', '..', 'posts', fileName)
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await Promise.all([
-    writeFile(writePost('ip-request-body.json'), req.body),
-    writeFile(writePost('ip-request-query.json'), JSON.stringify(req.query)),
-  ])
+export default async ({ body }: NextApiRequest, res: NextApiResponse) => {
+  await writeFile(
+    join(__dirname, '..', '..', 'posts', 'ip-request-body.json'),
+    JSON.stringify(body)
+  )
   res.status(200).end('okay')
 }
