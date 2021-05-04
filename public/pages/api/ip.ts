@@ -1,16 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { readFile, writeFile } from 'fs/promises'
-import { dirname, join } from 'path'
-import { fileURLToPath } from 'url'
-
-const ipFile = join(
-  dirname(fileURLToPath(import.meta.url)),
-  '..',
-  '..',
-  'posts',
-  'ip-request.json'
-)
+import { writeFile } from 'fs/promises'
+import { ipFile, readIp } from '../../utils/fs'
 
 export default async (
   { method, body }: NextApiRequest,
@@ -19,8 +10,7 @@ export default async (
   switch (method) {
     case 'GET':
       try {
-        const response = await readFile(ipFile)
-        res.status(200).end(response)
+        res.status(200).end(await readIp())
       } catch (e) {
         console.error(e)
         res.status(404).end('ip address not found')
@@ -32,8 +22,8 @@ export default async (
         await writeFile(
           ipFile,
           JSON.stringify({
-            time: new Date(Date.now()).toTimeString(),
-            ...body,
+            lastUpdated: new Date(Date.now()).toString(),
+            ip: body.ip,
           })
         )
         res.status(200).end('okay')

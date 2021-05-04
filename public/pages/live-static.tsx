@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import LoadingEllipsis from '../components/LoadingEllipsis'
 
-// const liveVideoUrl = 'http://138.43.190.248:20020/'
-const proxyUrl = 'https://camera.compositebridge.org'
-const liveVideoUrl = 'http://ceecam.edu:20020/'
-
-export default function Live() {
+export default function Live({ ip }: { ip: string }) {
   const [imageState, setImageState] = useState('loading')
+
+  console.log(ip)
 
   return (
     <>
@@ -18,7 +16,7 @@ export default function Live() {
         {imageState !== 'error' ? (
           <div className="center-items">
             <img
-              src={liveVideoUrl}
+              src={ip}
               alt=""
               height="auto"
               onLoad={() => setImageState('')}
@@ -28,13 +26,6 @@ export default function Live() {
         ) : (
           <p>live video feed could not be loaded</p>
         )}
-        <img
-          src={proxyUrl}
-          alt=""
-          height="auto"
-          onLoad={() => setImageState('')}
-          onError={() => setImageState('error')}
-        />
       </div>
       <style jsx>{`
         .root {
@@ -56,4 +47,10 @@ export default function Live() {
       `}</style>
     </>
   )
+}
+
+Live.getInitialProps = async () => {
+  const response = await fetch('https://compositebridge.org/api/ip')
+  const { ip } = await response.json()
+  return { ip: 'http://' + ip }
 }
