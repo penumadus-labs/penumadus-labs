@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url'
 export const ipFile = join(
   dirname(fileURLToPath(import.meta.url)),
   '..',
-  '..',
   'posts',
   'ip-request.json'
 )
