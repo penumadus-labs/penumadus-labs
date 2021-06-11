@@ -247,6 +247,11 @@ const globalStyle = css`
     ${spaceChildrenXXXS}
   }
 
+  .center-children-vertically {
+    display: flex;
+    align-items: center;
+  }
+
   .center-child {
     display: flex;
     align-items: center;

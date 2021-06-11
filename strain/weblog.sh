@@ -1,0 +1,1 @@
+/var/www/html/weblog/weblog.sh

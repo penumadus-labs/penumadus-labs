@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import Tooltip from './tooltip'
 import React, { useState } from 'react'
 import { IoMdClose as Close } from 'react-icons/io'
-import { useEsc } from '@web/hooks/use-events'
+import { useEsc } from '../hooks/use-events'
+import Tooltip from './tooltip'
 
 /* @keyframes open {
     0% {

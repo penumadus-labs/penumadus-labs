@@ -5,7 +5,7 @@ export const parseDate = (date) =>
     day: 'numeric',
   })
 
-export const oneDay = 86400000
+export const oneDay = 86400000 / 1000
 export const threeDays = oneDay * 3
 
 const parseTime = (time) => {

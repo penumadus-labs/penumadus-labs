@@ -1,52 +1,66 @@
-import axios from 'axios'
+// import axios from 'axios'
 import url from '../utils/url'
 
-const withCredentials = process.env.NODE_ENV === 'development'
+// const withCredentials = process.env.NODE_ENV === 'development'
 
 const headers = {
   'X-Requested-With': 'XMLHttpRequest',
   'Content-Type': 'application/json',
-  Accept: 'application/json; text/plain',
+  Accept: 'application/json, text/plain, application/csv',
 }
 
-export const api = axios.create({
-  baseURL: url + 'api/',
-  headers,
-  withCredentials,
-})
+const baseURL = url + 'api/'
 
-export const parseError = (error) =>
-  error.response?.statusText || error.toString()
+// export const api = axios.create({
+//   baseURL,
+//   headers,
+//   withCredentials,
+// })
 
-export const request = async (url, params = {}, method = 'get') => {
-  const { data } = await api({ method, url, params })
-  return data
-}
+// export const parseError = (error) =>
+//   error.response?.statusText || error.toString()
 
-export const update = async (url, data = {}, method = 'post') => {
-  const res = await api({ method, url, data })
-  return res.data
-}
-
-// export const update = async (url, data = {}) => {
-//   const res = await fetch(baseURL + url, {
-//     mode: 'cors',
-//     method: 'POST',
-//     credentials: 'include',
-//     headers,
-//     body: JSON.stringify(data),
-//   })
-//   if (!res.ok) throw new Error('oops')
+// export const request = async (url, params = {}, method = 'get') => {
+//   const { data } = await api({ method, url, params })
+//   return data
 // }
 
-// export const request = async (url, data = {}) => {
-//   const res = await fetch(baseURL + url, {
-//     mode: 'cors',
-//     method: 'GET',
-//     credentials: 'include',
-//     headers,
-//     body: JSON.stringify(data),
-//   })
-//   if (!res.ok) throw new Error('oops')
-//   return res.json()
+// export const update = async (url, data = {}, method = 'post') => {
+//   const res = await api({ method, url, data })
+//   return res.data
 // }
+
+const createUrl = (path, params) => {
+  const url = new URL(baseURL + path)
+  if (params) url.search = new URLSearchParams(params).toString()
+
+  return url
+}
+
+export const update = async (path, data = {}) => {
+  const response = await fetch(createUrl(path), {
+    method: 'POST',
+    credentials: 'include',
+    headers,
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw Error(response.statusText)
+}
+
+export const request = async (...ctx) => {
+  const response = await fetch(createUrl(...ctx), {
+    method: 'GET',
+    credentials: 'include',
+    headers,
+  })
+
+  if (!response.ok) throw Error(response.statusText)
+
+  const data = await response.text()
+
+  try {
+    return JSON.parse(data)
+  } catch (_) {
+    return data
+  }
+}

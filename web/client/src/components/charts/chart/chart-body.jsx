@@ -1,11 +1,11 @@
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useResize } from '../../../hooks/use-events'
 import Controls from './controls'
+import Chart from './d3-linechart'
 import Legend from './legend'
 import Tools from './tools'
-import Chart from './d3-linechart'
-import { useResize } from '@web/hooks/use-events'
 
 const SvgStyle = css`
   svg {

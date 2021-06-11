@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+@mixin reset {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+$gray: #58595b;
+
+:root {
+  --orange: #ff8200;
+  --gray: #58595b;
+  // value of 16rem is no margin from the side
+  --sidebar-width: 20rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-image: url('/background.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  // background-position: 50% 0%;
+  background-color: black;
+  color: $gray;
+}
+
+html,
+body {
+  // overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 115%;
+  @media only screen and (min-width: 140rem) {
+    font-size: 130%;
+    color: green;
+  }
+}
+
+* {
+  @include reset;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 2rem;
+  font-family: 'Montserrat', sans-serif;
+  // font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  //   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+button {
+  border: 0;
+  background: inherit;
+  cursor: pointer;
+}
+
+img[alt]:after {
+  display: none;
+  content: attr(alt);
+}

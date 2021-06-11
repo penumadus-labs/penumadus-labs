@@ -12,13 +12,13 @@ const defaultUdpPortIndex = 30000
 
 class DatabaseClient {
   silent = false
-  constructor({ DB_USER, DB_PWD, DB_URL }) {
-    if (!DB_URL || !DB_USER || !DB_PWD)
+  constructor({ DB_USER, DB_PWD, DB_URL = 'localhost' }) {
+    if (!DB_USER || !DB_PWD)
       throw new Error(
-        'no database credentials provided, please put DB_URl DB_USER DB_PWD a .env file in the database directory'
+        'no database credentials provided, please put DB_URL DB_USER DB_PWD a .env file in the database directory'
       )
 
-    this.uri = `mongodb://${DB_USER}:${DB_PWD}@${DB_URL ?? 'localhost'}/admin`
+    this.uri = `mongodb://${DB_USER}:${DB_PWD}@${DB_URL}/admin`
   }
 
   connect = async (uri = this.uri, initialize) => {
@@ -182,38 +182,41 @@ class DatabaseClient {
     )
   }
 
-  getAcceleration = ({ id }) => {
-    return this.acceleration(id)
+  getAcceleration = async ({ id }) => {
+    const data = await this.acceleration(id)
       .find()
       .sort({ time: -1 })
       .map(({ time }) => time)
       .toArray()
+
+    return data
   }
 
-  getAccelerationEvent = async ({ id, time }) => {
-    const col = await this.acceleration(id)
+  getAccelerationEvent = async ({ id, time: input }) => {
+    const collection = await this.acceleration(id)
 
-    return resolveData(
-      col,
-      async () =>
-        (
-          await col.findOne({
-            time: time ?? (await this.getAcceleration({ id }))[0],
-          })
-        ).data
-    )
+    let time = +input
+
+    if (!time) {
+      const times = await this.getAcceleration({ id })
+      time = times[0]
+    }
+
+    const { data = null } = time ? await collection.findOne({ time }) : {}
+
+    return resolveData(collection, data)
   }
   getDataRecent = async ({ limit = 1000, ...ctx }) => {
-    const col = await this.data(ctx)
+    const collection = await this.data(ctx)
 
-    return resolveData(col, async () =>
-      col
-        .find()
-        .sort({ time: 1 })
-        .project({ _id: 0, index: 0 })
-        .limit(+limit)
-        .toArray()
-    )
+    const data = await collection
+      .find()
+      .sort({ time: -1 })
+      .project({ _id: 0, index: 0 })
+      .limit(+limit)
+      .toArray()
+
+    return resolveData(collection, data)
   }
   getDataRange = async ({ start, end, limit, ...ctx }) => {
     const handleLimit = limit
@@ -231,22 +234,21 @@ class DatabaseClient {
         ]
       : []
 
-    const col = await this.data(ctx)
-
-    return resolveData(col, async () =>
-      this.data(ctx)
-        .aggregate([
-          {
-            $match: {
-              time: { $gte: +start || -Infinity, $lte: +end || Infinity },
-            },
+    const collection = await this.data(ctx)
+    const data = await collection
+      .aggregate([
+        {
+          $match: {
+            time: { $gte: +start || -Infinity, $lte: +end || Infinity },
           },
-          ...handleLimit,
-          { $sort: { time: 1 } },
-          { $project: { _id: 0, index: 0 } },
-        ])
-        .toArray()
-    )
+        },
+        ...handleLimit,
+        { $sort: { time: 1 } },
+        { $project: { _id: 0, index: 0 } },
+      ])
+      .toArray()
+
+    return resolveData(collection, data)
   }
   resetCounter({ field, id }) {
     return this.devices.updateOne(

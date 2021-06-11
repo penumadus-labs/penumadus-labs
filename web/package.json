@@ -3,12 +3,12 @@
   "name": "web",
   "repository": "https://github.com/carosaur/tankmon/",
   "dependencies": {
-    "node-gyp": "*",
-    "node-pre-gyp": "*"
+    "node-gyp": "^7.1.2",
+    "node-pre-gyp": "^0.17.0"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "*",
-    "prettier": "*"
+    "@shelf/jest-mongodb": "^1.2.3",
+    "prettier": "^2.2.1"
   },
   "scripts": {
     "build": "cd client && npm run build",
@@ -20,7 +20,9 @@
     "script": "node scripts",
     "test": "jest",
     "test-detect": "jest --detectOpenHandles",
-    "build:package": "cd packages/test && rollup -c"
+    "build:package": "cd packages/test && rollup -c",
+    "start:pm2": "pm2 start --name web npm -- start",
+    "restart:pm2": "npm run build && pm2 restart web"
   },
   "workspaces": [
     "client",

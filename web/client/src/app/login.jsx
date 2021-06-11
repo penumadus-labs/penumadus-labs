@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '../components/input'
 import ErrorBoundary from '../components/error-boundary'
+import Input from '../components/input'
 
-const Card = styled.form`
+const Card = styled.div`
   padding: 2rem 6rem;
   margin: 0 auto;
 `

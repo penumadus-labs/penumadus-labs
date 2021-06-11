@@ -1,0 +1,100 @@
+$break-small: 60rem;
+$break-medium: 100rem;
+
+@media only screen and (max-width: $break-small) {
+  .hidden-small {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $break-small) {
+  .visible-small {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $break-medium) {
+  .visible-large {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $break-medium) {
+  .visible-medium-and-down {
+    display: none;
+  }
+}
+
+.body-responsive-side-margins {
+  margin-left: 0;
+  margin-right: 0;
+  @media only screen and (min-width: $break-small) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  @media only screen and (min-width: $break-medium) {
+    margin-right: 6rem;
+    margin-left: 2rem;
+  }
+}
+
+:root {
+  @media only screen and (max-width: $break-medium) {
+    // is 1 rem padding on the left
+    --sidebar-width: 17rem;
+  }
+}
+
+body {
+  background-size: 200% 100%;
+  background-position: 60% 0%;
+  @media only screen and (min-width: $break-small) {
+    background-size: 150% 100%;
+    background-position: 40% 0%;
+  }
+  @media only screen and (min-width: $break-medium) {
+    background-size: 100% 100%;
+    background-position: 0% 0%;
+  }
+}
+
+.content-area {
+  position: relative;
+  min-height: 100vh;
+  background: white;
+  text-align: center;
+  section {
+    @media only screen and (min-width: $break-medium) {
+      // width: 60%;
+    }
+  }
+
+  p,
+  ul {
+    line-height: 2rem;
+  }
+  h1 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  p {
+    // margin-top: 2rem;
+    // margin-bottom: 2rem;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 50rem;
+    @media only screen and (min-width: 140rem) {
+      max-width: 60rem;
+    }
+  }
+
+  ul {
+    // list-style: disc;
+    li {
+    }
+  }
+}
+
+* + .content-area {
+  margin-top: 1rem;
+}

@@ -6,6 +6,6 @@ connectToServer(createEnvironmentData, {
   // limit: 40,
 })
 
-connectToServer(createAccelerationData, { timeBetween: 50, limit: 40 })
+// connectToServer(createAccelerationData, { timeBetween: 50, limit: 40 })
 
 export {}

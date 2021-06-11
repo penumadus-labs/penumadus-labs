@@ -1,7 +1,7 @@
 import React from 'react'
+import useApi from '../../../api'
 import Chart from '../chart/chart'
 import EventSelector from './event-selector'
-import useApi from '../../../api'
 
 let timeout
 
@@ -24,6 +24,7 @@ export default function AccelerationChart() {
   const time = !event?.data.length || !eventList ? null : event.data[0].time
 
   const handleMutation = (data, store) => {
+    // if not timeout then start a new array
     const result = timeout ? [...store, data] : [data]
     clearTimeout(timeout)
     timeout = setTimeout(getAcceleration, 500)

@@ -1,6 +1,10 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import '../styles/globals.css'
+import React from 'react'
+import SideBar from '../components/SideBar'
+import SmallNavBar from '../components/SmallNavBar'
+import { RouteProvider } from '../routes'
+import '../styles/index.scss'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -9,42 +13,29 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Composite Bridge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header>
-        <h1>
-          <a href="/">Composite Bridge</a>
-        </h1>
-        <nav>
-          <a href="https://admin.compositebridge.org">dashboard</a>
-          <a href="./static">utilities</a>
-          <a href="./live">live video feed</a>
-        </nav>
-      </header>
-      <main>
-        <Component {...pageProps} />
-      </main>
-      <footer></footer>
+      <RouteProvider>
+        <SmallNavBar />
+        <div className="layout">
+          <header>
+            <SideBar />
+          </header>
+          <main className="body-responsive-side-margins">
+            <Component {...pageProps} />
+          </main>
+        </div>
+        <footer></footer>
+      </RouteProvider>
       <style jsx>{`
-        header {
-          margin: 0;
-          background: #333;
-          padding: 0.5rem 1rem;
-          color: #eee;
+        .layout {
+          display: grid;
+          grid-template-columns: auto 1fr;
         }
-
         h1 {
-          margin-bottom: 0.5rem;
+          background: white;
         }
-
-        main {
-          margin: 1rem;
-        }
-
-        nav {
-          display: flex;
-        }
-
-        nav > * {
-          margin-right: 1rem;
+        header {
+          display: grid;
+          place-items: center;
         }
       `}</style>
     </>

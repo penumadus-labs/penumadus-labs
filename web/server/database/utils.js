@@ -5,12 +5,13 @@ const increment = async (col, query, field, amount = 1) => {
   return value
 }
 
-const resolveData = async (collection, resolver) => {
-  const noDataCollected = !(await collection.countDocuments())
+const resolveData = async (collection, data) => {
+  const count = await collection.countDocuments()
+  const noDataCollected = !count
 
   return {
     noDataCollected,
-    data: noDataCollected ? [] : await resolver(),
+    data: noDataCollected || !data ? [] : data,
   }
 }
 
