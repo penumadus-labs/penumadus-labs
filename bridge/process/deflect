@@ -1,0 +1,1 @@
+cat journal | grep --line-buffered "b morgan" | cut -d' ' -f3-8 | ./dolog
