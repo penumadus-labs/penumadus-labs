@@ -30,6 +30,7 @@
 .viminfo
 .vscode-server/
 .wget-hsts
+.yarnrc
 *.o
 *.exe
 dbtestmon

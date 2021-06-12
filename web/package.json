@@ -3,8 +3,8 @@
   "name": "web",
   "repository": "https://github.com/carosaur/tankmon/",
   "dependencies": {
-    "node-gyp": "^7.1.2",
-    "node-pre-gyp": "^0.17.0"
+    "@mapbox/node-pre-gyp": "^1.0.5",
+    "node-gyp": "^7.1.2"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
@@ -23,10 +23,5 @@
     "build:package": "cd packages/test && rollup -c",
     "start:pm2": "pm2 start --name web npm -- start",
     "restart:pm2": "npm run build && pm2 restart web"
-  },
-  "workspaces": [
-    "client",
-    "server",
-    "packages/*"
-  ]
+  }
 }
