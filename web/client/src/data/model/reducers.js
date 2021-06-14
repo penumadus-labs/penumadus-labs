@@ -1,4 +1,5 @@
 import { brushHeight, margin } from './size'
+import { getDomainTime } from './utils'
 
 const brushGroupTopOffset = margin.bottom + brushHeight
 const chartHeightOffset =
@@ -35,7 +36,7 @@ export const brushDomain = (data, { scales }) => {
   return setDomainInfo(timeDomain)
 }
 
-export const setDomain = (data) => {
+export const setDomain = (data, { scales }) => {
   const domainTime = getDomainTime(data)
 
   for (const scale of Object.values(scales.x)) {

@@ -2,25 +2,24 @@ import React, { useMemo, useEffect } from 'react'
 import { Router, navigate } from '@reach/router'
 import ErrorBoundary from '../components/error-boundary'
 
-import { FaThermometerHalf as Environment } from 'react-icons/fa'
-import { VscSymbolRuler as Deflection } from 'react-icons/vsc'
-import { IoMdSpeedometer as Acceleration } from 'react-icons/io'
-import { IoMdDocument as UserManual } from 'react-icons/io'
-import { FiLogOut as Logout } from 'react-icons/fi'
-import { MdDashboard as Dashboard, MdDevices as Devices } from 'react-icons/md'
+import { FaThermometerHalf as EnvironmentIcon } from 'react-icons/fa'
+import { VscSymbolRuler as DeflectionIcon } from 'react-icons/vsc'
+import { IoMdSpeedometer as AccelerationIcon } from 'react-icons/io'
+import { IoMdDocument as UserManualIcon } from 'react-icons/io'
+import { FiLogOut as Icon } from 'react-icons/fi'
+import {
+  MdDashboard as DashboardIcon,
+  MdDevices as DevicesIcon,
+} from 'react-icons/md'
 
 import useApi from '../api'
 import Link from './link'
 
-// import AccelerationChart from '@web/d3-charts/acceleration'
-// import EnvironmentChart from '@web/d3-charts/environment'
-// import DeflectionChart from '@web/d3-charts/deflection'
-
 import AccelerationChart from '../components/charts/acceleration'
-// import EnvironmentChart from '../components/charts/environment'
+import EnvironmentChart from '../components/charts/environment'
 import DeflectionChart from '../components/charts/deflection'
 
-import TestChart from '../data/views/index.jsx'
+// import TestChart from '../data/views/index.jsx'
 
 import Controls from './controls'
 import Register from './register'
@@ -29,16 +28,16 @@ import Manual from './manual'
 const staticRoutes = ['register', 'manual']
 
 const icons = {
-  environment: Environment,
-  deflection: Deflection,
-  acceleration: Acceleration,
-  controls: Dashboard,
-  register: Devices,
-  manual: UserManual,
+  environment: EnvironmentIcon,
+  deflection: DeflectionIcon,
+  acceleration: AccelerationIcon,
+  controls: DashboardIcon,
+  register: DevicesIcon,
+  manual: UserManualIcon,
 }
 
 const Components = {
-  environment: TestChart,
+  environment: EnvironmentChart,
   deflection: DeflectionChart,
   acceleration: AccelerationChart,
   controls: Controls,
@@ -122,7 +121,7 @@ export default function Routes({ handleLogout }) {
       </main>
       <nav className="shadow-card">
         {links}
-        <Link Icon={Logout} label="Logout" to={''} onClick={handleLogout} />
+        <Link Icon={Icon} label="Logout" to={''} onClick={handleLogout} />
       </nav>
     </>
   )

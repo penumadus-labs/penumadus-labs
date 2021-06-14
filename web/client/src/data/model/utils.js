@@ -10,7 +10,7 @@ export const getDomainPadded = (data, accessor) => {
 
 export const accessTime = ({ time }) => +time
 
-export const getTimeDomain = (data) => extent(data.map(accessTime))
+export const getDomainTime = (data) => extent(data.map(accessTime))
 
 export const getAxisDomains = (data, setting) => {
   const extentsLeft = []
