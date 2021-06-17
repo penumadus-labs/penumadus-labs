@@ -1,25 +1,25 @@
 cd ..
-mv -r DM src/DM
-mv -r bin src/bin
-mv -r bridge src/bridge
-mv -r camera src/camera
-mv -r gellotest src/gellotest
-mv -r hank src/hank
-mv -r logs src/logs
-mv -r magtest src/magtest
-mv -r public src/public
-mv -r save-data-from-db src/save-data-from-db
-mv -r scripts src/scripts
-mv -r strain src/strain
-mv -r stubbyhank src/stubbyhank
-mv -r web src/web
-mv -r www/static src/www/static
-mv -r .gitignore src/.gitignore
-mv -r README.md src/README.md
-mv -r changelog.md src/changelog.md
-mv -r logall src/logall
-mv -r makefile src/makefile
-mv -r rtunnel.sh src/rtunnel.sh
-mv -r server-configuration-notes src/server-configuration-notes
-mv -r start-app.sh src/start-app.sh
-mv -r test.txt src/test.txt
+sudo mv -r DM src/DM
+sudo mv -r bin src/bin
+sudo mv -r bridge src/bridge
+sudo mv -r camera src/camera
+sudo mv -r gellotest src/gellotest
+sudo mv -r hank src/hank
+sudo mv -r logs src/logs
+sudo mv -r magtest src/magtest
+sudo mv -r public src/public
+sudo mv -r save-data-from-db src/save-data-from-db
+sudo mv -r scripts src/scripts
+sudo mv -r strain src/strain
+sudo mv -r stubbyhank src/stubbyhank
+sudo mv -r web src/web
+sudo mv -r www/static src/www/static
+sudo mv -r .gitignore src/.gitignore
+sudo mv -r README.md src/README.md
+sudo mv -r changelog.md src/changelog.md
+sudo mv -r logall src/logall
+sudo mv -r makefile src/makefile
+sudo mv -r rtunnel.sh src/rtunnel.sh
+sudo mv -r server-configuration-notes src/server-configuration-notes
+sudo mv -r start-app.sh src/start-app.sh
+sudo mv -r test.txt src/test.txt
