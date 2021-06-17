@@ -14,12 +14,12 @@ sudo mv -r strain src/strain
 sudo mv -r stubbyhank src/stubbyhank
 sudo mv -r web src/web
 sudo mv -r www/static src/www/static
-sudo mv -r .gitignore src/.gitignore
-sudo mv -r README.md src/README.md
-sudo mv -r changelog.md src/changelog.md
-sudo mv -r logall src/logall
-sudo mv -r makefile src/makefile
-sudo mv -r rtunnel.sh src/rtunnel.sh
-sudo mv -r server-configuration-notes src/server-configuration-notes
-sudo mv -r start-app.sh src/start-app.sh
-sudo mv -r test.txt src/test.txt
+sudo mv .gitignore src/.gitignore
+sudo mv README.md src/README.md
+sudo mv changelog.md src/changelog.md
+sudo mv logall src/logall
+sudo mv makefile src/makefile
+sudo mv rtunnel.sh src/rtunnel.sh
+sudo mv server-configuration-notes src/server-configuration-notes
+sudo mv start-app.sh src/start-app.sh
+sudo mv test.txt src/test.txt
