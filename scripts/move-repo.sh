@@ -1,19 +1,21 @@
 cd ..
-sudo mv -r DM src/DM
-sudo mv -r bin src/bin
-sudo mv -r bridge src/bridge
-sudo mv -r camera src/camera
-sudo mv -r gellotest src/gellotest
-sudo mv -r hank src/hank
-sudo mv -r logs src/logs
-sudo mv -r magtest src/magtest
-sudo mv -r public src/public
-sudo mv -r save-data-from-db src/save-data-from-db
-sudo mv -r scripts src/scripts
-sudo mv -r strain src/strain
-sudo mv -r stubbyhank src/stubbyhank
-sudo mv -r web src/web
-sudo mv -r www/static src/www/static
+mkdir src
+sudo mv -rf .git src/.git
+sudo mv -rf DM src/DM
+sudo mv -rf bin src/bin
+sudo mv -rf bridge src/bridge
+sudo mv -rf camera src/camera
+sudo mv -rf gellotest src/gellotest
+sudo mv -rf hank src/hank
+sudo mv -rf logs src/logs
+sudo mv -rf magtest src/magtest
+sudo mv -rf public src/public
+sudo mv -rf save-data-from-db src/save-data-from-db
+sudo mv -rf scripts src/scripts
+sudo mv -rf strain src/strain
+sudo mv -rf stubbyhank src/stubbyhank
+sudo mv -rf web src/web
+sudo mv -rf www/static src/www/static
 sudo mv .gitignore src/.gitignore
 sudo mv README.md src/README.md
 sudo mv changelog.md src/changelog.md
