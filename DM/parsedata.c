@@ -95,7 +95,7 @@ parsedata(char *incoming, char *outgoing, int size)
 			mag=sqrtf(powf(arrx,2)+powf(arry,2)+powf(arrz,2));
 			memset(outgoing,PADCHAR,size);
 			if((n=snprintf(outgoing,size,
-				"{ \"type\":\acceleration\","
+				"{ \"type\":\"acceleration\","
 				  "\"id\":\"%s\","
 				  "\"magnitude\":%.2f,"
 				  "\"x\":%.2f,"
