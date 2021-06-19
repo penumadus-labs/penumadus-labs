@@ -1,56 +1,42 @@
-.DS_Store
-._.DS_Store
-.bash_history
-.bash_logout
-.bashrc
-.cache/
-.config/
-.dbshell
-.git-credentials
-.gitconfig
-.gnupg/
-.lesshst
-.local
-.mongorc.js
-.mysql_history
-.node_repl_history
-.node-gyp
-.pnpm/
-.python_history
-.npm/
-.nvm/
-.pm2/
-.pnpm-store/
-.profile
-.ssh/
-.unionfs-fuse/
-.sudo_as_admin_successful
-.vim/
-.vimrc
-.viminfo
-.vscode-server/
-.wget-hsts
-.yarnrc
+# displacement/
+# archive/
+# backups/
+# new/
+# reftable
+# tmp/
+# gellowifipi.c
+# hank/hank-latest-3.1/tankmon/libraries/
+
+# this repo lives in a linux home directory
+
+# folders where code can be stored and not tracked
+trash
+ignored
+
+# ignore any congif files that get created in home
+/.*
+!/.gitignore
+
+# global ignores
 *.o
+*.log
 *.exe
-dbtestmon
-DM/e_UDPengine.log
-DM/UDPengine
-DM/dbtestmon
-DM/start.log
-displacement
-hank/hank-latest-3.1/wifipi/wifipi
-archive/
-backups/
-new/
 node_modules/
-reftable
-tmp/
 logs/
-gellowifipi.c
-hank/hank-latest-3.1/tankmon/libraries/
-DM/UDPengine
-DM/dbtestmon
-micro
-to_be_trashed
-.gitcredentials
+
+# explicit inclusion of src
+# /*
+# !/bin
+# !/bridge
+# !/camera
+# !/compositebridge.org
+# !/data
+# !/hank
+# !/scripts
+# !/strain
+# !/UDPengine
+# !/web
+# !/www
+# !/changelog.md
+# !/makefile
+# !/README.md

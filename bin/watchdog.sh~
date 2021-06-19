@@ -1,0 +1,14 @@
+#!/bin/bash
+
+stream=$(netstat -na | grep 20020 | cut -d' ' -f1)
+admin=$(netstat -na | grep 20021 | cut -d' ' -f1)
+ssh=$(netstat -na | grep 20022 | cut -d' ' -f1)
+time=$(date -d "-5 hours")
+
+echo $time
+
+if [ -z "$stream" ]; then
+	echo "The Stream tunnel went down at $time"
+else
+	echo "working fine"
+fi
