@@ -1,19 +1,6 @@
-# displacement/
-# archive/
-# backups/
-# new/
-# reftable
-# tmp/
-# gellowifipi.c
-# hank/hank-latest-3.1/tankmon/libraries/
-
 # this repo lives in a linux home directory
 
-# folders where code can be stored and not tracked
-trash
-ignored
-
-# ignore any congif files that get created in home
+# ignore any config files that get created in home
 /.*
 !/.gitignore
 
@@ -23,20 +10,14 @@ ignored
 *.exe
 node_modules/
 logs/
+tmp/
 
-# explicit inclusion of src
-# /*
-# !/bin
-# !/bridge
-# !/camera
-# !/compositebridge.org
-# !/data
-# !/hank
-# !/scripts
-# !/strain
-# !/UDPengine
-# !/web
-# !/www
-# !/changelog.md
-# !/makefile
-# !/README.md
+# local ignores
+/yarn.lock
+/micro
+/displacement/
+/tmp/
+
+# folders where code can be stored and not tracked
+/trash/
+/ignored/
