@@ -2,8 +2,10 @@ const exec = require('./exec')
 const { join } = require('path')
 const database = require('../database/client')
 
+// import udp engine binary from the udp engine directory
+// if you're having issues, you may need to cd into the UDPengine directory and run make
 const udpEngine = 'UDPengine'
-const udpEnginePath = join(__dirname, '..', '..', '..', 'DM', udpEngine)
+const udpEnginePath = join(__dirname, '..', '..', '..', udpEngine, udpEngine)
 
 const killUdpEngines = async () => {
   try {
