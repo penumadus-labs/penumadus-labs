@@ -1,6 +1,6 @@
 #STATICFLAG=-static
 
-OTHERINCLUDE=../hank/hank-latest-3.1/include
+OTHERINCLUDE=../hank/include
 INCLUDE+=-I. -I$(OTHERINCLUDE)
 LFLAGS+=-g $(STATICFLAG) -pthread -lm
 #CFLAGS+=-g $(STATICFLAG) $(INCLUDE) -pthread -DSIMULATOR
