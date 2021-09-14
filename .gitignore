@@ -12,12 +12,17 @@ node_modules/
 logs/
 tmp/
 
-# local ignores
+# ignored files in root
 /yarn.lock
 /micro
-/displacement/
-/tmp/
+/journal
 
-# folders where code can be stored and not tracked
+# ignored folders in root
 /trash/
 /ignored/
+/displacement/
+/tmp/
+/backups/
+/OneDrive/
+/dlang/
+/packages/
